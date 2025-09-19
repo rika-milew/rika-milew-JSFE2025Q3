@@ -13,6 +13,7 @@
 
 :root {
   --white: #ffffff;
+  --gray: #222222;
   --font-family: "Mulish", sans-serif;
   --second-family: "Oswald", sans-serif;
 
@@ -38,4 +39,27 @@
   text-transform: uppercase;
   text-align: center;
   color: var(--white);
+}
+
+
+/* header  */
+
+.header__container {
+    background-color: var(--gray);
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    list-style-type: none;
+}
+
+.menu__list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    list-style-type: none;
 }
