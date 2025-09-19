@@ -6,7 +6,7 @@
 
 .container {
     margin: 0 auto;
-    padding: 60px 82px;
+    padding: 60px 20px;
     max-width: 1440px;
 }
 
@@ -22,13 +22,45 @@
 
 /* typography  */
 
-.header-1 {
-  font-family: var(--font-family);
+.h1 {
+  font-family: var(--second-family);
   font-weight: 300;
   font-size: 116px;
   line-height: 114%;
   text-transform: uppercase;
   color: var(--white);
+  max-width: ;
+  
+}
+
+
+.h2 {
+    font-family: var(--second-family);
+font-weight: 400;
+font-size: 32px;
+line-height: 125%;
+text-transform: uppercase;
+color: #222;
+}
+
+
+.h3 {
+    font-family: var(--second-family);
+font-weight: 400;
+font-size: 20px;
+line-height: 140%;
+text-transform: uppercase;
+color: #fff;
+}
+
+
+.h4 {
+    font-family: var(--second-family);
+font-weight: 400;
+font-size: 16px;
+line-height: 150%;
+text-transform: uppercase;
+color: #222;
 }
 
 .base {
@@ -41,12 +73,40 @@
   color: var(--white);
 }
 
+.base-italic {
+    font-family: var(--font-family);
+font-style: italic;
+font-weight: 400;
+font-size: 16px;
+line-height: 125%;
+color: #222;
+}
+
+.small {
+    font-family: var(--font-family);
+font-weight: 500;
+font-size: 12px;
+line-height: 133%;
+color: var(--white)
+}
+
+.decoration {
+    font-family: var(--second-family);
+font-weight: 300;
+font-size: 48px;
+line-height: 112%;
+text-transform: uppercase;
+text-align: right;
+color: #fff;
+}
+
 
 /* header  */
 
 
 .header {
     height: 60px;
+    background-color: var(--gray);
 }
 
 .header__container {
@@ -54,7 +114,7 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 20px 18px;
-    background-color: var(--gray);
+    
     
 }
 
@@ -81,4 +141,53 @@
 
 .menu__burger {
     display: none;
+}
+
+
+/* hero section  */
+
+.hero {
+background-color: var(--gray);
+}
+
+.hero__container {
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+flex-wrap: nowrap;
+}
+
+
+.about-me__decoration {
+    padding-right: 22px;
+    padding-left: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    
+}
+
+
+.about-me__signature, .about-me__year {
+  writing-mode: vertical-rl;
+     
+  text-orientation: mixed;
+  transform: rotate(180deg); 
+}
+
+.about-me__line  {
+
+width: 1px;
+height: 536px;
+background-color: var(--white);
+}
+
+
+
+.about-me__heading {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
 }
