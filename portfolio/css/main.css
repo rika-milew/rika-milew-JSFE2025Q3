@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 60px 82px;
+    max-width: 1440px;
+}
+
+
+:root {
+  --white: #ffffff;
+  --font-family: "Mulish", sans-serif;
+  --second-family: "Oswald", sans-serif;
+
+}
+
+
+/* typography  */
+
+.header-1 {
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 116px;
+  line-height: 114%;
+  text-transform: uppercase;
+  color: var(--white);
+}
