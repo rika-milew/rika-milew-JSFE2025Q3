@@ -29,3 +29,13 @@
   text-transform: uppercase;
   color: var(--white);
 }
+
+.base {
+    font-family: var(--second-family);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--white);
+}
