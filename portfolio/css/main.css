@@ -7,7 +7,8 @@
 .container {
     margin: 0 auto;
     padding: 60px 20px;
-    max-width: 1440px;
+   max-width: 1440px;
+   width: 100%;
 }
 
 
@@ -29,7 +30,7 @@
   line-height: 114%;
   text-transform: uppercase;
   color: var(--white);
-  max-width: ;
+  max-width: 740px;
   
 }
 
@@ -64,11 +65,11 @@ color: #222;
 }
 
 .base {
-    font-family: var(--second-family);
+   
   font-weight: 400;
   font-size: 16px;
   line-height: 150%;
-  text-transform: uppercase;
+ 
   text-align: center;
   color: var(--white);
 }
@@ -132,6 +133,8 @@ color: #fff;
     align-items: center;
     gap: 40px;
     list-style-type: none;
+     font-family: var(--second-family);
+      text-transform: uppercase;
     
 }
 
@@ -155,10 +158,11 @@ display: flex;
 flex-direction: row;
 justify-content: space-between;
 flex-wrap: nowrap;
+gap: 40px;
 }
 
 
-.about-me__decoration {
+.hero__decoration {
     padding-right: 22px;
     padding-left: 2px;
     display: flex;
@@ -169,14 +173,14 @@ flex-wrap: nowrap;
 }
 
 
-.about-me__signature, .about-me__year {
+.hero__signature, .hero__year {
   writing-mode: vertical-rl;
      
   text-orientation: mixed;
   transform: rotate(180deg); 
 }
 
-.about-me__line  {
+.hero__line  {
 
 width: 1px;
 height: 536px;
@@ -185,9 +189,110 @@ background-color: var(--white);
 
 
 
-.about-me__heading {
+.hero__heading {
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: flex-start;
+padding-top: 100px;
 }
+
+
+.hero__info {
+display: flex;
+flex-direction: row;
+gap: 60px;
+margin-bottom: 40px;
+}
+
+.hero__statistics {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+
+
+.hero__numbers {
+    margin-bottom: 8px;
+    
+}
+
+.hero__more {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+}
+
+.hero__header {
+    margin-bottom: 40px;
+}
+
+.hero__capture {
+ margin-bottom: 160px;
+}
+
+
+.hero__scroll {
+ display: flex;
+    flex-direction: row;
+    gap: 8px;
+    
+}
+
+
+.hero__scroll-text {
+    font-family: var(--font-family);
+}
+
+
+
+.hero__image-block {
+    width: 15.714285%;
+    display: flex;
+   align-items: center;
+    
+    
+
+}
+
+.hero__image {
+    
+    width: 100%;
+    height: 220px;
+    background-image: url(../assets/images/webp/img-10.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+}
+
+
+.hero__text {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+
+.hero__image2 {
+    width: 100%;
+    height: 374px;
+    background-image: url(../assets/images/webp/img-11.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.hero__text2 {
+font-family: var(--font-family);
+max-width: 220px;
+text-align: right;
+
+}
+
