@@ -598,3 +598,33 @@ color: var(--white);
 .price-card__description {
  margin-bottom: 12px;
 }
+
+
+/* footer  */
+
+.footer {
+    background-color: var(--gray);
+}
+
+.footer__container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+
+.footer__socials {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.footer__link {
+    padding: 18px 20px;
+  text-transform: uppercase;
+  font-family: var(--second-family);
+  text-decoration: none;
+  
+}
+
+
