@@ -299,6 +299,10 @@ text-align: right;
 
 /* about me section  */
 
+.about-me {
+background-color: var(--white);
+}
+
 .about-me__container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -481,4 +485,110 @@ overflow: hidden;
     height: 534px;
     background-image: url(../assets/images/webp/img-12.webp);
     align-self: flex-start;
+}
+
+
+/* price section  */
+
+.price {
+    background-color: var(--white);
+    
+}
+
+.price__container {
+display: flex;
+flex-direction: column;
+
+}
+
+
+.price__container .h2 {
+    margin-bottom: 12px;
+    color: var(--gray);
+}
+
+
+.price__description {
+    margin-bottom: 40px;
+    color: var(--gray);
+    font-family: var(--font-family);
+}
+
+
+
+
+
+
+.price-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #222;
+padding: 24px;
+width: 320px;
+height: 500px;
+}
+
+
+.price-card__heading {
+    color: var(--gray);
+    margin-bottom: 12px;
+}
+
+.price-card__list {
+   
+    padding: 0;
+    list-style-type: none;
+    list-style-position: inside;
+    margin-bottom: 12px;
+
+}
+
+
+.price-card__item {
+  
+     text-align: left;
+    color: var(--gray);
+    font-family: var(--font-family);
+
+}
+
+
+
+li {
+  position: relative;  
+  padding-left: 15px;
+}
+
+li::before {
+  content: "■";         
+  position: absolute;
+  left: 0;
+  margin-right: 6px;    
+}
+
+.price-card__price {
+ color: var(--gray);
+}
+
+
+button {
+    padding: 0px 20px;
+width: 272px;
+height: 60px;
+min-width: 200px;
+background: #222;
+font-family: var(--second-family);
+font-weight: 400;
+font-size: 16px;
+line-height: 150%;
+text-transform: uppercase;
+text-align: center;
+
+color: var(--white);
+}
+
+
+.price-card__description {
+ margin-bottom: 12px;
 }
