@@ -561,12 +561,12 @@ height: 500px;
 
 
 
-li {
+.price-card__list li {
   position: relative;  
   padding-left: 15px;
 }
 
-li::before {
+.price-card__list li::before {
   content: "■";         
   position: absolute;
   left: 0;
@@ -611,7 +611,47 @@ color: var(--white);
 .faq__container {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    color: var(--white);
 }
+
+.faq__heading h2 {
+    margin-bottom: 12px;
+    color: var(--white);
+    
+}
+
+.faq__heading p {
+font-family: var(--font-family);
+text-align: left;
+
+}
+
+
+.faq__question {
+ border-bottom: 1px solid var(--white);
+}
+
+
+.faq__question-block {
+ padding: 18px 0;
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between;
+}
+
+
+.faq__answer {
+    padding-bottom: 20px;
+ font-family: var(--font-family);
+ text-align: left;
+ display: none;
+}
+
+#faq__answer1 {
+    display: block;
+}
+
+
 
 
 
