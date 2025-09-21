@@ -15,6 +15,7 @@
 :root {
   --white: #ffffff;
   --gray: #222222;
+  --red: #ff3c3c;
   --font-family: "Mulish", sans-serif;
   --second-family: "Oswald", sans-serif;
 
@@ -637,6 +638,14 @@ text-align: left;
  display: flex;
  flex-direction: row;
  justify-content: space-between;
+ transition: color 0.2s ease-in-out; 
+  color: var(--white);
+}
+
+.faq__question-block:hover {
+ color: var(--red);
+ 
+ cursor: pointer;
 }
 
 
