@@ -353,12 +353,15 @@ background-image: url(../assets/images/webp/img-photographer-3.webp);
 
 .portfolio {
     background-color: var(--gray);
+    
 }
 
-/* .portfolio__container {
+.portfolio__container {
 display: flex;
 flex-direction: column;
-} */
+overflow: hidden;
+
+}
 
 
 .portfolio__container .h2 {
@@ -370,23 +373,112 @@ flex-direction: column;
 
 .portfolio__container p {
     max-width: 360px;
-    float: left;
     text-align: left;
     font-family: var(--font-family);
     margin-bottom: 40px;
 }
 
 
+.portfolio__slider {
+    display: flex;
+    flex-direction: row;
+    height: 654px;
+    justify-content: center;
+     
+    
+    gap: 20px;
+    
+}
+
+
 .portfolio__slide {
-    width: 400px;
-    height: 540px;
     background-size: cover;
+    flex-shrink: 0; 
+    
 }
 
 #portfolio__slide1 {
-    background-image: url(../assets/images/webp/img-1.webp);
+    width: 400px;
+    height: 534px;
+    background-image: url(../assets/images/webp/img-14.webp);
+    align-self: flex-end;
 }
 
+#portfolio__slide2 {
+    width: 220px;
+    height: 220px;
+    background-image: url(../assets/images/webp/img-21.webp);
+    align-self: center;
+}
+
+#portfolio__slide3 {
+    width: 280px;
+    height: 374px;
+    background-image: url(../assets/images/webp/img-22.webp);
+    margin-top: 120px;
+}
+
+#portfolio__slide4 {
+    width: 400px;
+    height: 534px;
+    background-image: url(../assets/images/webp/img-20.webp);
+    align-self: flex-start;
+}
+
+#portfolio__slide5 {
+    width: 280px;
+    height: 374px;
+    background-image: url(../assets/images/webp/img-17.webp);
+    margin-top: 120px;
+    
+}
+
+#portfolio__slide6 {
+    width: 220px;
+    height: 220px;
+    background-image: url(../assets/images/webp/img-1.webp);
+    align-self: center;
+}
+
+#portfolio__slide7 {
+     width: 280px;
+    height: 374px;
+    background-image: url(../assets/images/webp/img-2.webp);
+    align-self: flex-start;
+}
+
+#portfolio__slide8 {
+     width: 400px;
+    height: 534px;
+    background-image: url(../assets/images/webp/img-5.webp);
+    align-self: flex-end;
+}
+
+#portfolio__slide9 {
+     width: 220px;
+    height: 220px;
+    background-image: url(../assets/images/webp/img-7.webp);
+    align-self: center;
+}
+
+#portfolio__slide10 {
+     width: 280px;
+    height: 374px;
+    background-image: url(../assets/images/webp/img-8.webp);
+    align-self: flex-start;
+}
+
+#portfolio__slide11 {
+     width: 280px;
+    height: 374px;
+    background-image: url(../assets/images/webp/img-9.webp);
+    margin-top: 120px;
+}
+
+
 #portfolio__slide12 {
+    width: 400px;
+    height: 534px;
     background-image: url(../assets/images/webp/img-12.webp);
+    align-self: flex-start;
 }
