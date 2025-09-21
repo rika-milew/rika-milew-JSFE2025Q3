@@ -346,3 +346,47 @@ margin-top: 40px;
 .about-me__image3 {
 background-image: url(../assets/images/webp/img-photographer-3.webp);
 }
+
+
+/* portfolio section */
+
+
+.portfolio {
+    background-color: var(--gray);
+}
+
+/* .portfolio__container {
+display: flex;
+flex-direction: column;
+} */
+
+
+.portfolio__container .h2 {
+    margin-bottom: 12px;
+    color: var(--white);
+}
+
+
+
+.portfolio__container p {
+    max-width: 360px;
+    float: left;
+    text-align: left;
+    font-family: var(--font-family);
+    margin-bottom: 40px;
+}
+
+
+.portfolio__slide {
+    width: 400px;
+    height: 540px;
+    background-size: cover;
+}
+
+#portfolio__slide1 {
+    background-image: url(../assets/images/webp/img-1.webp);
+}
+
+#portfolio__slide12 {
+    background-image: url(../assets/images/webp/img-12.webp);
+}
