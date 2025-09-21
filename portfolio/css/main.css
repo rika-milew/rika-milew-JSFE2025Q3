@@ -600,6 +600,89 @@ color: var(--white);
 }
 
 
+/* faq section */
+
+.faq {
+    background-color: var(--gray);
+
+}
+
+
+.faq__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+
+/* cta section */
+
+
+
+.cta {
+    background-color: var(--white);
+
+}
+
+.cta__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.cta__heading {
+    margin-bottom: 20px;
+    color: var(--gray);
+
+}
+
+
+form {
+    padding: 0;
+    display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+    
+}
+
+input {
+    border: 1px solid var(--gray);
+padding: 0px 12px;
+width: 100%;
+height: 60px;
+
+max-width: 380px;
+color: var(--gray);
+}
+
+input#name {
+font-family: var(--second-family);
+font-weight: 400;
+font-size: 16px;
+line-height: 150%;
+text-transform: uppercase;
+color: #989898;
+-webkit-text-fill-color: #989898; 
+}
+
+
+input#phone {
+    font-family: var(--second-family);
+font-weight: 400;
+font-size: 16px;
+line-height: 150%;
+text-transform: uppercase;
+color: var(--gray);
+-webkit-text-fill-color: var(--gray); 
+}
+
+.visually-hidden {
+ display: none;
+}
+
 /* footer  */
 
 .footer {
