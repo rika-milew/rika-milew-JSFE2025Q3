@@ -148,6 +148,45 @@ color: #fff;
   cursor: pointer;
 }
 
+/* burger icon  */
+
+.menu__burger {
+    position: relative;
+    display: none;
+    width: 20px;
+    height: 24px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu__burger span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0; 
+    width: 20px;
+    height: 2px;
+    background: var(--white);
+    border-radius: 1px;
+    transition: transform 0.4s ease, top 0.4s ease;
+}
+
+.menu__burger span:nth-child(1) {
+    width: 12px;
+    top: calc(50% - 3px); 
+    
+   
+    
+}
+
+.menu__burger span:nth-child(2) {
+    top: calc(50% + 3px); 
+}
+
+
+
 .menu__burger {
     display: none;
 }
@@ -822,4 +861,17 @@ input#phone::placeholder {
   
 }
 
+
+/* burger  */
+
+@media screen and (max-width: 768px) {
+.menu__burger {
+    display: block;
+}
+
+.menu__list {
+    display: none;
+}
+
+}
 
