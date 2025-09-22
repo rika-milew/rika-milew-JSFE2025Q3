@@ -133,9 +133,12 @@
   text-decoration: none;
 }
 
-.menu__list a:hover {
-  color: var(--red);
-  cursor: pointer;
+
+@media (hover: hover) and (pointer: fine) {
+  .menu__list a:hover {
+    color: var(--red);
+    cursor: pointer;
+  }
 }
 
 
@@ -150,7 +153,6 @@
   height: 24px;
   background: none;
   border: none;
-  cursor: pointer;
 }
 
 .menu__burger span {
@@ -163,6 +165,7 @@
   background: var(--white);
   border-radius: 1px;
   transition: transform 0.4s ease, top 0.4s ease;
+  cursor: pointer;
 }
 
 .menu__burger span:nth-child(1) {
@@ -261,17 +264,22 @@
   transition: all 0.3 ease;
 }
 
-.hero__scroll:hover {
-  color: var(--red);
-  cursor: pointer;
+@media (hover: hover) and (pointer: fine) {
+  .hero__scroll:hover {
+    color: var(--red);
+    cursor: pointer;
+  }
 }
 
 .hero__svg {
   transition: all 0.3 ease;
 }
 
-.hero__scroll:hover .hero__svg path[stroke="white"] {
-  stroke: var(--red);
+
+@media (hover: hover) and (pointer: fine) {
+  .hero__scroll:hover .hero__svg path[stroke="white"] {
+    stroke: var(--red);
+  }
 }
 
 .hero__scroll-text {
@@ -535,17 +543,23 @@
   transition: all 0.3 ease;
 }
 
-.price-card:hover {
-  border: 1px solid var(--red);
-  cursor: pointer;
+
+@media (hover: hover) and (pointer: fine) {
+  .price-card:hover {
+    border: 1px solid var(--red);
+    cursor: pointer;
+  }
 }
 
-.price-card:hover button {
-  color: var(--gray);
-  background-color: var(--red);
-  border: 0;
-  transition: all 0.3s ease; 
-  cursor: pointer;
+
+@media (hover: hover) and (pointer: fine) {
+  .price-card:hover button {
+    color: var(--gray);
+    background-color: var(--red);
+    border: 0;
+    transition: all 0.3s ease; 
+    cursor: pointer;
+  }
 }
 
 .price-card__heading {
@@ -600,12 +614,14 @@ button {
   transition: all 0.3s ease; 
 }
 
-button:hover {
-  color: var(--gray);
-  background-color: var(--red);
-  border: 0;
-  transition: all 0.3s ease; 
-  cursor: pointer;
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    color: var(--gray);
+    background-color: var(--red);
+    border: 0;
+    transition: all 0.3s ease; 
+    cursor: pointer;
+  }
 }
 
 .price-card__description {
@@ -649,23 +665,29 @@ button:hover {
   transition: color 0.3s ease-in-out; 
 }
 
-.faq__question-block:hover {
-  cursor: pointer;
+@media (hover: hover) and (pointer: fine) {
+  .faq__question-block:hover {
+    cursor: pointer;
+  }
 }
 
-.faq__question-block:hover h3 {
-  color: var(--red);
-  transition: color 0.3s ease-in-out; 
-  cursor: pointer;
+@media (hover: hover) and (pointer: fine) {
+  .faq__question-block:hover h3 {
+    color: var(--red);
+    transition: color 0.3s ease-in-out; 
+    cursor: pointer;
+  }
 }
 
 .faq__svg {
   transition: color 0.3s ease-in-out; 
 }
 
-.faq__question-block:hover .faq__svg path[fill="white"] {
-  fill: var(--red);
-  transition: color 0.3s ease-in-out; 
+@media (hover: hover) and (pointer: fine) {
+  .faq__question-block:hover .faq__svg path[fill="white"] {
+    fill: var(--red);
+    transition: color 0.3s ease-in-out; 
+  }
 }
 
 .faq__answer {
@@ -717,9 +739,11 @@ input {
   transition: all 0.3 ease;
 }
 
-input:hover {
-  border: 1px solid var(--red);
-  outline: none;
+@media (hover: hover) and (pointer: fine) {
+  input:hover {
+    border: 1px solid var(--red);
+    outline: none;
+  }
 }
 
 input#name {
