@@ -567,6 +567,10 @@
   transition: all 0.3 ease;
 }
 
+.price-card__description {
+  max-width: 270px;
+}
+
 
 @media (hover: hover) and (pointer: fine) {
   .price-card:hover {
@@ -820,10 +824,10 @@ input#phone::placeholder {
   display: none;
 }
 
-
 .cta__button {
   max-width: 200px;
 }
+
 
 /* footer  */
 
@@ -850,8 +854,54 @@ input#phone::placeholder {
   text-decoration: none;
 }
 
+@media screen and (max-width: 1438px) { 
 
-/* burger  */
+
+  .price__cards { 
+  gap: 20px;
+} 
+
+
+  .price-card {
+  width: 100%;
+}
+
+
+
+}
+
+@media screen and (max-width: 1400px) { 
+
+ .price-card button {
+  width: 100%;
+ }
+}
+
+
+
+
+
+
+
+@media screen and (max-width: 1200px) { 
+  .price__cards { 
+  grid-template-columns: 1fr 1fr;
+  row-gap: 40px;
+  
+} 
+
+  .price-card {
+  width: 75%;
+  place-self: center;
+}
+
+ .price-card button {
+  width: 272px;
+ }
+
+}
+
+
 
 
 @media screen and (max-width: 768px) {
@@ -862,5 +912,9 @@ input#phone::placeholder {
   .menu__list {
     display: none;
   }
+
+   .price-card {
+  width: 320px;
+}
 }
 
