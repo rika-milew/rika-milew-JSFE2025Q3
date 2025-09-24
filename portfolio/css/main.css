@@ -362,10 +362,6 @@
   margin-bottom: 12px;
 }
 
-.about-me__block {
-  width: 31.428%;
-}
-
 .about-me__text {
   font-family: var(--font-family);
   color: var(--gray);
