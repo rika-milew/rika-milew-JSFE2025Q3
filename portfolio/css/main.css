@@ -141,7 +141,6 @@
   text-decoration: none;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
   .menu__list a:hover {
     color: var(--red);
@@ -290,7 +289,6 @@
   transition: all 0.3 ease;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
   .hero__scroll:hover .hero__svg path[stroke="white"] {
     stroke: var(--red);
@@ -298,8 +296,8 @@
 }
 
 .hero__scroll-text {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
   font-family: var(--font-family);
   line-height: 150%;
 }
@@ -325,8 +323,8 @@
   justify-content: space-between;
   align-items: flex-end;
   width: 20%;
-  line-height: 150%;
   margin-bottom: 0;
+  line-height: 150%;
 }
 
 .hero__image2 {
@@ -572,14 +570,12 @@
   margin: 0 auto 12px;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
   .price-card:hover {
     border: 1px solid var(--red);
     cursor: pointer;
   }
 }
-
 
 @media (hover: hover) and (pointer: fine) {
   .price-card:hover button {
@@ -622,15 +618,12 @@
   position: absolute;
   left: 0;
   width: 6px;
-  height: 6px;
-     
+  height: 6px;  
 }
 
 .price-card__price {
   color: var(--gray);
 }
-
-
 
 .price-card__bottom {
   width: 100%;
@@ -664,8 +657,6 @@ button {
     cursor: pointer;
   }
 }
-
-
 
 
 /* faq section */
@@ -743,9 +734,9 @@ button {
 }
 
 .faq__arrow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 svg {
@@ -806,7 +797,6 @@ input#name {
   font-family: var(--second-family);
   text-transform: uppercase;
   color: #989898;
-  /* -webkit-text-fill-color: #989898;  */
 }
 
 input#name::placeholder {
@@ -820,7 +810,6 @@ input#phone {
   font-family: var(--second-family);
   text-transform: uppercase;
   color: var(--gray);
-  /* -webkit-text-fill-color: var(--gray);  */
 }
 
 input#phone::placeholder {
@@ -861,212 +850,171 @@ input#phone::placeholder {
   text-decoration: none;
 }
 
+
 @media screen and (max-width: 1438px) { 
-
-
   .price__cards { 
-  gap: 20px;
-} 
-
-
+    gap: 20px;
+  } 
   .price-card {
-  width: 100%;
+    width: 100%;
+  }
 }
 
-
-
-}
 
 @media screen and (max-width: 1400px) { 
-
- .price-card button {
-  width: 100%;
- }
+  .price-card button {
+    width: 100%;
+  }
 }
+
 
 @media screen and (max-width: 1350px) { 
-.h1 {
- 
-  font-size: 102px;
+  .h1 {
+    font-size: 102px;
+  }
+
+  .hero__image-block {
+    width: 20.714285%;
+  }
+
+  .hero__text {
+    width: 25%;
+  }
+
+  .hero__container {
+    gap: 35px;
+  }
 }
-
-.hero__image-block {
- 
-  width: 20.714285%;
-}
-
-.hero__text {
- 
-  width: 25%;
-
-}
-
-.hero__container {
-  gap: 35px;
-}
-
-}
-
-
 
 
 @media screen and (max-width: 1200px) { 
   .price__cards { 
-  grid-template-columns: 1fr 1fr;
-  row-gap: 40px;
-  
-} 
+    grid-template-columns: 1fr 1fr;
+    row-gap: 40px;
+  } 
 
   .price-card {
-  width: 75%;
-  place-self: center;
+    width: 75%;
+    place-self: center;
+  }
+
+  .price-card button {
+    width: 272px;
+  }
+
+  .h1 {
+    font-size: 96px;
+  }
+
+  .hero__container {
+    gap: 35px;
+  }
+
+  .hero__image-block {
+    width: 24.714285%;
+  }
+
+  .hero__text {
+    width: 29%;
+  }
 }
 
- .price-card button {
-  width: 272px;
- }
-
- .h1 {
- 
-  font-size: 96px;
-}
-
-
-.hero__container {
-  gap: 35px;
-}
-
-.hero__image-block {
- 
-  width: 24.714285%;
-}
-
-.hero__text {
- 
-  width: 29%;
-
-}
-
-
-}
 
 @media screen and (max-width: 1100px) {
+  .h1 {
+    font-size: 86px;
+  }
 
-   .h1 {
- 
-  font-size: 86px;
-}
+  .hero__container {
+    gap: 25px;
+  }
 
+  .hero__image-block {
+    width: 26.714285%;
+  }
 
-.hero__container {
-  gap: 25px;
-}
-
-.hero__image-block {
- 
-  width: 26.714285%;
-}
-
-.hero__text {
- 
-  width: 33%;
-
-}
+  .hero__text {
+    width: 33%;
+  }
 
   .price-card {
-  width: 80%;
-  place-self: center;
+    place-self: center;
+    width: 80%;
+  }
 }
 
-}
 
 @media screen and (max-width: 1000px) {
-   .h1 {
- 
-  font-size: 76px;
-}
+  .h1 {
+    font-size: 76px;
+  }
 
+  .hero__image-block {
+    width: 30%;
+  }
 
-.hero__image-block {
- 
-  width: 30%;
-}
+  .hero__text {
+    width: 40%;
+  }
 
-.hero__text {
- 
-  width: 40%;
-
-}
-
-.hero__container {
-  gap: 22px;
-}
+  .hero__container {
+    gap: 22px;
+  }
 
   .price-card {
-  width: 85%;
-  place-self: center;
+    place-self: center;
+    width: 85%;
+  }
 }
 
-}
 
 @media screen and (max-width: 870px) {
+  .h1 {
+    font-size: 68px;
+  }
 
- .h1 {
- 
-  font-size: 68px;
-}
+  .hero__container {
+    gap: 20px;
+  }
 
-.hero__container {
-  gap: 20px;
-}
+  .hero__image-block {
+    width: 32%;
+  }
 
-.hero__image-block {
- 
-  width: 32%;
-}
+  .hero__text {
+    width: 45%;
+  }
 
-.hero__text {
- 
-  width: 45%;
+  .about-me__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 
-}
+  .about-me__image2 {
+    margin-bottom: 0;
+  }
 
-
-.about-me__container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-}
-
-
-.about-me__image2 {
-  margin-bottom: 0;
-}
-
-.about-me__image3 {
-  display: none;
-}
+  .about-me__image3 {
+    display: none;
+  }
 
   .price-card {
-  width: 90%;
-  place-self: center;
-}
+    place-self: center;
+    width: 90%;
+  }
 }
 
 
 @media screen and (max-width: 839px) {
-.hero__image-block {
- 
-  display: none;
-}
+  .hero__image-block {
+    display: none;
+  }
 
-
-.hero__image2 {
-  width: 220px;
-  height: 294px;
-
-}
-
+  .hero__image2 {
+    width: 220px;
+    height: 294px;
+  }
 }
 
 
@@ -1079,269 +1027,214 @@ input#phone::placeholder {
     display: none;
   }
 
-    .price__cards { 
-  
-  row-gap: 20px;
-  padding: 0 34px;
-  
-} 
-
+  .price__cards {  
+    row-gap: 20px;
+    padding: 0 34px;
+  } 
 
   .price-card {
-  width: 320px;
-  place-self: center;
+    place-self: center;
+    width: 320px;
+  }
+
+  .faq__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    color: var(--white);
+  }
+
+  .hero__line  {
+    height: 432px;
+  }
+
+  .hero__heading {
+    padding-left: 20px;
+  }
 }
 
-
-.faq__container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-  color: var(--white);
-}
-
-.hero__line  {
-  
-  height: 432px;
-}
-
-.hero__heading {
-  padding-left: 20px;
-}
-
-}
 
 @media screen and (max-width: 766px) { 
-.hero__heading {
-  padding-left: 0;
+  .hero__heading {
+    padding-left: 0;
+  }
+
+  .price__cards { 
+    row-gap: 20px;
+    padding: 0 15px;
+  } 
 }
 
-    .price__cards { 
-  
-  row-gap: 20px;
-  padding: 0 15px;
-  
-} 
-
-}
 
 @media screen and (max-width: 745px) { 
+  .h1 {
+    font-size: 56px;
+  }
 
- .h1 {
- 
-  font-size: 56px;
+  .price__cards { 
+    gap: 15px;
+    padding: 0 0;
+  } 
+
+  .price__card { 
+    width: 100%;
+  }
 }
 
-    .price__cards { 
-  
-  row-gap: 20px;
-  padding: 0 0;
-  gap: 15px;
-  
-} 
-
-.price__card { 
- width: 100%;
-}
-
-}
 
 @media screen and (max-width: 710px) { 
- .price__cards { 
+  .price__cards { 
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-  grid-template-columns: 1fr;
-  gap: 20px;
+  .price__card { 
+   width: 320px;
+  }
 
-}
-
-
-.price__card { 
- width: 320px;
-}
-
-
-.price__description {
-  width: 100%;
-}
-
+  .price__description {
+    width: 100%;
+  }
 }
 
 
 @media screen and (max-width: 680px) { 
+  .h1 {
+    font-size: 68px;
+  }
 
+  .hero__container {
+    display: flex;
+    flex-direction: column;
+  }
 
-   .h1 {
- 
-  font-size: 68px;
+  .hero__decoration {
+    display: none;
+  }
+
+  .hero__heading {
+    align-items: center;
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .hero__info {
+    justify-content: center;
+    gap: 100px;  
+    width: 100%;
+  }
+
+  .hero__header {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero__caption {
+    margin-bottom: 20px;
+  }
+
+  .hero__text {
+    width: 100%;
+  }
+
+  .hero__image2 {
+    margin-bottom: 60px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 65%;
+  }
+
+ .input {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+ .cta__button {
+    width: 100% !important;
+    max-width: 380px;
+  } 
 }
-
-.hero__container {
-  display: flex;
-  flex-direction: column;
- 
-}
-
-.hero__decoration {
-  display: none;
-}
-
-.hero__heading {
-  padding-top: 0;
-  width: 100%;
-  align-items: center;
-
-  
-}
-
-.hero__info {
-  width: 100%;
-  justify-content: center;
-  gap: 100px;
-  
-}
-
-
-.hero__header {
-  width: 100%;
-  text-align: center;
-}
-
-
-.hero__caption {
-  margin-bottom: 20px;
-}
-
-
-.hero__text {
-  width: 100%;
-}
-
-
-.hero__image2 {
-  margin-bottom: 60px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  width: 65%;
-
-}
-
-.input {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-.cta__button {
-  width: 100% !important;
-  max-width: 380px;
-  
-
-} }
 
 @media screen and (max-width: 590px) { 
+  .footer__socials {
+    flex-direction: column;
+    align-items: center;
+  }
 
-.footer__socials {
-  
-  flex-direction: column;
-  align-items: center;
-  
-}
-
-form { 
-  width: 80%;
-
-}
-
+  form { 
+    width: 80%;
+  }
 }
 
 
 @media screen and (max-width: 450px) { 
+  .h1 {
+    font-size: 56px;
+    text-align: left;
+  }
 
+  .hero__info {
+    justify-content: space-between;
+    gap: 60px;
+    width: 100%;
+  }
 
-     .h1 {
- 
-  font-size: 56px;
-  text-align: left;
-}
+  .hero__caption {
+    align-self: start;
+  }
 
-.hero__info {
-  width: 100%;
-  justify-content: space-between;
-  gap: 60px;
-  
-  
-}
+  .hero__facts {
+    text-align: left !important;
+  }
 
-
-.hero__caption {
-  align-self: start;
-}
-
-.hero__facts {
-
-text-align: left !important;
-
-
-}
-
-form { 
-  width: 100%;
-
-}
-
+  form { 
+    width: 100%;
+  }
 }
 
 
 @media screen and (max-width: 380px) { 
+  .hero__caption {
+    margin-bottom: 0;
+  }
 
-
-
-.hero__caption {
-  margin-bottom: 0;
-}
-
-.hero__scroll {
-  display: none;
-}
-
-
+  .hero__scroll {
+    display: none;
+  }
 }
 
 
 @media screen and (max-width: 370px) { 
+  .price-card { 
+    width: 300px;
+  }  
 
-.price-card { 
- width: 300px;
-}  
+  .cta__heading {
+    text-align: center;
+  }
 
+  .h1 {
+    font-size: 50px;
+  }
 
-.cta__heading {
-  text-align: center;
-}
-
-     .h1 {
- 
-  font-size: 50px;
-}
- .price-card button {
-  width: 100%;
- }
+  .price-card button {
+    width: 100%;
+  }
 }
 
 
 @media screen and (max-width: 345px) { 
-     .h1 {
- 
-  font-size: 46px;
-}
-.price-card { 
- width: 280px;
-}  
-
-
+  .h1 {
+    font-size: 46px;
   }
+
+  .price-card { 
+    width: 280px;
+  }  
+}
