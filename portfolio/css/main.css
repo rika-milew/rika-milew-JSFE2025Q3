@@ -971,6 +971,7 @@ input#phone::placeholder {
 @media screen and (max-width: 870px) {
   .h1 {
     font-size: 68px;
+    line-height: 118%;
   }
 
   .hero__container {
@@ -1101,6 +1102,7 @@ input#phone::placeholder {
 @media screen and (max-width: 680px) { 
   .h1 {
     font-size: 68px;
+    line-height: 114%;
   }
 
   .hero__container {
