@@ -279,10 +279,6 @@
   transition: all 0.3s ease;
 }
 
-.hero__scroll a {
-  text-decoration: none;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .hero__scroll:hover {
     color: var(--red);
