@@ -848,6 +848,9 @@ input#phone::placeholder {
 }
 
 
+/* media queries */
+
+
 @media screen and (max-width: 1438px) { 
   .price__cards { 
     gap: 20px;
