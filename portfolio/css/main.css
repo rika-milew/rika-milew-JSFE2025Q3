@@ -403,7 +403,16 @@
 .portfolio__container {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+}
+
+.portfolio__slider {
+  width: 100vw; 
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow-x: hidden;
 }
 
 .portfolio__container .h2 {
