@@ -413,6 +413,30 @@
   margin-left: -50vw;
   margin-right: -50vw;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  height: 654px;
+}
+
+.hover-container {
+  position: absolute;
+  top: 0;
+  width: 30%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.hover-left { 
+  left: 0; 
+  border: 1px solid red;
+}
+
+.hover-right { 
+  right: 0; 
+  border: 1px solid red;
 }
 
 .portfolio__container .h2 {
@@ -425,14 +449,6 @@
   margin-bottom: 40px;
   font-family: var(--font-family);
   text-align: left; 
-}
-
-.portfolio__slider {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  height: 654px;
 }
 
 .portfolio__slide {
