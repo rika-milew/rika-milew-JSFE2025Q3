@@ -620,7 +620,7 @@
 }
 
 .price-card__heading {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   line-height: 140%;
   color: var(--gray); 
 }
@@ -642,7 +642,7 @@
 
 .price-card__list li {
   position: relative;  
-  padding-left: 15px;
+  padding-left: 13px;
 }
 
 .price-card__list li::before {
