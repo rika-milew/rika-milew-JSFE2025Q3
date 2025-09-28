@@ -117,6 +117,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  z-index: 1002;
 }
 
 .menu {
@@ -599,8 +600,9 @@
 }
 
 .price-card__description {
+  width: 100%;
   max-width: 270px;
-  margin: 0 auto 12px;
+  margin: 0 0 12px;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -642,13 +644,15 @@
 
 .price-card__list li {
   position: relative;  
-  padding-left: 13px;
+  padding-left: 14px;
 }
 
 .price-card__list li::before {
   content: "■";         
   position: absolute;
+  top: 0;
   left: 0;
+  transform: translateY(-50%);
   width: 6px;
   height: 6px;  
 }
@@ -1088,6 +1092,70 @@ input#phone::placeholder {
   .hero__heading {
     padding-left: 20px;
   }
+
+   .menu__burger {
+        display: flex;
+        z-index: 1002;
+    }
+
+    .menu__list {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      z-index: 1000;
+      display: flex;               
+      flex-direction: column;  
+      justify-content: center;      
+      align-items: center;
+      gap: 0;         
+      width: 100%;
+      height: 100vh;
+      padding: 60px 0 0 0;
+      background: var(--gray);
+      opacity: 0;
+      
+      transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+    }
+
+    .menu__list li a {
+      width: 100%;
+      padding: 18px 0;
+      text-align: center;  
+    }
+
+    .menu__list li {  
+      display: flex;
+      align-items: center;         
+      justify-content: center; 
+      width: 100%; 
+      
+    }
+
+    .menu__list.active {
+      right: 0;
+      opacity: 1; 
+      transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+    }
+
+    /* .menu__burger span {
+      width: 20px;
+      height: 2px;
+    } */
+
+    .menu__burger.active span:nth-child(1) {
+      top: 50%;
+      width: 20px;
+      transform: rotate(45deg);
+    }
+
+    .menu__burger.active span:nth-child(2) {
+      top: 50%;
+      transform: rotate(-45deg);
+    }
+
+    body.no-scroll {
+      overflow: hidden;
+    }
 }
 
 

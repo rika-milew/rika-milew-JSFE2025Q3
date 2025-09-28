@@ -88,3 +88,54 @@ if (isTouchDevice) {
     isSwiping = false;
   }, { passive: true });
 }
+
+
+// burger menu
+
+const burger = document.querySelector('.menu__burger');
+const menuList = document.querySelector('.menu__list');
+const menuLinks = document.querySelectorAll('.menu__link')
+const body = document.body;
+
+burger.addEventListener('click', () => {
+  burger.classList.toggle('active');
+  menuList.classList.toggle('active');
+  body.classList.toggle('no-scroll');
+});
+
+
+document.querySelectorAll('.menu__link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+
+      const targetId = href.slice(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    burger.classList.remove('active');
+    menuList.classList.remove('active');
+    body.classList.remove('no-scroll');
+  });
+});
+
+
+
+
+
+
+// scroll button
+
+const scrollButton = document.getElementById('scrollButton');
