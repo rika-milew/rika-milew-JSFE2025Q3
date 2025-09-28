@@ -601,7 +601,6 @@
 @media (hover: hover) and (pointer: fine) {
   .price-card:hover {
     border: 1px solid var(--red);
-    cursor: pointer;
   }
 }
 
@@ -674,6 +673,7 @@ button {
   color: var(--white);
   background: #222;
   transition: all 0.3s ease; 
+  cursor: pointer;
 }
 
 @media (hover: hover) and (pointer: fine) {
