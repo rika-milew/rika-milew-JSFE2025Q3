@@ -412,12 +412,18 @@
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  overflow-x: hidden;
+  overflow: hidden;
+  height: 654px;
+}
+
+.portfolio__slider-wrapper {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 20px;
-  height: 654px;
+  /* transform: translateX(0);
+  transition: transform 0.1s linear;  */
 }
 
 .hover-container {
