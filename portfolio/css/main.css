@@ -760,15 +760,15 @@ button {
 }
 
 .faq__answer {
-  display: none;
-  padding-bottom: 20px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-bottom: 0;
   font-family: var(--font-family);
   text-align: left;
+  transition: margin 0.5s ease, max-height 0.5s ease, opacity 0.5s ease;
 }
 
-#faq__answer1 {
-  display: block;
-}
 
 .faq__arrow {
   display: flex;
@@ -778,6 +778,11 @@ button {
 
 svg {
   display: block;
+}
+
+.faq__question.shown .faq__answer {
+  margin-bottom: 20px;
+  opacity: 1;
 }
 
 

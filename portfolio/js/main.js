@@ -132,9 +132,47 @@ document.querySelectorAll('.menu__link').forEach(link => {
 });
 
 
+// faq
+
+const questions = document.querySelectorAll('.faq__question');
+const answers = document.querySelectorAll('.faq__answer');
 
 
+function showAnswer(index) {
+  questions.forEach((question, i) => {
+    const answer = question.querySelector('.faq__answer');
+    if (i === index) {
+      question.classList.add('shown');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    } else {
+      question.classList.remove('shown');
+      answer.style.maxHeight = 0;
+    }
+  });
+  localStorage.setItem('openedAnswer', index);
+}
+  
+questions.forEach((question, i) => {
+  const faqQuestion = question.querySelector('.faq__question-block');
+  faqQuestion.addEventListener('click', () => {
+    const answer = question.querySelector('.faq__answer');
+    if (question.classList.contains('shown')) {
+      question.classList.remove('shown');
+      answer.style.maxHeight = 0;
+      localStorage.removeItem('openedAnswer');
+    } else {
+      showAnswer(i);
+    }
+  });
+});
 
+const savedFaq = localStorage.getItem('openedAnswer');
+
+if (savedFaq !== null) {
+  showAnswer(Number(savedFaq));
+} else {
+  showAnswer(0);
+}
 
 // scroll button
 
