@@ -47,4 +47,44 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', centerSlider);
 
 
+// mobile slider
 
+const minSwipe = 10;
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+if (isTouchDevice) {
+  let startX = 0;
+  let currentShift = 0;
+  let isSwiping = false;
+
+  slider.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    currentShift = sliderShift;
+    isSwiping = false;  
+  }, { passive: true });
+
+  slider.addEventListener('touchmove', (e) => {
+    const deltaX = e.touches[0].clientX - startX;
+
+    if (!isSwiping && Math.abs(deltaX) < minSwipe) return;
+    
+    isSwiping = true;
+    e.preventDefault();
+
+    sliderShift = currentShift + deltaX;
+
+    const sliderWidth = slider.scrollWidth;
+    const containerWidth = sliderContainer.getBoundingClientRect().width;
+    const minSliderShift = containerWidth - sliderWidth;
+    const maxSliderShift = 0;
+
+    if (sliderShift > maxSliderShift) sliderShift = maxSliderShift;
+    if (sliderShift < minSliderShift) sliderShift = minSliderShift;
+
+    slider.style.transform = `translateX(${sliderShift}px)`;
+  }, { passive: false });
+
+  slider.addEventListener('touchend', () => {
+    isSwiping = false;
+  }, { passive: true });
+}
