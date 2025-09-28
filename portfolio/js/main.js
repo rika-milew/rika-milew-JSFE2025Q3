@@ -177,3 +177,8 @@ if (savedFaq !== null) {
 // scroll button
 
 const scrollButton = document.getElementById('scrollButton');
+const aboutMeSection = document.getElementById('about-me');
+
+scrollButton.addEventListener('click', () => {
+  aboutMeSection.scrollIntoView({ behavior: 'smooth' });
+});
