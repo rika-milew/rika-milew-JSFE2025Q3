@@ -859,6 +859,13 @@ input#phone::placeholder {
   text-decoration: none;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .footer__link:hover {
+    color: var(--red);
+    cursor: pointer;
+  }
+}
+
 
 /* media queries */
 
