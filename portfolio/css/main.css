@@ -892,6 +892,96 @@ input#phone::placeholder {
   text-decoration: none;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .footer__link:hover {
+    color: var(--red);
+    cursor: pointer;
+  }
+}
+
+
+/* modal  */
+
+.modal-section {
+  position: fixed;       
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;       
+}
+
+.open {
+  display: flex;
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1005;
+  background-color: var(--white);
+  padding: 60px 20px;
+  width: 100%;
+  height: fit-content;
+  max-width: 500px;
+}
+
+.modal__heading {
+  width: 100%;
+  margin-bottom: 12px;
+  text-align: center;
+  color: var(--gray);
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal__input, .modal__button {
+  width: 100% !important;
+  max-width: 380px !important;
+}
+
+
+ .modal__close-button {
+   position: absolute;
+   top: 28.5px;
+   right: 40px;
+ }
+
+
+.modal__close-button span {
+  position: absolute;
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--gray);
+  transition: transform 0.4s ease, top 0.4s ease;
+  cursor: pointer;
+}
+
+   .modal__close-button span:nth-child(1) {
+      top: 50%;
+      transform: rotate(45deg);
+    }
+
+    .modal__close-button span:nth-child(2) {
+      top: 50%;
+      transform: rotate(-45deg);
+    }
+
 
 /* media queries */
 

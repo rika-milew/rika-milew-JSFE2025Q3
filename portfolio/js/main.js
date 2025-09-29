@@ -182,3 +182,37 @@ const aboutMeSection = document.getElementById('about-me');
 scrollButton.addEventListener('click', () => {
   aboutMeSection.scrollIntoView({ behavior: 'smooth' });
 });
+
+// modal
+
+let modalSection = document.getElementById("modalSection");
+let modalWindow = document.getElementById("giftModalWindow");
+let closeButton = document.getElementById("closeButton");
+
+function openModal() {
+  modalSection.classList.add("open");
+  document.body.style.overflow = "hidden"; 
+}
+
+function closeModal() {
+  modalSection.classList.remove("open");
+  document.body.style.overflow = ""; 
+}
+
+closeButton.addEventListener("click", closeModal);
+modalSection.addEventListener("click", (e) => {
+  if (e.target === modalSection) {
+    closeModal();
+  }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const priceButtons = document.querySelectorAll('.price-card__button');
+  
+  priceButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      openModal();
+    });
+  });
+});
