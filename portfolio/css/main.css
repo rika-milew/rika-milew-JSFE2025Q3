@@ -572,8 +572,9 @@
 }
 
 .price-card__description {
+  width: 100%;
   max-width: 270px;
-  margin: 0 auto 12px;
+  margin: 0 0 12px;
 }
 
 @media (hover: hover) and (pointer: fine) {
