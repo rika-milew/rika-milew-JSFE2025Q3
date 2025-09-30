@@ -430,7 +430,10 @@
 }
 
 
-
+.portfolio__slider-wrapper.disabled-slider {
+  cursor: default;
+  pointer-events: none; 
+}
 
 .hover-container {
   position: absolute;

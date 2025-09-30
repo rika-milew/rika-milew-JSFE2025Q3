@@ -8,13 +8,37 @@ let sliderShift = 0;
 let sliderStep = 0; 
 let sliderSpeed = 8; 
 
-function centerSlider() { 
-  const sliderWidth = slider.scrollWidth; 
-  const containerWidth = sliderContainer.getBoundingClientRect().width; 
 
+
+function updateSliderMode() {
+  const sliderWidth = slider.scrollWidth;
+  const containerWidth = sliderContainer.getBoundingClientRect().width;
+
+  
   sliderShift = (containerWidth - sliderWidth) / 2;
   slider.style.transform = `translateX(${sliderShift}px)`;
+
+  if (sliderWidth <= containerWidth) {
+    sliderStep = 0;
+    slider.classList.add('disabled-slider');
+
+    document.querySelector('.hover-left').style.pointerEvents = 'none';
+    document.querySelector('.hover-right').style.pointerEvents = 'none';
+  } else {
+    slider.classList.remove('disabled-slider');
+
+    document.querySelector('.hover-left').style.pointerEvents = 'auto';
+    document.querySelector('.hover-right').style.pointerEvents = 'auto';
+  }
 }
+
+// function centerSlider() { 
+//   const sliderWidth = slider.scrollWidth; 
+//   const containerWidth = sliderContainer.getBoundingClientRect().width; 
+
+//   sliderShift = (containerWidth - sliderWidth) / 2;
+//   slider.style.transform = `translateX(${sliderShift}px)`;
+// }
 
   
 function startSlider() { 
@@ -40,17 +64,18 @@ document.querySelector('.hover-right').addEventListener('mouseenter', () => slid
 document.querySelector('.hover-right').addEventListener('mouseleave', () => sliderStep = 0); 
       
       
-window.addEventListener('load', () => { 
-  centerSlider(); 
-  startSlider(); 
-}); 
-window.addEventListener('resize', centerSlider);
+window.addEventListener('load', () => {
+  updateSliderMode();
+  startSlider();
+});
 
+window.addEventListener('resize', updateSliderMode);
 
 // mobile slider
 
+
+let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 const minSwipe = 10;
-const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 if (isTouchDevice) {
   let startX = 0;
@@ -58,12 +83,14 @@ if (isTouchDevice) {
   let isSwiping = false;
 
   slider.addEventListener('touchstart', (e) => {
+    if (slider.classList.contains('disabled-slider')) return;
     startX = e.touches[0].clientX;
     currentShift = sliderShift;
     isSwiping = false;  
   }, { passive: true });
 
   slider.addEventListener('touchmove', (e) => {
+    if (slider.classList.contains('disabled-slider')) return; 
     const deltaX = e.touches[0].clientX - startX;
 
     if (!isSwiping && Math.abs(deltaX) < minSwipe) return;
