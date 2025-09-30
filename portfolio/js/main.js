@@ -6,8 +6,7 @@ const sliderContainer = document.querySelector('.portfolio__slider');
 
 let sliderShift = 0; 
 let sliderStep = 0; 
-let sliderSpeed = 8; 
-
+let sliderSpeed = 8;
 
 
 function updateSliderMode() {
@@ -32,15 +31,7 @@ function updateSliderMode() {
   }
 }
 
-// function centerSlider() { 
-//   const sliderWidth = slider.scrollWidth; 
-//   const containerWidth = sliderContainer.getBoundingClientRect().width; 
 
-//   sliderShift = (containerWidth - sliderWidth) / 2;
-//   slider.style.transform = `translateX(${sliderShift}px)`;
-// }
-
-  
 function startSlider() { 
   if (sliderStep !== 0) { 
     sliderShift += sliderStep * sliderSpeed; 
