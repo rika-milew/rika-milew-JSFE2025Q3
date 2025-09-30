@@ -403,17 +403,30 @@
 .portfolio__container {
   display: flex;
   flex-direction: column;
+  padding-bottom: 0;
+}
+
+.slider-container {
+  width: 100%;
+  padding: 0 0 60px;
 }
 
 .portfolio__slider {
-  width: 100vw; 
+  overflow: hidden;
   position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  overflow-x: hidden;
 }
+
+.portfolio__slider-wrapper {
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  transform: translateX(0);
+  transition: transform 0.1s linear; 
+  height: 654px;
+  padding: 0 20px;
+}  
 
 .portfolio__container .h2 {
   margin-bottom: 12px;
