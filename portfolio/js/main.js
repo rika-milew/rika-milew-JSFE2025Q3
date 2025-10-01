@@ -3,16 +3,13 @@
 const slider = document.querySelector('.portfolio__slider-wrapper'); 
 const sliderContainer = document.querySelector('.portfolio__slider'); 
 
-
 let sliderShift = 0; 
 let sliderStep = 0; 
 let sliderSpeed = 8;
 
-
-function updateSliderMode() {
+function setSlider() {
   const sliderWidth = slider.scrollWidth;
   const containerWidth = sliderContainer.getBoundingClientRect().width;
-
   
   sliderShift = (containerWidth - sliderWidth) / 2;
   slider.style.transform = `translateX(${sliderShift}px)`;
@@ -20,17 +17,16 @@ function updateSliderMode() {
   if (sliderWidth <= containerWidth) {
     sliderStep = 0;
     slider.classList.add('disabled-slider');
-
+    slider.style.justifyContent = 'center'; 
     document.querySelector('.hover-left').style.pointerEvents = 'none';
     document.querySelector('.hover-right').style.pointerEvents = 'none';
   } else {
     slider.classList.remove('disabled-slider');
-
+    slider.style.justifyContent = 'flex-start'; 
     document.querySelector('.hover-left').style.pointerEvents = 'auto';
     document.querySelector('.hover-right').style.pointerEvents = 'auto';
   }
 }
-
 
 function startSlider() { 
   if (sliderStep !== 0) { 
@@ -40,35 +36,46 @@ function startSlider() {
     const minSliderShift = containerWidth - sliderWidth; 
     const maxSliderShift = 0; 
       
-    if (sliderShift > maxSliderShift) sliderShift = maxSliderShift; 
-    if (sliderShift < minSliderShift) sliderShift = minSliderShift; 
+    if (sliderShift > maxSliderShift) {
+      sliderShift = maxSliderShift; 
+    }
+    if (sliderShift < minSliderShift) {
+      sliderShift = minSliderShift; 
+    }
       
     slider.style.transform = `translateX(${sliderShift}px)`; 
   } 
   requestAnimationFrame(startSlider); 
 } 
    
-
 document.querySelector('.hover-left').addEventListener('mouseenter', () => sliderStep = +1); 
 document.querySelector('.hover-left').addEventListener('mouseleave', () => sliderStep = 0); 
 document.querySelector('.hover-right').addEventListener('mouseenter', () => sliderStep = -1); 
 document.querySelector('.hover-right').addEventListener('mouseleave', () => sliderStep = 0); 
-      
-      
+        
 window.addEventListener('load', () => {
-  updateSliderMode();
+  setSlider();
   startSlider();
 });
 
-window.addEventListener('resize', updateSliderMode);
+window.addEventListener('resize', setSlider);
+
 
 // mobile slider
-
 
 let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 const minSwipe = 10;
 
 if (isTouchDevice) {
+  const leftArrow = document.querySelector('.hover-left');
+  const rightArrow = document.querySelector('.hover-right');
+
+  leftArrow.style.display = 'none';
+  rightArrow.style.display = 'none';
+
+  leftArrow.style.pointerEvents = 'none';
+  rightArrow.style.pointerEvents = 'none'; 
+
   let startX = 0;
   let currentShift = 0;
   let isSwiping = false;
@@ -121,14 +128,12 @@ burger.addEventListener('click', () => {
   body.classList.toggle('no-scroll');
 });
 
-
 document.querySelectorAll('.menu__link').forEach(link => {
   link.addEventListener('click', (e) => {
     const href = link.getAttribute('href');
 
     if (href && href.startsWith('#')) {
       e.preventDefault();
-
       const targetId = href.slice(1);
       const targetElement = document.getElementById(targetId);
 
@@ -154,19 +159,29 @@ document.querySelectorAll('.menu__link').forEach(link => {
 
 const questions = document.querySelectorAll('.faq__question');
 const answers = document.querySelectorAll('.faq__answer');
-
+const plusIcon = `<svg class="faq__svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 4.25C12.4142 4.25 12.75 4.58579 12.75 5V11.25H19C19.4142 11.25 19.75 11.5858 19.75 12C19.75 12.4142 19.4142 12.75 19 12.75H12.75V19C12.75 19.4142 12.4142 19.75 12 19.75C11.5858 19.75 11.25 19.4142 11.25 19V12.75H5C4.58579 12.75 4.25 12.4142 4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H11.25V5C11.25 4.58579 11.5858 4.25 12 4.25Z" fill="white"/>
+</svg>`;
+const minusIcon = `<svg class="faq__svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M19 11.25C19.4142 11.25 19.75 11.5858 19.75 12C19.75 12.4142 19.4142 12.75 19 12.75H5C4.58579 12.75 4.25 12.4142 4.25 12C4.25 11.5858 4.58579 11.25 5 11.25H19Z" fill="white"/>
+</svg>`;
 
 function showAnswer(index) {
   questions.forEach((question, i) => {
     const answer = question.querySelector('.faq__answer');
+    const icon = question.querySelector('.faq__icon');
+
     if (i === index) {
       question.classList.add('shown');
       answer.style.maxHeight = answer.scrollHeight + 'px';
+      icon.innerHTML = minusIcon;
     } else {
       question.classList.remove('shown');
       answer.style.maxHeight = 0;
+      icon.innerHTML = plusIcon;
     }
   });
+
   localStorage.setItem('openedAnswer', index);
 }
   
@@ -174,9 +189,12 @@ questions.forEach((question, i) => {
   const faqQuestion = question.querySelector('.faq__question-block');
   faqQuestion.addEventListener('click', () => {
     const answer = question.querySelector('.faq__answer');
+    const icon = question.querySelector('.faq__icon');
+
     if (question.classList.contains('shown')) {
       question.classList.remove('shown');
       answer.style.maxHeight = 0;
+      icon.innerHTML = plusIcon;
       localStorage.removeItem('openedAnswer');
     } else {
       showAnswer(i);
@@ -223,7 +241,6 @@ modalSection.addEventListener("click", (e) => {
     closeModal();
   }
 });
-
 
 document.addEventListener('DOMContentLoaded', function() {
   const priceButtons = document.querySelectorAll('.price-card__button');

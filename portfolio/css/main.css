@@ -141,6 +141,7 @@
 .menu__list a {
   padding: 0;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -434,25 +435,16 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  gap: 20px;
+  /* gap: 20px; */
   transform: translateX(0);
   transition: transform 0.1s linear; 
   height: 654px;
-  padding: 0 20px;
 }  
 
-/* .portfolio__slider-wrapper {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 20px;
-  align-items: flex-start;
-  transform: translateX(0); 
-  transition: transform 0.1s linear; 
-  height: 654px;
-} */
-
+.portfolio__spacer {
+  flex: 0 0 20px;  
+  height: auto;
+}
 
 .portfolio__slider-wrapper.disabled-slider {
   cursor: default;
@@ -494,6 +486,7 @@
   flex-shrink: 0;
   background-size: cover;
   background-position: center;
+  margin-right: 20px;
 }
 
 #portfolio__slide1 {
@@ -579,6 +572,7 @@
 
 #portfolio__slide12 {
   align-self: flex-start;
+  margin-right: 0;
   width: 400px;
   height: 534px;
   background-image: url(../assets/images/webp/img-12.webp);
@@ -708,6 +702,7 @@ button {
   text-align: center;
   color: var(--white);
   background: #222;
+  border: none;
   transition: all 0.3s ease; 
   cursor: pointer;
 }
@@ -797,7 +792,7 @@ button {
 }
 
 
-.faq__arrow {
+.faq__icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -891,6 +886,7 @@ input#phone::placeholder {
 
 .cta__button {
   max-width: 200px;
+  border: none;
 }
 
 
@@ -979,6 +975,7 @@ input#phone::placeholder {
 .modal__input, .modal__button {
   width: 100% !important;
   max-width: 380px !important;
+  border: none;
 }
 
 
@@ -1453,6 +1450,7 @@ input#phone::placeholder {
 
   .price-card button {
     width: 100%;
+    border: none;
   }
 }
 
