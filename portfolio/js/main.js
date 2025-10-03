@@ -7,6 +7,8 @@ let sliderShift = 0;
 let sliderStep = 0; 
 let sliderSpeed = 8;
 
+const basicPadding = 20;
+
 function setSlider() {
   const sliderWidth = slider.scrollWidth;
   const containerWidth = sliderContainer.getBoundingClientRect().width;
@@ -33,8 +35,15 @@ function startSlider() {
     sliderShift += sliderStep * sliderSpeed; 
     const sliderWidth = slider.scrollWidth; 
     const containerWidth = sliderContainer.getBoundingClientRect().width; 
-    const minSliderShift = containerWidth - sliderWidth; 
-    const maxSliderShift = 0; 
+
+    const contentContainer = document.querySelector('.container');
+    const contentContainerWidth = contentContainer.getBoundingClientRect();
+    
+    const leftSliderPadding = contentContainerWidth.left;
+    const rightSliderPadding = document.documentElement.clientWidth - contentContainerWidth.right;
+
+    const maxSliderShift = leftSliderPadding; 
+    const minSliderShift = containerWidth - sliderWidth - rightSliderPadding;
       
     if (sliderShift > maxSliderShift) {
       sliderShift = maxSliderShift; 
@@ -182,7 +191,7 @@ function showAnswer(index) {
     }
   });
 
-  localStorage.setItem('openedAnswer', index);
+  sessionStorage.setItem('openedAnswer', index);
 }
   
 questions.forEach((question, i) => {
@@ -195,20 +204,21 @@ questions.forEach((question, i) => {
       question.classList.remove('shown');
       answer.style.maxHeight = 0;
       icon.innerHTML = plusIcon;
-      localStorage.removeItem('openedAnswer');
+      sessionStorage.removeItem('openedAnswer');
     } else {
       showAnswer(i);
     }
   });
 });
 
-const savedFaq = localStorage.getItem('openedAnswer');
+const savedFaq = sessionStorage.getItem('openedAnswer');
 
 if (savedFaq !== null) {
   showAnswer(Number(savedFaq));
 } else {
   showAnswer(0);
 }
+
 
 // scroll button
 
@@ -218,6 +228,7 @@ const aboutMeSection = document.getElementById('about-me');
 scrollButton.addEventListener('click', () => {
   aboutMeSection.scrollIntoView({ behavior: 'smooth' });
 });
+
 
 // modal
 
