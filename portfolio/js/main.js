@@ -73,7 +73,7 @@ window.addEventListener('resize', setSlider);
 // mobile slider
 
 let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-const minSwipe = 10;
+const minSwipe = 5;
 
 if (isTouchDevice) {
   const leftArrow = document.querySelector('.hover-left');
