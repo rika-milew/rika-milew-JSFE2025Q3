@@ -163,6 +163,16 @@ document.querySelectorAll('.menu__link').forEach(link => {
   });
 });
 
+function setMenu() {
+  if (window.innerWidth > 768 && burger.classList.contains('active')) {
+    burger.classList.remove('active');
+    menuList.classList.remove('active');
+    body.classList.remove('no-scroll');
+  }
+}
+
+window.addEventListener('resize', setMenu);
+
 
 // faq
 
