@@ -113,6 +113,7 @@
 }
 
 .logo {
+  z-index: 1002;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,6 +141,7 @@
 .menu__list a {
   padding: 0;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -155,8 +157,8 @@
 
 .menu__burger {
   position: relative;
-  display: none;
   z-index: 1000;
+  display: none;
   width: 20px;
   height: 24px;
   background: none;
@@ -210,8 +212,8 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding-right: 22px;
   padding-left: 2px;
+  padding-right: 22px;
 }
 
 .hero__signature, .hero__year {
@@ -412,8 +414,49 @@
 }
 
 .portfolio__slider {
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+ 
+}
+
+
+.portfolio__slider-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* gap: 20px; */
+  height: 654px;
+  transform: translateX(0);
+  transition: transform 0.1s linear; 
+}  
+
+.portfolio__spacer {
+  flex: 0 0 20px;  
+  height: auto;
+}
+
+.portfolio__slider-wrapper.disabled-slider {
+  cursor: default;
+  pointer-events: none; 
+}
+
+.hover-container {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  width: 30%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.hover-left { 
+  left: 0; 
+  border: 1px solid red;
+}
+
+.hover-right { 
+  right: 0; 
+  border: 1px solid red;
 }
 
 .portfolio__slider-wrapper {
@@ -440,16 +483,9 @@
   text-align: left; 
 }
 
-.portfolio__slider {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  height: 654px;
-}
-
 .portfolio__slide {
   flex-shrink: 0;
+  margin-right: 20px;
   background-size: cover;
   background-position: center;
 }
@@ -466,7 +502,6 @@
   width: 220px;
   height: 220px;
   background-image: url(../assets/images/webp/img-21.webp);
-    
 }
 
 #portfolio__slide3 {
@@ -509,7 +544,6 @@
   width: 400px;
   height: 534px;
   background-image: url(../assets/images/webp/img-5.webp);
-  
 }
 
 #portfolio__slide9 {
@@ -517,7 +551,6 @@
   width: 220px;
   height: 220px;
   background-image: url(../assets/images/webp/img-7.webp);
-  
 }
 
 #portfolio__slide10 {
@@ -534,9 +567,9 @@
   background-image: url(../assets/images/webp/img-9.webp);
 }
 
-
 #portfolio__slide12 {
   align-self: flex-start;
+  margin-right: 0;
   width: 400px;
   height: 534px;
   background-image: url(../assets/images/webp/img-12.webp);
@@ -640,6 +673,7 @@
   transform: translateY(-50%);
   width: 6px;
   height: 6px;  
+  transform: translateY(-50%);
 }
 
 .price-card__price {
@@ -647,10 +681,10 @@
 }
 
 .price-card__bottom {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 button {
@@ -666,6 +700,7 @@ button {
   text-align: center;
   color: var(--white);
   background: #222;
+  border: none;
   transition: all 0.3s ease; 
   cursor: pointer;
 }
@@ -745,17 +780,16 @@ button {
 }
 
 .faq__answer {
-  display: none;
-  padding-bottom: 20px;
+  max-height: 0;
+  overflow: hidden;
+  margin-bottom: 0;
   font-family: var(--font-family);
   text-align: left;
+  opacity: 0;
+  transition: margin 0.5s ease, max-height 0.5s ease, opacity 0.5s ease;
 }
 
-#faq__answer1 {
-  display: block;
-}
-
-.faq__arrow {
+.faq__icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -763,6 +797,11 @@ button {
 
 svg {
   display: block;
+}
+
+.faq__question.shown .faq__answer {
+  margin-bottom: 20px;
+  opacity: 1;
 }
 
 
@@ -812,7 +851,7 @@ input {
   }
 }
 
-input#name {
+input#name, input#nameModal {
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
@@ -821,11 +860,11 @@ input#name {
   color: #989898;
 }
 
-input#name::placeholder {
+input#name::placeholder, input#nameModal::placeholder {
   color: #989898;
 }
 
-input#phone {
+input#phone, input#phoneModal {
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
@@ -834,7 +873,7 @@ input#phone {
   color: var(--gray);
 }
 
-input#phone::placeholder {
+input#phone::placeholder, input#phoneModal::placeholder {
   color: var(--gray);
 }
 
@@ -844,6 +883,7 @@ input#phone::placeholder {
 
 .cta__button {
   max-width: 200px;
+  border: none;
 }
 
 
@@ -877,6 +917,88 @@ input#phone::placeholder {
     color: var(--red);
     cursor: pointer;
   }
+}
+
+
+/* modal  */
+
+.modal-section {
+  position: fixed;       
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;       
+}
+
+.open {
+  display: flex;
+}
+
+.modal {
+  position: relative;
+  z-index: 1005;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  width: 100%;
+  max-width: 500px;
+  height: fit-content;
+  padding: 60px 20px;
+}
+
+.modal__heading {
+  width: 100%;
+  margin-bottom: 12px;
+  text-align: center;
+  color: var(--gray);
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal__input, .modal__button {
+  width: 100% !important;
+  max-width: 380px !important;
+  border: none;
+}
+
+.modal__close-button {
+  position: absolute;
+  top: 28.5px;
+  right: 40px;
+}
+
+.modal__close-button span {
+  position: absolute;
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--gray);
+  transition: transform 0.4s ease, top 0.4s ease;
+  cursor: pointer;
+}
+
+.modal__close-button span:nth-child(1) {
+  top: 50%;
+  transform: rotate(45deg);
+}
+
+.modal__close-button span:nth-child(2) {
+  top: 50%;
+  transform: rotate(-45deg);
 }
 
 
@@ -1084,6 +1206,63 @@ input#phone::placeholder {
   .hero__heading {
     padding-left: 20px;
   }
+
+  .menu__burger {
+    z-index: 1002;
+    display: flex;
+  }
+
+  .menu__list {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    z-index: 1000;
+    display: flex;               
+    flex-direction: column;  
+    justify-content: center;      
+    align-items: center;
+    gap: 0;         
+    width: 100%;
+    height: 100vh;
+    padding: 60px 0 0 0;
+    background: var(--gray);
+    opacity: 0;
+    transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+  }
+
+  .menu__list li a {
+    width: 100%;
+    padding: 18px 0;
+    text-align: center;  
+  }
+
+  .menu__list li {  
+    display: flex;  
+    justify-content: center; 
+    align-items: center;
+    width: 100%; 
+  }
+    
+  .menu__list.active {
+    right: 0;
+    opacity: 1; 
+    transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+  }
+
+  .menu__burger.active span:nth-child(1) {
+    top: 50%;
+    width: 20px;
+    transform: rotate(45deg);
+  }
+
+  .menu__burger.active span:nth-child(2) {
+    top: 50%;
+    transform: rotate(-45deg);
+  }
+
+  body.no-scroll {
+    overflow: hidden;
+  }
 }
 
 
@@ -1259,6 +1438,7 @@ input#phone::placeholder {
 
   .price-card button {
     width: 100%;
+    border: none;
   }
 }
 
