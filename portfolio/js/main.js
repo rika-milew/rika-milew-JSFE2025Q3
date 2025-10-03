@@ -89,14 +89,14 @@ if (isTouchDevice) {
   let currentShift = 0;
   let isSwiping = false;
 
-  slider.addEventListener('touchstart', (e) => {
+  sliderContainer.addEventListener('touchstart', (e) => {
     if (slider.classList.contains('disabled-slider')) return;
     startX = e.touches[0].clientX;
     currentShift = sliderShift;
     isSwiping = false;  
   }, { passive: true });
 
-  slider.addEventListener('touchmove', (e) => {
+  sliderContainer.addEventListener('touchmove', (e) => {
     if (slider.classList.contains('disabled-slider')) return; 
     const deltaX = e.touches[0].clientX - startX;
 
@@ -118,7 +118,7 @@ if (isTouchDevice) {
     slider.style.transform = `translateX(${sliderShift}px)`;
   }, { passive: false });
 
-  slider.addEventListener('touchend', () => {
+  sliderContainer.addEventListener('touchend', () => {
     isSwiping = false;
   }, { passive: true });
 }
