@@ -457,19 +457,7 @@
 .hover-right { 
   right: 0; 
   border: 1px solid red;
-}
-
-.portfolio__slider-wrapper {
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  transform: translateX(0);
-  transition: transform 0.1s linear; 
-  height: 654px;
-  padding: 0 20px;
-}  
+} 
 
 .portfolio__container .h2 {
   margin-bottom: 12px;
@@ -670,7 +658,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  transform: translateY(-50%);
   width: 6px;
   height: 6px;  
   transform: translateY(-50%);
