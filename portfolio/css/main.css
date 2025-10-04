@@ -281,6 +281,8 @@
   padding: 0;
   line-height: 150%;
   text-transform: none;
+  background: none;
+  border: none;
   transition: all 0.3s ease;
 }
 
@@ -303,10 +305,10 @@
   cursor: pointer;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
   .hero__scroll:hover {
     color: var(--red);
+    background: none;
     cursor: pointer;
   }
 }
@@ -439,15 +441,12 @@
 .portfolio__slider {
   position: relative;
   overflow: hidden;
- 
 }
-
 
 .portfolio__slider-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  /* gap: 20px; */
   height: 654px;
   transform: translateX(0);
   transition: transform 0.1s linear; 
@@ -474,12 +473,12 @@
 
 .hover-left { 
   left: 0; 
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 .hover-right { 
   right: 0; 
-  border: 1px solid red;
+  /* border: 1px solid red; */
 } 
 
 .portfolio__container .h2 {
@@ -695,24 +694,6 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-}
-
-button {
-  width: 272px;
-  min-width: 200px;
-  height: 60px;
-  padding: 0px 20px;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 150%;
-  font-family: var(--second-family);
-  text-transform: uppercase;
-  text-align: center;
-  color: var(--white);
-  background: #222;
-  border: none;
-  transition: all 0.3s ease; 
-  cursor: pointer;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1186,6 +1167,21 @@ input#phone::placeholder, input#phoneModal::placeholder {
 @media screen and (max-width: 768px) {
   .menu__burger {
     display: block;
+    background: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .menu__burger:hover {
+      color: var(--red);
+      background: none;
+      cursor: pointer;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .menu__burger:hover span {
+      background: var(--red);
+    }
   }
 
   .menu__list {
