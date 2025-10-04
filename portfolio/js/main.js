@@ -73,7 +73,7 @@ window.addEventListener('resize', setSlider);
 // mobile slider
 
 let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-const minSwipe = 5;
+const minSwipeDistance = 5;
 
 if (isTouchDevice) {
   const leftArrow = document.querySelector('.hover-left');
@@ -91,6 +91,7 @@ if (isTouchDevice) {
 
   sliderContainer.addEventListener('touchstart', (e) => {
     if (slider.classList.contains('disabled-slider')) return;
+    slider.style.transition = "none"; 
     startX = e.touches[0].clientX;
     currentShift = sliderShift;
     isSwiping = false;  
@@ -100,7 +101,7 @@ if (isTouchDevice) {
     if (slider.classList.contains('disabled-slider')) return; 
     const deltaX = e.touches[0].clientX - startX;
 
-    if (!isSwiping && Math.abs(deltaX) < minSwipe) return;
+    if (!isSwiping && Math.abs(deltaX) < minSwipeDistance) return;
     
     isSwiping = true;
     e.preventDefault();
@@ -120,6 +121,9 @@ if (isTouchDevice) {
 
   sliderContainer.addEventListener('touchend', () => {
     isSwiping = false;
+
+    slider.style.transition = "transform 0.3s ease-out";
+    slider.style.transform = `translateX(${sliderShift}px)`; 
   }, { passive: true });
 }
 
