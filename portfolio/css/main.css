@@ -286,7 +286,6 @@
   transition: all 0.3s ease;
 }
 
-
 .button {
   width: 272px;
   min-width: 200px;
@@ -912,6 +911,7 @@ input#phone::placeholder, input#phoneModal::placeholder {
 
 
 /* modal  */
+
 
 .modal-section {
   position: fixed;       
