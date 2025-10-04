@@ -337,7 +337,7 @@
 .hero__image {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background-image: url(../assets/images/webp/img-10.webp);
+  background-image: url(../assets/images/webp/img-10-min.webp);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -357,7 +357,7 @@
   width: 100%;
   aspect-ratio: 0.7486 / 1;
   margin: 0;
-  background-image: url(../assets/images/webp/img-11.webp);
+  background-image: url(../assets/images/webp/img-11-min.webp);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -405,16 +405,16 @@
 }
 
 .about-me__image1 {
-  background-image: url(../assets/images/webp/img-photographer-1.webp);
+  background-image: url(../assets/images/webp/img-photographer-1-min.webp);
 }
 
 .about-me__image2 {
   margin-top: 40px;
-  background-image: url(../assets/images/webp/img-photographer-2.webp);
+  background-image: url(../assets/images/webp/img-photographer-2-min.webp);
 }
 
 .about-me__image3 {
-  background-image: url(../assets/images/webp/img-photographer-3.webp);
+  background-image: url(../assets/images/webp/img-photographer-3-min.webp);
 }
 
 
@@ -505,77 +505,77 @@
   align-self: flex-end;
   width: 400px;
   height: 534px;
-  background-image: url(../assets/images/webp/img-14.webp);
+  background-image: url(../assets/images/webp/img-14-min.webp);
 }
 
 #portfolio__slide2 {
   align-self: center;
   width: 220px;
   height: 220px;
-  background-image: url(../assets/images/webp/img-21.webp);
+  background-image: url(../assets/images/webp/img-21-min.webp);
 }
 
 #portfolio__slide3 {
   width: 280px;
   height: 374px;
   margin-top: 120px;
-  background-image: url(../assets/images/webp/img-22.webp);
+  background-image: url(../assets/images/webp/img-22-min.webp);
 }
 
 #portfolio__slide4 {
   align-self: flex-start;
   width: 400px;
   height: 534px;
-  background-image: url(../assets/images/webp/img-20.webp);
+  background-image: url(../assets/images/webp/img-20-min.webp);
 }
 
 #portfolio__slide5 {
   width: 280px;
   height: 374px;
   margin-top: 120px;
-  background-image: url(../assets/images/webp/img-17.webp);
+  background-image: url(../assets/images/webp/img-17-min.webp);
 }
 
 #portfolio__slide6 {
   align-self: center;
   width: 220px;
   height: 220px;
-  background-image: url(../assets/images/webp/img-1.webp);
+  background-image: url(../assets/images/webp/img-1-min.webp);
 }
 
 #portfolio__slide7 {
   align-self: flex-start;
   width: 280px;
   height: 374px;
-  background-image: url(../assets/images/webp/img-2.webp);
+  background-image: url(../assets/images/webp/img-2-min.webp);
 }
 
 #portfolio__slide8 {
   align-self: flex-end;
   width: 400px;
   height: 534px;
-  background-image: url(../assets/images/webp/img-5.webp);
+  background-image: url(../assets/images/webp/img-5-min.webp);
 }
 
 #portfolio__slide9 {
   align-self: center;
   width: 220px;
   height: 220px;
-  background-image: url(../assets/images/webp/img-7.webp);
+  background-image: url(../assets/images/webp/img-7-min.webp);
 }
 
 #portfolio__slide10 {
   align-self: flex-start;
   width: 280px;
   height: 374px;
-  background-image: url(../assets/images/webp/img-8.webp);
+  background-image: url(../assets/images/webp/img-8-min.webp);
 }
 
 #portfolio__slide11 {
   width: 280px;
   height: 374px;
   margin-top: 120px;
-  background-image: url(../assets/images/webp/img-9.webp);
+  background-image: url(../assets/images/webp/img-9-min.webp);
 }
 
 #portfolio__slide12 {
@@ -583,7 +583,7 @@
   margin-right: 0;
   width: 400px;
   height: 534px;
-  background-image: url(../assets/images/webp/img-12.webp);
+  background-image: url(../assets/images/webp/img-12-min.webp);
 }
 
 
