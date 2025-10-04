@@ -992,6 +992,12 @@ input#phone::placeholder, input#phoneModal::placeholder {
   transform: rotate(-45deg);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .modal__close-button:hover span {
+    background: var(--red);
+  }
+}
+
 
 /* media queries */
 
