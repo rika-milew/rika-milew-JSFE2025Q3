@@ -5,7 +5,9 @@ const sliderContainer = document.querySelector('.portfolio__slider');
 
 let sliderShift = 0; 
 let sliderStep = 0; 
-let sliderSpeed = 8;
+let sliderSpeed = 5;
+let maxSliderShift = 0;
+let minSliderShift = 0;
 
 const basicPadding = 20;
 
@@ -27,23 +29,20 @@ function setSlider() {
     slider.style.justifyContent = 'flex-start'; 
     document.querySelector('.hover-left').style.pointerEvents = 'auto';
     document.querySelector('.hover-right').style.pointerEvents = 'auto';
+
+    const contentContainer = document.querySelector('.container');
+    const contentContainerWidth = contentContainer.getBoundingClientRect();
+    const leftSliderPadding = contentContainerWidth.left;
+    const rightSliderPadding = document.documentElement.clientWidth - contentContainerWidth.right;
+
+    maxSliderShift = leftSliderPadding;                       
+    minSliderShift = containerWidth - sliderWidth - rightSliderPadding; 
   }
 }
 
 function startSlider() { 
   if (sliderStep !== 0) { 
     sliderShift += sliderStep * sliderSpeed; 
-    const sliderWidth = slider.scrollWidth; 
-    const containerWidth = sliderContainer.getBoundingClientRect().width; 
-
-    const contentContainer = document.querySelector('.container');
-    const contentContainerWidth = contentContainer.getBoundingClientRect();
-    
-    const leftSliderPadding = contentContainerWidth.left;
-    const rightSliderPadding = document.documentElement.clientWidth - contentContainerWidth.right;
-
-    const maxSliderShift = leftSliderPadding; 
-    const minSliderShift = containerWidth - sliderWidth - rightSliderPadding;
       
     if (sliderShift > maxSliderShift) {
       sliderShift = maxSliderShift; 
@@ -95,6 +94,7 @@ if (isTouchDevice) {
   let horizontalSwiping = false;
   
   sliderContainer.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) return;
     if (slider.classList.contains('disabled-slider')) return;
     slider.style.transition = "none"; 
     startX = e.touches[0].clientX;
@@ -104,34 +104,35 @@ if (isTouchDevice) {
     lastSwipeTime = Date.now();
     isSwiping = false;  
     horizontalSwiping = false;
-  }, { passive: true });
+  }, { passive: false});
 
   sliderContainer.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 1) return;
     if (slider.classList.contains('disabled-slider')) return; 
     const touch = e.touches[0];
     const deltaX = e.touches[0].clientX - startX;
     const deltaY = e.touches[0].clientY - startY;
 
     if (!isSwiping) {
-      if (Math.abs(deltaX) < minSwipeDistance && Math.abs(deltaY) < minSwipeDistance) {
-        return;
-      }
-
+    if (Math.abs(deltaX) > minSwipeDistance || Math.abs(deltaY) > minSwipeDistance) {
       isSwiping = true;
       horizontalSwiping = Math.abs(deltaX) > Math.abs(deltaY);
+    } else { 
+      return; 
     }
+  }
 
     if (!horizontalSwiping) {
       return;
     }
+
+    e.preventDefault();
 
     const swipeDistance = touch.clientX - lastSwipe;
     const swipeDuration = Date.now() - lastSwipeTime;
     mobileSliderSpeed = swipeDistance / swipeDuration; 
     lastSwipe = touch.clientX;
     lastSwipeTime = Date.now();
-
-    e.preventDefault();
 
     sliderShift = currentShift + deltaX;
 
@@ -146,12 +147,13 @@ if (isTouchDevice) {
     slider.style.transform = `translateX(${sliderShift}px)`;
   }, { passive: false });
 
-  sliderContainer.addEventListener('touchend', () => {
+  sliderContainer.addEventListener('touchend', (e) => {
+    if (e.touches.length > 0) return; 
     if (!horizontalSwiping) { 
       return;
     }
     
-    let slideMomentum = mobileSliderSpeed * 250;
+    let slideMomentum = mobileSliderSpeed * 220;
     sliderShift += slideMomentum;
 
     const sliderWidth = slider.scrollWidth;

@@ -449,6 +449,7 @@
   height: 654px;
   transform: translateX(0);
   transition: transform 0.1s linear; 
+  transition: transform 0.2s ease-out;
 }  
 
 .portfolio__spacer {
