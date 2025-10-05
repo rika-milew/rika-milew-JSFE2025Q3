@@ -86,24 +86,51 @@ if (isTouchDevice) {
   rightArrow.style.pointerEvents = 'none'; 
 
   let startX = 0;
+  let startY = 0;
   let currentShift = 0;
+  let mobileSliderSpeed = 0;
+  let lastSwipe = 0;
+  let lastSwipeTime = 0;
   let isSwiping = false;
-
+  let horizontalSwiping = false;
+  
   sliderContainer.addEventListener('touchstart', (e) => {
     if (slider.classList.contains('disabled-slider')) return;
     slider.style.transition = "none"; 
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
     currentShift = sliderShift;
+    lastSwipe = startX;
+    lastSwipeTime = Date.now();
     isSwiping = false;  
+    horizontalSwiping = false;
   }, { passive: true });
 
   sliderContainer.addEventListener('touchmove', (e) => {
     if (slider.classList.contains('disabled-slider')) return; 
+    const touch = e.touches[0];
     const deltaX = e.touches[0].clientX - startX;
+    const deltaY = e.touches[0].clientY - startY;
 
-    if (!isSwiping && Math.abs(deltaX) < minSwipeDistance) return;
-    
-    isSwiping = true;
+    if (!isSwiping) {
+      if (Math.abs(deltaX) < minSwipeDistance && Math.abs(deltaY) < minSwipeDistance) {
+        return;
+      }
+
+      isSwiping = true;
+      horizontalSwiping = Math.abs(deltaX) > Math.abs(deltaY);
+    }
+
+    if (!horizontalSwiping) {
+      return;
+    }
+
+    const swipeDistance = touch.clientX - lastSwipe;
+    const swipeDuration = Date.now() - lastSwipeTime;
+    mobileSliderSpeed = swipeDistance / swipeDuration; 
+    lastSwipe = touch.clientX;
+    lastSwipeTime = Date.now();
+
     e.preventDefault();
 
     sliderShift = currentShift + deltaX;
@@ -120,9 +147,31 @@ if (isTouchDevice) {
   }, { passive: false });
 
   sliderContainer.addEventListener('touchend', () => {
-    isSwiping = false;
+    if (!horizontalSwiping) { 
+      return;
+    }
+    
+    let slideMomentum = mobileSliderSpeed * 250;
+    sliderShift += slideMomentum;
 
-    slider.style.transition = "transform 0.3s ease-out";
+    const sliderWidth = slider.scrollWidth;
+    const containerWidth = sliderContainer.getBoundingClientRect().width;
+    const minSliderShift = containerWidth - sliderWidth;
+    const maxSliderShift = 0;
+
+    if (sliderShift > maxSliderShift) {
+     sliderShift = maxSliderShift;
+      slider.style.transition = "transform 0.5s cubic-bezier(0.2, 1.5, 0.4, 1)";
+    } else if (sliderShift < minSliderShift) {
+      sliderShift = minSliderShift;
+      slider.style.transition = "transform 0.5s cubic-bezier(0.2, 1.5, 0.4, 1)";
+    } else {
+      slider.style.transition = "transform 0.3s ease-out";
+    }
+    
+    isSwiping = false;
+    horizontalSwiping = false;
+
     slider.style.transform = `translateX(${sliderShift}px)`; 
   }, { passive: true });
 }
