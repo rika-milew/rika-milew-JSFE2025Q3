@@ -148,33 +148,28 @@ if (isTouchDevice) {
   }, { passive: false });
 
   sliderContainer.addEventListener('touchend', (e) => {
-    if (e.touches.length > 0) return; 
-    if (!horizontalSwiping) { 
-      return;
-    }
+    if (!horizontalSwiping) return;
+    
+    const touch = e.changedTouches[0];
     
     let slideMomentum = mobileSliderSpeed * 220;
-    sliderShift += slideMomentum;
+    let finalShift = sliderShift + slideMomentum;
 
     const sliderWidth = slider.scrollWidth;
     const containerWidth = sliderContainer.getBoundingClientRect().width;
     const minSliderShift = containerWidth - sliderWidth;
     const maxSliderShift = 0;
 
-    if (sliderShift > maxSliderShift) {
-     sliderShift = maxSliderShift;
-      slider.style.transition = "transform 0.5s cubic-bezier(0.2, 1.5, 0.4, 1)";
-    } else if (sliderShift < minSliderShift) {
-      sliderShift = minSliderShift;
-      slider.style.transition = "transform 0.5s cubic-bezier(0.2, 1.5, 0.4, 1)";
-    } else {
-      slider.style.transition = "transform 0.3s ease-out";
-    }
-    
+    if (finalShift > maxSliderShift) finalShift = maxSliderShift;
+    if (finalShift < minSliderShift) finalShift = minSliderShift;
+
+    slider.style.transition = "transform 0.5s cubic-bezier(0.2, 1.5, 0.4, 1)";
+    slider.style.transform = `translateX(${finalShift}px)`;
+
+    sliderShift = finalShift;
     isSwiping = false;
     horizontalSwiping = false;
-
-    slider.style.transform = `translateX(${sliderShift}px)`; 
+    
   }, { passive: true });
 }
 
