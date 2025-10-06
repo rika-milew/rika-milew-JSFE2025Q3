@@ -244,7 +244,6 @@ function showAnswer(index) {
   questions.forEach((question, i) => {
     const answer = question.querySelector('.faq__answer');
     const icon = question.querySelector('.faq__icon');
-
     if (i === index) {
       question.classList.add('shown');
       answer.style.maxHeight = answer.scrollHeight + 'px';
@@ -255,8 +254,18 @@ function showAnswer(index) {
       icon.innerHTML = plusIcon;
     }
   });
-
   sessionStorage.setItem('openedAnswer', index);
+}
+
+function closeFaqs() {
+  questions.forEach((question) => {
+    const answer = question.querySelector('.faq__answer');
+    const icon = question.querySelector('.faq__icon');
+    question.classList.remove('shown');
+    answer.style.maxHeight = 0;
+    icon.innerHTML = plusIcon;
+  });
+  sessionStorage.setItem('openedAnswer', '-1');
 }
   
 questions.forEach((question, i) => {
@@ -264,12 +273,8 @@ questions.forEach((question, i) => {
   faqQuestion.addEventListener('click', () => {
     const answer = question.querySelector('.faq__answer');
     const icon = question.querySelector('.faq__icon');
-
     if (question.classList.contains('shown')) {
-      question.classList.remove('shown');
-      answer.style.maxHeight = 0;
-      icon.innerHTML = plusIcon;
-      sessionStorage.removeItem('openedAnswer');
+      closeFaqs();
     } else {
       showAnswer(i);
     }
@@ -279,7 +284,14 @@ questions.forEach((question, i) => {
 const savedFaq = sessionStorage.getItem('openedAnswer');
 
 if (savedFaq !== null) {
-  showAnswer(Number(savedFaq));
+  const savedIndex = parseInt(savedFaq);
+  if (savedIndex === -1) {
+    closeAllAnswers();
+  } else if (savedIndex >= 0) {
+    showAnswer(savedIndex);
+  } else {
+    showAnswer(0);
+  }
 } else {
   showAnswer(0);
 }
