@@ -286,7 +286,7 @@ const savedFaq = sessionStorage.getItem('openedAnswer');
 if (savedFaq !== null) {
   const savedIndex = parseInt(savedFaq);
   if (savedIndex === -1) {
-    closeAllAnswers();
+    closeFaqs();
   } else if (savedIndex >= 0) {
     showAnswer(savedIndex);
   } else {
