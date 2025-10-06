@@ -330,12 +330,10 @@ modalSection.addEventListener("click", (e) => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  const priceButtons = document.querySelectorAll('.price-card__button');
+const priceButtons = document.querySelectorAll('.price-card__button');
   
-  priceButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      openModal();
-    });
+priceButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    openModal();
   });
 });
