@@ -1,0 +1,69 @@
+body {
+  background: radial-gradient(circle at center, #0a192f 0%, #01060e 100%);
+  height: 100vh;
+  background-image: url(images/background-image3.jpg);
+  }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.hang-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heading {
+    font-size: 48px;
+    color: #ffffff;
+}
+
+.hang {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at center, #222e3d, #0f172a);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+}
+
+.note {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at center, #1e293b, #0f172a);
+  border-radius: 50%;
+  box-shadow: inset 0 2px 6px rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.note:active, .note.played {
+  transform: scale(0.9);
+  box-shadow: 0 0 20px rgba(125,211,252,0.5);
+}
+
+.center-note:active, .center-note.played {
+transform: translate(-50%, -50%) scale(0.9);
+}
+
+.center-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.note:nth-child(2) { top: 20px; left: 160px; }   
+.note:nth-child(3) { top: 60px; left: 270px; }   
+.note:nth-child(4) { top: 150px; left: 320px; }  
+.note:nth-child(5) { top: 250px; left: 290px; }  
+.note:nth-child(6) { top: 310px; left: 190px; }  
+.note:nth-child(7) { top: 250px; left: 70px; }   
+.note:nth-child(8) { top: 150px; left: 20px; }   
+.note:nth-child(9) { top: 60px; left: 60px; }   
