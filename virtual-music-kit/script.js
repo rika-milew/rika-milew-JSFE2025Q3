@@ -49,8 +49,29 @@ basicNotes.forEach((note, i) => {
   note.style.top = `${y}px`;
 });
 
+// sounds 
+
+const sounds = {
+  note1: new Audio('sounds/D4.wav'),
+  note2: new Audio('sounds/A4.wav'),
+  note3: new Audio('sounds/G4.wav'),
+  note4: new Audio('sounds/E4.wav'),
+  note5: new Audio('sounds/C5.wav'),
+  note6: new Audio('sounds/A3.wav'),
+  note7: new Audio('sounds/Bb4.wav'),
+  note8: new Audio('sounds/D5.wav'),
+  note9: new Audio('sounds/F4.wav')
+};
+
+
 hang.querySelectorAll('.note').forEach(note => {
   note.addEventListener('click', () => {
+    const soundFile = note.dataset.sound;
+    const sound = sounds[soundFile];
+    if (sound) {
+      sound.currentTime = 0; 
+      sound.play();
+    }
     note.classList.add('played');
     setTimeout(() => note.classList.remove('played'), 200);
     console.log('Played:', note.dataset.sound); 
