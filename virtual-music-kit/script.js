@@ -6,7 +6,7 @@ document.body.appendChild(container);
 
 const heading = document.createElement('h1');
 heading.classList.add('heading');
-heading.textContent = 'Virtual Hang Drum';
+heading.textContent = 'Virtual Handpan';
 container.appendChild(heading);
 
 
@@ -33,7 +33,7 @@ for (let i = 2; i <= notes + 1; i++) {
   const note = document.createElement('div');
   note.classList.add('note', 'basic-note');
   note.dataset.sound = `note${i}`;
-  note.textContent = noteNames[i - 1]
+  note.textContent = noteNames[i - 1];
   hang.appendChild(note);
 }
 
@@ -66,9 +66,27 @@ const sounds = {
   note9: 'sounds/F4.wav'
 };
 
+// hang.querySelectorAll('.note').forEach(note => {
+//   note.addEventListener('click', () => {
+//     playNotebyClick(note.dataset.sound);
+//   });
+// });
+
+
 hang.querySelectorAll('.note').forEach(note => {
-  note.addEventListener('click', () => {
-    playNotebyClick(note.dataset.sound);
+  note.addEventListener('mousedown', () => {
+    playNotebyClick(note.dataset.sound);   
+    note.classList.add('played');          
+  });
+
+
+  note.addEventListener('mouseup', () => {
+    note.classList.remove('played');       
+  });
+
+  
+  note.addEventListener('mouseleave', () => {
+    note.classList.remove('played');       
   });
 });
 
@@ -79,29 +97,29 @@ function playNotebyClick(soundKey) {
   const audio = new Audio(sounds[soundKey]);
   audio.volume = 1;
   audio.play();
-  const note = hang.querySelector(`[data-sound="${soundKey}"]`);
-  if (note) {
-    note.classList.remove('played');
-    void note.offsetWidth; 
-    note.classList.add('played');
-    clearTimeout(note.timeout);
-    note.timeout = setTimeout(() => note.classList.remove('played'), 200);
-  }
+  // const note = hang.querySelector(`[data-sound="${soundKey}"]`);
+  // if (note) {
+  //   note.classList.remove('played');
+  //   void note.offsetWidth; 
+  //   note.classList.add('played');
+  //   clearTimeout(note.timeout);
+  //   note.timeout = setTimeout(() => note.classList.remove('played'), 300);
+  // }
 }
 
 
 // keys
 
 const keyMap = {
-  'S': { sound: 'note1', name: 'D4' },
-  'W': { sound: 'note2', name: 'A4' },
-  'E': { sound: 'note3', name: 'G4' },
-  'D': { sound: 'note4', name: 'E4' },
-  'C': { sound: 'note5', name: 'C5' },
-  'X': { sound: 'note6', name: 'A3' },
-  'Z': { sound: 'note7', name: 'Bb4' },
-  'A': { sound: 'note8', name: 'D4' },
-  'Q': { sound: 'note9', name: 'F4' }
+  KeyS:  { sound: 'note1', name: 'D4' },
+  KeyW:  { sound: 'note2', name: 'A4' },
+  KeyE:  { sound: 'note3', name: 'G4' },
+  KeyD:  { sound: 'note4', name: 'E4' },
+  KeyC:  { sound: 'note5', name: 'C5' },
+  KeyX:  { sound: 'note6', name: 'A3' },
+  KeyZ:  { sound: 'note7', name: 'Bb4' },
+  KeyA:  { sound: 'note8', name: 'D5' },
+  KeyQ:  { sound: 'note9', name: 'F4' }
 };
 
 const pressedKeys = new Set();
@@ -117,7 +135,7 @@ function playNoteKey(soundKey) {
 
 window.addEventListener('keydown', (event) => {
   if (document.activeElement.tagName === 'INPUT') return;
-  const key = event.key.toUpperCase();
+  const key = event.code;
   if (!keyMap[key] || currentKey || pressedKeys.has(key)) return;
   currentKey = key;
   pressedKeys.add(key);
@@ -126,7 +144,7 @@ window.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('keyup', (event) => {
-  const key = event.key.toUpperCase();
+  const key = event.code;
   if (key !== currentKey) return;
   if (!keyMap[key]) return;
 
@@ -152,11 +170,109 @@ const keyTable = document.createElement('table');
 tableContainer.appendChild(keyTable);
 
 const header = document.createElement('tr');
-header.innerHTML = '<th>Key</th><th>Note</th>';
+header.innerHTML = '<th>Note</th><th>Key</th><th>Edit</th>';
 keyTable.appendChild(header);
 
 Object.entries(keyMap).forEach(([key, { name }]) => {
   const row = document.createElement('tr');
-  row.innerHTML = `<td>${key}</td><td>${name}</td>`;
+  row.innerHTML = `<td>${name}</td><td class="key-column">${key.replace('Key','')}</td><td class="edit-button">✏️</td>`;
   keyTable.appendChild(row);
 });
+
+
+// edit input
+
+let editingKey = null; 
+
+keyTable.addEventListener('click', (event) => {
+  if (!event.target.classList.contains('edit-button')) return;
+
+  const editButton = event.target;
+  const row = event.target.closest('tr');
+  const keyArea = row.querySelector('.key-column');
+  const templateKey = keyArea.textContent;
+  editButton.classList.add('active');
+
+  const editField = document.createElement('input');
+  editField.type = 'text';
+  editField.value = templateKey;
+  editField.classList.add('edit-field');
+  editField.maxLength = 1;
+  editField.style.width = '40px';
+  editField.style.textAlign = 'center';
+  editField.style.textTransform = 'uppercase';
+
+  keyArea.textContent = '';
+  keyArea.appendChild(editField);
+  editField.focus();
+
+  editingKey = keyArea;
+
+  editField.addEventListener('input', () => {
+    editField.value = editField.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
+  });
+
+  editField.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      const newKey = editField.value.toUpperCase();
+      if (!newKey.match(/^[A-Z]$/)) {
+        alert('Please enter a single English letter (A–Z).');
+        editButton.classList.remove('active');
+        return;
+      }
+
+      if (keyMap[`Key${newKey}`]) {
+       alert(`Key "${newKey}" is already used!`);
+       editButton.classList.remove('active');
+       editButton.blur();
+       return;
+      }
+  
+      const oldKey = `Key${templateKey}`;
+      const sound = keyMap[oldKey].sound;
+      const name = keyMap[oldKey].name;
+      keyMap[`Key${newKey}`] = { sound, name };
+      delete keyMap[oldKey];
+
+      keyArea.textContent = newKey;
+      editingKey = null;
+      editButton.classList.remove('active');
+      editButton.blur();
+    }
+
+    if (event.key === 'Escape') {
+      keyArea.textContent = templateKey;
+      editingKey = null;
+      editButton.classList.remove('active');
+      editButton.blur();
+    }
+  });
+
+  editField.addEventListener('blur', () => {
+    if (editingKey) keyArea.textContent = keyArea.querySelector('input') ? templateKey : keyArea.textContent;
+    editingKey = null;
+    editButton.classList.remove('active');
+    editButton.blur();
+  });
+});
+
+
+// music input field
+
+const inputContainer = document.createElement('div');
+inputContainer.classList.add('input-container');
+container.appendChild(inputContainer);
+
+const musicInput = document.createElement('input');
+musicInput.classList.add('music-input');
+musicInput.type = 'text';
+musicInput.placeholder = 'Type your key sequence';
+musicInput.maxLength = 18;
+inputContainer.appendChild(musicInput);
+
+const playButton = document.createElement('button');
+playButton.classList.add('play-button');
+playButton.textContent = 'Play';
+inputContainer.appendChild(playButton);
+
+
