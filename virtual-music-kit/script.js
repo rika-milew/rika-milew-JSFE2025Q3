@@ -9,9 +9,6 @@ heading.classList.add('heading');
 heading.textContent = 'Virtual Handpan';
 container.appendChild(heading);
 
-
-// basic hang elements
-
 const hangContainer = document.createElement('div');
 hangContainer.classList.add('hang-container');
 container.appendChild(hangContainer);
@@ -19,6 +16,13 @@ container.appendChild(hangContainer);
 const hang = document.createElement('div');
 hang.classList.add('hang');
 container.appendChild(hang);
+
+const inputContainer = document.createElement('div');
+inputContainer.classList.add('input-container');
+container.appendChild(inputContainer);
+
+
+// basic hang elements
 
 const noteNames = ['D4', 'A4', 'G4', 'E4', 'C5', 'A3', 'Bb4', 'D5', 'F4'];
 
@@ -37,19 +41,24 @@ for (let i = 2; i <= notes + 1; i++) {
   hang.appendChild(note);
 }
 
-const basicNotes = hang.querySelectorAll('.basic-note');
-const hangSize = hang.getBoundingClientRect();
-const centerX = hangSize.width / 2;
-const centerY = hangSize.height / 2;
-const radius = hangSize.width / 2 * 0.7;
+function positionNotes() {
+  const basicNotes = hang.querySelectorAll('.basic-note');
+  const hangSize = hang.getBoundingClientRect();
+  const centerX = hangSize.width / 2;
+  const centerY = hangSize.height / 2;
+  const radius = hangSize.width / 2 * 0.7;
 
-basicNotes.forEach((note, i) => {
-  const angle = (i / basicNotes.length) * 2 * Math.PI - Math.PI / 2;
-  const x = centerX + radius * Math.cos(angle) - note.offsetWidth / 2;
-  const y = centerY + radius * Math.sin(angle) - note.offsetHeight / 2;
-  note.style.left = `${x}px`;
-  note.style.top = `${y}px`;
-});
+  basicNotes.forEach((note, i) => {
+    const angle = (i / basicNotes.length) * 2 * Math.PI - Math.PI / 2;
+    const x = centerX + radius * Math.cos(angle) - note.offsetWidth / 2;
+    const y = centerY + radius * Math.sin(angle) - note.offsetHeight / 2;
+    note.style.left = `${x}px`;
+    note.style.top = `${y}px`;
+  });
+}
+
+positionNotes();
+window.addEventListener('resize', positionNotes);
 
 
 // sounds 
@@ -65,13 +74,6 @@ const sounds = {
   note8: 'sounds/D5.wav',
   note9: 'sounds/F4.wav'
 };
-
-// hang.querySelectorAll('.note').forEach(note => {
-//   note.addEventListener('click', () => {
-//     playNotebyClick(note.dataset.sound);
-//   });
-// });
-
 
 hang.querySelectorAll('.note').forEach(note => {
   note.addEventListener('mousedown', () => {
@@ -119,7 +121,7 @@ const keyMap = {
   KeyX:  { sound: 'note6', name: 'A3' },
   KeyZ:  { sound: 'note7', name: 'Bb4' },
   KeyA:  { sound: 'note8', name: 'D5' },
-  KeyQ:  { sound: 'note9', name: 'F4' }
+  KeyQ:  { sound: 'note9', name: 'F4' },
 };
 
 const pressedKeys = new Set();
@@ -163,7 +165,7 @@ tableContainer.classList.add('keys-table');
 container.appendChild(tableContainer);
 
 const tableHeader = document.createElement('h2');
-tableHeader.textContent = 'Keyboard → Notes';
+tableHeader.textContent = ' Notes → Keyboard';
 tableContainer.appendChild(tableHeader);
 
 const keyTable = document.createElement('table');
@@ -239,7 +241,7 @@ keyTable.addEventListener('click', (event) => {
     if (event.key === 'Enter') {
       const newKey = editField.value.toUpperCase();
       if (!newKey.match(/^[A-Z]$/)) {
-        alert('Please enter a single English letter (A–Z).');
+        alert('Please enter a single English letter (A-Z).');
         editButton.classList.remove('active');
         return;
       }
@@ -281,10 +283,6 @@ keyTable.addEventListener('click', (event) => {
 
 
 // music input field
-
-const inputContainer = document.createElement('div');
-inputContainer.classList.add('input-container');
-container.appendChild(inputContainer);
 
 const musicInput = document.createElement('input');
 musicInput.classList.add('music-input');
