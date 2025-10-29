@@ -170,12 +170,35 @@ const keyTable = document.createElement('table');
 tableContainer.appendChild(keyTable);
 
 const header = document.createElement('tr');
-header.innerHTML = '<th>Note</th><th>Key</th><th>Edit</th>';
+const headerNote = document.createElement('th');
+headerNote.textContent = 'Note';
+header.appendChild(headerNote);
+const headerKey = document.createElement('th');
+headerKey.textContent = 'Key';
+header.appendChild(headerKey);
+const headerEdit = document.createElement('th');
+headerEdit.textContent = 'Edit';
+header.appendChild(headerEdit);
 keyTable.appendChild(header);
 
 Object.entries(keyMap).forEach(([key, { name }]) => {
+  const header = document.createElement('tr');
   const row = document.createElement('tr');
-  row.innerHTML = `<td>${name}</td><td class="key-column">${key.replace('Key','')}</td><td class="edit-button">✏️</td>`;
+
+  const columnNote = document.createElement('td');
+  columnNote.textContent = name;
+  row.appendChild(columnNote);
+
+  const columnKey = document.createElement('td');
+  columnKey.classList.add('key-column');
+  columnKey.textContent = key.replace('Key', '');
+  row.appendChild(columnKey);
+
+  const columnEdit = document.createElement('td');
+  columnEdit.classList.add('edit-button');
+  columnEdit.textContent = '✏️';
+  row.appendChild(columnEdit);
+
   keyTable.appendChild(row);
 });
 
@@ -275,4 +298,73 @@ playButton.classList.add('play-button');
 playButton.textContent = 'Play';
 inputContainer.appendChild(playButton);
 
+musicInput.addEventListener('input', () => {
+  const validKeys = Object.keys(keyMap).map(key => key.replace('Key','').toUpperCase());
+  musicInput.value = musicInput.value
+    .toUpperCase()
+    .split('')
+    .filter(key => validKeys.includes(key))
+    .join('');
+});
 
+async function playMelody(melody) {
+  musicInput.disabled = true;
+  playButton.disabled = true;
+  musicInput.style.opacity = '0.5';
+  playButton.style.opacity = '0.5';
+
+  const editButtons = document.querySelectorAll('.edit-button');
+  editButtons.forEach(button => {
+    button.classList.add('disabled');
+    button.style.pointerEvents = 'none';
+    button.style.opacity = '0.5';
+  });
+
+  hang.style.pointerEvents = 'none';
+  let isKeysLocked = true;
+
+  function lockKeyboard(event) {
+    if (isKeysLocked) event.stopImmediatePropagation();
+  }
+
+  window.addEventListener('keydown', lockKeyboard, true);
+  window.addEventListener('keyup', lockKeyboard, true);
+
+  for (let sound of melody) {
+    const key = `Key${sound.toUpperCase()}`;
+    if (keyMap[key]) {
+      const soundKey = keyMap[key].sound;
+      const note = hang.querySelector(`[data-sound="${soundKey}"]`);
+      note.classList.add('played');
+
+      await new Promise(resolve => {
+        const audio = new Audio(sounds[soundKey]);
+        audio.volume = 1;
+        audio.play();
+        audio.addEventListener('ended', resolve);
+        setTimeout(resolve, 500); 
+      });
+
+      note.classList.remove('played');
+    }
+  }
+
+  musicInput.disabled = false;
+  playButton.disabled = false;
+  musicInput.style.opacity = '1';
+  playButton.style.opacity = '1';
+  hang.style.pointerEvents = 'auto';
+  isKeysLocked = false;
+
+  editButtons.forEach(button => {
+    button.classList.remove('disabled');
+    button.style.pointerEvents = 'auto';
+    button.style.opacity = '1';
+  });
+}
+
+playButton.addEventListener('click', () => {
+  const melody = musicInput.value;
+  if (!melody) return;
+  playMelody(melody);
+});
