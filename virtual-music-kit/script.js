@@ -262,13 +262,13 @@ keyTable.addEventListener('click', (event) => {
     if (event.key === 'Enter') {
       const newKey = editField.value.toUpperCase();
       if (!newKey.match(/^[A-Z]$/)) {
-        alert('Please enter a single English letter (A-Z).');
+        openModal('Please enter a single English letter (A-Z).');
         editButton.classList.remove('active');
         return;
       }
 
       if (keyMap[`Key${newKey}`]) {
-       alert(`Key "${newKey}" is already used!`);
+       openModal(`Key "${newKey}" is already used!`);
        editButton.classList.remove('active');
        editButton.blur();
        return;
@@ -391,3 +391,48 @@ playButton.addEventListener('click', () => {
   if (!melody) return;
   playMelody(melody);
 });
+
+
+// modal 
+
+const modalOverlay = document.createElement('div');
+modalOverlay.id = 'modalOverlay';
+modalOverlay.classList.add('modal-overlay');
+
+const modalWindow = document.createElement('div');
+modalWindow.id = 'modal';
+modalWindow.classList.add('modal');
+modalOverlay.appendChild(modalWindow);
+
+const modalContent = document.createElement('p');
+modalContent.id = 'modalContent';
+modalContent.classList.add('modal-content');
+modalWindow.appendChild(modalContent);
+
+const modalButton = document.createElement('button');
+modalButton.id = 'modalButton';
+modalButton.classList.add('modal-button');
+modalButton.textContent = 'OK';
+modalWindow.appendChild(modalButton);
+
+document.body.appendChild(modalOverlay);
+
+modalButton.addEventListener('click', () => {
+  modalWindow.style.transform = 'scale(0.8)';
+  modalWindow.style.opacity = '0';
+  setTimeout(() => {
+    modalOverlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }, 200); 
+});
+
+function openModal(content) {
+  modalContent.textContent = content;
+  modalOverlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  requestAnimationFrame(() => {
+    modalWindow.style.transform = 'scale(1)';
+    modalWindow.style.opacity = '1';
+  });
+}
