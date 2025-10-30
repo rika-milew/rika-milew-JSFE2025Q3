@@ -22,6 +22,26 @@ inputContainer.classList.add('input-container');
 container.appendChild(inputContainer);
 
 
+// unlock sounds
+
+let unlockedSound = false;
+
+function unlockSound() {
+  if (unlockedSound) return;
+  const firstSound = new Audio(sounds.note1); 
+  firstSound.volume = 0;
+  firstSound.play().catch(() => {});
+  firstSound.pause();
+
+  unlockedSound = true;
+  document.removeEventListener('touchstart', unlockSound);
+  document.removeEventListener('click', unlockSound);
+}
+
+document.addEventListener('touchstart', unlockSound, { once: true });
+document.addEventListener('click', unlockSound, { once: true });
+
+
 // basic hang elements
 
 const noteNames = ['D4', 'A4', 'G4', 'E4', 'C5', 'A3', 'Bb4', 'D5', 'F4'];
@@ -81,14 +101,21 @@ hang.querySelectorAll('.note').forEach(note => {
     note.classList.add('played');          
   });
 
-
   note.addEventListener('mouseup', () => {
     note.classList.remove('played');       
   });
-
   
   note.addEventListener('mouseleave', () => {
     note.classList.remove('played');       
+  });
+
+  note.addEventListener('touchstart', () => {
+    playNotebyClick(note.dataset.sound);
+    note.classList.add('played');
+  });
+
+  note.addEventListener('touchend', () => {
+    note.classList.remove('played');
   });
 });
 
@@ -96,17 +123,10 @@ hang.querySelectorAll('.note').forEach(note => {
 // sounds by click
 
 function playNotebyClick(soundKey) {
+  if (!unlockedSound) return;
   const audio = new Audio(sounds[soundKey]);
   audio.volume = 1;
   audio.play();
-  // const note = hang.querySelector(`[data-sound="${soundKey}"]`);
-  // if (note) {
-  //   note.classList.remove('played');
-  //   void note.offsetWidth; 
-  //   note.classList.add('played');
-  //   clearTimeout(note.timeout);
-  //   note.timeout = setTimeout(() => note.classList.remove('played'), 300);
-  // }
 }
 
 
@@ -128,6 +148,7 @@ const pressedKeys = new Set();
 let currentKey = null;
 
 function playNoteKey(soundKey) {
+  if (!unlockedSound) return;
   const audio = new Audio(sounds[soundKey]);
   audio.volume = 1;
   audio.play();
@@ -241,13 +262,13 @@ keyTable.addEventListener('click', (event) => {
     if (event.key === 'Enter') {
       const newKey = editField.value.toUpperCase();
       if (!newKey.match(/^[A-Z]$/)) {
-        alert('Please enter a single English letter (A-Z).');
+        openModal('Please enter a single English letter (A-Z).');
         editButton.classList.remove('active');
         return;
       }
 
       if (keyMap[`Key${newKey}`]) {
-       alert(`Key "${newKey}" is already used!`);
+       openModal(`Key "${newKey}" is already used!`);
        editButton.classList.remove('active');
        editButton.blur();
        return;
@@ -258,6 +279,10 @@ keyTable.addEventListener('click', (event) => {
       const name = keyMap[oldKey].name;
       keyMap[`Key${newKey}`] = { sound, name };
       delete keyMap[oldKey];
+
+      if (musicInput.value.includes(templateKey)) {
+        musicInput.value = '';
+      }
 
       keyArea.textContent = newKey;
       editingKey = null;
@@ -366,3 +391,48 @@ playButton.addEventListener('click', () => {
   if (!melody) return;
   playMelody(melody);
 });
+
+
+// modal 
+
+const modalOverlay = document.createElement('div');
+modalOverlay.id = 'modalOverlay';
+modalOverlay.classList.add('modal-overlay');
+
+const modalWindow = document.createElement('div');
+modalWindow.id = 'modal';
+modalWindow.classList.add('modal');
+modalOverlay.appendChild(modalWindow);
+
+const modalContent = document.createElement('p');
+modalContent.id = 'modalContent';
+modalContent.classList.add('modal-content');
+modalWindow.appendChild(modalContent);
+
+const modalButton = document.createElement('button');
+modalButton.id = 'modalButton';
+modalButton.classList.add('modal-button');
+modalButton.textContent = 'OK';
+modalWindow.appendChild(modalButton);
+
+document.body.appendChild(modalOverlay);
+
+modalButton.addEventListener('click', () => {
+  modalWindow.style.transform = 'scale(0.8)';
+  modalWindow.style.opacity = '0';
+  setTimeout(() => {
+    modalOverlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }, 200); 
+});
+
+function openModal(content) {
+  modalContent.textContent = content;
+  modalOverlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  requestAnimationFrame(() => {
+    modalWindow.style.transform = 'scale(1)';
+    modalWindow.style.opacity = '1';
+  });
+}
