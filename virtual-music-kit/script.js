@@ -22,26 +22,6 @@ inputContainer.classList.add('input-container');
 container.appendChild(inputContainer);
 
 
-// unlock sounds
-
-// let unlockedSound = false;
-
-// function unlockSound() {
-//   if (unlockedSound) return;
-//   const firstSound = new Audio(sounds.note1); 
-//   firstSound.volume = 0;
-//   firstSound.play().catch(() => {});
-//   firstSound.pause();
-
-//   unlockedSound = true;
-//   document.removeEventListener('touchstart', unlockSound);
-//   document.removeEventListener('click', unlockSound);
-// }
-
-// document.addEventListener('touchstart', unlockSound, { once: true });
-// document.addEventListener('click', unlockSound, { once: true });
-
-
 // basic hang elements
 
 const noteNames = ['D4', 'A4', 'G4', 'E4', 'C5', 'A3', 'Bb4', 'D5', 'F4'];
@@ -95,6 +75,13 @@ const sounds = {
   note9: 'sounds/F4.wav'
 };
 
+const audioSounds = {};
+for (const key in sounds) {
+  const audio = new Audio(sounds[key]);
+  audio.preload = 'auto';
+  audioSounds[key] = audio;
+}
+
 hang.querySelectorAll('.note').forEach(note => {
   note.addEventListener('mousedown', () => {
     playNotebyClick(note.dataset.sound);   
@@ -123,10 +110,9 @@ hang.querySelectorAll('.note').forEach(note => {
 // sounds by click
 
 function playNotebyClick(soundKey) {
-  // if (!unlockedSound) return;
-  const audio = new Audio(sounds[soundKey]);
+  const audio = audioSounds[soundKey].cloneNode(); 
   audio.volume = 1;
-  audio.play();
+  audio.play().catch(() => {});
 }
 
 
@@ -148,10 +134,9 @@ const pressedKeys = new Set();
 let currentKey = null;
 
 function playNoteKey(soundKey) {
-  // if (!unlockedSound) return;
-  const audio = new Audio(sounds[soundKey]);
+  const audio = audioSounds[soundKey].cloneNode();
   audio.volume = 1;
-  audio.play();
+  audio.play().catch(() => {});
   const note = hang.querySelector(`[data-sound="${soundKey}"]`);
   if (note) note.classList.add('played');
 }
@@ -361,7 +346,7 @@ async function playMelody(melody) {
       note.classList.add('played');
 
       await new Promise(resolve => {
-        const audio = new Audio(sounds[soundKey]);
+        const audio = audioSounds[soundKey].cloneNode();
         audio.volume = 1;
         audio.play();
         audio.addEventListener('ended', resolve);
