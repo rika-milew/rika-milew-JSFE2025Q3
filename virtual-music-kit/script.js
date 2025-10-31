@@ -24,22 +24,22 @@ container.appendChild(inputContainer);
 
 // unlock sounds
 
-let unlockedSound = false;
+// let unlockedSound = false;
 
-function unlockSound() {
-  if (unlockedSound) return;
-  const firstSound = new Audio(sounds.note1); 
-  firstSound.volume = 0;
-  firstSound.play().catch(() => {});
-  firstSound.pause();
+// function unlockSound() {
+//   if (unlockedSound) return;
+//   const firstSound = new Audio(sounds.note1); 
+//   firstSound.volume = 0;
+//   firstSound.play().catch(() => {});
+//   firstSound.pause();
 
-  unlockedSound = true;
-  document.removeEventListener('touchstart', unlockSound);
-  document.removeEventListener('click', unlockSound);
-}
+//   unlockedSound = true;
+//   document.removeEventListener('touchstart', unlockSound);
+//   document.removeEventListener('click', unlockSound);
+// }
 
-document.addEventListener('touchstart', unlockSound, { once: true });
-document.addEventListener('click', unlockSound, { once: true });
+// document.addEventListener('touchstart', unlockSound, { once: true });
+// document.addEventListener('click', unlockSound, { once: true });
 
 
 // basic hang elements
@@ -123,7 +123,7 @@ hang.querySelectorAll('.note').forEach(note => {
 // sounds by click
 
 function playNotebyClick(soundKey) {
-  if (!unlockedSound) return;
+  // if (!unlockedSound) return;
   const audio = new Audio(sounds[soundKey]);
   audio.volume = 1;
   audio.play();
@@ -148,7 +148,7 @@ const pressedKeys = new Set();
 let currentKey = null;
 
 function playNoteKey(soundKey) {
-  if (!unlockedSound) return;
+  // if (!unlockedSound) return;
   const audio = new Audio(sounds[soundKey]);
   audio.volume = 1;
   audio.play();
