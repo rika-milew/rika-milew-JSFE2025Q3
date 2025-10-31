@@ -21,6 +21,14 @@ const inputContainer = document.createElement('div');
 inputContainer.classList.add('input-container');
 container.appendChild(inputContainer);
 
+document.addEventListener('touchstart', initAudio, { once: true });
+document.addEventListener('click', initAudio, { once: true });
+
+function initAudio() {
+  const silent = audioSounds.note1.cloneNode();
+  silent.volume = 0;
+  silent.play().catch(() => {});
+}
 
 // basic hang elements
 
