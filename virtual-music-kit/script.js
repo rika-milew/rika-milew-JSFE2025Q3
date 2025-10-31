@@ -75,39 +75,16 @@ const sounds = {
   note9: 'sounds/F4.wav'
 };
 
-// const audioSounds = {};
-// for (const key in sounds) {
-//   const audio = new Audio(sounds[key]);
-//   audio.preload = 'auto';
-//   audioSounds[key] = audio;
-// }
-
-
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioContext = new AudioContext();
-const buffers = {};
-
-async function loadSounds() {
-  for (const key in sounds) {
-    const response = await fetch(sounds[key]);
-    const arrayBuffer = await response.arrayBuffer();
-    buffers[key] = await audioContext.decodeAudioData(arrayBuffer);
-  }
-}
-loadSounds();
-
-function playSound(key) {
-  if (!buffers[key]) return;
-  const source = audioContext.createBufferSource();
-  source.buffer = buffers[key];
-  source.connect(audioContext.destination);
-  source.start(0);
+const audioSounds = {};
+for (const key in sounds) {
+  const audio = new Audio(sounds[key]);
+  audio.preload = 'auto';
+  audioSounds[key] = audio;
 }
 
 hang.querySelectorAll('.note').forEach(note => {
   note.addEventListener('mousedown', () => {
-    // playNotebyClick(note.dataset.sound);   
-    playSound(note.dataset.sound);
+    playNotebyClick(note.dataset.sound);   
     note.classList.add('played');          
   });
 
@@ -120,8 +97,7 @@ hang.querySelectorAll('.note').forEach(note => {
   });
 
   note.addEventListener('touchstart', () => {
-    // playNotebyClick(note.dataset.sound);
-    playSound(note.dataset.sound);
+    playNotebyClick(note.dataset.sound);
     note.classList.add('played');
   });
 
@@ -158,10 +134,9 @@ const pressedKeys = new Set();
 let currentKey = null;
 
 function playNoteKey(soundKey) {
-  // const audio = audioSounds[soundKey].cloneNode();
-  // audio.volume = 1;
-  // audio.play().catch(() => {});
-  playSound(soundKey);
+  const audio = audioSounds[soundKey].cloneNode();
+  audio.volume = 1;
+  audio.play().catch(() => {});
   const note = hang.querySelector(`[data-sound="${soundKey}"]`);
   if (note) note.classList.add('played');
 }
@@ -172,8 +147,7 @@ window.addEventListener('keydown', (event) => {
   if (!keyMap[key] || currentKey || pressedKeys.has(key)) return;
   currentKey = key;
   pressedKeys.add(key);
-  // const { sound, name } = keyMap[key];
-  const { sound } = keyMap[key];
+  const { sound, name } = keyMap[key];
   playNoteKey(sound);
 });
 
@@ -369,26 +343,17 @@ async function playMelody(melody) {
     if (keyMap[key]) {
       const soundKey = keyMap[key].sound;
       const note = hang.querySelector(`[data-sound="${soundKey}"]`);
-      if (note) note.classList.add('played');
+      note.classList.add('played');
 
-      // await new Promise(resolve => {
-      //   const audio = audioSounds[soundKey].cloneNode();
-      //   audio.volume = 1;
-      //   audio.play();
-      //   audio.addEventListener('ended', resolve);
-      //   setTimeout(resolve, 500); 
-      // });
+      await new Promise(resolve => {
+        const audio = audioSounds[soundKey].cloneNode();
+        audio.volume = 1;
+        audio.play();
+        audio.addEventListener('ended', resolve);
+        setTimeout(resolve, 500); 
+      });
 
-      // note.classList.remove('played');
-
-
-      const source = audioContext.createBufferSource();
-      source.buffer = buffers[soundKey];
-      source.connect(audioContext.destination);
-      source.start();
-
-      await new Promise(resolve => setTimeout(resolve, 500)); 
-      if (note) note.classList.remove('played');
+      note.classList.remove('played');
     }
   }
 
@@ -459,27 +424,26 @@ function openModal(content) {
 
 // start modal 
 
-
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 if (isMobile) {
   openModal('Tap "Start" to enable sound');
-  modalButton.textContent = 'Start';
 
-  const startHandler = () => {
-    if (audioContext.state === 'suspended') audioContext.resume();
+  const startButton = modalButton;
+  startButton.textContent = 'Start';
 
-    const source = audioContext.createBufferSource();
-    const buffer = audioContext.createBuffer(1, 1, audioContext.sampleRate);
-    source.buffer = buffer;
-    source.connect(audioContext.destination);
-    source.start();
+  startButton.addEventListener('click', function startMobileAudio() {
+    const audio = audioSounds.note1.cloneNode();
+    audio.volume = 0;
+    audio.play().catch(() => {});
 
-    modalOverlay.style.display = 'none';
-    document.body.style.overflow = 'auto';
-
-    modalButton.textContent = 'OK';
-    modalButton.removeEventListener('click', startHandler);
-  };
-
-  modalButton.addEventListener('click', startHandler);
+    modalWindow.style.transform = 'scale(0.8)';
+    modalWindow.style.opacity = '0';
+    setTimeout(() => {
+      modalOverlay.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      startButton.textContent = 'OK';
+      startButton.removeEventListener('click', startMobileAudio);
+    }, 200);
+  });
 }
