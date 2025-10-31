@@ -21,14 +21,6 @@ const inputContainer = document.createElement('div');
 inputContainer.classList.add('input-container');
 container.appendChild(inputContainer);
 
-document.addEventListener('touchstart', initAudio, { once: true });
-document.addEventListener('click', initAudio, { once: true });
-
-function initAudio() {
-  const silent = audioSounds.note1.cloneNode();
-  silent.volume = 0;
-  silent.play().catch(() => {});
-}
 
 // basic hang elements
 
@@ -427,5 +419,31 @@ function openModal(content) {
   requestAnimationFrame(() => {
     modalWindow.style.transform = 'scale(1)';
     modalWindow.style.opacity = '1';
+  });
+}
+
+// start modal 
+
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+if (isMobile) {
+  openModal('Tap "Start" to enable sound');
+
+  const startButton = modalButton;
+  startButton.textContent = 'Start';
+
+  startButton.addEventListener('click', function startMobileAudio() {
+    const audio = audioSounds.note1.cloneNode();
+    audio.volume = 0;
+    audio.play().catch(() => {});
+
+    modalWindow.style.transform = 'scale(0.8)';
+    modalWindow.style.opacity = '0';
+    setTimeout(() => {
+      modalOverlay.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      startButton.textContent = 'OK';
+      startButton.removeEventListener('click', startMobileAudio);
+    }, 200);
   });
 }
