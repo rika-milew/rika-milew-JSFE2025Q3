@@ -75,25 +75,69 @@ const sounds = {
   note9: 'sounds/F4.wav'
 };
 
-const audioSounds = {};
-for (const key in sounds) {
-  const audio = new Audio(sounds[key]);
-  audio.preload = 'auto';
-  audioSounds[key] = audio;
+let audioCtx = null; 
+let audioBuffers = {};
+let isAudioReady = false;
+
+async function initAudioIfNeeded() {
+  if (audioCtx) return;
+  const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+  audioCtx = new AudioContextCtor();
+  await loadAllBuffers();
+  isAudioReady = true;
+}
+
+async function loadAllBuffers() {
+  const entries = Object.entries(sounds);
+  for (const [key, url] of entries) {
+    try {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`Failed to fetch ${url}`);
+      const arrayBuffer = await r.arrayBuffer();
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer.slice(0));
+      audioBuffers[key] = audioBuffer;
+    } catch (err) {
+      console.warn('Error loading sound', url, err);
+    }
+    await new Promise(r => setTimeout(r, 50));
+  }
+}
+
+async function playBuffer(noteKey) {
+  if (!audioCtx || !audioBuffers[noteKey]) return null;
+  if (audioCtx.state === 'suspended') {
+    try { await audioCtx.resume(); } catch (e) {}
+  }
+  const src = audioCtx.createBufferSource();
+  src.buffer = audioBuffers[noteKey];
+  src.connect(audioCtx.destination);
+  src.start(0);
+  return src;
 }
 
 hang.querySelectorAll('.note').forEach(note => {
-  note.addEventListener('mousedown', () => {
-    playNotebyClick(note.dataset.sound);   
-    note.classList.add('played');          
+  note.addEventListener('mousedown', async (e) => {
+    await initAudioIfNeeded().catch(() => {});
+    if (isAudioReady) {
+      const src = playBuffer(note.dataset.sound);
+      note.classList.add('played');
+      if (src) {
+        src.onended = () => note.classList.remove('played');
+      } else {
+        setTimeout(() => note.classList.remove('played'), 400);
+      }
+    } else {
+      note.classList.add('played');
+      setTimeout(() => note.classList.remove('played'), 200);
+    }
   });
 
   note.addEventListener('mouseup', () => {
-    note.classList.remove('played');       
+    note.classList.remove('played');
   });
-  
+
   note.addEventListener('mouseleave', () => {
-    note.classList.remove('played');       
+    note.classList.remove('played');
   });
 
   note.addEventListener('touchstart', (event) => {
@@ -325,28 +369,24 @@ playButton.textContent = 'Play';
 inputContainer.appendChild(playButton);
 
 musicInput.addEventListener('input', () => {
-  const validKeys = Object.keys(keyMap).map(key => key.replace('Key','').toUpperCase());
-  musicInput.value = musicInput.value
-    .toUpperCase()
-    .split('')
-    .filter(key => validKeys.includes(key))
-    .join('');
+  const validKeys = Object.keys(keyMap).map(k => k.replace('Key','').toUpperCase());
+  musicInput.value = musicInput.value.toUpperCase().split('').filter(ch => validKeys.includes(ch)).join('');
 });
 
 let melodyAudio = null;
 
-async function playMelody(melody) {
+async function playMelody(sequence) {
+  if (!sequence) return;
+  await initAudioIfNeeded().catch(() => {});
+  if (!isAudioReady) return;
+
   musicInput.disabled = true;
   playButton.disabled = true;
   musicInput.style.opacity = '0.5';
   playButton.style.opacity = '0.5';
 
-  const editButtons = document.querySelectorAll('.edit-button');
-  editButtons.forEach(button => {
-    button.classList.add('disabled');
-    button.style.pointerEvents = 'none';
-    button.style.opacity = '0.5';
-  });
+  const editButtons = keyTable.querySelectorAll('.edit-button');
+  editButtons.forEach(b => { b.classList.add('disabled'); b.style.pointerEvents = 'none'; b.style.opacity = '0.4'; });
 
   hang.style.pointerEvents = 'none';
   let isKeysLocked = true;
@@ -363,6 +403,30 @@ async function playMelody(melody) {
     melodyAudio.currentTime = 0;
   }
 
+  for (const ch of sequence.split('')) {
+    const code = `Key${ch}`;
+    if (!keyMap[code]) continue;
+    const soundKey = keyMap[code].sound;
+    const note = hang.querySelector(`[data-sound="${soundKey}"]`);
+    if (note) note.classList.add('played');
+
+    const src = audioCtx.createBufferSource();
+    src.buffer = audioBuffers[soundKey];
+    src.connect(audioCtx.destination);
+    src.start(0);
+
+    await new Promise(resolve => {
+      let done = false;
+      src.onended = () => { if (!done) { done = true; resolve(); } };
+      setTimeout(() => { if (!done) { done = true; resolve(); } }, 500);
+    });
+
+    if (note) note.classList.remove('played');
+  }
+
+  keyboardLocked = false;
+  window.removeEventListener('keydown', keyBlocker, true);
+  window.removeEventListener('keyup', keyBlocker, true);
   for (let sound of melody) {
     const key = `Key${sound.toUpperCase()}`;
     if (keyMap[key]) {
@@ -404,15 +468,11 @@ async function playMelody(melody) {
   window.removeEventListener('keydown', lockKeyboard, true);
   window.removeEventListener('keyup', lockKeyboard, true);
 
-  editButtons.forEach(button => {
-    button.classList.remove('disabled');
-    button.style.pointerEvents = 'auto';
-    button.style.opacity = '1';
-  });
+  editButtons.forEach(b => { b.classList.remove('disabled'); b.style.pointerEvents = 'auto'; b.style.opacity = '1'; });
 }
 
 playButton.addEventListener('click', () => {
-  const melody = musicInput.value;
+  const melody = musicInput.value.trim();
   if (!melody) return;
   playMelody(melody);
 });
@@ -451,8 +511,9 @@ modalButton.addEventListener('click', () => {
   }, 200); 
 });
 
-function openModal(content) {
+function openModal(content, btnText = 'OK') {
   modalContent.textContent = content;
+  modalButton.textContent = btnText;
   modalOverlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 
@@ -462,30 +523,47 @@ function openModal(content) {
   });
 }
 
+
 // start modal 
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
 if (isMobile) {
-  openModal('Tap "Start" to enable sound');
+  openModal('Tap "Start" to enable sound', 'Start');
+modalButton.addEventListener('click', async function startHandler() {
+  if (!audioCtx) {
+    const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AudioContextCtor();
+  }
 
-  const startButton = modalButton;
-  startButton.textContent = 'Start';
+  if (audioCtx.state === 'suspended') {
+    try { await audioCtx.resume(); } catch (e) {}
+  }
 
-  startButton.addEventListener('click', function startMobileAudio() {
-    Object.values(audioSounds).forEach(a => {
-    const silent = a.cloneNode();
-    silent.volume = 0;
-    silent.play().catch(() => {});
-  });
+  const buffer = audioCtx.createBuffer(1, 1, audioCtx.sampleRate);
+  const source = audioCtx.createBufferSource();
+  source.buffer = buffer;
+  source.connect(audioCtx.destination);
+  source.start(0);
 
-    modalWindow.style.transform = 'scale(0.8)';
-    modalWindow.style.opacity = '0';
-    setTimeout(() => {
-      modalOverlay.style.display = 'none';
-      document.body.style.overflow = 'auto';
-      startButton.textContent = 'OK';
-      startButton.removeEventListener('click', startMobileAudio);
-    }, 200);
-  });
+  await loadAllBuffers();
+  isAudioReady = true;
+   modalWindow.style.transform = 'scale(0.8)';
+  modalWindow.style.opacity = '0';
+  setTimeout(() => {
+    modalOverlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }, 200);
+}, { once: true });
+
+} else {
+  const firstGesture = async () => {
+    await initAudioIfNeeded().catch(() => {});
+    if (audioCtx && audioCtx.state === 'suspended') {
+      try { await audioCtx.resume(); } catch (e) {}
+    }
+    window.removeEventListener('touchstart', firstGesture);
+    window.removeEventListener('click', firstGesture);
+  };
+  window.addEventListener('touchstart', firstGesture, { once: true, passive: true });
+  window.addEventListener('click', firstGesture, { once: true });
 }
