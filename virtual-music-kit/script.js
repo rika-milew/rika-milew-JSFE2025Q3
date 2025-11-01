@@ -199,9 +199,11 @@ tableContainer.appendChild(keyTable);
 const header = document.createElement('tr');
 const headerNote = document.createElement('th');
 headerNote.textContent = 'Note';
+
 header.appendChild(headerNote);
 const headerKey = document.createElement('th');
 headerKey.textContent = 'Key';
+
 header.appendChild(headerKey);
 const headerEdit = document.createElement('th');
 headerEdit.textContent = 'Edit';
@@ -248,9 +250,6 @@ keyTable.addEventListener('click', (event) => {
   editField.value = templateKey;
   editField.classList.add('edit-field');
   editField.maxLength = 1;
-  editField.style.width = '40px';
-  editField.style.textAlign = 'center';
-  editField.style.textTransform = 'uppercase';
 
   keyArea.textContent = '';
   keyArea.appendChild(editField);
@@ -259,13 +258,13 @@ keyTable.addEventListener('click', (event) => {
   editingKey = keyArea;
 
   editField.addEventListener('input', () => {
-    editField.value = editField.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
+    editField.value = editField.value.toUpperCase();
   });
 
   editField.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-      const newKey = editField.value.toUpperCase();
-      if (!newKey.match(/^[A-Z]$/)) {
+      const newKey = editField.value.trim().toUpperCase();
+      if (!/^[A-Z]$/.test(newKey)) {
         openModal('Please enter a single English letter (A-Z).');
         editButton.classList.remove('active');
         return;
