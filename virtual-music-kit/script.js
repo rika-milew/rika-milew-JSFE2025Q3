@@ -96,23 +96,37 @@ hang.querySelectorAll('.note').forEach(note => {
     note.classList.remove('played');       
   });
 
-  note.addEventListener('touchstart', () => {
+  note.addEventListener('touchstart', (event) => {
+    event.preventDefault();
     playNotebyClick(note.dataset.sound);
     note.classList.add('played');
-  });
+  }, { passive: false });
 
-  note.addEventListener('touchend', () => {
+  note.addEventListener('touchend', (event) => {
+    event.preventDefault();
     note.classList.remove('played');
-  });
+  }, { passive: false });
+
+  note.addEventListener('touchcancel', (event) => {
+    event.preventDefault();
+    note.classList.remove('played');
+  }, { passive: false });
 });
 
 
 // sounds by click
 
+let currentSound = null;
+
 function playNotebyClick(soundKey) {
-  const audio = audioSounds[soundKey].cloneNode(); 
+  if (currentSound) {
+    currentSound.pause();
+    currentSound.currentTime = 0;
+  } 
+  const audio = audioSounds[soundKey].cloneNode();
   audio.volume = 1;
   audio.play().catch(() => {});
+  currentSound = audio; 
 }
 
 
@@ -134,9 +148,14 @@ const pressedKeys = new Set();
 let currentKey = null;
 
 function playNoteKey(soundKey) {
+  if (currentSound) {
+    currentSound.pause();
+    currentSound.currentTime = 0;
+  }
   const audio = audioSounds[soundKey].cloneNode();
   audio.volume = 1;
   audio.play().catch(() => {});
+  currentSound = audio;
   const note = hang.querySelector(`[data-sound="${soundKey}"]`);
   if (note) note.classList.add('played');
 }
@@ -315,6 +334,8 @@ musicInput.addEventListener('input', () => {
     .join('');
 });
 
+let melodyAudio = null;
+
 async function playMelody(melody) {
   musicInput.disabled = true;
   playButton.disabled = true;
@@ -338,22 +359,39 @@ async function playMelody(melody) {
   window.addEventListener('keydown', lockKeyboard, true);
   window.addEventListener('keyup', lockKeyboard, true);
 
+  if (melodyAudio) {
+    melodyAudio.pause();
+    melodyAudio.currentTime = 0;
+  }
+
   for (let sound of melody) {
     const key = `Key${sound.toUpperCase()}`;
     if (keyMap[key]) {
       const soundKey = keyMap[key].sound;
       const note = hang.querySelector(`[data-sound="${soundKey}"]`);
-      note.classList.add('played');
 
-      await new Promise(resolve => {
-        const audio = audioSounds[soundKey].cloneNode();
-        audio.volume = 1;
-        audio.play();
-        audio.addEventListener('ended', resolve);
-        setTimeout(resolve, 500); 
-      });
+      if (melodyAudio) {
+      melodyAudio.pause();
+      melodyAudio.currentTime = 0;
+    }
 
-      note.classList.remove('played');
+    const audio = audioSounds[soundKey].cloneNode();
+    audio.volume = 1;
+    audio.play().catch(() => {});
+    melodyAudio = audio;
+
+    hang.querySelectorAll('.note').forEach(n => n.classList.remove('played'));
+    if (note) note.classList.add('played');
+
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    audio.pause();
+    audio.currentTime = 0;
+    if (note) note.classList.remove('played');
+    melodyAudio = null;
+
+    await new Promise(resolve => setTimeout(resolve, 300));
     }
   }
 
@@ -363,6 +401,9 @@ async function playMelody(melody) {
   playButton.style.opacity = '1';
   hang.style.pointerEvents = 'auto';
   isKeysLocked = false;
+
+  window.removeEventListener('keydown', lockKeyboard, true);
+  window.removeEventListener('keyup', lockKeyboard, true);
 
   editButtons.forEach(button => {
     button.classList.remove('disabled');
@@ -433,9 +474,11 @@ if (isMobile) {
   startButton.textContent = 'Start';
 
   startButton.addEventListener('click', function startMobileAudio() {
-    const audio = audioSounds.note1.cloneNode();
-    audio.volume = 0;
-    audio.play().catch(() => {});
+    Object.values(audioSounds).forEach(a => {
+    const silent = a.cloneNode();
+    silent.volume = 0;
+    silent.play().catch(() => {});
+  });
 
     modalWindow.style.transform = 'scale(0.8)';
     modalWindow.style.opacity = '0';
