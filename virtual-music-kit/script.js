@@ -321,6 +321,8 @@ musicInput.classList.add('music-input');
 musicInput.type = 'text';
 musicInput.placeholder = 'Type your key sequence';
 musicInput.maxLength = 18;
+musicInput.id = 'music-input';
+musicInput.name = 'music-melody';
 inputContainer.appendChild(musicInput);
 
 const playButton = document.createElement('button');
