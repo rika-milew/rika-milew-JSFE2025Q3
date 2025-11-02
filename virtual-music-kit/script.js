@@ -251,6 +251,10 @@ keyTable.addEventListener('click', (event) => {
   editField.classList.add('edit-field');
   editField.maxLength = 1;
 
+  const rowIndex = Array.from(keyTable.querySelectorAll('tr')).indexOf(row);
+  editField.id = `input-${rowIndex}`;
+  editField.name = `key-${rowIndex}`;
+
   keyArea.textContent = '';
   keyArea.appendChild(editField);
   editField.focus();
