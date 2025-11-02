@@ -454,6 +454,8 @@ modalButton.addEventListener('click', () => {
   setTimeout(() => {
     modalOverlay.style.display = 'none';
     document.body.style.overflow = 'auto';
+    document.removeEventListener('keydown', blockKeyboard, true);
+    document.removeEventListener('click', blockClicks, true);
   }, 200); 
 });
 
@@ -462,10 +464,29 @@ function openModal(content) {
   modalOverlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 
+  document.addEventListener('keydown', blockKeyboard, true);
+  document.addEventListener('click', blockClicks, true);
+
   requestAnimationFrame(() => {
     modalWindow.style.transform = 'scale(1)';
     modalWindow.style.opacity = '1';
   });
+}
+
+function blockKeyboard(event) {
+  if (event.key === 'Escape') {
+    modalButton.click();
+  } else {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+}
+
+function blockClicks(event) {
+  if (!modalWindow.contains(event.target)) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }
 
 // start modal 
