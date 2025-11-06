@@ -111,7 +111,7 @@ function createGameGrid(mode) {
 
   const modeHeading = document.createElement('h2');
   modeHeading.classList.add('mode-heading');
-  modeHeading.textContent = 'Classic Mode';
+  modeHeading.textContent = mode + ' Mode';
   container.appendChild(modeHeading);
 
   const infoContainer = document.createElement('div');
@@ -188,7 +188,14 @@ function createGameGrid(mode) {
     assistButton.textContent = button;
     assistButton.classList.add('assist-button');
     assistButton.classList.add('button');
+    const className = button.toLowerCase().replace(/\s+/g, '-') + '-button';
+    assistButton.classList.add(className);
     assistButtons.appendChild(assistButton);
+  });
+
+  document.querySelector('.hints-button').addEventListener('click', () => {
+    const availablePairs = showHints();
+    showModal('Available pairs: ' + (availablePairs.length > 5 ? '5+' : availablePairs.length));
   });
 
   const gameControls = document.createElement('div');
@@ -223,6 +230,8 @@ function startGame() {
   let secondCell = null;
   let score = 0;
 
+  const gameContainer = document.querySelector('.game-container'); 
+
   function updateScore() {
     const scoreDisplay = document.querySelector('.current-score');
     scoreDisplay.textContent = `Score: ${score}`;
@@ -245,47 +254,59 @@ function startGame() {
     const digit1 = parseInt(firstCell.textContent);
     const digit2 = parseInt(secondCell.textContent);
 
+    const isValidNumbers = (digit1 === digit2 || digit1 + digit2 === 10);
+    const isValidPosition = checkPairSelection(firstCell, secondCell, document.querySelectorAll('.game-cell'));
 
-    if (checkPairSelection(firstCell, secondCell, document.querySelectorAll('.game-cell'))) {
+    gameContainer.classList.add('locked');
+    
+    if (isValidNumbers && isValidPosition) {
       let points = 0;
       if (digit1 === digit2) {
         points = (digit1 === 5) ? 3 : 1;
       } else if (digit1 + digit2 === 10) {
         points = 2;
       }
+        
+      playSound('match');
+      score += points;
+      firstCell.classList.add('right-pair');
+      secondCell.classList.add('right-pair');
 
-      if (points > 0) {
-        playSound('match');
-        score += points;
-        firstCell.classList.add('right-pair');
-       secondCell.classList.add('right-pair');
-        setTimeout(() => {
-          firstCell.textContent = '';
-          secondCell.textContent = '';
-          firstCell.classList.remove('selected-cell', 'right-pair');
-          secondCell.classList.remove('selected-cell', 'right-pair');
-          firstCell.classList.add('empty-cell');
-          secondCell.classList.add('empty-cell');
-          firstCell = null;
-          secondCell = null;
-          updateScore();
-        }, 400);
+      const firstCorrectCell = firstCell;
+      const secondCorrectCell = secondCell;
+
+      firstCell = null;
+      secondCell = null;
+        
+      setTimeout(() => {
+        firstCorrectCell.textContent = '';
+        secondCorrectCell.textContent = '';
+        firstCorrectCell.classList.remove('selected-cell', 'right-pair');
+        secondCorrectCell.classList.remove('selected-cell', 'right-pair');
+        firstCorrectCell.classList.add('empty-cell');
+        secondCorrectCell.classList.add('empty-cell');
+        updateScore();
+        gameContainer.classList.remove('locked');
+      }, 400);
       } else {
         firstCell.classList.add('wrong-pair');
         secondCell.classList.add('wrong-pair');
         playSound('error');
+        const firstWrongCell = firstCell;
+        const secondWrongCell = secondCell;
+        firstCell = null;
+        secondCell = null;
+
         setTimeout(() => {
-          firstCell.classList.remove('selected-cell', 'wrong-pair');
-          secondCell.classList.remove('selected-cell', 'wrong-pair');
-          firstCell = null;
-          secondCell = null;
+          firstWrongCell.classList.remove('selected-cell', 'wrong-pair');
+          secondWrongCell.classList.remove('selected-cell', 'wrong-pair');
+          gameContainer.classList.remove('locked');
         }, 700);
       }
     }
-  }
-  document.querySelectorAll('.game-cell').forEach(cell => {
+    document.querySelectorAll('.game-cell').forEach(cell => {
       cell.addEventListener('click', clickOnCell);
-    });
+  });
 }
 
 
@@ -346,4 +367,65 @@ function playSound(type) {
   audio.play().catch(err => {
     console.log('Sound playback error:', err);
   });
+}
+
+
+// Assist Tools
+
+
+function showHints() {
+  const cells = Array.from(document.querySelectorAll('.game-cell'));
+  const availablePairs = [];
+
+  for (let i = 0; i < cells.length; i++) {
+    if (!cells[i].textContent) continue;
+
+    for (let j = i + 1; j < cells.length; j++) {
+      if (!cells[j].textContent) continue;
+
+      const digit1 = parseInt(cells[i].textContent);
+      const digit2 = parseInt(cells[j].textContent);
+
+      const isValidNumbers = (digit1 === digit2 || digit1 + digit2 === 10);
+      const isValidPosition = checkPairSelection(cells[i], cells[j], cells);
+
+      if (isValidNumbers && isValidPosition) {
+        availablePairs.push([cells[i], cells[j]]);
+      }
+    }
+  }
+
+  return availablePairs;
+}
+
+
+// modal 
+
+function createModal() {
+  let modal = document.querySelector('.modal');
+  if (modal) return modal;
+
+  modal = document.createElement('div');
+  modal.classList.add('modal');
+
+  const content = document.createElement('p');
+  content.classList.add('modal-text');
+  modal.appendChild(content);
+
+  const closeButton = document.createElement('button');
+  closeButton.textContent = 'OK';
+  closeButton.classList.add('close-button');
+  closeButton.onclick = () => {
+    modal.style.display = 'none';
+  };
+  modal.appendChild(closeButton);
+
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function showModal(content) {
+  const modal = createModal();
+  modal.querySelector('.modal-text').textContent = content;
+  modal.style.display = 'block';
 }

@@ -145,6 +145,12 @@
   margin-bottom: 50px;
 }
 
+.game-container.locked {
+  pointer-events: none;
+  opacity: 0.9;
+  cursor: not-allowed;
+}
+
 .game-cell {
   display: flex;
   justify-content: center;
@@ -168,7 +174,7 @@
 }
 
 .mode-heading {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   font-size: 36px;
   text-align: center;
   color: #2a5d3e;
@@ -287,4 +293,52 @@
   50% { transform: scale(1.3); }
   100% { transform: scale(1); }
 }
+
+
+
+/* modal  */
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  display: none;
+  min-width: 300px;
+  padding: 30px 40px;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.modal-text {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.close-button {
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: #317f35;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close-button:hover {
+    background-color: #266529;
+  }
+}
+
 
