@@ -22,7 +22,6 @@ function createStartScreen() {
   authorContent.classList.add('author-content');
   container.appendChild(authorContent);
   
-
   const authorText = document.createElement('span');
   authorText.textContent = 'Author: ';
   authorText.classList.add('author-text');
@@ -53,7 +52,8 @@ function createStartScreen() {
     modeButton.onclick = function() {
       console.log('Mode selected: ' + modeButtons[i]);
       if (modeButtons[i] === 'Classic') {
-      createGameGrid(mode = 'Classic');
+        createGameGrid('Classic');
+        setTimeout(startGame, 0); 
       }
     };
     modeContainer.appendChild(modeButton);
@@ -66,7 +66,6 @@ function createStartScreen() {
   const buttonsContainer = document.createElement('div');
   buttonsContainer.classList.add('buttons-container');
   container.appendChild(buttonsContainer);
-
 
   const continueButton = document.createElement('button');
   continueButton.textContent = 'Continue';
@@ -126,7 +125,7 @@ function createGameGrid(mode = 'Classic') {
   container.appendChild(gameContainer);
 
   const controlsContainer = document.createElement('div');
-  gameContainer.classList.add('controls-container');
+  controlsContainer.classList.add('controls-container');
   container.appendChild(controlsContainer);
 
   const scoreDisplay = document.createElement('div');
@@ -173,10 +172,15 @@ function createGameGrid(mode = 'Classic') {
     assistButtons.appendChild(assistButton);
   });
 
-
   const gameControls = document.createElement('div');
   gameControls.classList.add('game-controls');
   controlsContainer.appendChild(gameControls);
+
+  const backButton = document.createElement('button');
+  backButton.textContent = '← Back';
+  backButton.classList.add('button', 'back-button');
+  backButton.onclick = () => createStartScreen();
+  gameControls.appendChild(backButton);
 
   ['Reset', 'Save Game', 'Continue Game'].forEach(button => {
     const controlButton = document.createElement('button');
@@ -185,12 +189,118 @@ function createGameGrid(mode = 'Classic') {
     controlButton.classList.add('button');
     gameControls.appendChild(controlButton);
   });
-
     
-  
   const settingsButton = document.createElement('button');
   settingsButton.textContent = 'Settings';
   settingsButton.classList.add('settings-button');
   settingsButton.classList.add('button');
   infoContainer.appendChild(settingsButton);
+}
+
+// gameplay 
+
+function startGame() {
+  let firstCell = null;
+  let secondCell = null;
+  let score = 0;
+
+  function updateScore() {
+    const scoreDisplay = document.querySelector('.current-score');
+    scoreDisplay.textContent = `Score: ${score}`;
+  }
+
+  function clickOnCell(event) {
+    const cell = event.target;
+    if (!cell.textContent) return;
+
+    if (!firstCell) {
+      firstCell = cell;
+      cell.classList.add('selected-cell');
+      return;
+    }
+
+    if (cell === firstCell) return;
+    secondCell = cell;
+    cell.classList.add('selected-cell');
+
+    const digit1 = parseInt(firstCell.textContent);
+    const digit2 = parseInt(secondCell.textContent);
+
+
+    if (checkPairSelection(firstCell, secondCell, document.querySelectorAll('.game-cell'))) {
+      let points = 0;
+      if (digit1 === digit2) {
+        points = (digit1 === 5) ? 3 : 1;
+      } else if (digit1 + digit2 === 10) {
+        points = 2;
+      }
+
+      if (points > 0) {
+        score += points;
+        setTimeout(() => {
+          firstCell.textContent = '';
+          secondCell.textContent = '';
+          firstCell.classList.remove('selected-cell');
+          secondCell.classList.remove('selected-cell');
+          firstCell.classList.add('empty-cell');
+          secondCell.classList.add('empty-cell');
+          firstCell = null;
+          secondCell = null;
+          updateScore();
+        }, 200);
+      } else {
+        setTimeout(() => {
+          firstCell.classList.remove('selected-cell');
+          secondCell.classList.remove('selected-cell');
+          firstCell = null;
+          secondCell = null;
+        }, 700);
+      }
+    }
+  }
+  document.querySelectorAll('.game-cell').forEach(cell => {
+      cell.addEventListener('click', clickOnCell);
+    });
+}
+
+
+function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
+  const cell1 = Array.from(cells).indexOf(firstCell);
+  const cell2 = Array.from(cells).indexOf(secondCell);
+
+  const checkAdjacent = Math.abs(cell1 - cell2) === 1 || Math.abs(cell1 - cell2) === columns;
+
+  const checkSameRow = (cell1, cell2) => {
+    const rowStart = Math.floor(cell1 / columns) * columns;
+    const rowEnd = rowStart + columns - 1;
+    const start = Math.min(cell1, cell2) + 1;
+    const end = Math.max(cell1, cell2);
+    if (cell1 >= rowStart && cell2 <= rowEnd) {
+      for (let i = start; i < end; i++) {
+        if (cells[i].textContent !== '') return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  const checkSameColumn = (cell1, cell2) => {
+    if (cell1 % columns !== cell2 % columns) return false;
+    const start = Math.min(cell1, cell2) + columns;
+    const end = Math.max(cell1, cell2);
+    for (let i = start; i < end; i += columns) {
+      if (cells[i].textContent !== '') return false;
+    }
+    return true;
+  }
+
+  const checkRowBoundaries = (cell1, cell2) => {
+    return (cell1 % columns === columns - 1 && cell2 % columns === 0) ||
+           (cell2 % columns === columns - 1 && cell1 % columns === 0);
+  }
+
+  const digit1 = parseInt(firstCell.textContent);
+  const digit2 = parseInt(secondCell.textContent);
+
+  return checkAdjacent || checkSameRow(cell1, cell2) || checkSameColumn(cell1, cell2) || checkRowBoundaries(cell1, cell2);
 }
