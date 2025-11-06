@@ -229,8 +229,10 @@ function startGame() {
   let firstCell = null;
   let secondCell = null;
   let score = 0;
+  let lastMove = null;
 
   const gameContainer = document.querySelector('.game-container'); 
+  const revertButton = document.querySelector('.revert-button');
 
   function updateScore() {
     const scoreDisplay = document.querySelector('.current-score');
@@ -266,9 +268,19 @@ function startGame() {
       } else if (digit1 + digit2 === 10) {
         points = 2;
       }
+
         
       playSound('match');
       score += points;
+
+      lastMove = {
+        cells: [firstCell, secondCell],
+        values: [digit1, digit2],
+        points: points
+      };
+
+      revertButton.disabled = false;
+
       firstCell.classList.add('right-pair');
       secondCell.classList.add('right-pair');
 
@@ -306,6 +318,18 @@ function startGame() {
     }
     document.querySelectorAll('.game-cell').forEach(cell => {
       cell.addEventListener('click', clickOnCell);
+  });
+
+  revertButton.addEventListener('click', () => {
+    if (!lastMove) return;
+    lastMove.cells.forEach((cell, i) => {
+      cell.textContent = lastMove.values[i];
+      cell.classList.remove('empty-cell');
+    });
+    score -= lastMove.points;
+    updateScore();
+    lastMove = null;
+    revertButton.disabled = true; 
   });
 }
 
