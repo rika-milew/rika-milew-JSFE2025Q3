@@ -51,10 +51,8 @@ function createStartScreen() {
     modeButton.classList.add('button');
     modeButton.onclick = function() {
       console.log('Mode selected: ' + modeButtons[i]);
-      if (modeButtons[i] === 'Classic') {
-        createGameGrid('Classic');
-        setTimeout(startGame, 0); 
-      }
+      createGameGrid(modeButtons[i]);
+      setTimeout(startGame, 0);
     };
     modeContainer.appendChild(modeButton);
   }
@@ -100,7 +98,7 @@ createStartScreen();
 
 // game grid
 
-function createGameGrid(mode = 'Classic') {
+function createGameGrid(mode) {
   const body = document.body;
 
   while (body.firstChild) {
@@ -147,18 +145,39 @@ function createGameGrid(mode = 'Classic') {
   timer.textContent = '00:00';
   infoContainer.appendChild(timer);
 
-  for (let i = 1; i <= 19; i++) {
-    if (i === 10) continue;
-    const digits = i.toString().split(''); 
-    digits.forEach(digit => {
-      if (digit !== '0') {
-        const gameCell = document.createElement('div');
-        gameCell.classList.add('game-cell');
-        gameCell.textContent = digit;
-        gameContainer.appendChild(gameCell);
-      }
-    });
+
+  let digitsInCells = [];
+
+  function shuffleArray(arr) {
+    const array = arr.slice();
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
+
+  if (mode === 'Classic' || mode === 'Random') {
+    for (let i = 1; i <= 19; i++) {
+      if (i === 10) continue;
+      const digits = i.toString().split('');
+      digits.forEach(digit => digitsInCells.push(parseInt(digit)));
+    }
+    if (mode === 'Random') { 
+      digitsInCells = shuffleArray(digitsInCells);
+    }
+  } else if (mode === 'Chaotic') {
+    for (let i = 0; i < 27; i++) {
+      digitsInCells.push(Math.floor(Math.random() * 9) + 1);
+    }
+  }
+
+  digitsInCells.forEach(digit => {
+    const gameCell = document.createElement('div');
+    gameCell.classList.add('game-cell');
+    gameCell.textContent = digit;
+    gameContainer.appendChild(gameCell);
+  });
   
   const assistButtons = document.createElement('div');
   assistButtons.classList.add('assist-buttons');
