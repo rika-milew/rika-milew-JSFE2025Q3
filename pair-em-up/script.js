@@ -255,22 +255,28 @@ function startGame() {
       }
 
       if (points > 0) {
+        playSound('match');
         score += points;
+        firstCell.classList.add('right-pair');
+       secondCell.classList.add('right-pair');
         setTimeout(() => {
           firstCell.textContent = '';
           secondCell.textContent = '';
-          firstCell.classList.remove('selected-cell');
-          secondCell.classList.remove('selected-cell');
+          firstCell.classList.remove('selected-cell', 'right-pair');
+          secondCell.classList.remove('selected-cell', 'right-pair');
           firstCell.classList.add('empty-cell');
           secondCell.classList.add('empty-cell');
           firstCell = null;
           secondCell = null;
           updateScore();
-        }, 200);
+        }, 400);
       } else {
+        firstCell.classList.add('wrong-pair');
+        secondCell.classList.add('wrong-pair');
+        playSound('error');
         setTimeout(() => {
-          firstCell.classList.remove('selected-cell');
-          secondCell.classList.remove('selected-cell');
+          firstCell.classList.remove('selected-cell', 'wrong-pair');
+          secondCell.classList.remove('selected-cell', 'wrong-pair');
           firstCell = null;
           secondCell = null;
         }, 700);
@@ -322,4 +328,22 @@ function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
   const digit2 = parseInt(secondCell.textContent);
 
   return checkAdjacent || checkSameRow(cell1, cell2) || checkSameColumn(cell1, cell2) || checkRowBoundaries(cell1, cell2);
+}
+
+
+// sound effects
+
+const sounds = {
+  error: 'assets/sounds/error.mp3',
+  match: 'assets/sounds/match.mp3',
+  bonus: 'assets/sounds/bonus.mp3',
+};
+
+function playSound(type) {
+  if (!sounds[type]) return;
+  const audio = new Audio(sounds[type]);
+  audio.volume = 0.5;
+  audio.play().catch(err => {
+    console.log('Sound playback error:', err);
+  });
 }
