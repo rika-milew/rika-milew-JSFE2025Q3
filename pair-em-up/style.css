@@ -305,6 +305,20 @@
 
 /* gameplay  */
 
+.selected-cell {
+  outline: 3px solid #82e0aa;
+  background-color: rgba(130, 224, 170, 0.2);
+  transition: background-color 0.2s, outline-color 0.2s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .game-cell:hover.selected-cell {
+    background-color: rgba(150, 255, 200, 0.5);
+    box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
+    transform: scale(1.08);
+  }
+}
+
 .wrong-pair {
   animation: shake 0.3s;
   border: 2px solid #800000;

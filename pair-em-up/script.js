@@ -1,5 +1,11 @@
 // start screen
 
+let currentMode = '';
+let lastMove = null;
+let score = 0;
+let gameContainer = null;
+let revertButton = null;
+
 function createStartScreen() {
   const body = document.body;
   body.classList.add('body');
@@ -52,7 +58,7 @@ function createStartScreen() {
     modeButton.onclick = function() {
       console.log('Mode selected: ' + modeButtons[i]);
       createGameGrid(modeButtons[i]);
-      setTimeout(startGame, 0);
+      setTimeout(() => startGame(modeButtons[i]), 0);
     };
     modeContainer.appendChild(modeButton);
   }
@@ -118,7 +124,7 @@ function createGameGrid(mode) {
   infoContainer.classList.add('info-container');
   container.appendChild(infoContainer);
 
-  const gameContainer = document.createElement('div');
+  gameContainer = document.createElement('div');
   gameContainer.classList.add('game-container');
   container.appendChild(gameContainer);
 
@@ -145,17 +151,7 @@ function createGameGrid(mode) {
   timer.textContent = '00:00';
   infoContainer.appendChild(timer);
 
-
   let digitsInCells = [];
-
-  function shuffleArray(arr) {
-    const array = arr.slice();
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
 
   if (mode === 'Classic' || mode === 'Random') {
     for (let i = 1; i <= 19; i++) {
@@ -164,7 +160,7 @@ function createGameGrid(mode) {
       digits.forEach(digit => digitsInCells.push(parseInt(digit)));
     }
     if (mode === 'Random') { 
-      digitsInCells = shuffleArray(digitsInCells);
+      digitsInCells = shuffleDigits(digitsInCells);
     }
   } else if (mode === 'Chaotic') {
     for (let i = 0; i < 27; i++) {
@@ -193,11 +189,6 @@ function createGameGrid(mode) {
     assistButtons.appendChild(assistButton);
   });
 
-  document.querySelector('.hints-button').addEventListener('click', () => {
-    const availablePairs = showHints();
-    showModal('Available pairs: ' + (availablePairs.length > 5 ? '5+' : availablePairs.length));
-  });
-
   const gameControls = document.createElement('div');
   gameControls.classList.add('game-controls');
   controlsContainer.appendChild(gameControls);
@@ -221,124 +212,171 @@ function createGameGrid(mode) {
   settingsButton.classList.add('settings-button');
   settingsButton.classList.add('button');
   infoContainer.appendChild(settingsButton);
-}
 
-// gameplay 
+  revertButton = assistButtons.querySelector('.revert-button');
+  const addButton = assistButtons.querySelector('.add-numbers-button');
+  const hintsButton = assistButtons.querySelector('.hints-button');
 
-function startGame() {
-  let firstCell = null;
-  let secondCell = null;
-  let score = 0;
-  let lastMove = null;
-
-  const gameContainer = document.querySelector('.game-container'); 
-  const revertButton = document.querySelector('.revert-button');
-
-  function updateScore() {
-    const scoreDisplay = document.querySelector('.current-score');
-    scoreDisplay.textContent = `Score: ${score}`;
+  if (revertButton) {
+    revertButton.disabled = true;
+    revertButton.addEventListener('click', () => {
+      if (!lastMove) return;
+      lastMove.cells.forEach((cell, i) => {
+        cell.textContent = lastMove.values[i];
+        cell.classList.remove('empty-cell');
+     });
+      score -= lastMove.points;
+      updateScore();
+      lastMove = null;
+      revertButton.disabled = true; 
+    });
   }
 
-  function clickOnCell(event) {
-    const cell = event.target;
-    if (!cell.textContent) return;
+  let addNumbersAttempts = 0;
+  const addNumbersLimit = 10;
 
-    if (!firstCell) {
-      firstCell = cell;
-      cell.classList.add('selected-cell');
+  if (addButton) {
+    addButton.addEventListener('click', () => {
+    if (addNumbersAttempts >= addNumbersLimit) {
+      showModal('You have used Add Numbers 10 times already.');
       return;
     }
 
-    if (cell === firstCell) return;
-    secondCell = cell;
-    cell.classList.add('selected-cell');
-
-    const digit1 = parseInt(firstCell.textContent);
-    const digit2 = parseInt(secondCell.textContent);
-
-    const isValidNumbers = (digit1 === digit2 || digit1 + digit2 === 10);
-    const isValidPosition = checkPairSelection(firstCell, secondCell, document.querySelectorAll('.game-cell'));
-
-    gameContainer.classList.add('locked');
-    
-    if (isValidNumbers && isValidPosition) {
-      let points = 0;
-      if (digit1 === digit2) {
-        points = (digit1 === 5) ? 3 : 1;
-      } else if (digit1 + digit2 === 10) {
-        points = 2;
-      }
-
-        
-      playSound('match');
-      score += points;
-
-      lastMove = {
-        cells: [firstCell, secondCell],
-        values: [digit1, digit2],
-        points: points
-      };
-
-      revertButton.disabled = false;
-
-      firstCell.classList.add('right-pair');
-      secondCell.classList.add('right-pair');
-
-      const firstCorrectCell = firstCell;
-      const secondCorrectCell = secondCell;
-
-      firstCell = null;
-      secondCell = null;
-        
-      setTimeout(() => {
-        firstCorrectCell.textContent = '';
-        secondCorrectCell.textContent = '';
-        firstCorrectCell.classList.remove('selected-cell', 'right-pair');
-        secondCorrectCell.classList.remove('selected-cell', 'right-pair');
-        firstCorrectCell.classList.add('empty-cell');
-        secondCorrectCell.classList.add('empty-cell');
-        updateScore();
-        gameContainer.classList.remove('locked');
-      }, 400);
-      } else {
-        firstCell.classList.add('wrong-pair');
-        secondCell.classList.add('wrong-pair');
-        playSound('error');
-        const firstWrongCell = firstCell;
-        const secondWrongCell = secondCell;
-        firstCell = null;
-        secondCell = null;
-
-        setTimeout(() => {
-          firstWrongCell.classList.remove('selected-cell', 'wrong-pair');
-          secondWrongCell.classList.remove('selected-cell', 'wrong-pair');
-          gameContainer.classList.remove('locked');
-        }, 700);
-      }
-    }
-    document.querySelectorAll('.game-cell').forEach(cell => {
-      cell.addEventListener('click', clickOnCell);
+    addNumbersAttempts++;
+    showModal(`Add Numbers (${addNumbersLimit - addNumbersAttempts} left)`);
+    addNumbers(mode);
   });
+}
 
-  revertButton.addEventListener('click', () => {
-    if (!lastMove) return;
-    lastMove.cells.forEach((cell, i) => {
-      cell.textContent = lastMove.values[i];
-      cell.classList.remove('empty-cell');
+  if (hintsButton) {
+    hintsButton.addEventListener('click', () => {
+      const availablePairs = showHints();
+      showModal('Available pairs: ' + (availablePairs.length > 5 ? '5+' : availablePairs.length));
     });
-    score -= lastMove.points;
-    updateScore();
-    lastMove = null;
-    revertButton.disabled = true; 
-  });
+  }
+
+  gameContainer.addEventListener('click', clickOnCell);
+}
+
+
+
+// gameplay 
+
+let firstCell = null;
+let secondCell = null;
+
+
+function clickOnCell(event) {
+  const cell = event.target.closest('.game-cell');
+  if (!cell || !gameContainer.contains(cell)) return;
+  if (!cell.textContent.trim()) return;
+  if (gameContainer.classList.contains('locked')) return;
+
+  if (!firstCell) {
+    firstCell = cell;
+    cell.classList.add('selected-cell');
+    return;
+  }
+
+  if (cell === firstCell) {
+    cell.classList.remove('selected-cell');
+    firstCell = null;
+    return;
+  }
+  
+  secondCell = cell;
+  cell.classList.add('selected-cell');
+
+  const digit1 = parseInt(firstCell.textContent);
+  const digit2 = parseInt(secondCell.textContent);
+
+  const isValidNumbers = (digit1 === digit2 || digit1 + digit2 === 10);
+  const isValidPosition = checkPairSelection(firstCell, secondCell, document.querySelectorAll('.game-cell'));
+
+  gameContainer.classList.add('locked');
+    
+  if (isValidNumbers && isValidPosition) {
+    let points = 0;
+    if (digit1 === digit2) {
+      points = (digit1 === 5) ? 3 : 1;
+    } else if (digit1 + digit2 === 10) {
+      points = 2;
+    }
+
+        
+    playSound('match');
+    score += points;
+
+    lastMove = {
+      cells: [firstCell, secondCell],
+      values: [digit1, digit2],
+      points: points
+    };
+
+    revertButton.disabled = false;
+
+    firstCell.classList.add('right-pair');
+    secondCell.classList.add('right-pair');
+
+    const firstCorrectCell = firstCell;
+    const secondCorrectCell = secondCell;
+
+    firstCell = null;
+    secondCell = null;
+        
+    setTimeout(() => {
+      firstCorrectCell.textContent = '';
+      secondCorrectCell.textContent = '';
+      firstCorrectCell.classList.remove('selected-cell', 'right-pair');
+      secondCorrectCell.classList.remove('selected-cell', 'right-pair');
+      firstCorrectCell.classList.add('empty-cell');
+      secondCorrectCell.classList.add('empty-cell');
+      updateScore();
+      gameContainer.classList.remove('locked');
+    }, 400);
+
+  } else {
+    firstCell.classList.add('wrong-pair');
+    secondCell.classList.add('wrong-pair');
+    playSound('error');
+    const firstWrongCell = firstCell;
+    const secondWrongCell = secondCell;
+    firstCell = null;
+    secondCell = null;
+
+    setTimeout(() => {
+      firstWrongCell.classList.remove('selected-cell', 'wrong-pair');
+      secondWrongCell.classList.remove('selected-cell', 'wrong-pair');
+      gameContainer.classList.remove('locked');
+    }, 700);
+  }
+}
+
+
+function startGame(mode) {
+  currentMode = mode;
+  firstCell = null;
+  secondCell = null;
+  score = 0;
+  lastMove = null;
+
+  updateScore();
+  if (revertButton) revertButton.disabled = true;
 }
 
 
 function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
+  const gameCells = Array.from(cells);
   const cell1 = Array.from(cells).indexOf(firstCell);
   const cell2 = Array.from(cells).indexOf(secondCell);
 
-  const checkAdjacent = Math.abs(cell1 - cell2) === 1 || Math.abs(cell1 - cell2) === columns;
+  const [start, end] = [Math.min(cell1, cell2), Math.max(cell1, cell2)];
+
+  const digit1 = parseInt(firstCell.textContent);
+  const digit2 = parseInt(secondCell.textContent);
+
+  const checkAdjacent =
+    Math.abs(cell1 - cell2) === 1 || Math.abs(cell1 - cell2) === columns;
 
   const checkSameRow = (cell1, cell2) => {
     const rowStart = Math.floor(cell1 / columns) * columns;
@@ -347,33 +385,61 @@ function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
     const end = Math.max(cell1, cell2);
     if (cell1 >= rowStart && cell2 <= rowEnd) {
       for (let i = start; i < end; i++) {
-        if (cells[i].textContent !== '') return false;
+        if (gameCells[i].textContent !== '') return false;
       }
       return true;
     }
     return false;
-  }
+  };
 
   const checkSameColumn = (cell1, cell2) => {
     if (cell1 % columns !== cell2 % columns) return false;
-    const start = Math.min(cell1, cell2) + columns;
-    const end = Math.max(cell1, cell2);
-    for (let i = start; i < end; i += columns) {
-      if (cells[i].textContent !== '') return false;
+    for (let i = cell1 + columns; i < cell2; i += columns) {
+      if (gameCells[i].textContent !== '') return false;
     }
     return true;
-  }
+  };
 
   const checkRowBoundaries = (cell1, cell2) => {
-    return (cell1 % columns === columns - 1 && cell2 % columns === 0) ||
-           (cell2 % columns === columns - 1 && cell1 % columns === 0);
+    const aboveCell = Math.min(cell1, cell2);
+    const belowCell = Math.max(cell1, cell2);
+    return (aboveCell % columns === columns - 1) && (belowCell % columns === 0) && (belowCell - aboveCell === 1);
   }
 
-  const digit1 = parseInt(firstCell.textContent);
-  const digit2 = parseInt(secondCell.textContent);
 
-  return checkAdjacent || checkSameRow(cell1, cell2) || checkSameColumn(cell1, cell2) || checkRowBoundaries(cell1, cell2);
+  const checkEmptyCells = (cell1, cell2) => {
+    if (cell1 % columns !== cell2 % columns) return false;
+    for (let i = cell1 + columns; i < cell2; i += columns) {
+      if (gameCells[i].textContent !== '') return false;
+    }
+    return true;
+  };
+
+  return (
+    checkAdjacent ||
+    checkSameRow(cell1, cell2) ||
+    checkSameColumn(cell1, cell2) ||
+    checkRowBoundaries(cell1, cell2) ||
+    checkEmptyCells(cell1, cell2)
+  );
 }
+
+
+function shuffleDigits(arr) {
+    const array = arr.slice();
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+
+function updateScore() {
+  const scoreDisplay = document.querySelector('.current-score');
+  scoreDisplay.textContent = `Score: ${score}`;
+}
+
 
 
 // sound effects
@@ -418,8 +484,40 @@ function showHints() {
       }
     }
   }
-
   return availablePairs;
+}
+
+
+function addNumbers(mode) {
+  const cells = Array.from(document.querySelectorAll('.game-cell'));
+  const availableDigits = cells.filter(cell => cell.textContent !== '').map(cell => parseInt(cell.textContent));
+
+  let additionalDigits = [];
+
+  if (mode === 'Classic') {
+    additionalDigits = [...availableDigits];
+  } else if (mode === 'Random') {
+    additionalDigits = shuffleDigits([...availableDigits]);
+  } else if (mode === 'Chaotic') {
+    additionalDigits = availableDigits.map(() => Math.floor(Math.random() * 9) + 1);
+  }
+
+  const emptyCells = cells.filter(cell => cell.textContent === '');
+  let cellIndex = 0;
+
+  additionalDigits.forEach(num => {
+    if (cellIndex < emptyCells.length) {
+      emptyCells[cellIndex].textContent = num;
+      emptyCells[cellIndex].classList.remove('empty-cell');
+      cellIndex++;
+    } else {
+      const newCell = document.createElement('div');
+      newCell.classList.add('game-cell');
+      newCell.textContent = num;
+      document.querySelector('.game-container').appendChild(newCell);
+      newCell.addEventListener('click', clickOnCell);
+    }
+  });
 }
 
 
