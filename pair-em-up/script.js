@@ -172,6 +172,7 @@ function createGameGrid(mode) {
     const gameCell = document.createElement('div');
     gameCell.classList.add('game-cell');
     gameCell.textContent = digit;
+    gameCell.addEventListener('click', clickOnCell);
     gameContainer.appendChild(gameCell);
   });
   
@@ -215,7 +216,26 @@ function createGameGrid(mode) {
 
   revertButton = assistButtons.querySelector('.revert-button');
   const addButton = assistButtons.querySelector('.add-numbers-button');
+  
   const hintsButton = assistButtons.querySelector('.hints-button');
+
+  // if (revertButton) {
+  //   const clone = revertButton.cloneNode(true);
+  //   revertButton.parentNode.replaceChild(clone, revertButton);
+  //   revertButton = clone;
+  // }
+
+  // if (addButton) {
+  //   const clone = addButton.cloneNode(true);
+  //   addButton.parentNode.replaceChild(clone, addButton);
+  //   addButton = clone;
+  // }
+
+  // if (hintsButton) {
+  //   const clone = hintsButton.cloneNode(true);
+  //   hintsButton.parentNode.replaceChild(clone, hintsButton);
+  //   hintsButton = clone;
+  // }
 
   if (revertButton) {
     revertButton.disabled = true;
@@ -239,8 +259,13 @@ function createGameGrid(mode) {
     addButton.addEventListener('click', () => {
     if (addNumbersAttempts >= addNumbersLimit) {
       showModal('You have used Add Numbers 10 times already.');
+      addButton.disabled = true; 
       return;
     }
+  
+    // if (addNumbersAttempts === addNumbersLimit - 1) {
+    //   addButton.disabled = true; 
+    // }
 
     addNumbersAttempts++;
     showModal(`Add Numbers (${addNumbersLimit - addNumbersAttempts} left)`);
@@ -254,8 +279,6 @@ function createGameGrid(mode) {
       showModal('Available pairs: ' + (availablePairs.length > 5 ? '5+' : availablePairs.length));
     });
   }
-
-  gameContainer.addEventListener('click', clickOnCell);
 }
 
 
@@ -366,9 +389,11 @@ function startGame(mode) {
 
 
 function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
-  const gameCells = Array.from(cells);
+  const gameCells = Array.from(document.querySelectorAll('.game-cell'));
   const cell1 = Array.from(cells).indexOf(firstCell);
   const cell2 = Array.from(cells).indexOf(secondCell);
+
+  if (cell1 === -1 || cell2 === -1) return false;
 
   const [start, end] = [Math.min(cell1, cell2), Math.max(cell1, cell2)];
 
@@ -407,9 +432,8 @@ function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
   }
 
 
-  const checkEmptyCells = (cell1, cell2) => {
-    if (cell1 % columns !== cell2 % columns) return false;
-    for (let i = cell1 + columns; i < cell2; i += columns) {
+  const checkHorizontalAcrossRows = (cell1, cell2) => {
+    for (let i = cell1 + 1; i < cell2; i++) {
       if (gameCells[i].textContent !== '') return false;
     }
     return true;
@@ -420,7 +444,7 @@ function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
     checkSameRow(cell1, cell2) ||
     checkSameColumn(cell1, cell2) ||
     checkRowBoundaries(cell1, cell2) ||
-    checkEmptyCells(cell1, cell2)
+    checkHorizontalAcrossRows(cell1, cell2)
   );
 }
 
@@ -452,6 +476,7 @@ const sounds = {
 
 function playSound(type) {
   if (!sounds[type]) return;
+  if (document.hidden) return;
   const audio = new Audio(sounds[type]);
   audio.volume = 0.5;
   audio.play().catch(err => {
@@ -489,35 +514,32 @@ function showHints() {
 
 
 function addNumbers(mode) {
-  const cells = Array.from(document.querySelectorAll('.game-cell'));
-  const availableDigits = cells.filter(cell => cell.textContent !== '').map(cell => parseInt(cell.textContent));
+  gameContainer = document.querySelector('.game-container');
+  firstCell = null;
+  secondCell = null; 
 
-  let additionalDigits = [];
+  const existingDigits = Array.from(gameContainer.querySelectorAll('.game-cell'))
+    .filter(cell => cell.textContent !== '')
+    .map(cell => parseInt(cell.textContent));
+
+  let newDigits = [];
 
   if (mode === 'Classic') {
-    additionalDigits = [...availableDigits];
+    newDigits = [...existingDigits];
   } else if (mode === 'Random') {
-    additionalDigits = shuffleDigits([...availableDigits]);
+    newDigits = shuffleDigits([...existingDigits]);
   } else if (mode === 'Chaotic') {
-    additionalDigits = availableDigits.map(() => Math.floor(Math.random() * 9) + 1);
+    newDigits = existingDigits.map(() => Math.floor(Math.random() * 9) + 1);
   }
 
-  const emptyCells = cells.filter(cell => cell.textContent === '');
-  let cellIndex = 0;
-
-  additionalDigits.forEach(num => {
-    if (cellIndex < emptyCells.length) {
-      emptyCells[cellIndex].textContent = num;
-      emptyCells[cellIndex].classList.remove('empty-cell');
-      cellIndex++;
-    } else {
-      const newCell = document.createElement('div');
-      newCell.classList.add('game-cell');
-      newCell.textContent = num;
-      document.querySelector('.game-container').appendChild(newCell);
-      newCell.addEventListener('click', clickOnCell);
-    }
+  newDigits.forEach(digit => {
+    const newCell = document.createElement('div');
+    newCell.classList.add('game-cell');
+    newCell.textContent = digit;
+    newCell.addEventListener('click', clickOnCell);
+    gameContainer.appendChild(newCell);
   });
+  updateScore();
 }
 
 

@@ -206,6 +206,11 @@
 }
 
 
+.add-numbers-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .revert-button {
   position: relative;
   transition: opacity 0.3s ease, transform 0.2s ease;
