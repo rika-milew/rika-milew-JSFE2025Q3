@@ -389,7 +389,7 @@ function startGame(mode) {
 
 
 function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
-  const gameCells = Array.from(document.querySelectorAll('.game-cell'));
+  const gameCells = cells ? Array.from(cells) : Array.from(gameContainer.querySelectorAll('.game-cell'));
   const cell1 = Array.from(cells).indexOf(firstCell);
   const cell2 = Array.from(cells).indexOf(secondCell);
 
@@ -431,7 +431,6 @@ function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
     return (aboveCell % columns === columns - 1) && (belowCell % columns === 0) && (belowCell - aboveCell === 1);
   }
 
-
   const checkHorizontalAcrossRows = (cell1, cell2) => {
     for (let i = cell1 + 1; i < cell2; i++) {
       if (gameCells[i].textContent !== '') return false;
@@ -439,6 +438,7 @@ function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
     return true;
   };
 
+  
   return (
     checkAdjacent ||
     checkSameRow(cell1, cell2) ||
