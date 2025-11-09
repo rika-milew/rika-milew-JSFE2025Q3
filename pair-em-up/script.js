@@ -6,6 +6,15 @@ let score = 0;
 let gameContainer = null;
 let revertButton = null;
 
+let addNumbersUses = 0;
+const addNumbersUsesLimit = 10;
+
+let shuffleUses = 0;
+const shuffleUsesLimit = 5;
+
+let eraserUses = 0;
+const eraserUsesLimit = 5;
+
 function createStartScreen() {
   const body = document.body;
   body.classList.add('body');
@@ -105,6 +114,10 @@ createStartScreen();
 // game grid
 
 function createGameGrid(mode) {
+  addNumbersUses = 0;
+  shuffleUses = 0;
+  eraserUses = 0;
+
   const body = document.body;
 
   while (body.firstChild) {
@@ -203,24 +216,18 @@ function createGameGrid(mode) {
   
 
   const addButton = assistButtons.querySelector('.add-numbers-button');
-  
-  let addNumbersAttempts = 0;
-  const addNumbersLimit = 10;
+
 
   if (addButton) {
     addButton.addEventListener('click', () => {
-      if (addNumbersAttempts >= addNumbersLimit) {
+      if (addNumbersUses >= addNumbersUsesLimit) {
         showModal('You have used Add Numbers 10 times already.');
         addButton.disabled = true; 
         return;
       }
-  
-    // if (addNumbersAttempts === addNumbersLimit - 1) {
-    //   addButton.disabled = true; 
-    // }
 
-      addNumbersAttempts++;
-      showModal(`Add Numbers (${addNumbersLimit - addNumbersAttempts} left)`);
+      addNumbersUses++;
+      showModal(`Add Numbers (${addNumbersUsesLimit - addNumbersUses} left)`);
       addNumbers(mode);
       });
   }
@@ -358,6 +365,7 @@ function clickOnCell(event) {
       secondCorrectCell.classList.remove('selected-cell', 'right-pair');
       firstCorrectCell.classList.add('empty-cell');
       secondCorrectCell.classList.add('empty-cell');
+      checkLoseConditions();
       updateScore();
       gameContainer.classList.remove('locked');
     }, 400);
@@ -472,10 +480,20 @@ function updateScore() {
   }
 }
 
+function checkLoseConditions() {
+  const availablePairs = showHints();
+  const assistToolsLocked = (
+    addNumbersUses >= addNumbersUsesLimit &&
+    shuffleUses >= shuffleUsesLimit &&
+    eraserUses >= eraserUsesLimit
+  );
 
-
-
-
+  if (availablePairs.length === 0 && assistToolsLocked) {
+    showModal('You lose! No valid moves remain and all assist tools have been used.', true);
+    playSound('lose');
+    gameContainer.classList.add('locked');
+  }
+}
 
 
 // sound effects
@@ -564,6 +582,16 @@ function addNumbers(mode) {
   firstCell = null;
   secondCell = null; 
 
+  const maxCells = 9 * 50;
+  const currentCells = gameContainer.querySelectorAll('.game-cell').length;
+
+  if (currentCells >= maxCells) {
+    showModal('You lose! 50-line grid limit has been reached.', true);
+    playSound('lose');
+    gameContainer.classList.add('locked');
+    return;
+  }
+
   const existingDigits = Array.from(gameContainer.querySelectorAll('.game-cell'))
     .filter(cell => cell.textContent !== '')
     .map(cell => parseInt(cell.textContent));
@@ -592,8 +620,6 @@ function addNumbers(mode) {
 }
 
 function useShuffleButton(shuffleButton, gameContainer) {
-  let shuffleUses = 0;
-  const shuffleUsesLimit = 5;
 
   shuffleButton.addEventListener('click', () => {
     if (shuffleUses >= shuffleUsesLimit) {
@@ -632,8 +658,6 @@ function shuffleGameCells(gameContainer) {
 }
 
 function useEraserButton(eraserButton, gameContainer) {
-  let eraserUses = 0;
-  const eraserUsesLimit = 5;
 
   if (!eraserButton) return;
 
@@ -712,16 +736,27 @@ function createModal() {
   const closeButton = document.createElement('button');
   closeButton.textContent = 'OK';
   closeButton.classList.add('close-button');
-  closeButton.onclick = () => {
-    modalWrapper.style.display = 'none';
-  };
   modal.appendChild(closeButton);
 
   return modalWrapper;
 }
 
-function showModal(content) {
+function showModal(content, isLose = false) {
   const modalWrapper = createModal();
   modalWrapper.querySelector('.modal-text').textContent = content;
   modalWrapper.style.display = 'flex';
+
+  
+
+
+  const closeButton = modalWrapper.querySelector('.close-button');
+  if (isLose) {
+    closeButton.textContent = 'Try again';
+  }
+  closeButton.onclick = () => {
+    modalWrapper.style.display = 'none';
+    if (isLose) {
+      createStartScreen();
+    }
+  };
 }
