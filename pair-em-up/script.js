@@ -190,23 +190,7 @@ function createGameGrid(mode) {
     assistButtons.appendChild(assistButton);
   });
 
-  const gameControls = document.createElement('div');
-  gameControls.classList.add('game-controls');
-  controlsContainer.appendChild(gameControls);
-
-  const backButton = document.createElement('button');
-  backButton.textContent = '← Back';
-  backButton.classList.add('button', 'back-button');
-  backButton.onclick = () => createStartScreen();
-  gameControls.appendChild(backButton);
-
-  ['Reset', 'Save Game', 'Continue Game'].forEach(button => {
-    const controlButton = document.createElement('button');
-    controlButton.textContent = button;
-    controlButton.classList.add('control-button');
-    controlButton.classList.add('button');
-    gameControls.appendChild(controlButton);
-  });
+  
     
   const settingsButton = document.createElement('button');
   settingsButton.textContent = 'Settings';
@@ -215,9 +199,48 @@ function createGameGrid(mode) {
   infoContainer.appendChild(settingsButton);
 
   revertButton = assistButtons.querySelector('.revert-button');
+  useRevertButton(revertButton);
+  
+
   const addButton = assistButtons.querySelector('.add-numbers-button');
   
+  let addNumbersAttempts = 0;
+  const addNumbersLimit = 10;
+
+  if (addButton) {
+    addButton.addEventListener('click', () => {
+      if (addNumbersAttempts >= addNumbersLimit) {
+        showModal('You have used Add Numbers 10 times already.');
+        addButton.disabled = true; 
+        return;
+      }
+  
+    // if (addNumbersAttempts === addNumbersLimit - 1) {
+    //   addButton.disabled = true; 
+    // }
+
+      addNumbersAttempts++;
+      showModal(`Add Numbers (${addNumbersLimit - addNumbersAttempts} left)`);
+      addNumbers(mode);
+      });
+  }
+  
   const hintsButton = assistButtons.querySelector('.hints-button');
+
+  if (hintsButton) {
+    hintsButton.addEventListener('click', () => {
+      const availablePairs = showHints();
+      playSound('hints');
+      showModal('Available pairs: ' + (availablePairs.length > 5 ? '5+' : availablePairs.length));
+    });
+  }
+
+
+  const shuffleButton = document.querySelector('.shuffle-button');
+  useShuffleButton(shuffleButton, gameContainer);
+
+  const eraserButton = assistButtons.querySelector('.eraser-button');
+  useEraserButton(eraserButton, gameContainer);
 
   // if (revertButton) {
   //   const clone = revertButton.cloneNode(true);
@@ -237,48 +260,27 @@ function createGameGrid(mode) {
   //   hintsButton = clone;
   // }
 
-  if (revertButton) {
-    revertButton.disabled = true;
-    revertButton.addEventListener('click', () => {
-      if (!lastMove) return;
-      lastMove.cells.forEach((cell, i) => {
-        cell.textContent = lastMove.values[i];
-        cell.classList.remove('empty-cell');
-     });
-      score -= lastMove.points;
-      updateScore();
-      lastMove = null;
-      revertButton.disabled = true; 
-    });
-  }
-
-  let addNumbersAttempts = 0;
-  const addNumbersLimit = 10;
-
-  if (addButton) {
-    addButton.addEventListener('click', () => {
-    if (addNumbersAttempts >= addNumbersLimit) {
-      showModal('You have used Add Numbers 10 times already.');
-      addButton.disabled = true; 
-      return;
-    }
   
-    // if (addNumbersAttempts === addNumbersLimit - 1) {
-    //   addButton.disabled = true; 
-    // }
 
-    addNumbersAttempts++;
-    showModal(`Add Numbers (${addNumbersLimit - addNumbersAttempts} left)`);
-    addNumbers(mode);
+  
+
+  const gameControls = document.createElement('div');
+  gameControls.classList.add('game-controls');
+  controlsContainer.appendChild(gameControls);
+
+  const backButton = document.createElement('button');
+  backButton.textContent = '← Back';
+  backButton.classList.add('button', 'back-button');
+  backButton.onclick = () => createStartScreen();
+  gameControls.appendChild(backButton);
+
+  ['Reset', 'Save Game', 'Continue Game'].forEach(button => {
+    const controlButton = document.createElement('button');
+    controlButton.textContent = button;
+    controlButton.classList.add('control-button');
+    controlButton.classList.add('button');
+    gameControls.appendChild(controlButton);
   });
-}
-
-  if (hintsButton) {
-    hintsButton.addEventListener('click', () => {
-      const availablePairs = showHints();
-      showModal('Available pairs: ' + (availablePairs.length > 5 ? '5+' : availablePairs.length));
-    });
-  }
 }
 
 
@@ -287,11 +289,13 @@ function createGameGrid(mode) {
 
 let firstCell = null;
 let secondCell = null;
+let isEraserActive = false;
 
 
 function clickOnCell(event) {
   const cell = event.target.closest('.game-cell');
   if (!cell || !gameContainer.contains(cell)) return;
+  
   if (!cell.textContent.trim()) return;
   if (gameContainer.classList.contains('locked')) return;
 
@@ -314,7 +318,7 @@ function clickOnCell(event) {
   const digit2 = parseInt(secondCell.textContent);
 
   const isValidNumbers = (digit1 === digit2 || digit1 + digit2 === 10);
-  const isValidPosition = checkPairSelection(firstCell, secondCell, document.querySelectorAll('.game-cell'));
+  const isValidPosition = checkPairSelection(firstCell, secondCell, Array.from(gameContainer.querySelectorAll('.game-cell')));
 
   gameContainer.classList.add('locked');
     
@@ -389,62 +393,59 @@ function startGame(mode) {
 
 
 function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
-  const gameCells = cells ? Array.from(cells) : Array.from(gameContainer.querySelectorAll('.game-cell'));
-  const cell1 = Array.from(cells).indexOf(firstCell);
-  const cell2 = Array.from(cells).indexOf(secondCell);
+  const gameCells = Array.from(cells || document.querySelectorAll('.game-cell'));
+  const cell1 = gameCells.indexOf(firstCell);
+  const cell2 = gameCells.indexOf(secondCell);
 
   if (cell1 === -1 || cell2 === -1) return false;
+  if (cell1 === cell2) return false;
 
   const [start, end] = [Math.min(cell1, cell2), Math.max(cell1, cell2)];
 
-  const digit1 = parseInt(firstCell.textContent);
-  const digit2 = parseInt(secondCell.textContent);
+  const sameRow = Math.floor(cell1 / columns) === Math.floor(cell2 / columns);
+  const sameColumn = cell1 % columns === cell2 % columns;
 
   const checkAdjacent =
-    Math.abs(cell1 - cell2) === 1 || Math.abs(cell1 - cell2) === columns;
+    Math.abs(cell1 - cell2) === 1 && sameRow || Math.abs(cell1 - cell2) === columns;
 
-  const checkSameRow = (cell1, cell2) => {
-    const rowStart = Math.floor(cell1 / columns) * columns;
-    const rowEnd = rowStart + columns - 1;
-    const start = Math.min(cell1, cell2) + 1;
-    const end = Math.max(cell1, cell2);
-    if (cell1 >= rowStart && cell2 <= rowEnd) {
-      for (let i = start; i < end; i++) {
-        if (gameCells[i].textContent !== '') return false;
-      }
-      return true;
-    }
-    return false;
-  };
-
-  const checkSameColumn = (cell1, cell2) => {
-    if (cell1 % columns !== cell2 % columns) return false;
-    for (let i = cell1 + columns; i < cell2; i += columns) {
+  const checkSameRow = (() => {
+    if (!sameRow) return false;
+    const startIndex = Math.min(cell1, cell2) + 1;
+    const endIndex = Math.max(cell1, cell2);
+    for (let i = startIndex; i < endIndex; i++) {
       if (gameCells[i].textContent !== '') return false;
     }
     return true;
-  };
+  })();
 
-  const checkRowBoundaries = (cell1, cell2) => {
-    const aboveCell = Math.min(cell1, cell2);
-    const belowCell = Math.max(cell1, cell2);
-    return (aboveCell % columns === columns - 1) && (belowCell % columns === 0) && (belowCell - aboveCell === 1);
-  }
-
-  const checkHorizontalAcrossRows = (cell1, cell2) => {
-    for (let i = cell1 + 1; i < cell2; i++) {
+  const checkSameColumn = (() => {
+    if (!sameColumn) return false;
+    for (let i = start + columns; i < end; i += columns) {
       if (gameCells[i].textContent !== '') return false;
     }
     return true;
-  };
+  })();
 
-  
+  const checkAcrossEmptyCells = (() => {
+    for (let i = start + 1; i < end; i++) {
+      if (gameCells[i].textContent !== '') return false;
+    }
+    return true;
+  })();
+
+  const checkStartandEndofRow =
+    Math.floor(cell1 / columns) === Math.floor(cell2 / columns) &&
+    Math.abs(cell1 - cell2) === columns - 1;
+
+  if (checkStartandEndofRow) return false;
+
+
+
   return (
     checkAdjacent ||
-    checkSameRow(cell1, cell2) ||
-    checkSameColumn(cell1, cell2) ||
-    checkRowBoundaries(cell1, cell2) ||
-    checkHorizontalAcrossRows(cell1, cell2)
+    checkSameRow ||
+    checkSameColumn ||
+    checkAcrossEmptyCells
   );
 }
 
@@ -460,9 +461,20 @@ function shuffleDigits(arr) {
 
 
 function updateScore() {
+  const targetScore = 100;
   const scoreDisplay = document.querySelector('.current-score');
   scoreDisplay.textContent = `Score: ${score}`;
+  
+  if (score >= targetScore) {
+    showModal('Congratulations! You win!');
+    playSound('win');
+    gameContainer.classList.add('locked');
+  }
 }
+
+
+
+
 
 
 
@@ -472,6 +484,14 @@ const sounds = {
   error: 'assets/sounds/error.mp3',
   match: 'assets/sounds/match.mp3',
   bonus: 'assets/sounds/bonus.mp3',
+  win: 'assets/sounds/win.mp3',
+  lose: 'assets/sounds/lose.mp3',
+  revert: 'assets/sounds/revert.mp3',
+  add: 'assets/sounds/add.mp3',
+  eraser: 'assets/sounds/eraser.mp3',
+  hints: 'assets/sounds/hints.mp3',
+  shuffle: 'assets/sounds/shuffle.mp3',
+  button: 'assets/sounds/button.mp3',
 };
 
 function playSound(type) {
@@ -512,6 +532,32 @@ function showHints() {
   return availablePairs;
 }
 
+function useRevertButton(revertButton) {
+  if (!revertButton) return;
+
+  revertButton.disabled = true;
+
+  revertButton.addEventListener('click', () => {
+    if (!lastMove) return;
+
+    if (lastMove.type === 'erase') {
+      const cell = gameContainer.querySelectorAll('.game-cell')[lastMove.cellIndex];
+      cell.textContent = lastMove.value;
+      cell.classList.remove('empty-cell');
+    } else {
+      lastMove.cells.forEach((cell, i) => {
+        cell.textContent = lastMove.values[i];
+        cell.classList.remove('empty-cell');
+      });
+      score -= lastMove.points;
+      updateScore();
+    }
+    playSound('revert');
+    lastMove = null;
+    revertButton.disabled = true;
+  });
+}
+
 
 function addNumbers(mode) {
   gameContainer = document.querySelector('.game-container');
@@ -523,6 +569,7 @@ function addNumbers(mode) {
     .map(cell => parseInt(cell.textContent));
 
   let newDigits = [];
+  playSound('add');
 
   if (mode === 'Classic') {
     newDigits = [...existingDigits];
@@ -539,18 +586,124 @@ function addNumbers(mode) {
     newCell.addEventListener('click', clickOnCell);
     gameContainer.appendChild(newCell);
   });
+  
+  revertButton.disabled = true;
   updateScore();
+}
+
+function useShuffleButton(shuffleButton, gameContainer) {
+  let shuffleUses = 0;
+  const shuffleUsesLimit = 5;
+
+  shuffleButton.addEventListener('click', () => {
+    if (shuffleUses >= shuffleUsesLimit) {
+      showModal('You have used Shuffle 5 times already.');
+      shuffleButton.disabled = true;
+      return;
+    }
+
+    playSound('shuffle');
+    shuffleGameCells(gameContainer);
+    shuffleUses++;
+    lastMove = null;
+    if (revertButton) revertButton.disabled = true;
+    showModal(`The numbers are shuffled! (${shuffleUsesLimit - shuffleUses} uses left)`);
+  });
+}
+
+function shuffleGameCells(gameContainer) {
+  const cells = Array.from(gameContainer.querySelectorAll('.game-cell'));
+  const digits = cells
+    .filter(cell => cell.textContent !== '')
+    .map(cell => parseInt(cell.textContent));
+
+  for (let i = digits.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [digits[i], digits[j]] = [digits[j], digits[i]];
+  }
+
+  let index = 0;
+  cells.forEach(cell => {
+    if (cell.textContent !== '') {
+      cell.textContent = digits[index];
+      index++;
+    }
+  });
+}
+
+function useEraserButton(eraserButton, gameContainer) {
+  let eraserUses = 0;
+  const eraserUsesLimit = 5;
+
+  if (!eraserButton) return;
+
+  eraserButton.addEventListener('click', () => {
+    if (eraserUses >= eraserUsesLimit) {
+      eraserButton.disabled = true;
+      showModal('You have already used Eraser 5 times.');
+
+      return;
+    }
+
+    showModal(`Eraser (${eraserUsesLimit - eraserUses} uses left). Click any number to remove it.`);
+
+    gameContainer.classList.add('active-eraser');
+
+    const activateEraser = (event) => {
+      const cell = event.target.closest('.game-cell');
+      if (!cell || !cell.textContent.trim()) return;
+
+      lastMove = {
+        type: 'erase',
+        cellIndex: Array.from(gameContainer.querySelectorAll('.game-cell')).indexOf(cell),
+        value: cell.textContent
+      };
+
+      playSound('eraser');
+      const selectedCells = gameContainer.querySelectorAll('.selected-cell');
+      selectedCells.forEach(c => c.classList.remove('selected-cell'));
+      firstCell = null;
+      secondCell = null;
+
+      cell.textContent = '';
+      cell.classList.add('empty-cell');
+      eraserUses++;
+
+      gameContainer.classList.remove('active-eraser');
+      gameContainer.removeEventListener('click', activateEraser);
+ 
+      showModal(`Number removed! (${eraserUsesLimit - eraserUses} uses left)`);
+      revertButton.disabled = false; 
+
+      if (eraserUses >= eraserUsesLimit) {
+        eraserButton.disabled = true;
+      }
+    };
+
+    gameContainer.addEventListener('click', activateEraser);
+  });
 }
 
 
 // modal 
 
 function createModal() {
-  let modal = document.querySelector('.modal');
-  if (modal) return modal;
+  let modalWrapper = document.querySelector('.modal-wrapper');
+  if (modalWrapper) return modalWrapper;
+  modalWrapper = document.createElement('div');
+  modalWrapper.classList.add('modal-wrapper');
+  
 
-  modal = document.createElement('div');
+  modalWrapper.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  document.body.appendChild(modalWrapper);
+
+
+  const modal = document.createElement('div');
   modal.classList.add('modal');
+  modalWrapper.appendChild(modal);
 
   const content = document.createElement('p');
   content.classList.add('modal-text');
@@ -560,16 +713,15 @@ function createModal() {
   closeButton.textContent = 'OK';
   closeButton.classList.add('close-button');
   closeButton.onclick = () => {
-    modal.style.display = 'none';
+    modalWrapper.style.display = 'none';
   };
   modal.appendChild(closeButton);
 
-  document.body.appendChild(modal);
-  return modal;
+  return modalWrapper;
 }
 
 function showModal(content) {
-  const modal = createModal();
-  modal.querySelector('.modal-text').textContent = content;
-  modal.style.display = 'block';
+  const modalWrapper = createModal();
+  modalWrapper.querySelector('.modal-text').textContent = content;
+  modalWrapper.style.display = 'flex';
 }
