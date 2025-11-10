@@ -210,7 +210,7 @@
   transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
-.add-numbers-button:disabled, .eraser-button:disabled, .shuffle-button:disabled, .revert-button:disabled {
+.add-numbers-button:disabled, .eraser-button:disabled, .shuffle-button:disabled, .revert-button:disabled, .continue-button:disabled {
   opacity: 0.5;
   cursor: default;
 }
@@ -322,8 +322,8 @@
 }
 
 .wrong-pair {
+  outline: 2px solid #800000;
   animation: shake 0.3s;
-  border: 2px solid #800000;
 }
 
 @keyframes shake {

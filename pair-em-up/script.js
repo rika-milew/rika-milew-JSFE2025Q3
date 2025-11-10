@@ -83,14 +83,22 @@ function createStartScreen() {
   buttonsContainer.classList.add('buttons-container');
   container.appendChild(buttonsContainer);
 
+  
+
   const continueButton = document.createElement('button');
   continueButton.textContent = 'Continue';
   continueButton.classList.add('continue-button');
   continueButton.classList.add('button');
-  continueButton.onclick = function() {
-    console.log('Settings');
-  };
-  buttonsContainer.appendChild(continueButton);
+
+const savedGame = localStorage.getItem('savedGame');
+if (savedGame) {
+  continueButton.disabled = false;
+  continueButton.addEventListener('click', continueSavedGame);
+} else {
+  continueButton.disabled = true;
+}
+ 
+buttonsContainer.appendChild(continueButton);
 
   const resultsButton = document.createElement('button');
   resultsButton.textContent = 'Results';
@@ -117,6 +125,7 @@ createStartScreen();
 // game grid
 
 function createGameGrid(mode) {
+  currentMode = mode;
   addNumbersUses = 0;
   shuffleUses = 0;
   eraserUses = 0;
@@ -282,6 +291,7 @@ function createGameGrid(mode) {
   backButton.textContent = '← Back';
   backButton.classList.add('button', 'back-button');
   backButton.onclick = () => {
+    saveGame();
     stopTimer();
     createStartScreen();
   };
@@ -373,6 +383,7 @@ function clickOnCell(event) {
       secondCorrectCell.classList.add('empty-cell');
       updateScore();
       checkLoseConditions();
+      saveGame();
       gameContainer.classList.remove('locked');
     }, 400);
 
@@ -404,7 +415,7 @@ function startGame(mode) {
   updateScore();
   if (revertButton) revertButton.disabled = true;
 
-  startTimer();
+  startTimer(true);
 }
 
 
@@ -592,6 +603,7 @@ function useRevertButton(revertButton) {
       });
       score -= lastMove.points;
       updateScore();
+      saveGame();
     }
     playSound('revert');
     lastMove = null;
@@ -640,6 +652,7 @@ function addNumbers(mode) {
   
   revertButton.disabled = true;
   updateScore();
+  saveGame();
 }
 
 function useShuffleButton(shuffleButton, gameContainer) {
@@ -678,6 +691,7 @@ function shuffleGameCells(gameContainer) {
       index++;
     }
   });
+  saveGame();
 }
 
 function useEraserButton(eraserButton, gameContainer) {
@@ -722,6 +736,8 @@ function useEraserButton(eraserButton, gameContainer) {
  
       showModal(`Number removed! (${eraserUsesLimit - eraserUses} uses left)`);
       revertButton.disabled = false; 
+
+      saveGame();
 
     };
 
@@ -794,11 +810,11 @@ function showModal(content, isLose = false) {
 // timer 
 
 
-function startTimer() {
+function startTimer(reset = true) {
   const timer = document.querySelector('.timer');
   if (!timer) return;
 
-  gameSeconds = 0;
+  if (reset) gameSeconds = 0;
   updateTimer(timer);
 
   if (gameTimer) clearInterval(gameTimer);
@@ -819,4 +835,115 @@ function updateTimer(timer) {
 function stopTimer() {
   clearInterval(gameTimer);
   gameTimer = null;
+}
+
+
+// save game 
+
+function saveGame(mode) {
+  const cells = Array.from(document.querySelectorAll('.game-cell')).map(cell => cell.textContent);
+  
+
+  let savedLastMove = null;
+  if (lastMove) {
+    if (lastMove.type === 'erase') {
+      savedLastMove = {
+        type: 'erase',
+        cellIndex: lastMove.cellIndex,
+        value: lastMove.value
+      };
+    } else {
+      savedLastMove = {
+        type: lastMove.type,
+        cellIndices: lastMove.cells.map(cell =>
+          Array.from(document.querySelectorAll('.game-cell')).indexOf(cell)
+        ),
+        values: lastMove.values,
+        points: lastMove.points
+      };
+    }
+  }
+
+
+  const lastGame = {
+    mode: currentMode,   
+    lastMove: savedLastMove,
+    cells,
+    score,
+    gameSeconds,
+    addNumbersUses,
+    shuffleUses,
+    eraserUses
+  };
+  localStorage.setItem('savedGame', JSON.stringify(lastGame));
+}
+
+function continueSavedGame() {
+  const savedGame = JSON.parse(localStorage.getItem('savedGame'));
+  if (!savedGame) return;
+
+  createGameGrid(savedGame.mode);
+  launchSavedGame(savedGame);
+}
+
+function launchSavedGame(savedGame) {
+  if (!savedGame || !gameContainer) return;
+
+  score = savedGame.score || 0;
+  lastMove = savedGame.lastMove || null;
+  gameSeconds = savedGame.gameSeconds || 0;
+  addNumbersUses = savedGame.addNumbersUses || 0;
+  shuffleUses = savedGame.shuffleUses || 0;
+  eraserUses = savedGame.eraserUses || 0;
+  currentMode = savedGame.mode || 'Classic';
+
+
+  const addButton = document.querySelector('.add-numbers-button');
+  const shuffleButton = document.querySelector('.shuffle-button');
+  const eraserButton = document.querySelector('.eraser-button');
+
+  if (addButton) addButton.disabled = addNumbersUses >= addNumbersUsesLimit;
+  if (shuffleButton) shuffleButton.disabled = shuffleUses >= shuffleUsesLimit;
+  if (eraserButton) eraserButton.disabled = eraserUses >= eraserUsesLimit;
+  if (revertButton) revertButton.disabled = !lastMove;
+
+  const cells = Array.from(gameContainer.querySelectorAll('.game-cell'));
+
+  if (lastMove && lastMove.type !== 'erase' && lastMove.cellIndices) {
+    lastMove.cells = lastMove.cellIndices.map(i => cells[i]);
+  }
+
+  if (savedGame.lastMove) {
+    if (savedGame.lastMove.type === 'erase') {
+      lastMove = {
+        ...savedGame.lastMove
+      };
+    } else {
+      lastMove = {
+        type: savedGame.lastMove.type,
+        cells: savedGame.lastMove.cellIndices.map(i => cells[i]),
+        values: savedGame.lastMove.values,
+        points: savedGame.lastMove.points
+      };
+    }
+  } else {
+    lastMove = null;
+  }
+
+  savedGame.cells.forEach((digit, index) => {
+    if (cells[index]) {
+      cells[index].textContent = digit;
+      if (digit === '') cells[index].classList.add('empty-cell');
+      else cells[index].classList.remove('empty-cell');
+    }
+  });
+
+  const scoreDisplay = document.querySelector('.current-score');
+  if (scoreDisplay) scoreDisplay.textContent = `Score: ${score}`;
+  revertButton.disabled = false;
+
+  updateScore();
+  updateTimer(document.querySelector('.timer'));
+  stopTimer();
+  startTimer(false);
 }
