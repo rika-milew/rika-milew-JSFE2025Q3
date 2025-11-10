@@ -410,3 +410,32 @@
 }
 
 
+
+/* bonus feature */
+
+@keyframes rotateDigits {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.3); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.bonus-animation {
+  display: inline-block;
+  font-weight: bold;
+  color: #a4192b;
+  animation: rotateDigits 1.5s ease-in-out;
+}
+
+@keyframes floatDigits {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-30px); }
+}
+.bonus-text {
+  position: absolute;
+  font-weight: bold;
+  font-size: 20px;
+  color: #a4192b;
+  pointer-events: none;
+  animation: floatDigits 1.5s ease-out forwards;
+}
+

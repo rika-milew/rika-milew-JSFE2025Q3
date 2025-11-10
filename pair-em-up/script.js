@@ -344,6 +344,8 @@ function clickOnCell(event) {
   const isValidPosition = checkPairSelection(firstCell, secondCell, Array.from(gameContainer.querySelectorAll('.game-cell')));
 
   gameContainer.classList.add('locked');
+
+ 
     
   if (isValidNumbers && isValidPosition) {
     let points = 0;
@@ -387,6 +389,18 @@ function clickOnCell(event) {
       gameContainer.classList.remove('locked');
     }, 400);
 
+  } else if (digit1 === 6 && digit2 === 9) {
+    bonusFeature(firstCell, secondCell);
+    const firstWrongCell = firstCell;
+    const secondWrongCell = secondCell;
+    firstCell = null;
+    secondCell = null;
+
+    setTimeout(() => {
+      firstWrongCell.classList.remove('selected-cell');
+      secondWrongCell.classList.remove('selected-cell');
+      gameContainer.classList.remove('locked');
+    }, 700);
   } else {
     firstCell.classList.add('wrong-pair');
     secondCell.classList.add('wrong-pair');
@@ -412,6 +426,7 @@ function startGame(mode) {
   score = 0;
   lastMove = null;
 
+  console.log('The bonus feature is activated by selecting 6 and 9 pair in sequence.');
   updateScore();
   if (revertButton) revertButton.disabled = true;
 
@@ -946,4 +961,42 @@ function launchSavedGame(savedGame) {
   updateTimer(document.querySelector('.timer'));
   stopTimer();
   startTimer(false);
+}
+
+
+
+// bonus feature 
+
+
+function bonusFeature(firstCell, secondCell) {
+  if (!firstCell || !secondCell) return;
+
+  [firstCell, secondCell].forEach(cell => {
+    const digit = cell.textContent;
+    cell.textContent = '';
+    const span = document.createElement('span');
+    span.textContent = digit;
+    span.classList.add('bonus-animation');
+    cell.appendChild(span);
+  });
+
+  const text = document.createElement('div');
+  text.textContent = '✨ Magic Pair! ✨';
+  text.classList.add('bonus-text');
+
+  const rect = firstCell.getBoundingClientRect();
+  text.style.left = rect.left + window.scrollX + 'px';
+  text.style.top = rect.top + window.scrollY - 40 + 'px';
+
+  document.body.appendChild(text);
+  
+  setTimeout(() => {
+    [firstCell, secondCell].forEach(cell => {
+      const span = cell.querySelector('span.bonus-animation');
+      if (span) {
+        cell.textContent = span.textContent;
+      }
+    });
+    text.remove();
+  }, 1500);
 }
