@@ -210,7 +210,7 @@
   transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
-.add-numbers-button:disabled, .eraser-button:disabled, .shuffleButton:disabled, .revert-button:disabled {
+.add-numbers-button:disabled, .eraser-button:disabled, .shuffle-button:disabled, .revert-button:disabled {
   opacity: 0.5;
   cursor: default;
 }

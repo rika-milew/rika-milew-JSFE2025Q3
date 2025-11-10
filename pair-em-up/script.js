@@ -15,6 +15,9 @@ const shuffleUsesLimit = 5;
 let eraserUses = 0;
 const eraserUsesLimit = 5;
 
+let gameTimer = null;
+let gameSeconds = 0;
+
 function createStartScreen() {
   const body = document.body;
   body.classList.add('body');
@@ -221,7 +224,7 @@ function createGameGrid(mode) {
   if (addButton) {
     addButton.addEventListener('click', () => {
       if (addNumbersUses >= addNumbersUsesLimit) {
-        showModal('You have used Add Numbers 10 times already.');
+        showModal('You have already used Add Numbers 10 times.');
         addButton.disabled = true; 
         return;
       }
@@ -278,7 +281,10 @@ function createGameGrid(mode) {
   const backButton = document.createElement('button');
   backButton.textContent = '← Back';
   backButton.classList.add('button', 'back-button');
-  backButton.onclick = () => createStartScreen();
+  backButton.onclick = () => {
+    stopTimer();
+    createStartScreen();
+  };
   gameControls.appendChild(backButton);
 
   ['Reset', 'Save Game', 'Continue Game'].forEach(button => {
@@ -365,8 +371,8 @@ function clickOnCell(event) {
       secondCorrectCell.classList.remove('selected-cell', 'right-pair');
       firstCorrectCell.classList.add('empty-cell');
       secondCorrectCell.classList.add('empty-cell');
-      checkLoseConditions();
       updateScore();
+      checkLoseConditions();
       gameContainer.classList.remove('locked');
     }, 400);
 
@@ -397,6 +403,8 @@ function startGame(mode) {
 
   updateScore();
   if (revertButton) revertButton.disabled = true;
+
+  startTimer();
 }
 
 
@@ -474,9 +482,11 @@ function updateScore() {
   scoreDisplay.textContent = `Score: ${score}`;
   
   if (score >= targetScore) {
-    showModal('Congratulations! You win!');
+    showModal('Congratulations! You win!', true);
     playSound('win');
     gameContainer.classList.add('locked');
+    stopTimer();
+    return;
   }
 }
 
@@ -488,10 +498,23 @@ function checkLoseConditions() {
     eraserUses >= eraserUsesLimit
   );
 
+  const allCells = Array.from(gameContainer.querySelectorAll('.game-cell'));
+  const allEmpty = allCells.every(cell => cell.textContent.trim() === '');
+
   if (availablePairs.length === 0 && assistToolsLocked) {
     showModal('You lose! No valid moves remain and all assist tools have been used.', true);
     playSound('lose');
     gameContainer.classList.add('locked');
+    stopTimer();
+    return;
+  }
+
+  if (allEmpty && score < 100) {
+    showModal('You lose! The grid is empty and you didn’t reach 100 points.', true);
+    playSound('lose');
+    gameContainer.classList.add('locked');
+    stopTimer();
+    return;
   }
 }
 
@@ -623,7 +646,7 @@ function useShuffleButton(shuffleButton, gameContainer) {
 
   shuffleButton.addEventListener('click', () => {
     if (shuffleUses >= shuffleUsesLimit) {
-      showModal('You have used Shuffle 5 times already.');
+      showModal('You have already used Shuffle 5 times.');
       shuffleButton.disabled = true;
       return;
     }
@@ -660,14 +683,17 @@ function shuffleGameCells(gameContainer) {
 function useEraserButton(eraserButton, gameContainer) {
 
   if (!eraserButton) return;
+  
 
   eraserButton.addEventListener('click', () => {
     if (eraserUses >= eraserUsesLimit) {
-      eraserButton.disabled = true;
       showModal('You have already used Eraser 5 times.');
+      eraserButton.disabled = true;
 
       return;
     }
+
+    clearSelectedCells();
 
     showModal(`Eraser (${eraserUsesLimit - eraserUses} uses left). Click any number to remove it.`);
 
@@ -684,14 +710,12 @@ function useEraserButton(eraserButton, gameContainer) {
       };
 
       playSound('eraser');
-      const selectedCells = gameContainer.querySelectorAll('.selected-cell');
-      selectedCells.forEach(c => c.classList.remove('selected-cell'));
-      firstCell = null;
-      secondCell = null;
 
       cell.textContent = '';
       cell.classList.add('empty-cell');
       eraserUses++;
+
+      clearSelectedCells();
 
       gameContainer.classList.remove('active-eraser');
       gameContainer.removeEventListener('click', activateEraser);
@@ -699,13 +723,17 @@ function useEraserButton(eraserButton, gameContainer) {
       showModal(`Number removed! (${eraserUsesLimit - eraserUses} uses left)`);
       revertButton.disabled = false; 
 
-      if (eraserUses >= eraserUsesLimit) {
-        eraserButton.disabled = true;
-      }
     };
 
     gameContainer.addEventListener('click', activateEraser);
   });
+}
+
+function clearSelectedCells() {
+  const selectedCells = document.querySelectorAll('.selected-cell');
+  selectedCells.forEach(c => c.classList.remove('selected-cell'));
+  firstCell = null;
+  secondCell = null;
 }
 
 
@@ -759,4 +787,36 @@ function showModal(content, isLose = false) {
       createStartScreen();
     }
   };
+}
+
+
+
+// timer 
+
+
+function startTimer() {
+  const timer = document.querySelector('.timer');
+  if (!timer) return;
+
+  gameSeconds = 0;
+  updateTimer(timer);
+
+  if (gameTimer) clearInterval(gameTimer);
+
+  gameTimer = setInterval(() => {
+    gameSeconds++;
+    updateTimer(timer);
+  }, 1000);
+}
+
+function updateTimer(timer) {
+  const minutes = Math.floor(gameSeconds / 60);
+  const seconds = gameSeconds % 60;
+  timer.textContent = 
+    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function stopTimer() {
+  clearInterval(gameTimer);
+  gameTimer = null;
 }
