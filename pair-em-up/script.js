@@ -291,7 +291,6 @@ function createGameGrid(mode) {
   backButton.textContent = '← Back';
   backButton.classList.add('button', 'back-button');
   backButton.onclick = () => {
-    saveGame();
     stopTimer();
     createStartScreen();
   };
@@ -302,8 +301,28 @@ function createGameGrid(mode) {
     controlButton.textContent = button;
     controlButton.classList.add('control-button');
     controlButton.classList.add('button');
+    const className = button.toLowerCase().replace(/\s+/g, '-') + '-button';
+    controlButton.classList.add(className);
     gameControls.appendChild(controlButton);
   });
+
+  const resetButton = document.querySelector('.reset-button');
+  resetGame(resetButton);
+
+  const saveButton = document.querySelector('.save-game-button');
+  if (saveButton) {
+    saveButton.addEventListener('click', saveGame);
+  }
+
+  const continueGameButton = document.querySelector('.continue-game-button');
+  const savedGame = localStorage.getItem('savedGame');
+  if (savedGame) {
+    continueGameButton.disabled = false;
+    continueGameButton.addEventListener('click', continueSavedGame);
+  } else {
+    continueGameButton.disabled = true;
+  } 
+
 }
 
 
@@ -385,7 +404,6 @@ function clickOnCell(event) {
       secondCorrectCell.classList.add('empty-cell');
       updateScore();
       checkLoseConditions();
-      saveGame();
       gameContainer.classList.remove('locked');
     }, 400);
 
@@ -618,7 +636,6 @@ function useRevertButton(revertButton) {
       });
       score -= lastMove.points;
       updateScore();
-      saveGame();
     }
     playSound('revert');
     lastMove = null;
@@ -667,7 +684,6 @@ function addNumbers(mode) {
   
   revertButton.disabled = true;
   updateScore();
-  saveGame();
 }
 
 function useShuffleButton(shuffleButton, gameContainer) {
@@ -706,7 +722,6 @@ function shuffleGameCells(gameContainer) {
       index++;
     }
   });
-  saveGame();
 }
 
 function useEraserButton(eraserButton, gameContainer) {
@@ -751,8 +766,6 @@ function useEraserButton(eraserButton, gameContainer) {
  
       showModal(`Number removed! (${eraserUsesLimit - eraserUses} uses left)`);
       revertButton.disabled = false; 
-
-      saveGame();
 
     };
 
@@ -965,6 +978,34 @@ function launchSavedGame(savedGame) {
 
 
 
+
+// reset game
+
+function resetGame(resetButton) {
+  if (!resetButton) return;
+
+  resetButton.addEventListener('click', () => {
+    if (!currentMode) return;
+    stopTimer();
+    createGameGrid(currentMode);
+    startGame(currentMode);
+
+    addNumbersUses = 0;
+    shuffleUses = 0;
+    eraserUses = 0;
+
+    lastMove = null;
+  });
+}
+
+
+window.addEventListener('beforeunload', () => {
+  if (gameContainer && !gameContainer.classList.contains('locked')) {
+    saveGame(currentMode);
+  }
+});
+
+
 // bonus feature 
 
 
@@ -1000,3 +1041,5 @@ function bonusFeature(firstCell, secondCell) {
     text.remove();
   }, 1500);
 }
+
+
