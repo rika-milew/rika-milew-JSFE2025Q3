@@ -410,6 +410,62 @@
 }
 
 
+/* results modal  */
+
+
+
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  max-height: 300px;
+  
+}
+
+.results-list li {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+   padding: 8px 12px;
+ font-size: 18px;
+  border-bottom: 1px solid #eee;
+  
+}
+
+.results-list li span {
+   flex: 1;
+  font-weight: 500;
+  color: #b6b4b4;
+  white-space: nowrap;
+}
+
+.result-info {
+ 
+  text-align: center;
+  
+}
+
+.result-info::after {
+  content: '|';
+  margin: 0 4px;
+  color: #999999;
+}
+
+.result-info:last-child::after {
+  content: '';
+}
+
+.results-list li .win-symbol {
+  color: gold;
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+
+
+
+
 
 /* bonus feature */
 

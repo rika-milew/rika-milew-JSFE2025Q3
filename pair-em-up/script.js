@@ -18,6 +18,7 @@ const eraserUsesLimit = 5;
 let gameTimer = null;
 let gameSeconds = 0;
 
+
 function createStartScreen() {
   const body = document.body;
   body.classList.add('body');
@@ -104,9 +105,10 @@ buttonsContainer.appendChild(continueButton);
   resultsButton.textContent = 'Results';
   resultsButton.classList.add('results-button');
   resultsButton.classList.add('button');
-  resultsButton.onclick = function() {
-    console.log('Results');
-  };
+  resultsButton.addEventListener('click', () => {
+  const results = JSON.parse(localStorage.getItem('gameResults')) || [];
+  showGameResults(results);
+});
   buttonsContainer.appendChild(resultsButton);
 
   const settingsButton = document.createElement('button');
@@ -129,6 +131,7 @@ function createGameGrid(mode) {
   addNumbersUses = 0;
   shuffleUses = 0;
   eraserUses = 0;
+  totalMoves = 0;
 
   const body = document.body;
 
@@ -403,6 +406,7 @@ function clickOnCell(event) {
       firstCorrectCell.classList.add('empty-cell');
       secondCorrectCell.classList.add('empty-cell');
       updateScore();
+      countMoves();
       checkLoseConditions();
       gameContainer.classList.remove('locked');
     }, 400);
@@ -413,6 +417,7 @@ function clickOnCell(event) {
     const secondWrongCell = secondCell;
     firstCell = null;
     secondCell = null;
+    countMoves();
 
     setTimeout(() => {
       firstWrongCell.classList.remove('selected-cell');
@@ -427,6 +432,7 @@ function clickOnCell(event) {
     const secondWrongCell = secondCell;
     firstCell = null;
     secondCell = null;
+    countMoves();
 
     setTimeout(() => {
       firstWrongCell.classList.remove('selected-cell', 'wrong-pair');
@@ -442,9 +448,11 @@ function startGame(mode) {
   firstCell = null;
   secondCell = null;
   score = 0;
+  totalMoves = 0; 
   lastMove = null;
 
   console.log('The bonus feature is activated by selecting 6 and 9 pair in sequence.');
+  playSound('start');
   updateScore();
   if (revertButton) revertButton.disabled = true;
 
@@ -530,12 +538,18 @@ function updateScore() {
     playSound('win');
     gameContainer.classList.add('locked');
     stopTimer();
+     saveGameResult({
+    mode: currentMode,
+    score: score,
+    result: 'Win',
+    gameSeconds: gameSeconds,
+    moves: totalMoves || 0
+  });
     return;
   }
 }
 
 function checkLoseConditions() {
-  const availablePairs = showHints();
   const assistToolsLocked = (
     addNumbersUses >= addNumbersUsesLimit &&
     shuffleUses >= shuffleUsesLimit &&
@@ -545,12 +559,24 @@ function checkLoseConditions() {
   const allCells = Array.from(gameContainer.querySelectorAll('.game-cell'));
   const allEmpty = allCells.every(cell => cell.textContent.trim() === '');
 
-  if (availablePairs.length === 0 && assistToolsLocked) {
+  if (assistToolsLocked) {
+    const availablePairs = showHints();
+    if (availablePairs.length === 0) {
     showModal('You lose! No valid moves remain and all assist tools have been used.', true);
     playSound('lose');
     gameContainer.classList.add('locked');
     stopTimer();
+    saveGameResult({
+    mode: currentMode,
+    score: score,
+    result: 'Lose',
+    gameSeconds: gameSeconds,
+    moves: totalMoves || 0
+  });
     return;
+} else {
+  return;
+}
   }
 
   if (allEmpty && score < 100) {
@@ -558,6 +584,13 @@ function checkLoseConditions() {
     playSound('lose');
     gameContainer.classList.add('locked');
     stopTimer();
+    saveGameResult({
+    mode: currentMode,
+    score: score,
+    result: 'Lose',
+    gameSeconds: gameSeconds,
+    moves: totalMoves || 0
+  });
     return;
   }
 }
@@ -569,6 +602,7 @@ const sounds = {
   error: 'assets/sounds/error.mp3',
   match: 'assets/sounds/match.mp3',
   bonus: 'assets/sounds/bonus.mp3',
+  start: 'assets/sounds/start.mp3',
   win: 'assets/sounds/win.mp3',
   lose: 'assets/sounds/lose.mp3',
   revert: 'assets/sounds/revert.mp3',
@@ -656,6 +690,13 @@ function addNumbers(mode) {
     showModal('You lose! 50-line grid limit has been reached.', true);
     playSound('lose');
     gameContainer.classList.add('locked');
+    saveGameResult({
+    mode: currentMode,
+    score: score,
+    result: 'Lose',
+    gameSeconds: gameSeconds,
+    moves: totalMoves || 0
+  });
     return;
   }
 
@@ -683,7 +724,9 @@ function addNumbers(mode) {
   });
   
   revertButton.disabled = true;
+  checkLoseConditions();
   updateScore();
+  countMoves();
 }
 
 function useShuffleButton(shuffleButton, gameContainer) {
@@ -722,6 +765,7 @@ function shuffleGameCells(gameContainer) {
       index++;
     }
   });
+  countMoves();
 }
 
 function useEraserButton(eraserButton, gameContainer) {
@@ -758,6 +802,7 @@ function useEraserButton(eraserButton, gameContainer) {
       cell.textContent = '';
       cell.classList.add('empty-cell');
       eraserUses++;
+      countMoves();
 
       clearSelectedCells();
 
@@ -766,6 +811,7 @@ function useEraserButton(eraserButton, gameContainer) {
  
       showModal(`Number removed! (${eraserUsesLimit - eraserUses} uses left)`);
       revertButton.disabled = false; 
+      checkLoseConditions();
 
     };
 
@@ -901,7 +947,8 @@ function saveGame(mode) {
     gameSeconds,
     addNumbersUses,
     shuffleUses,
-    eraserUses
+    eraserUses,
+    totalMoves
   };
   localStorage.setItem('savedGame', JSON.stringify(lastGame));
 }
@@ -924,6 +971,7 @@ function launchSavedGame(savedGame) {
   shuffleUses = savedGame.shuffleUses || 0;
   eraserUses = savedGame.eraserUses || 0;
   currentMode = savedGame.mode || 'Classic';
+  totalMoves = savedGame.totalMoves || 0; 
 
 
   const addButton = document.querySelector('.add-numbers-button');
@@ -1004,6 +1052,140 @@ window.addEventListener('beforeunload', () => {
     saveGame(currentMode);
   }
 });
+
+
+// game results and history 
+
+let totalMoves = 0;
+
+function countMoves() {
+  totalMoves++;
+}
+
+function saveGameResult({ mode, score, result, gameSeconds, moves }) {
+  const minutes = Math.floor(gameSeconds / 60);
+  const seconds = gameSeconds % 60;
+  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+  const newResult = {
+    mode,
+    score,
+    result,
+    time: formattedTime,
+    moves,
+    date: new Date().toLocaleString()
+  };
+
+  let results = JSON.parse(localStorage.getItem('gameResults')) || [];
+
+  results.push(newResult);
+
+  results.sort((a, b) => {
+    const timeA = a.time.split(':').map(Number);
+    const timeB = b.time.split(':').map(Number);
+    const secondsA = timeA[0] * 60 + timeA[1];
+    const secondsB = timeB[0] * 60 + timeB[1];
+    return secondsA - secondsB;
+  });
+
+  results = results.slice(0, 5);
+
+  localStorage.setItem('gameResults', JSON.stringify(results));
+}
+
+
+function showGameResults(results) {
+  let existingWrapper = document.querySelector('.modal-wrapper');
+  if (existingWrapper) existingWrapper.remove();
+
+  let resultsModalWrapper = document.querySelector('.modal-wrapper');
+  resultsModalWrapper = document.createElement('div');
+  resultsModalWrapper.classList.add('modal-wrapper');
+  resultsModalWrapper.style.display = 'flex';
+
+  resultsModalWrapper.addEventListener('click', () => resultsModalWrapper.remove());
+
+  const resultsModal = document.createElement('div');
+  resultsModal.classList.add('modal', 'results-modal');
+  resultsModal.addEventListener('click', e => e.stopPropagation());
+
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal-text');
+
+  const modalTitle = document.createElement('h2');
+  modalTitle.textContent = 'Results and History';
+  modalContent.appendChild(modalTitle);
+
+
+  if (!results || results.length === 0) {
+    const emptyContent = document.createElement('p');
+    emptyContent.textContent = 'No games played yet.';
+    modalContent.appendChild(emptyContent);
+  } else {
+    const resultsList = document.createElement('ul');
+    resultsList.classList.add('results-list');
+
+    results.forEach(result => {
+      const gameSession = document.createElement('li');
+
+      const modeInfo = document.createElement('span');
+      modeInfo.textContent = `Mode: ${result.mode}`;
+      modeInfo.classList.add('result-info');
+      gameSession.appendChild(modeInfo);
+
+      const scoreInfo = document.createElement('span');
+      scoreInfo.textContent = `Score: ${result.score}`;
+      scoreInfo.classList.add('result-info');
+      gameSession.appendChild(scoreInfo);
+
+       const outcomeInfo = document.createElement('span');
+       outcomeInfo.textContent = `Result: ${result.result}`;
+       outcomeInfo.classList.add('result-info');
+       gameSession.appendChild(outcomeInfo);
+
+      const movesInfo = document.createElement('span');
+      movesInfo.textContent = `Moves: ${result.moves}`;
+      movesInfo.classList.add('result-info');
+      gameSession.appendChild(movesInfo);
+
+      const timeInfo = document.createElement('span');
+      timeInfo.textContent = `Time: ${result.time}`;
+     timeInfo.classList.add('result-info');
+      gameSession.appendChild(timeInfo);
+
+      const winSymbol = document.createElement('span');
+        
+        winSymbol.classList.add('win-symbol');
+        gameSession.appendChild(winSymbol);
+
+      if (result.result === 'Win') {
+        winSymbol.textContent = ' 🏆';
+      } else {
+        winSymbol.textContent = ' ❌';
+      }
+
+      resultsList.appendChild(gameSession);
+    });
+    
+    modalContent.appendChild(resultsList);
+  }
+
+    const closeButton = document.createElement('button');
+  closeButton.textContent = 'Close';
+  closeButton.classList.add('close-button');
+  closeButton.addEventListener('click', () => resultsModalWrapper.remove());
+  
+
+
+  resultsModal.appendChild(modalContent); 
+  resultsModal.appendChild(closeButton);
+  resultsModalWrapper.appendChild(resultsModal);
+  document.body.appendChild(resultsModalWrapper);
+}
+
+
+
+
 
 
 // bonus feature 
