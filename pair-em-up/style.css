@@ -463,6 +463,33 @@
 }
 
 
+/* final modal  */
+
+.modal-title {
+  margin-bottom: 15px;
+  font-size: 36px;
+}
+
+.modal-information {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-information p {
+  margin: 0;
+  font-size: 20px;
+  color: #b6b4b4;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 
 
 
