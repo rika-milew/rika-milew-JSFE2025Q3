@@ -1126,26 +1126,18 @@ function saveGameResult({ mode, score, result, gameSeconds, moves }) {
     score,
     result,
     time: formattedTime,
+    gameSeconds,
     moves,
     date: new Date().toLocaleString()
   };
 
   let results = JSON.parse(localStorage.getItem('gameResults')) || [];
 
-  results.unshift(newResult);
+  results.push(newResult);
 
+    results = results.slice(-5);
 
-   results = results.slice(0, 5);
-
-  results.sort((a, b) => {
-    const timeA = a.time.split(':').map(Number);
-    const timeB = b.time.split(':').map(Number);
-    const secondsA = timeA[0] * 60 + timeA[1];
-    const secondsB = timeB[0] * 60 + timeB[1];
-    return secondsA - secondsB;
-  });
-
- 
+  results.sort((a, b) => a.gameSeconds - b.gameSeconds);
 
   localStorage.setItem('gameResults', JSON.stringify(results));
 }
