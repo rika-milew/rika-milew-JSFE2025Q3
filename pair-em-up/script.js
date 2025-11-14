@@ -19,6 +19,8 @@ let gameTimer = null;
 let gameSeconds = 0;
 
 
+
+
 function createStartScreen() {
   const body = document.body;
   body.classList.add('body');
@@ -116,10 +118,10 @@ buttonsContainer.appendChild(continueButton);
   settingsButton.textContent = 'Settings';
   settingsButton.classList.add('settings-button');
   settingsButton.classList.add('button');
-  settingsButton.onclick = function() {
-    console.log('Settings');
-    playSound('button');
-  };
+  settingsButton.addEventListener('click', () => {
+  playSound('button');
+  openSettings();
+});
   buttonsContainer.appendChild(settingsButton);
 }
 
@@ -225,10 +227,10 @@ function createGameGrid(mode) {
   settingsButton.textContent = 'Settings';
   settingsButton.classList.add('settings-button');
   settingsButton.classList.add('button');
-  settingsButton.onclick = function() {
-    console.log('Settings');
-    playSound('button');
-  };
+   settingsButton.addEventListener('click', () => {
+  playSound('button');
+  openSettings();
+});
   infoContainer.appendChild(settingsButton);
 
   revertButton = assistButtons.querySelector('.revert-button');
@@ -360,7 +362,7 @@ function clickOnCell(event) {
   if (cell === firstCell) {
     cell.classList.remove('selected-cell');
     firstCell = null;
-    playSound('select');
+    playSound('deselect');
     return;
   }
   
@@ -510,12 +512,19 @@ function checkPairSelection(firstCell, secondCell, cells, columns = 9) {
     return true;
   })();
 
-  const checkStartandEndofRow =
-    Math.floor(cell1 / columns) === Math.floor(cell2 / columns) &&
-    Math.abs(cell1 - cell2) === columns - 1;
+ const checkStartandEndofRow =
+  Math.floor(cell1 / columns) === Math.floor(cell2 / columns) &&
+  Math.abs(cell1 - cell2) === columns - 1 &&
+  (() => {
+    const startIndex = Math.min(cell1, cell2) + 1;
+    const endIndex = Math.max(cell1, cell2);
+    for (let i = startIndex; i < endIndex; i++) {
+      if (gameCells[i].textContent !== '') return true;
+    }
+    return false;
+  })();
 
-  if (checkStartandEndofRow) return false;
-
+if (checkStartandEndofRow) return false;
 
 
   return (
@@ -625,23 +634,27 @@ function checkLoseConditions() {
 // sound effects
 
 const sounds = {
-  error: 'assets/sounds/error.mp3',
-  match: 'assets/sounds/match.mp3',
-  bonus: 'assets/sounds/bonus.mp3',
+  
   start: 'assets/sounds/start.mp3',
-  win: 'assets/sounds/win.mp3',
-  lose: 'assets/sounds/lose.mp3',
+  button: 'assets/sounds/button.mp3',
+  select: 'assets/sounds/select.mp3',
+  deselect: 'assets/sounds/select.mp3',
+  match: 'assets/sounds/match.mp3',
+  error: 'assets/sounds/error.mp3',
+  bonus: 'assets/sounds/bonus.mp3',
   revert: 'assets/sounds/revert.mp3',
   add: 'assets/sounds/add.mp3',
   eraser: 'assets/sounds/eraser.mp3',
   hints: 'assets/sounds/hints.mp3',
   shuffle: 'assets/sounds/shuffle.mp3',
-  button: 'assets/sounds/button.mp3',
-  select: 'assets/sounds/select.mp3',
+  win: 'assets/sounds/win.mp3',
+  lose: 'assets/sounds/lose.mp3',
+  
 };
 
 function playSound(type) {
   if (!sounds[type]) return;
+   if (!settings.sounds.enabled || !settings.sounds.types[type]) return;
   if (document.hidden) return;
   const audio = new Audio(sounds[type]);
   audio.volume = 0.5;
@@ -952,7 +965,7 @@ function formatTime(seconds) {
 // save game 
 
 function saveGame(mode) {
-  const cells = Array.from(document.querySelectorAll('.game-cell')).map(cell => cell.textContent);
+  const cells = Array.from(document.querySelectorAll('.game-cell')).map(cell => cell.textContent || '');
   
   playSound('button');
   let savedLastMove = null;
@@ -1002,31 +1015,21 @@ function continueSavedGame() {
 function launchSavedGame(savedGame) {
   if (!savedGame || !gameContainer) return;
 
-  score = savedGame.score || 0;
-  lastMove = savedGame.lastMove || null;
-  gameSeconds = savedGame.gameSeconds || 0;
-  addNumbersUses = savedGame.addNumbersUses || 0;
-  shuffleUses = savedGame.shuffleUses || 0;
-  eraserUses = savedGame.eraserUses || 0;
-  currentMode = savedGame.mode || 'Classic';
-  totalMoves = savedGame.totalMoves || 0; 
+  gameContainer.innerHTML = ''; 
 
 
-  const addButton = document.querySelector('.add-numbers-button');
-  const shuffleButton = document.querySelector('.shuffle-button');
-  const eraserButton = document.querySelector('.eraser-button');
-
-  if (addButton) addButton.disabled = addNumbersUses >= addNumbersUsesLimit;
-  if (shuffleButton) shuffleButton.disabled = shuffleUses >= shuffleUsesLimit;
-  if (eraserButton) eraserButton.disabled = eraserUses >= eraserUsesLimit;
-  if (revertButton) {
-  revertButton.disabled = savedGame.revertButtonDisabled ?? !lastMove;
-}
+  savedGame.cells.forEach(digit => {
+    const newCell = document.createElement('div');
+    newCell.classList.add('game-cell');
+    if (digit === '') newCell.classList.add('empty-cell');
+    newCell.textContent = digit;
+    newCell.addEventListener('click', clickOnCell);
+    gameContainer.appendChild(newCell);
+  });
 
   const cells = Array.from(gameContainer.querySelectorAll('.game-cell'));
 
-
-  if (savedGame.lastMove) {
+    if (savedGame.lastMove) {
     if (savedGame.lastMove.type === 'erase') {
       lastMove = { ...savedGame.lastMove };
     } else if (savedGame.lastMove.cellIndices && savedGame.lastMove.values) {
@@ -1043,13 +1046,27 @@ function launchSavedGame(savedGame) {
     lastMove = null;
   }
 
-  savedGame.cells.forEach((digit, index) => {
-    if (cells[index]) {
-      cells[index].textContent = digit;
-      if (digit === '') cells[index].classList.add('empty-cell');
-      else cells[index].classList.remove('empty-cell');
-    }
-  });
+score = savedGame.score || 0;
+  gameSeconds = savedGame.gameSeconds || 0;
+  addNumbersUses = savedGame.addNumbersUses || 0;
+  shuffleUses = savedGame.shuffleUses || 0;
+  eraserUses = savedGame.eraserUses || 0;
+  currentMode = savedGame.mode || 'Classic';
+  totalMoves = savedGame.totalMoves || 0; 
+
+  const addButton = document.querySelector('.add-numbers-button');
+  const shuffleButton = document.querySelector('.shuffle-button');
+  const eraserButton = document.querySelector('.eraser-button');
+
+  if (addButton) addButton.disabled = addNumbersUses >= addNumbersUsesLimit;
+  if (shuffleButton) shuffleButton.disabled = shuffleUses >= shuffleUsesLimit;
+  if (eraserButton) eraserButton.disabled = eraserUses >= eraserUsesLimit;
+  if (revertButton) {
+  revertButton.disabled = savedGame.revertButtonDisabled ?? !lastMove;
+}
+
+
+
 
   const scoreDisplay = document.querySelector('.current-score');
   if (scoreDisplay) scoreDisplay.textContent = `Score: ${score}`;
@@ -1162,53 +1179,72 @@ function showGameResults(results) {
     emptyContent.textContent = 'No games played yet.';
     modalContent.appendChild(emptyContent);
   } else {
-    const resultsList = document.createElement('ul');
-    resultsList.classList.add('results-list');
+    const resultsTable = document.createElement('table');
+    resultsTable.classList.add('results-table');
 
-    results.forEach(result => {
-      const gameSession = document.createElement('li');
+    const tableHead = document.createElement('thead');
+  const tableHeadRow = document.createElement('tr');
 
-      const modeInfo = document.createElement('span');
-      modeInfo.textContent = `Mode: ${result.mode}`;
-      modeInfo.classList.add('result-info');
-      gameSession.appendChild(modeInfo);
+  ['Mode', 'Score', 'Result', 'Moves', 'Time', 'Win'].forEach(text => {
+    const th = document.createElement('th');
+    th.textContent = text;
+    tableHeadRow.appendChild(th);
+  });
 
-      const scoreInfo = document.createElement('span');
-      scoreInfo.textContent = `Score: ${result.score}`;
-      scoreInfo.classList.add('result-info');
-      gameSession.appendChild(scoreInfo);
+  tableHead.appendChild(tableHeadRow);
+  resultsTable.appendChild(tableHead);
 
-       const outcomeInfo = document.createElement('span');
-       outcomeInfo.textContent = `Result: ${result.result}`;
-       outcomeInfo.classList.add('result-info');
-       gameSession.appendChild(outcomeInfo);
+    const tableBody = document.createElement('tbody');
 
-      const movesInfo = document.createElement('span');
-      movesInfo.textContent = `Moves: ${result.moves}`;
-      movesInfo.classList.add('result-info');
-      gameSession.appendChild(movesInfo);
+  results.forEach(result => {
+    const gameSession = document.createElement('tr');
+    gameSession.classList.add('game-session');
 
-      const timeInfo = document.createElement('span');
-      timeInfo.textContent = `Time: ${result.time}`;
-     timeInfo.classList.add('result-info');
-      gameSession.appendChild(timeInfo);
+    const modeInfo = document.createElement('td');
+    modeInfo.textContent = result.mode;
+    modeInfo.classList.add('result-info');
+    gameSession.appendChild(modeInfo);
 
-      const winSymbol = document.createElement('span');
-        
-        winSymbol.classList.add('win-symbol');
-        gameSession.appendChild(winSymbol);
 
-      if (result.result === 'Win') {
+    const scoreInfo = document.createElement('td');
+    scoreInfo.textContent = result.score;
+    scoreInfo.classList.add('result-info')
+    gameSession.appendChild(scoreInfo);
+
+    const outcomeInfo = document.createElement('td');
+    outcomeInfo.textContent = result.result;
+    outcomeInfo.classList.add('result-info');
+    gameSession.appendChild(outcomeInfo);
+
+
+    const movesInfo = document.createElement('td');
+    movesInfo.textContent = result.moves;
+    movesInfo.classList.add('result-info');
+    gameSession.appendChild(movesInfo);
+
+    const timeInfo = document.createElement('td');
+    timeInfo.textContent = result.time;
+    timeInfo.classList.add('result-info');
+    gameSession.appendChild(timeInfo);
+
+    const  winSymbol = document.createElement('td');
+    if (result.result === 'Win') {
         winSymbol.textContent = ' 🏆';
       } else {
         winSymbol.textContent = ' ❌';
       }
+    winSymbol.classList.add('win-symbol');
+    winSymbol.classList.add('result-info');
+    gameSession.appendChild( winSymbol);
 
-      resultsList.appendChild(gameSession);
-    });
-    
-    modalContent.appendChild(resultsList);
-  }
+
+
+    tableBody.appendChild(gameSession);
+  });
+
+ resultsTable.appendChild(tableBody);
+  modalContent.appendChild(resultsTable);
+};
 
     const closeButton = document.createElement('button');
   closeButton.textContent = 'Close';
@@ -1316,6 +1352,8 @@ function showFinalModal({ result, score, time, message }) {
 function bonusFeature(firstCell, secondCell) {
   if (!firstCell || !secondCell) return;
 
+  gameContainer.classList.add('locked');
+
   [firstCell, secondCell].forEach(cell => {
     const digit = cell.textContent;
     cell.textContent = '';
@@ -1343,9 +1381,189 @@ function bonusFeature(firstCell, secondCell) {
       }
     });
     text.remove();
+    gameContainer.classList.remove('locked');
   }, 1500);
 }
 
+
+
+// settings 
+
+const defaultSettings = {
+  sounds: {
+    enabled: true,
+    types: {
+      start: true,
+      button: true,
+      select: true,
+      deselect: true,
+      match: true,
+      error: true,
+      bonus: true,
+      revert: true,
+      add: true,
+      eraser: true,
+      hints: true,
+      shuffle: true,
+      win: true,
+      lose: true
+    }
+  },
+  theme: 'light'
+};
+
+
+
+let settings = JSON.parse(localStorage.getItem('gameSettings')) || defaultSettings;
+
+loadSettings();
+
+function openSettings() {
+  const existing = document.querySelector('.settings-wrapper');
+  if (existing) existing.remove();
+
+  const modalWrapper = document.createElement('div');
+  modalWrapper.classList.add('modal-wrapper', 'settings-wrapper');
+  modalWrapper.style.display = 'flex';
+  modalWrapper.addEventListener('click', () => modalWrapper.remove());
+
+  const settingsModal = document.createElement('div');
+  settingsModal.classList.add('modal', 'settings-modal');
+  settingsModal.addEventListener('click', e => e.stopPropagation());
+  modalWrapper.appendChild(settingsModal);
+
+  const modalTitle = document.createElement('h2');
+  modalTitle.classList.add('modal-title');
+  modalTitle.textContent = 'Settings';
+  settingsModal.appendChild(modalTitle);
+
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal-content');
+  settingsModal.appendChild(modalContent);
+
+const soundSettings = document.createElement('div');
+soundSettings.classList.add('toggle-container');
+
+const soundLabel = document.createElement('span');
+soundLabel.textContent = 'Enable Sounds';
+
+const soundLabelWrapper = document.createElement('label');
+soundLabelWrapper.classList.add('toggle-wrapper');
+soundLabelWrapper.setAttribute('for', 'sound-toggle');
+
+const soundToggle = document.createElement('input');
+soundToggle.type = 'checkbox';
+soundToggle.id = 'sound-toggle';
+soundToggle.checked = settings.sounds.enabled;
+soundToggle.classList.add('toggle-checkbox');
+soundToggle.addEventListener('change', () => {
+  settings.sounds.enabled = soundToggle.checked;
+  saveSettings();
+});
+
+
+const soundSlider = document.createElement('label');
+soundSlider.setAttribute('for', 'sound-toggle');
+soundSlider.classList.add('toggle-slider');
+
+
+soundLabelWrapper.append(soundToggle, soundSlider);
+
+soundSettings.append(soundLabel, soundLabelWrapper);
+modalContent.appendChild(soundSettings);
+
+ 
+  const soundList = document.createElement('ul');
+  soundList.classList.add('sound-list');
+  for (const type in sounds) {
+    const soundItem = document.createElement('li');
+    soundItem.classList.add('sound-item');
+    const label = document.createElement('label');
+    label.classList.add('sound-label');
+    label.textContent = type;
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+     checkbox.classList.add('sound-checkbox');
+    checkbox.checked = settings.sounds.types[type];
+    checkbox.addEventListener('change', () => {
+      settings.sounds.types[type] = checkbox.checked;
+      saveSettings();
+    });
+    soundItem.append(label, checkbox);
+    soundList.appendChild(soundItem);
+  }
+  modalContent.appendChild(soundList);
+
+
+const themeSettings = document.createElement('div');
+themeSettings.classList.add('toggle-container'); 
+
+
+const themeLabel = document.createElement('span');
+themeLabel.textContent = 'Dark Mode';
+
+const themeLabelWrapper = document.createElement('label');
+themeLabelWrapper.classList.add('toggle-wrapper');
+themeLabelWrapper.setAttribute('for', 'theme-toggle');
+
+
+const themeToggle = document.createElement('input');
+themeToggle.type = 'checkbox';
+themeToggle.id = 'theme-toggle';
+themeToggle.checked = settings.theme === 'dark';
+themeToggle.classList.add('toggle-checkbox');
+themeToggle.addEventListener('change', () => {
+  settings.theme = themeToggle.checked ? 'dark' : 'light';
+  toggleTheme();
+  saveSettings();
+});
+
+
+const themeSlider = document.createElement('label');
+themeSlider.setAttribute('for', 'theme-toggle');
+themeSlider.classList.add('toggle-slider');
+
+
+themeLabelWrapper.append(themeToggle, themeSlider);
+
+themeSettings.append(themeLabel, themeLabelWrapper);
+modalContent.appendChild(themeSettings);
+
+
+  const closeButton = document.createElement('button');
+  closeButton.textContent = 'Close';
+  closeButton.classList.add('close-button');
+  closeButton.addEventListener('click', () => {
+  closeModal(modalWrapper);
+});
+  modalContent.appendChild(closeButton);
+
+  document.body.appendChild(modalWrapper);
+}
+
+
+function saveSettings() {
+  localStorage.setItem('gameSettings', JSON.stringify(settings));
+}
+
+function toggleTheme() {
+  document.body.dataset.theme = settings.theme;
+}
+
+
+function closeModal(modalWrapper) {
+  if (!modalWrapper) return;
+  modalWrapper.style.display = 'none';
+  setTimeout(() => modalWrapper.remove(), 300);
+}
+
+function loadSettings() {
+  const saved = localStorage.getItem('gameSettings');
+  if (saved) {
+    Object.assign(settings, JSON.parse(saved));
+  }
+  toggleTheme(); 
+}
 
 
 
