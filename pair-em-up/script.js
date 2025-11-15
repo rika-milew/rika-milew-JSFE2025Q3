@@ -18,9 +18,6 @@ const eraserUsesLimit = 5;
 let gameTimer = null;
 let gameSeconds = 0;
 
-
-
-
 function createStartScreen() {
   const body = document.body;
   body.classList.add('body');
@@ -282,7 +279,7 @@ document.addEventListener('click', (e) => {
       }
 
       addNumbersUses++;
-      showModal(`Add Numbers (${addNumbersUsesLimit - addNumbersUses} left)`);
+      showModal(`Add Numbers (${addNumbersUsesLimit - addNumbersUses} uses left)`);
       addNumbers(mode);
       });
   }
@@ -656,9 +653,7 @@ function checkLoseConditions() {
     moves: totalMoves || 0
   });
     return;
-} else {
-  return;
-}
+} return;
   }
 
   if (allEmpty && score < 100) {
@@ -668,7 +663,6 @@ function checkLoseConditions() {
       time: formatTime(gameSeconds),
       message: 'You lose! The grid is empty and you didn’t reach 100 points. Better luck next time!'
     });
-    showModal('', true);
     playSound('lose');
     gameContainer.classList.add('locked');
     stopTimer();
@@ -888,6 +882,13 @@ function useEraserButton(eraserButton, gameContainer) {
 
     gameContainer.classList.add('active-eraser');
 
+    const allButtons = document.querySelectorAll('.button');
+    allButtons.forEach(button => {
+  if (!button.classList.contains('eraser-button')) {
+    button.disabled = true;
+  }
+});
+
     const activateEraser = (event) => {
       const cell = event.target.closest('.game-cell');
       if (!cell || !cell.textContent.trim()) return;
@@ -909,6 +910,7 @@ function useEraserButton(eraserButton, gameContainer) {
 
       gameContainer.classList.remove('active-eraser');
       gameContainer.removeEventListener('click', activateEraser);
+      allButtons.forEach(button => button.disabled = false);
  
       showModal(`Number removed! (${eraserUsesLimit - eraserUses} uses left)`);
       revertButton.disabled = false; 
@@ -1239,7 +1241,6 @@ currentGameMode.append(
   Object.assign(document.createElement('span'), { textContent: 'Mode: ' }),
   currentGame.mode
 );
-currentGameContainer.appendChild(currentGameMode);
 currentGameContainer.appendChild(currentGameMode);
 
 const currentGameScore = document.createElement('p');
