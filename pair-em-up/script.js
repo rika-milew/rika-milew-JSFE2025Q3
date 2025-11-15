@@ -109,8 +109,9 @@ buttonsContainer.appendChild(continueButton);
   resultsButton.classList.add('button');
   resultsButton.addEventListener('click', () => {
   const results = JSON.parse(localStorage.getItem('gameResults')) || [];
+  const currentGame = JSON.parse(localStorage.getItem('lastFinishedGame')) || null;
   playSound('button');
-  showGameResults(results);
+  showGameResults(results, currentGame);
 });
   buttonsContainer.appendChild(resultsButton);
 
@@ -203,7 +204,8 @@ function createGameGrid(mode) {
     const gameCell = document.createElement('div');
     gameCell.classList.add('game-cell');
     gameCell.textContent = digit;
-    gameCell.addEventListener('click', clickOnCell);
+    // gameCell.addEventListener('click', clickOnCell);
+    addCellListeners(gameCell);
     gameContainer.appendChild(gameCell);
   });
   
@@ -221,7 +223,38 @@ function createGameGrid(mode) {
     assistButtons.appendChild(assistButton);
   });
 
-  
+ 
+
+  const assistButtonsToggle = document.createElement('button');
+  assistButtonsToggle.classList.add('assist-buttons-toggle', 'button');
+  assistButtonsToggle.textContent = 'Assist Buttons';
+
+  controlsContainer.appendChild(assistButtonsToggle);
+
+assistButtonsToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  assistButtons.classList.toggle('open');
+  gameControls.classList.remove('open');
+});
+
+assistButtons.addEventListener('click', (e) => {
+  if (e.target.classList.contains('assist-button')) {
+    assistButtons.classList.remove('open');
+    
+  }
+});
+
+document.addEventListener('click', (e) => {
+  const clickedOutsideMenu =
+    !assistButtons.contains(e.target) &&
+    e.target !== assistButtonsToggle;
+
+  if (clickedOutsideMenu) {
+    assistButtons.classList.remove('open');
+  }
+});
+
+
     
   const settingsButton = document.createElement('button');
   settingsButton.textContent = 'Settings';
@@ -270,25 +303,6 @@ function createGameGrid(mode) {
 
   const eraserButton = assistButtons.querySelector('.eraser-button');
   useEraserButton(eraserButton, gameContainer);
-
-  // if (revertButton) {
-  //   const clone = revertButton.cloneNode(true);
-  //   revertButton.parentNode.replaceChild(clone, revertButton);
-  //   revertButton = clone;
-  // }
-
-  // if (addButton) {
-  //   const clone = addButton.cloneNode(true);
-  //   addButton.parentNode.replaceChild(clone, addButton);
-  //   addButton = clone;
-  // }
-
-  // if (hintsButton) {
-  //   const clone = hintsButton.cloneNode(true);
-  //   hintsButton.parentNode.replaceChild(clone, hintsButton);
-  //   hintsButton = clone;
-  // }
-
   
 
   
@@ -296,6 +310,36 @@ function createGameGrid(mode) {
   const gameControls = document.createElement('div');
   gameControls.classList.add('game-controls');
   controlsContainer.appendChild(gameControls);
+
+    const gameControlsToggle = document.createElement('button');
+  gameControlsToggle.classList.add('game-controls-toggle', 'button');
+  gameControlsToggle.textContent = 'Game Controls';
+
+  controlsContainer.appendChild(gameControlsToggle);
+
+  gameControlsToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  gameControls.classList.toggle('open');
+  assistButtons.classList.remove('open');
+});
+
+
+gameControls.addEventListener('click', (e) => {
+  if (e.target.classList.contains('button')) {
+    gameControls.classList.remove('open');
+  }
+});
+
+
+document.addEventListener('click', (e) => {
+  const clickedOutsideMenu =
+    !gameControls.contains(e.target) &&
+    e.target !== assistButtonsToggle;
+
+  if (clickedOutsideMenu) {
+    gameControls.classList.remove('open');
+  }
+});
 
   const backButton = document.createElement('button');
   backButton.textContent = '← Back';
@@ -317,13 +361,22 @@ function createGameGrid(mode) {
     gameControls.appendChild(controlButton);
   });
 
+
+
+
   const resetButton = document.querySelector('.reset-button');
   resetGame(resetButton);
 
   const saveButton = document.querySelector('.save-game-button');
-  if (saveButton) {
-    saveButton.addEventListener('click', saveGame);
-  }
+
+
+if (saveButton) {
+  saveButton.addEventListener('click', () => {
+    saveGame();
+    showModal('Game saved successfully!'); 
+  });
+}
+
 
   const continueGameButton = document.querySelector('.continue-game-button');
   const savedGame = localStorage.getItem('savedGame');
@@ -764,7 +817,8 @@ function addNumbers(mode) {
     const newCell = document.createElement('div');
     newCell.classList.add('game-cell');
     newCell.textContent = digit;
-    newCell.addEventListener('click', clickOnCell);
+    addCellListeners(newCell);
+    // newCell.addEventListener('click', clickOnCell);
     gameContainer.appendChild(newCell);
   });
   
@@ -811,7 +865,7 @@ function shuffleGameCells(gameContainer) {
       index++;
     }
   });
-  countMoves();
+  
 }
 
 function useEraserButton(eraserButton, gameContainer) {
@@ -1002,6 +1056,7 @@ function saveGame(mode) {
     revertButtonDisabled: revertButton?.disabled || false
   };
   localStorage.setItem('savedGame', JSON.stringify(lastGame));
+  
 }
 
 function continueSavedGame() {
@@ -1015,7 +1070,7 @@ function continueSavedGame() {
 function launchSavedGame(savedGame) {
   if (!savedGame || !gameContainer) return;
 
-  gameContainer.innerHTML = ''; 
+  gameContainer.replaceChildren();
 
 
   savedGame.cells.forEach(digit => {
@@ -1023,7 +1078,7 @@ function launchSavedGame(savedGame) {
     newCell.classList.add('game-cell');
     if (digit === '') newCell.classList.add('empty-cell');
     newCell.textContent = digit;
-    newCell.addEventListener('click', clickOnCell);
+    addCellListeners(newCell);
     gameContainer.appendChild(newCell);
   });
 
@@ -1071,11 +1126,12 @@ score = savedGame.score || 0;
   const scoreDisplay = document.querySelector('.current-score');
   if (scoreDisplay) scoreDisplay.textContent = `Score: ${score}`;
  
-
+  
   updateScore();
   updateTimer(document.querySelector('.timer'));
   stopTimer();
   startTimer(false);
+  showModal('Game loaded successfully!'); 
 }
 
 
@@ -1135,15 +1191,19 @@ function saveGameResult({ mode, score, result, gameSeconds, moves }) {
 
   results.push(newResult);
 
+  const lastFinishedGame = results.filter(g => g.result === 'Win' || g.result === 'Lose').slice(-1)[0];
+
     results = results.slice(-5);
 
   results.sort((a, b) => a.gameSeconds - b.gameSeconds);
 
   localStorage.setItem('gameResults', JSON.stringify(results));
+
+   localStorage.setItem('lastFinishedGame', JSON.stringify(lastFinishedGame));
 }
 
 
-function showGameResults(results) {
+function showGameResults(results, currentGame) {
   let existingWrapper = document.querySelector('.modal-wrapper');
   if (existingWrapper) existingWrapper.remove();
 
@@ -1164,6 +1224,55 @@ function showGameResults(results) {
   const modalTitle = document.createElement('h2');
   modalTitle.textContent = 'Results and History';
   modalContent.appendChild(modalTitle);
+
+  if (currentGame) {
+    const currentGameContainer = document.createElement('div');
+    currentGameContainer.classList.add('current-game-block');
+   
+    const currentGameTitle = document.createElement('h3');
+  currentGameTitle.textContent = 'Current Game';
+currentGameContainer.appendChild(currentGameTitle);
+
+
+const currentGameMode = document.createElement('p');
+currentGameMode.append(
+  Object.assign(document.createElement('span'), { textContent: 'Mode: ' }),
+  currentGame.mode
+);
+currentGameContainer.appendChild(currentGameMode);
+currentGameContainer.appendChild(currentGameMode);
+
+const currentGameScore = document.createElement('p');
+currentGameScore.append(
+  Object.assign(document.createElement('span'), { textContent: 'Score: ' }),
+  currentGame.score
+);
+currentGameContainer.appendChild(currentGameScore);
+
+const currentGameMoves = document.createElement('p');
+currentGameMoves.append(
+  Object.assign(document.createElement('span'), { textContent: 'Moves: ' }),
+  currentGame.moves
+);
+currentGameContainer.appendChild(currentGameMoves);
+
+const currentGameTime = document.createElement('p');
+currentGameTime.append(
+  Object.assign(document.createElement('span'), { textContent: 'Time: ' }),
+  currentGame.time
+);
+currentGameContainer.appendChild(currentGameTime);
+
+const currentGameResult = document.createElement('p');
+currentGameResult.append(
+  Object.assign(document.createElement('span'), { textContent: 'Result: ' }),
+  `${currentGame.result} ${currentGame.result === 'Win' ? '🏆' : '❌'}`
+);
+currentGameContainer.appendChild(currentGameResult);
+
+modalContent.appendChild(currentGameContainer);
+  }
+
 
 
   if (!results || results.length === 0) {
@@ -1187,6 +1296,7 @@ function showGameResults(results) {
   resultsTable.appendChild(tableHead);
 
     const tableBody = document.createElement('tbody');
+    
 
   results.forEach(result => {
     const gameSession = document.createElement('tr');
@@ -1321,7 +1431,9 @@ function showFinalModal({ result, score, time, message }) {
   viewResultsButton.addEventListener('click', () => {
     modalWrapper.remove();
     const results = JSON.parse(localStorage.getItem('gameResults')) || [];
-    showGameResults(results);
+    const currentGame = JSON.parse(localStorage.getItem('lastFinishedGame')) || null;
+
+    showGameResults(results, currentGame);
 
     const resultsModalWrapper = document.querySelector('.modal-wrapper');
   if (resultsModalWrapper) {
@@ -1557,5 +1669,30 @@ function loadSettings() {
   toggleTheme(); 
 }
 
+
+
+// mobile 
+
+
+function addCellListeners(cell) {
+  let touched = false;
+
+  
+  cell.addEventListener('touchstart', (e) => {
+    touched = true; 
+    clickOnCell({ target: cell });
+    e.preventDefault();
+  }, { passive: false });
+
+
+  cell.addEventListener('click', (e) => {
+    if (touched) {
+    
+      touched = false;
+      return;
+    }
+    clickOnCell({ target: cell });
+  });
+}
 
 
