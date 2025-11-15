@@ -890,6 +890,7 @@ function useEraserButton(eraserButton, gameContainer) {
 });
 
     const activateEraser = (event) => {
+      event.preventDefault();
       const cell = event.target.closest('.game-cell');
       if (!cell || !cell.textContent.trim()) return;
 
@@ -919,6 +920,7 @@ function useEraserButton(eraserButton, gameContainer) {
     };
 
     gameContainer.addEventListener('click', activateEraser);
+    gameContainer.addEventListener('touchstart', activateEraser, { passive: false });
   });
 }
 

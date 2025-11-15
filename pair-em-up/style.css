@@ -151,6 +151,7 @@
   justify-content: center;
   margin-top: 50px;
   margin-bottom: 50px;
+  padding: 0;
 }
 
 .game-container.locked {
