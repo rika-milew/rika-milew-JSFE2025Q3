@@ -891,6 +891,7 @@ function useEraserButton(eraserButton, gameContainer) {
 
     const activateEraser = (event) => {
       event.preventDefault();
+      event.stopPropagation();
       const cell = event.target.closest('.game-cell');
       if (!cell || !cell.textContent.trim()) return;
 
@@ -908,9 +909,11 @@ function useEraserButton(eraserButton, gameContainer) {
       countMoves();
 
       clearSelectedCells();
+      
 
       gameContainer.classList.remove('active-eraser');
       gameContainer.removeEventListener('click', activateEraser);
+      gameContainer.removeEventListener('touchstart', activateEraser);
       allButtons.forEach(button => button.disabled = false);
  
       showModal(`Number removed! (${eraserUsesLimit - eraserUses} uses left)`);
