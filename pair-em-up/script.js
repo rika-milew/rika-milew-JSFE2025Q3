@@ -1324,7 +1324,6 @@ function showFinalModal({ result, score, time, message }) {
   const modalWrapper = document.createElement('div');
   modalWrapper.classList.add('modal-wrapper');
   modalWrapper.style.display = 'flex';
-  modalWrapper.addEventListener('click', () => modalWrapper.remove());
 
   const modal = document.createElement('div');
   modal.classList.add('modal', 'final-modal');
