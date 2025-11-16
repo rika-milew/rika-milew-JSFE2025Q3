@@ -747,7 +747,22 @@ function addNumbers(mode) {
   const maxCells = 9 * 50;
   const currentCells = gameContainer.querySelectorAll('.game-cell').length;
 
-  if (currentCells >= maxCells) {
+  const existingDigits = Array.from(gameContainer.querySelectorAll('.game-cell'))
+    .filter(cell => cell.textContent !== '')
+    .map(cell => parseInt(cell.textContent));
+
+  let newDigits = [];
+  playSound('add');
+
+  if (mode === 'Classic') {
+    newDigits = [...existingDigits];
+  } else if (mode === 'Random') {
+    newDigits = shuffleDigits([...existingDigits]);
+  } else if (mode === 'Chaotic') {
+    newDigits = existingDigits.map(() => Math.floor(Math.random() * 9) + 1);
+  }
+
+  if (newDigits.length + currentCells >= maxCells) {
     showFinalModal({
       result: 'Lose',
       score: score,
@@ -766,21 +781,6 @@ function addNumbers(mode) {
       moves: totalMoves || 0
     });
     return;
-  }
-
-  const existingDigits = Array.from(gameContainer.querySelectorAll('.game-cell'))
-    .filter(cell => cell.textContent !== '')
-    .map(cell => parseInt(cell.textContent));
-
-  let newDigits = [];
-  playSound('add');
-
-  if (mode === 'Classic') {
-    newDigits = [...existingDigits];
-  } else if (mode === 'Random') {
-    newDigits = shuffleDigits([...existingDigits]);
-  } else if (mode === 'Chaotic') {
-    newDigits = existingDigits.map(() => Math.floor(Math.random() * 9) + 1);
   }
 
   newDigits.forEach(digit => {
