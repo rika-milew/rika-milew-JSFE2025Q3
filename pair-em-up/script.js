@@ -724,6 +724,7 @@ function useRevertButton(revertButton) {
       const cell = gameContainer.querySelectorAll('.game-cell')[lastMove.cellIndex];
       cell.textContent = lastMove.value;
       cell.classList.remove('empty-cell');
+      eraserUses = eraserUses + 1;
     } else if (lastMove.cells && lastMove.values) {
       lastMove.cells.forEach((cell, i) => {
         cell.textContent = lastMove.values[i];
