@@ -646,7 +646,7 @@ function checkLoseConditions() {
       result: 'Lose',
       score: score,
       time: formatTime(gameSeconds),
-      message: 'You lose! The grid is empty and you didn’t reach 100 points. Better luck next time!'
+      message: 'You lose! The grid is empty and you didn\'t reach 100 points. Better luck next time!'
     });
 
     playSound('lose');
