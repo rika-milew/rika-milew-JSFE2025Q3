@@ -226,6 +226,7 @@ function createGameGrid(mode) {
 
   assistButtonsToggle.addEventListener('click', (e) => {
     e.stopPropagation();
+    playSound('button');
     assistButtons.classList.toggle('open');
     gameControls.classList.remove('open');
   });
@@ -300,6 +301,7 @@ function createGameGrid(mode) {
 
   gameControlsToggle.addEventListener('click', (e) => {
     e.stopPropagation();
+    playSound('button');
     gameControls.classList.toggle('open');
     assistButtons.classList.remove('open');
   });
@@ -724,7 +726,7 @@ function useRevertButton(revertButton) {
       const cell = gameContainer.querySelectorAll('.game-cell')[lastMove.cellIndex];
       cell.textContent = lastMove.value;
       cell.classList.remove('empty-cell');
-      eraserUses = eraserUses + 1;
+      eraserUses--;
     } else if (lastMove.cells && lastMove.values) {
       lastMove.cells.forEach((cell, i) => {
         cell.textContent = lastMove.values[i];
@@ -948,6 +950,7 @@ function showModal(content) {
   const closeButton = modalWrapper.querySelector('.close-button');
 
   closeButton.onclick = () => {
+    playSound('button');
     modalWrapper.style.display = 'none';
   };
 }
@@ -1178,8 +1181,6 @@ function showGameResults(results, currentGame) {
   resultsModalWrapper = document.createElement('div');
   resultsModalWrapper.classList.add('modal-wrapper');
   resultsModalWrapper.style.display = 'flex';
-
-  resultsModalWrapper.addEventListener('click', () => resultsModalWrapper.remove());
 
   const resultsModal = document.createElement('div');
   resultsModal.classList.add('modal', 'results-modal');
@@ -1415,10 +1416,20 @@ function showFinalModal({ result, score, time, message }) {
 function bonusFeature(firstCell, secondCell) {
   if (!firstCell || !secondCell) return;
 
+  const changeDigits = digit => {
+    if (digit === '6') return '9';
+    if (digit === '9') return '6';
+    return digit;
+  };
+
   gameContainer.classList.add('locked');
+  lastMove = null;
+  revertButton.disabled = true;
 
   [firstCell, secondCell].forEach(cell => {
-    const digit = cell.textContent;
+    let digit = cell.textContent.trim();
+    digit = changeDigits(digit);
+
     cell.textContent = '';
     const span = document.createElement('span');
     span.textContent = digit;
@@ -1429,6 +1440,7 @@ function bonusFeature(firstCell, secondCell) {
   const text = document.createElement('div');
   text.textContent = '😉 Magic Pair!';
   text.classList.add('bonus-text');
+  playSound('bonus');
 
   const rect = firstCell.getBoundingClientRect();
   text.style.left = rect.left + window.scrollX + 'px';
@@ -1517,6 +1529,7 @@ function openSettings() {
   soundToggle.classList.add('toggle-checkbox');
 
   soundToggle.addEventListener('change', () => {
+    playSound('button');
     settings.sounds.enabled = soundToggle.checked;
     saveSettings();
   });
@@ -1546,6 +1559,7 @@ function openSettings() {
     checkbox.checked = settings.sounds.types[type];
 
     checkbox.addEventListener('change', () => {
+      playSound('button');
       settings.sounds.types[type] = checkbox.checked;
       saveSettings();
     });
@@ -1603,12 +1617,14 @@ function saveSettings() {
 }
 
 function toggleTheme() {
+  playSound('button');
   document.body.dataset.theme = settings.theme;
 }
 
 function closeModal(modalWrapper) {
   if (!modalWrapper) return;
   modalWrapper.style.display = 'none';
+  playSound('button');
   setTimeout(() => modalWrapper.remove(), 300);
 }
 

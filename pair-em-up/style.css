@@ -166,7 +166,7 @@
   align-items: center;
   width: 60px;
   height: 60px;
-  font-weight: bold;
+  font-weight: 700;
   color: #1f3d2f;
   background-color: #8fd3a6;
   border-radius: 6px;
@@ -261,7 +261,7 @@
   height: 40px;
   padding: 10px 20px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   color: #1f3d2f;
   background-color: #d0f0c0;
@@ -388,7 +388,7 @@
 .modal-text {
   margin: 0;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .close-button {
@@ -514,7 +514,7 @@
 
 .bonus-animation {
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   color: #a4192b;
   animation: rotateDigits 1.5s ease-in-out;
 }
@@ -827,7 +827,14 @@
   }
 }
 
-@media screen and (max-width: 650px) { 
+@media screen and (max-width: 770px) {
+  .final-modal {
+    width: 90%;
+    min-width: 90%;
+  }
+}
+
+@media screen and (max-width: 650px) {
   .game-container {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
@@ -842,6 +849,18 @@
     width: 100%;
     height: auto;
     aspect-ratio: 1 / 1;
+  }
+}
+
+@media screen and (max-width: 630px) {
+ .action-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 15px;
   }
 }
 
@@ -898,7 +917,6 @@
   }
 }
 
-
 @media screen and (max-width: 500px) { 
   .buttons-container .button, .mode-container .button {
     width: 100%;
@@ -932,6 +950,10 @@
 
   .modal-title {
     font-size: 26px;
+  }
+
+  .modal-information p {
+    font-size: 16px;
   }
 }
 
