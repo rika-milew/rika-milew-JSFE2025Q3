@@ -769,7 +769,7 @@
 
 .body[data-theme="dark"]  .selected-cell {
   color: #222222;
-  background-color: #82d6a6;
+  background-color: #0e8f46;
   outline: 3px solid #222222;
   transition: background-color 0.2s, outline-color 0.2s;
 }
@@ -777,7 +777,7 @@
 @media (hover: hover) and (pointer: fine) {
   .body[data-theme="dark"] .game-cell:hover.selected-cell {
     color: #222222;
-    background-color: #82d6a6;
+    background-color: #69ad86;
     outline: 3px solid #555555;
     box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
     transform: scale(1.08);
@@ -786,7 +786,7 @@
 
 .body[data-theme="dark"] .game-cell:active.selected-cell {
   color: #222222;
-  background-color: #82d6a6;
+  background-color: #69ad86;
   outline: 3px solid #555555;
   box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
   transform: scale(1.08);
