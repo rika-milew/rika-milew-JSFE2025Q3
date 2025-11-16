@@ -60,6 +60,10 @@
   }
 }
 
+.author-link:active {
+  color: #5aa678;
+}
+
 .select-mode {
   margin: 15px 0;
   font-size: 24px;
@@ -97,6 +101,7 @@
   cursor: pointer;
   touch-action: manipulation;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .button:disabled {
@@ -114,7 +119,7 @@
 
 .button:active {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-  transform: translateY(1px);
+  transform: translateY(1px) scale(1.05); 
 }
 
 .mode-button {
@@ -174,6 +179,7 @@
   user-select: none;
   transition: all 0.2s;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -181,6 +187,11 @@
     background-color: #72bf8e;
     transform: scale(1.05);
   }
+}
+
+.game-cell:active {
+  background-color: #72bf8e;
+  transform: scale(1.05);
 }
 
 .mode-heading {
@@ -230,6 +241,11 @@
     opacity: 0.8;
     transform: scale(1.05);
   }
+}
+
+.revert-button:not(:disabled):active {
+  opacity: 0.8;
+  transform: scale(1.05);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -309,6 +325,11 @@
   }
 }
 
+.assist-buttons .button:active, .mode-container .button:active, .assist-buttons-toggle:active {
+  background-color: #4d998d;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
 /* gameplay  */
 
 .selected-cell {
@@ -323,6 +344,12 @@
     box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
     transform: scale(1.08);
   }
+}
+
+.game-cell:active.selected-cell {
+  background-color: rgba(150, 255, 200, 0.5);
+  box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
+  transform: scale(1.08);
 }
 
 .wrong-pair {
@@ -356,6 +383,11 @@
     cursor: url('assets/images/eraser2.png'), pointer;
     transition: 0.2s;
   }
+}
+
+.game-container.active-eraser .game-cell:active {
+  background-color: #ffdddd;
+  transition: 0.2s;
 }
 
 /* modal  */
@@ -409,6 +441,10 @@
     background-color: #266529;
   }
 }
+
+.close-button:active {
+    background-color: #266529;
+  }
 
 /* results modal  */
 
@@ -467,7 +503,14 @@
   border-top: 1px solid #dddddd;
 }
 
-.game-session:hover {
+@media (hover: hover) and (pointer: fine) {
+  .game-session:hover {
+    color: #111111;
+    background-color: #cccccc;
+  }
+}
+
+.game-session:active {
   color: #111111;
   background-color: #cccccc;
 }
@@ -657,6 +700,11 @@
   box-shadow: 0 0 5px rgba(0, 155, 87, 0.5);
 }
 
+.sound-checkbox:active {
+  border-color: #009b57;
+  box-shadow: 0 0 5px rgba(0, 155, 87, 0.5);
+}
+
 /* dark theme */
 
 .body[data-theme="dark"] {
@@ -676,6 +724,11 @@
     background-color: #023921;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
+}
+
+.body[data-theme="dark"] .button:active {
+  background-color: #023921;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .body[data-theme="dark"] .author-content {
@@ -709,6 +762,11 @@
   }
 }
 
+.body[data-theme="dark"] .game-cell:active {
+  background-color: #333333;
+  transform: scale(1.05);
+}
+
 .body[data-theme="dark"]  .selected-cell {
   color: #222222;
   background-color: #82d6a6;
@@ -726,7 +784,15 @@
   }
 }
 
-.body[data-theme="dark"]  .right-pair {
+.body[data-theme="dark"] .game-cell:active.selected-cell {
+  color: #222222;
+  background-color: #82d6a6;
+  outline: 3px solid #555555;
+  box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
+  transform: scale(1.08);
+}
+
+.body[data-theme="dark"] .right-pair {
   color: #222222;
   background-color: #d0f0c0;
   animation: correct 0.4s ease-in-out;
@@ -745,7 +811,7 @@
   display: none;
 }
 
-/* mobile */
+/* media queries */
 
 @media screen and (max-width: 900px) { 
   .assist-buttons-toggle, .game-controls-toggle {
@@ -760,7 +826,7 @@
     justify-content: space-between;
     gap: 15px;
     width: 100%;
-}
+  }
 
   .assist-buttons, .game-controls {
     position: absolute; 
