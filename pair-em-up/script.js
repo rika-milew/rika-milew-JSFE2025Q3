@@ -330,7 +330,7 @@ function createGameGrid(mode) {
     createStartScreen();
   };
   
-  ['Reset', 'Save Game', 'Continue Game'].forEach(button => {
+  ['Reset', 'Save Game', 'Continue Game', 'Results'].forEach(button => {
     const controlButton = document.createElement('button');
     controlButton.textContent = button;
     controlButton.classList.add('control-button');
@@ -361,6 +361,15 @@ function createGameGrid(mode) {
   } else {
     continueGameButton.disabled = true;
   } 
+
+  const showResultsButton = document.querySelector('.results-button');
+
+  showResultsButton.addEventListener('click', () => {
+    const results = JSON.parse(localStorage.getItem('gameResults')) || [];
+    const currentGame = JSON.parse(localStorage.getItem('lastFinishedGame')) || null;
+    playSound('button');
+    showGameResults(results, currentGame);
+  });
 }
 
 // gameplay 
