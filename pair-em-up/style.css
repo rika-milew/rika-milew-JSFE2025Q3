@@ -453,7 +453,7 @@
 }
 
 .current-game-block {
-  margin-bottom: 15px 10px;
+  margin-bottom: 15px;
   padding: 15px;
   font-size: 16px;
   color: #b6b4b4;
@@ -777,8 +777,9 @@
 @media (hover: hover) and (pointer: fine) {
   .body[data-theme="dark"] .game-cell:hover.selected-cell {
     color: #222222;
-    background-color: #69ad86;
+    background-color: #4d8566;
     outline: 3px solid #555555;
+    border: none;
     box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
     transform: scale(1.08);
   }
@@ -786,16 +787,25 @@
 
 .body[data-theme="dark"] .game-cell:active.selected-cell {
   color: #222222;
-  background-color: #69ad86;
+  background-color: #4d8566;
   outline: 3px solid #555555;
+  border: none;
   box-shadow: 0 0 18px rgba(180, 255, 220, 0.9);
   transform: scale(1.08);
 }
 
 .body[data-theme="dark"] .right-pair {
+  outline: 3px solid #3c6a50;
   color: #222222;
   background-color: #d0f0c0;
+  border: none;
   animation: correct 0.4s ease-in-out;
+}
+
+.body[data-theme="dark"] .wrong-pair {
+  outline: 2px solid #6b0d0d;
+  border: none;
+  animation: shake 0.3s;
 }
 
 .body[data-theme="dark"] .current-score,
