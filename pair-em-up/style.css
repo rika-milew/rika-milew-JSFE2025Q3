@@ -330,6 +330,30 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
+.tool-button {
+  position: relative;
+}
+
+.tool-counter {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background-color: #d44646;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.hints-button .tool-counter {
+  font-size: 16px;
+}
+
 /* gameplay  */
 
 .selected-cell {

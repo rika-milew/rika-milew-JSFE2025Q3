@@ -265,6 +265,7 @@ function createGameGrid(mode) {
       addNumbersUses++;
       showModal(`Add Numbers (${addNumbersUsesLimit - addNumbersUses} uses left)`);
       addNumbers(mode);
+      updateToolCounters();
 
       if (addNumbersUses >= addNumbersUsesLimit) {
         addButton.disabled = true; 
@@ -368,6 +369,8 @@ function createGameGrid(mode) {
     playSound('button');
     showGameResults(results, currentGame);
   });
+
+  createToolCounters();
 }
 
 // gameplay 
@@ -447,6 +450,7 @@ function clickOnCell(event) {
 
       updateScore();
       countMoves();
+      updateToolCounters();
       checkLoseConditions();
       gameContainer.classList.remove('locked');
     }, 400);
@@ -458,6 +462,7 @@ function clickOnCell(event) {
     firstCell = null;
     secondCell = null;
     countMoves();
+    updateToolCounters();
 
     setTimeout(() => {
       firstWrongCell.classList.remove('selected-cell');
@@ -577,6 +582,7 @@ function updateScore() {
   const targetScore = 100;
   const scoreDisplay = document.querySelector('.current-score');
   scoreDisplay.textContent = `Score: ${score}`;
+  updateToolCounters();
   
   if (score >= targetScore) {
     showFinalModal({
@@ -734,6 +740,7 @@ function useRevertButton(revertButton) {
       cell.textContent = lastMove.value;
       cell.classList.remove('empty-cell');
       eraserUses--;
+      updateEraserButton();
     } else if (lastMove.cells && lastMove.values) {
       lastMove.cells.forEach((cell, i) => {
         cell.textContent = lastMove.values[i];
@@ -745,6 +752,7 @@ function useRevertButton(revertButton) {
     playSound('revert');
     lastMove = null;
     revertButton.disabled = true;
+    updateToolCounters();
   });
 }
 
@@ -819,6 +827,7 @@ function useShuffleButton(shuffleButton, gameContainer) {
     if (revertButton) revertButton.disabled = true;
 
     showModal(`The numbers are shuffled! (${shuffleUsesLimit - shuffleUses} uses left)`);
+    updateToolCounters();
 
     if (shuffleUses >= shuffleUsesLimit) {
       shuffleButton.disabled = true;
@@ -883,6 +892,7 @@ function useEraserButton(eraserButton, gameContainer) {
       cell.classList.add('empty-cell');
       eraserUses++;
       countMoves();
+      updateToolCounters();
 
       clearSelectedCells();
       
@@ -1116,6 +1126,7 @@ function launchSavedGame(savedGame) {
 
   stopTimer();
   startTimer(false);
+  updateToolCounters();
 
   showModal('Game loaded successfully!'); 
 }
@@ -1661,4 +1672,55 @@ function addCellListeners(cell) {
     }
     clickOnCell({ target: cell });
   });
+}
+
+// Assist Tool Counters
+
+function createToolCounters() {
+  const tools = [
+    { selector: '.add-numbers-button', id: 'addCounter', limit: addNumbersUsesLimit },
+    { selector: '.shuffle-button', id: 'shuffleCounter', limit: shuffleUsesLimit },
+    { selector: '.eraser-button', id: 'eraserCounter', limit: eraserUsesLimit },
+    { selector: '.hints-button', id: 'hintsCounter', limit: "∞" },
+    { selector: '.revert-button', id: 'revertCounter', limit: 0 }
+  ];
+
+  tools.forEach(tool => {
+    const button = document.querySelector(tool.selector);
+    if (!button) return;
+
+    button.classList.add('tool-button');
+
+    if (button.querySelector('.tool-counter')) return;
+
+    const counter = document.createElement('span');
+    counter.classList.add('tool-counter');
+    counter.id = tool.id;
+    counter.textContent = tool.limit;
+
+    button.appendChild(counter);
+  });
+}
+
+function updateToolCounters() {
+  document.getElementById("addCounter").textContent = addNumbersUsesLimit - addNumbersUses;
+
+  document.getElementById("shuffleCounter").textContent = shuffleUsesLimit - shuffleUses;
+
+  document.getElementById("eraserCounter").textContent = eraserUsesLimit - eraserUses;
+
+  const revertCounter = document.getElementById("revertCounter");
+  if (revertCounter) revertCounter.textContent = lastMove ? 1 : 0;
+}
+
+
+function updateEraserButton() {
+  const eraserButton = document.querySelector('.eraser-button');
+  if(eraserButton) {
+    if (eraserUses >= eraserUsesLimit) { 
+      eraserButton.disabled = true;
+    } else {
+     eraserButton.disabled = false;
+    }
+  }
 }
