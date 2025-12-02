@@ -9,7 +9,6 @@
 
     "module": "ESNext",
     "target": "ES6",
-    "types": [],
    
     "sourceMap": true,
     "declaration": true,

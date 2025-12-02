@@ -9,9 +9,9 @@ class Loader {
     this.options = options;
   }
 
-  getResp(
+  getResp<T>(
     { endpoint, options = {} }: GetResponse,
-    callback: (data: unknown) => void = () => {
+    callback: (data: T) => void = () => {
       console.error('No callback for GET response');
     }
   ) {
@@ -40,15 +40,15 @@ class Loader {
     return url.slice(0, -1);
   }
 
-  private load(
+  private load<T>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     endpoint: string,
-    callback: (data: unknown) => void,
+    callback: (data: T) => void,
     options: { [key: string]: string | number | boolean } = {}
   ): void {
     fetch(this.makeUrl(options, endpoint), { method })
       .then(this.errorHandler)
-      .then((res) => res.json())
+      .then((res) => res.json() as Promise<T>)
       .then((data) => callback(data))
       .catch((err) => console.error(err));
   }
