@@ -11,6 +11,7 @@ class AppController extends AppLoader {
       callback
     );
   }
+
   getNews(e: Event, callback: (data: News | null | undefined) => void): void {
     let target: EventTarget | null = e.target;
     if (!(target instanceof HTMLElement)) return;

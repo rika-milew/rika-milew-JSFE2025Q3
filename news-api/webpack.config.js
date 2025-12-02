@@ -33,7 +33,8 @@ const baseConfig = {
             extensions: ['ts'],
             eslintPath: require.resolve('eslint/use-at-your-own-risk'),
             failOnError: false,
-            emitWarning: true
+            emitWarning: true,
+            exclude: ['**/*.css']
         }),
         new DotenvWebpackPlugin(),
         new HtmlWebpackPlugin({
@@ -42,6 +43,15 @@ const baseConfig = {
         }),
         new CleanWebpackPlugin(),
     ],
+    devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
+    port: 3000,
+    open: true,
+    hot: true,
+  },
 };
 
 module.exports = ({ mode }) => {
