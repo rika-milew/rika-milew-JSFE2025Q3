@@ -85,8 +85,12 @@
 }
 
 @media screen and (max-width: 500px) {
+  .search-container {
+    width: 100%;
+  }
+
   .sources-list {
-    height: 68px;
+    height: 60px;
   }
 
   .source__item {
@@ -94,6 +98,8 @@
     width: 100%;          
     min-width: 100px;     
     max-width: 100%; 
+    margin: 8px 0;
+    font-size: 14px;
   }
 }
 
