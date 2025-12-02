@@ -48,3 +48,8 @@ export interface Article {
   publishedAt: string;
   content: string | null;
 }
+
+export interface GetResponse {
+  endpoint: string;
+  options: { [key: string]: string | number | boolean };
+}
