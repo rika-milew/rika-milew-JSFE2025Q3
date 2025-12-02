@@ -8,7 +8,7 @@ export interface SourceTemplate {
   country: string;
 }
 
-export interface Sources {
+export interface SourcesApiResponse {
   status: string;
   sources: SourceTemplate[];
 }
@@ -16,7 +16,7 @@ export interface Sources {
 export interface News {
   status: string;
   totalResults: number;
-  articles: ArticleTemplate[];
+  articles?: ArticleTemplate[];
 }
 
 export interface NewsSource {
@@ -46,5 +46,5 @@ export interface Article {
   url: string;
   urlToImage: string | null;
   publishedAt: string;
-  content: string;
+  content: string | null;
 }

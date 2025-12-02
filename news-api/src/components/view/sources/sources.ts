@@ -3,8 +3,8 @@ import './sources.css';
 
 class Sources {
   draw(data: NewsSource[]): void {
-    const fragment = document.createDocumentFragment();
-    const sourceItemTemp = document.querySelector('#sourceItemTemp');
+    const fragment: DocumentFragment = document.createDocumentFragment();
+    const sourceItemTemp: Element | null = document.querySelector('#sourceItemTemp');
 
     if (!(sourceItemTemp instanceof HTMLTemplateElement)) {
       return;
