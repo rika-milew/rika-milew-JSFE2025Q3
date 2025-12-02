@@ -31,7 +31,6 @@ const baseConfig = {
     plugins: [
         new ESLintPlugin({
             extensions: ['ts'],
-            eslintPath: require.resolve('eslint/use-at-your-own-risk'),
             failOnError: false,
             emitWarning: true,
             exclude: ['**/*.css']
@@ -57,8 +56,8 @@ const baseConfig = {
 module.exports = ({ mode }) => {
     const isProductionMode = mode === 'prod';
     const envConfig = isProductionMode
-        ? require('./webpack.prod.config')
-        : require('./webpack.dev.config');
+        ? require('./webpack.prod.config.cjs')
+        : require('./webpack.dev.config.cjs');
 
     return merge(baseConfig, envConfig);
 };
