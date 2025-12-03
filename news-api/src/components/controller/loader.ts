@@ -1,5 +1,12 @@
 import type { GetResponse } from 'types';
 
+export enum HttpMethods {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}
+
 class Loader {
   private readonly baseLink: string;
   private readonly options: { [key: string]: string | number | boolean };
@@ -15,7 +22,7 @@ class Loader {
       console.error('No callback for GET response');
     }
   ) {
-    this.load('GET', endpoint, callback, options);
+    this.load(HttpMethods.GET, endpoint, callback, options);
   }
 
   private errorHandler(res: Response): Response {
@@ -41,7 +48,7 @@ class Loader {
   }
 
   private load<T>(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: HttpMethods,
     endpoint: string,
     callback: (data: T) => void,
     options: { [key: string]: string | number | boolean } = {}
