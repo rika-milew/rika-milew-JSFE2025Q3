@@ -2,8 +2,10 @@ import type { Article } from 'types';
 import './news.css';
 
 class News {
+  private readonly AVAILABLE_NEWS: number = 10;
+
   draw(data: Article[]): void {
-    const news = data.length >= 10 ? data.filter((_item, idx) => idx < 10) : data;
+    const news = data.length >= this.AVAILABLE_NEWS ? data.filter((_item, idx) => idx < this.AVAILABLE_NEWS) : data;
     const fragment = document.createDocumentFragment();
     const newsItemTemp = document.querySelector<HTMLTemplateElement>('#newsItemTemp');
     if (!newsItemTemp) return;
@@ -26,7 +28,7 @@ class News {
 
       const date = newsClone.querySelector<HTMLElement>('.news__meta-date');
       if (date) {
-        date.textContent = item.publishedAt.slice(0, 10).split('-').reverse().join('-');
+        date.textContent = item.publishedAt.slice(0, this.AVAILABLE_NEWS).split('-').reverse().join('-');
       }
 
       const title = newsClone.querySelector<HTMLElement>('.news__description-title');
