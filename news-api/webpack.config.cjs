@@ -5,6 +5,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const DotenvWebpackPlugin = require('dotenv-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const baseConfig = {
     entry: './src/index.ts',
@@ -18,7 +19,14 @@ const baseConfig = {
             {
                 test: /\.ts$/i,
                 use: 'ts-loader'
-            }
+            },
+            {
+                test: /\.(png|jpg|jpeg|gif|svg|webp|ico)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/[folder]/[name][hash][ext]'
+                }
+            },
         ],
     },
     resolve: {
@@ -27,6 +35,7 @@ const baseConfig = {
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, './dist'),
+        publicPath: '/',
     },
     plugins: [
         new ESLintPlugin({
@@ -39,12 +48,23 @@ const baseConfig = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
+             favicon: 'src/assets/icons/favicon.ico'
         }),
         new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: 'src/assets',
+                    to: 'assets'
+                }
+            ]
+         })
     ],
     devServer: {
     static: {
       directory: path.join(__dirname, 'dist'),
+      publicPath: '/', 
+      watch: true,
     },
     compress: true,
     port: 3000,
