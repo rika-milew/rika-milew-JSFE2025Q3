@@ -1,12 +1,12 @@
 import AppLoader from './appLoader';
-import type { News, SourcesApiResponse } from 'types';
+import type { NewsApiResponse, SourcesApiResponse } from 'types';
 
 class AppController extends AppLoader {
   getSources(callback: (data: SourcesApiResponse | null | undefined) => void): void {
     super.getResp({ endpoint: 'sources', options: {} }, callback);
   }
 
-  getNews(e: Event, callback: (data: News | null | undefined) => void): void {
+  getNews(e: Event, callback: (data: NewsApiResponse | null | undefined) => void): void {
     let target: EventTarget | null = e.target;
     if (!(target instanceof HTMLElement)) return;
 

@@ -1,6 +1,6 @@
 import AppController from '../controller/controller';
 import { AppView } from '../view/appView';
-import type { News, SourcesApiResponse } from 'types';
+import type { NewsApiResponse, SourcesApiResponse } from 'types';
 
 class App {
   private readonly controller: AppController;
@@ -16,7 +16,7 @@ class App {
 
     if (sourcesContainer instanceof HTMLElement) {
       sourcesContainer.addEventListener('click', (e: MouseEvent) => {
-        this.controller.getNews(e, (data: News | null | undefined) => this.view.drawNews(data));
+        this.controller.getNews(e, (data: NewsApiResponse | null | undefined) => this.view.drawNews(data));
       });
     }
     this.controller.getSources((data: SourcesApiResponse | null | undefined) => this.view.drawSources(data));

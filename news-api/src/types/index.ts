@@ -13,7 +13,7 @@ export interface SourcesApiResponse {
   sources: SourceTemplate[];
 }
 
-export interface News {
+export interface NewsApiResponse {
   status: string;
   totalResults: number;
   articles?: ArticleTemplate[];
