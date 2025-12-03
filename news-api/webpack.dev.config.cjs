@@ -2,8 +2,16 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    devtool: 'inline-source-map',
+
+    devtool: 'source-map',
+
     devServer: {
-        static: path.resolve(__dirname, './dist'),
-    },
+        static: {
+            directory: path.resolve(__dirname, './dist'),
+        },
+        compress: true,
+        port: 3000,
+        open: true,
+        hot: true,
+    }
 };

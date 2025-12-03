@@ -11,8 +11,6 @@
     "target": "ES6",
    
     "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
     "moduleResolution": "node",
   
     "noUncheckedIndexedAccess": true,

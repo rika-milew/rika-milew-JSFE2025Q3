@@ -22,7 +22,8 @@ const baseConfig = {
             },
             {
                 test: /\.ts$/i,
-                use: 'ts-loader'
+                use: 'ts-loader',
+                exclude: /node_modules/
             },
             {
                 test: /\.(png|jpg|jpeg|gif|svg|webp|ico)$/i,
@@ -60,13 +61,9 @@ const baseConfig = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                 from: 'src/assets/icons/favicon.ico',
-                 to: 'assets/icons/favicon.ico',
-                 noErrorOnMissing: true
-                },
-                {
                     from: 'src/assets',
-                    to: 'assets'
+                    to: 'assets',
+                    noErrorOnMissing: true
                 }
             ]
          })
