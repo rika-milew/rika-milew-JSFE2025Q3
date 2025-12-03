@@ -1,0 +1,1 @@
+{"version":3,"file":"news.d.ts","sourceRoot":"","sources":["../../../../src/components/view/news/news.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,OAAO,CAAC;AACrC,OAAO,YAAY,CAAC;AAEpB,cAAM,IAAI;IACR,OAAO,CAAC,QAAQ,CAAC,cAAc,CAAc;IAE7C,IAAI,CAAC,IAAI,EAAE,OAAO,EAAE,GAAG,IAAI;CAuD5B;AAED,eAAe,IAAI,CAAC"}

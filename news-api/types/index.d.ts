@@ -1,0 +1,52 @@
+export interface SourceTemplate {
+    id: string;
+    name: string;
+    description: string;
+    url: string;
+    category: string;
+    language: string;
+    country: string;
+}
+export interface SourcesApiResponse {
+    status: string;
+    sources: SourceTemplate[];
+}
+export interface NewsApiResponse {
+    status: string;
+    totalResults: number;
+    articles?: ArticleTemplate[];
+}
+export interface NewsSource {
+    id: string | null;
+    name: string;
+}
+export interface ArticleTemplate {
+    source: NewsSource;
+    author: string | null;
+    title: string;
+    description: string;
+    url: string;
+    urlToImage: string | null;
+    publishedAt: string;
+    content: string | null;
+}
+export interface Article {
+    source: {
+        id: string | null;
+        name: string;
+    };
+    author: string | null;
+    title: string;
+    description: string;
+    url: string;
+    urlToImage: string | null;
+    publishedAt: string;
+    content: string | null;
+}
+export interface GetResponse {
+    endpoint: string;
+    options: {
+        [key: string]: string | number | boolean;
+    };
+}
+//# sourceMappingURL=index.d.ts.map
