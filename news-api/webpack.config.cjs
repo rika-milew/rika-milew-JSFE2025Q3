@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const DotenvWebpackPlugin = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const baseConfig = {
     entry: './src/index.ts',
@@ -14,7 +15,10 @@ const baseConfig = {
         rules: [
             {
                 test: /\.css$/i,
-                use: ['style-loader', 'css-loader']
+                use: [
+                MiniCssExtractPlugin.loader,
+                  'css-loader'
+                ],
             },
             {
                 test: /\.ts$/i,
@@ -50,6 +54,9 @@ const baseConfig = {
             filename: 'index.html',
         }),
         new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin({
+         filename: 'styles/[name].[contenthash].css',
+         }),
         new CopyWebpackPlugin({
             patterns: [
                 {
