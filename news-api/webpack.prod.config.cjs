@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
     mode: 'production',
     output: {
-        publicPath: '/news-api/', 
+        publicPath: './', 
         filename: 'index.js',
         path: path.resolve(__dirname, './dist'),
     },
