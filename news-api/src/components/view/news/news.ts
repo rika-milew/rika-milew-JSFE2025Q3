@@ -1,10 +1,10 @@
-import type { Article } from 'types';
+import type { ArticleTemplate } from 'types';
 import './news.css';
 
 class News {
   private readonly AVAILABLE_NEWS: number = 10;
 
-  draw(data: Article[]): void {
+  draw(data: ArticleTemplate[]): void {
     const news = data.length >= this.AVAILABLE_NEWS ? data.filter((_item, idx) => idx < this.AVAILABLE_NEWS) : data;
     const fragment = document.createDocumentFragment();
     const newsItemTemp = document.querySelector<HTMLTemplateElement>('#newsItemTemp');

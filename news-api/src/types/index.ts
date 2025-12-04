@@ -35,20 +35,6 @@ export type ArticleTemplate = {
   content: string | null;
 };
 
-export type Article = {
-  source: {
-    id: string | null;
-    name: string;
-  };
-  author: string | null;
-  title: string;
-  description: string;
-  url: string;
-  urlToImage: string | null;
-  publishedAt: string;
-  content: string | null;
-};
-
 export type GetResponse = {
   endpoint: string;
   options: Record<string, string | number | boolean>;
