@@ -1,13 +1,16 @@
 import js from '@eslint/js';
-import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-plugin-prettier';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import prettierPlugin from 'eslint-plugin-prettier';
 import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 
+const tsRecommended = tsPlugin.configs.recommended;
+const tsTypeChecked = tsPlugin.configs["recommended-type-checked"];
+const prettierRecommended = prettierPlugin.configs.recommended;
+
 export default [
   js.configs.recommended,
-  
   {
     files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
@@ -24,17 +27,24 @@ export default [
       }
     },
     plugins: {
-      "@typescript-eslint": ts,
-      "prettier": prettier,
+     "@typescript-eslint": tsPlugin,
+     "prettier": prettierPlugin,
       "import": importPlugin
     },
     rules: {
-      ...ts.configs.recommended.rules,
+      ...tsRecommended.rules,
+      ...tsTypeChecked.rules,
+      ...prettierRecommended.rules,
       "no-debugger": "off",
       "no-console": "off",
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/consistent-type-assertions": "error",
-      "prettier/prettier": "error"
+      "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
+      "@typescript-eslint/explicit-function-return-type": "error", 
+      "@typescript-eslint/explicit-module-boundary-types": "error",
+      "@typescript-eslint/no-unnecessary-type-assertion": "error",
+      "@typescript-eslint/no-non-null-assertion": "error",
+      "prettier/prettier": "error",
     }
   },
   {
@@ -53,7 +63,6 @@ export default [
       "no-console": "off"
     }
   },
-  
   {
     ignores: [
       "**/*.css",
