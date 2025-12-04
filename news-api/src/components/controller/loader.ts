@@ -9,7 +9,7 @@ export enum HttpMethods {
 
 class Loader {
   private readonly baseLink: string;
-  private readonly options: Record<string, string | number | boolean>;
+  private readonly options: GetResponse['options'];
 
   constructor(baseLink: string, options: Record<string, string | number | boolean> = {}) {
     this.baseLink = baseLink;
