@@ -12,7 +12,7 @@ const prettierRecommended = prettierPlugin.configs.recommended;
 export default [
   js.configs.recommended,
   {
-    files: ["**/*.ts", "**/*.tsx"],
+    files: ["**/*.ts", "**/*.js", "**/*.jsx"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -36,7 +36,7 @@ export default [
       ...tsTypeChecked.rules,
       ...prettierRecommended.rules,
       "no-debugger": "off",
-      "no-console": "off",
+      "no-console": "error",
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/consistent-type-assertions": "error",
       "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
@@ -45,22 +45,6 @@ export default [
       "@typescript-eslint/no-unnecessary-type-assertion": "error",
       "@typescript-eslint/no-non-null-assertion": "error",
       "prettier/prettier": "error",
-    }
-  },
-  {
-    files: ["**/*.js", "**/*.jsx"],
-    languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: "module",
-      globals: {
-        browser: true,
-        es2020: true,
-        node: true
-      }
-    },
-    rules: {
-      "no-debugger": "off",
-      "no-console": "off"
     }
   },
   {
