@@ -33,6 +33,7 @@ export default [
       "no-debugger": "off",
       "no-console": "off",
       "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/consistent-type-assertions": "error",
       "prettier/prettier": "error"
     }
   },
