@@ -51,7 +51,7 @@ class Loader {
 class AppLoader extends loader {
     constructor() {
         var _a, _b;
-        const apiUrl = (_a = "https://rss-news-api.onrender.com") !== null && _a !== void 0 ? _a : '';
+        const apiUrl = (_a = "https://rss-news-api.onrender.com/") !== null && _a !== void 0 ? _a : '';
         const apiKey = (_b = "a3467a8729554d8c8b2341e49884499c") !== null && _b !== void 0 ? _b : '';
         super(apiUrl, { apiKey });
     }
