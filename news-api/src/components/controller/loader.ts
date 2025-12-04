@@ -9,9 +9,9 @@ export enum HttpMethods {
 
 class Loader {
   private readonly baseLink: string;
-  private readonly options: { [key: string]: string | number | boolean };
+  private readonly options: Record<string, string | number | boolean>;
 
-  constructor(baseLink: string, options: { [key: string]: string | number | boolean } = {}) {
+  constructor(baseLink: string, options: Record<string, string | number | boolean> = {}) {
     this.baseLink = baseLink;
     this.options = options;
   }
@@ -36,7 +36,7 @@ class Loader {
     return res;
   }
 
-  private makeUrl(options: { [key: string]: string | number | boolean }, endpoint: string): string {
+  private makeUrl(options: Record<string, string | number | boolean>, endpoint: string): string {
     const urlOptions = { ...this.options, ...options };
     let url = `${this.baseLink}${endpoint}?`;
 
@@ -51,7 +51,7 @@ class Loader {
     method: HttpMethods,
     endpoint: string,
     callback: (data: T) => void,
-    options: { [key: string]: string | number | boolean } = {}
+    options: Record<string, string | number | boolean> = {}
   ): void {
     fetch(this.makeUrl(options, endpoint), { method })
       .then(this.errorHandler)

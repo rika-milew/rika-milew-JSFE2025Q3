@@ -51,5 +51,5 @@ export type Article = {
 
 export type GetResponse = {
   endpoint: string;
-  options: { [key: string]: string | number | boolean };
+  options: Record<string, string | number | boolean>;
 };
