@@ -16,20 +16,17 @@ class Loader {
     this.options = options;
   }
 
-  getResp<T>(
-    { endpoint, options = {} }: GetResponse,
-    callback: (data: T) => void = () => {
-      console.error('No callback for GET response');
+  getResp<T>({ endpoint, options = {} }: GetResponse, callback: (data: T) => void = () => {}): void {
+    if (!callback) {
+      throw new Error('Callback is required');
     }
-  ) {
     this.load(HttpMethods.GET, endpoint, callback, options);
   }
 
   private errorHandler(res: Response): Response {
     if (!res.ok) {
       if (res.status === 401 || res.status === 404) {
-        console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
-        throw Error(res.statusText);
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
       }
     }
 
@@ -54,10 +51,10 @@ class Loader {
     options: Record<string, string | number | boolean> = {}
   ): void {
     fetch(this.makeUrl(options, endpoint), { method })
-      .then(this.errorHandler)
+      .then((res) => this.errorHandler(res))
       .then((res) => res.json() as Promise<T>)
       .then((data) => callback(data))
-      .catch((err) => console.error(err));
+      .catch((err) => void err);
   }
 }
 
