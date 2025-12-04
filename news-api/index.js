@@ -14,16 +14,16 @@ class Loader {
         this.baseLink = baseLink;
         this.options = options;
     }
-    getResp({ endpoint, options = {} }, callback = () => {
-        console.error('No callback for GET response');
-    }) {
+    getResp({ endpoint, options = {} }, callback = () => { }) {
+        if (!callback) {
+            throw new Error('Callback is required');
+        }
         this.load(HttpMethods.GET, endpoint, callback, options);
     }
     errorHandler(res) {
         if (!res.ok) {
             if (res.status === 401 || res.status === 404) {
-                console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
-                throw Error(res.statusText);
+                throw new Error(`Error ${res.status}: ${res.statusText}`);
             }
         }
         return res;
@@ -38,10 +38,10 @@ class Loader {
     }
     load(method, endpoint, callback, options = {}) {
         fetch(this.makeUrl(options, endpoint), { method })
-            .then(this.errorHandler)
+            .then((res) => this.errorHandler(res))
             .then((res) => res.json())
             .then((data) => callback(data))
-            .catch((err) => console.error(err));
+            .catch((err) => void err);
     }
 }
 /* harmony default export */ const loader = (Loader);
@@ -50,9 +50,9 @@ class Loader {
 
 class AppLoader extends loader {
     constructor() {
-        var _a, _b;
+        var _a;
         const apiUrl = (_a = "https://rss-news-api.onrender.com/") !== null && _a !== void 0 ? _a : '';
-        const apiKey = (_b = "a3467a8729554d8c8b2341e49884499c") !== null && _b !== void 0 ? _b : '';
+        const apiKey =  true ? String("a3467a8729554d8c8b2341e49884499c") : 0;
         super(apiUrl, { apiKey });
     }
 }
