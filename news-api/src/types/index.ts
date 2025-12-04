@@ -1,4 +1,4 @@
-export interface SourceTemplate {
+export type SourceTemplate = {
   id: string;
   name: string;
   description: string;
@@ -6,25 +6,25 @@ export interface SourceTemplate {
   category: string;
   language: string;
   country: string;
-}
+};
 
-export interface SourcesApiResponse {
+export type SourcesApiResponse = {
   status: string;
   sources: SourceTemplate[];
-}
+};
 
-export interface NewsApiResponse {
+export type NewsApiResponse = {
   status: string;
   totalResults: number;
   articles?: ArticleTemplate[];
-}
+};
 
-export interface NewsSource {
+export type NewsSource = {
   id: string | null;
   name: string;
-}
+};
 
-export interface ArticleTemplate {
+export type ArticleTemplate = {
   source: NewsSource;
   author: string | null;
   title: string;
@@ -33,9 +33,9 @@ export interface ArticleTemplate {
   urlToImage: string | null;
   publishedAt: string;
   content: string | null;
-}
+};
 
-export interface Article {
+export type Article = {
   source: {
     id: string | null;
     name: string;
@@ -47,9 +47,9 @@ export interface Article {
   urlToImage: string | null;
   publishedAt: string;
   content: string | null;
-}
+};
 
-export interface GetResponse {
+export type GetResponse = {
   endpoint: string;
   options: { [key: string]: string | number | boolean };
-}
+};
