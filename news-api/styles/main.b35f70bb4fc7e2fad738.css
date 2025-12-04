@@ -148,7 +148,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: 1fr;
-    align-items: stretch;
+    align-items: center;
     gap: 25px;
   }
 
@@ -338,7 +338,7 @@
   }
 
   .sources-list {
-    height: 60px;
+    height: 124px;
   }
 
   .source__item {
@@ -456,4 +456,4 @@ footer .copyright:before {
 
 
 
-/*# sourceMappingURL=main.b9b577d279e544f5250e.css.map*/
+/*# sourceMappingURL=main.b35f70bb4fc7e2fad738.css.map*/
