@@ -148,7 +148,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: 1fr;
-    align-items: stretch;
+    align-items: center;
     gap: 25px;
   }
 
