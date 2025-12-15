@@ -25,6 +25,9 @@
       "prettier --check"
   ]
 },
+  "validate-branch-name": {
+    "pattern": "^(feat|fix|chore|docs|test|refactor)/.+$"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",
