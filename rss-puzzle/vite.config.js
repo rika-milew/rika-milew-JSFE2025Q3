@@ -5,7 +5,6 @@ import checker from 'vite-plugin-checker';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default {
-  publicDir: 'assets',
   plugins: [
     Inspect(),
     ViteImageOptimizer({
@@ -29,6 +28,7 @@ export default {
   build: {
     target: 'esnext',
     outDir: 'dist', 
+    assetsDir: 'assets',
     minify: false,
     compact: false,
     sourcemap: true,

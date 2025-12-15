@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"]
+    },
+    "rootDir": "./src",
+    "outDir": "dist",
     "target": "ES2022",
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
     "skipLibCheck": true,
-    "outDir": "dist",
 
     /* Bundler mode */
     "moduleResolution": "node",
@@ -28,5 +34,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"]
 }
