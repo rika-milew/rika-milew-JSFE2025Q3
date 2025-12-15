@@ -2,4 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 cd rss-puzzle
-npx eslint 'src/**/*.{ts,tsx,js}' && npx validate-branch-name --pattern '^(feat|fix|chore|docs|test|refactor)/.+$'
+npx eslint 'src/**/*.{ts,tsx,js}' && npx validate-branch-name '^(feat|fix|chore|docs|test|refactor)/.+$'
