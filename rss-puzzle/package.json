@@ -1,0 +1,54 @@
+{
+  "name": "rss-puzzle",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "deploy": "npx vite build && npx gh-pages -d dist -e rss-puzzle",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,js,jsx,json,md}\"",
+    "ci:format": "prettier --check \"src/**/*.{ts,tsx,css,js,jsx,json,md}\"",
+    "lint": "eslint src/**/*.{ts,tsx,js}",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
+    "prepare": "cd .. && husky install rss-puzzle/.husky"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,js}": [
+      "eslint --max-warnings 0",
+      "prettier --check"
+  ],
+    "*.{css,scss}": [
+      "stylelint",
+      "prettier --check"
+  ]
+},
+  "validate-branch-name": {
+    "pattern": "^(feat|fix|chore|docs|test|refactor)/.+$"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "gh-pages": "^6.3.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "stylelint": "^16.26.1",
+    "stylelint-config-clean-order": "^8.0.0",
+    "stylelint-order": "^7.0.0",
+    "typescript": "~5.9.3",
+    "validate-branch-name": "^1.3.2",
+    "vite": "^7.2.4",
+    "vite-plugin-checker": "^0.11.0",
+    "vite-plugin-image-optimizer": "^2.0.3",
+    "vite-plugin-inspect": "^11.3.3",
+    "vite-tsconfig-paths": "^6.0.0"
+  }
+}
