@@ -19,12 +19,12 @@
     "src/**/*.{ts,tsx,js}": [
       "eslint --max-warnings 0",
       "prettier --check"
-  ],
+    ],
     "*.{css,scss}": [
       "stylelint",
       "prettier --check"
-  ]
-},
+    ]
+  },
   "validate-branch-name": {
     "pattern": "^(feat|fix|chore|docs|test|refactor)/.+$"
   },
