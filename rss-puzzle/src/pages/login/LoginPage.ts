@@ -12,7 +12,12 @@ export function createLabel(text: string, htmlFor: string): HTMLLabelElement {
   return label;
 }
 
-export function createTextInput(id: string, name: string, placeholder: string, className: string): HTMLInputElement {
+export function createTextInput(
+  id: string,
+  name: string,
+  placeholder: string,
+  className: string,
+): HTMLInputElement {
   return createElement({
     tag: 'input',
     className,
@@ -63,11 +68,21 @@ export function createLoginPage(container: HTMLElement): HTMLDivElement {
 
   const firstNameLabel = createLabel('First Name', 'first-name-input');
 
-  const firstNameInput = createTextInput('first-name-input', 'name', 'Enter your first name', 'login__input');
+  const firstNameInput = createTextInput(
+    'first-name-input',
+    'name',
+    'Enter your first name',
+    'login__input',
+  );
 
   const surnameLabel = createLabel('Surname', 'surname-input');
 
-  const surnameInput = createTextInput('surname-input', 'surname', 'Enter your surname', 'login__input');
+  const surnameInput = createTextInput(
+    'surname-input',
+    'surname',
+    'Enter your surname',
+    'login__input',
+  );
 
   const loginButton = createSubmitButton('Login');
 

@@ -1,24 +1,7 @@
-import Inspect from 'vite-plugin-inspect';
 import { resolve } from 'path';
-import tsconfigPaths from 'vite-tsconfig-paths';
 // import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default {
-  plugins: [
-    Inspect(),
-    // ViteImageOptimizer({
-    //   png: {
-    //     quality: 90,
-    //   },
-    //   jpg: {
-    //     quality: 80,
-    //   },
-    //   webp: {
-    //     quality: 80,
-    //   },
-    // }),
-    tsconfigPaths(),
-  ],
   base: './',
   build: {
     target: 'esnext',
