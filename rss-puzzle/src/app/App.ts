@@ -2,10 +2,10 @@ import { createLoginPage } from '../pages/login/LoginPage';
 
 export function startApp(root: HTMLElement): void {
   while (root.firstChild) {
-    root.removeChild(root.firstChild);
+    root.firstChild.remove();
   }
   const mainContainer = document.createElement('div');
   mainContainer.className = 'container';
-  root.appendChild(mainContainer);
+  root.append(mainContainer);
   createLoginPage(mainContainer);
 }
