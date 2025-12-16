@@ -116,7 +116,7 @@ export default defineConfig([
       'indent': ['error', 2, { SwitchCase: 1 }],
       'comma-dangle': ['error', 'always-multiline'],
       'object-curly-spacing': ['error', 'always'],
-      'array-bracket-spacing': ['error', 'always'],
+      // 'array-bracket-spacing': ['error', 'always'],
       'arrow-parens': ['error', 'always'],
       'max-len': ['warn', { code: 100, ignoreComments: true }],
 
