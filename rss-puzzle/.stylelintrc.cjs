@@ -18,6 +18,7 @@ module.exports = {
             'max-width',
             'height',
             'margin',
+            'margin-top',
             'margin-bottom',
             'padding',
             'box-sizing',
@@ -26,8 +27,8 @@ module.exports = {
         { properties: ['border', 'border-width', 'border-style', 'border-color', 'border-radius', 'box-shadow'] },
         { properties: ['list-style-type', 'overflow', 'overflow-x', 'overflow-y'] },
         { properties: ['font', 'font-size', 'font-weight', 'line-height', 'color', 'text-align'] },
-        { properties: ['background', 'background-color', 'text-decoration'] },
-        { properties: ['cursor', 'transition', 'animation'] },
+        { properties: ['background', 'background-color', 'outline', 'text-decoration'] },
+        { properties: ['cursor', 'transition', 'transform', 'animation'] },
       ],
       {
         unspecified: 'bottomAlphabetical',
