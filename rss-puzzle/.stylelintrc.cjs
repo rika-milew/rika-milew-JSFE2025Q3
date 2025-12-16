@@ -8,16 +8,30 @@ module.exports = {
     'order/properties-order': [
       [
         { properties: ['position', 'top', 'right', 'bottom', 'float', 'clear', 'z-index'] },
-        { properties: ['display', 'width', 'height', 'margin', 'padding', 'box-sizing'] },
+        {
+          properties: ['display',
+            'justify-content',
+            'align-items',
+            'flex-direction',
+            'gap',
+            'width',
+            'max-width',
+            'height',
+            'margin',
+            'margin-bottom',
+            'padding',
+            'box-sizing',
+          ],
+        },
         { properties: ['border', 'border-width', 'border-style', 'border-color', 'border-radius', 'box-shadow'] },
         { properties: ['list-style-type', 'overflow', 'overflow-x', 'overflow-y'] },
-        { properties: ['font', 'font-size', 'line-height', 'color', 'text-align'] },
-        { properties: ['background', 'background-color', 'color', 'font', 'font-size', 'line-height', 'text-align', 'text-decoration'] },
-        { properties: ['transition', 'animation'] }
+        { properties: ['font', 'font-size', 'font-weight', 'line-height', 'color', 'text-align'] },
+        { properties: ['background', 'background-color', 'text-decoration'] },
+        { properties: ['cursor', 'transition', 'animation'] },
       ],
       {
-        unspecified: 'bottomAlphabetical'
-      }
-    ]
-  }
+        unspecified: 'bottomAlphabetical',
+      },
+    ],
+  },
 };
