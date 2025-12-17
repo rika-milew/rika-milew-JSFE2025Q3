@@ -1,7 +1,7 @@
 import { defineConfig } from 'eslint/config';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
-// import importX from 'eslint-plugin-import-x';
+import importX from 'eslint-plugin-import-x';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 
@@ -9,8 +9,8 @@ export default defineConfig([
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
-  // importX.flatConfigs.recommended,
-  // importX.flatConfigs.typescript,
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
   eslintPluginUnicorn.configs.recommended,
 
   {
@@ -69,26 +69,21 @@ export default defineConfig([
       '@typescript-eslint/prefer-optional-chain': 'error',
       '@typescript-eslint/no-unnecessary-condition': 'error',
 
-      // 'import-x/order': ['error', {
-      //   groups: [
-      //     ['builtin', 'external'],
-      //     'internal',
-      //     ['parent', 'sibling', 'index'],
-      //     'type',
-      //   ],
-      //   'newlines-between': 'always',
-      //   alphabetize: { order: 'asc', caseInsensitive: true },
-      // }],
-      // 'import-x/no-duplicates': 'error',
-      // 'import-x/no-unresolved': [
-      //   'error',
-      //   {
-      //     ignore: ['\\.css$'],
-      //   },
-      // ],
-      // 'import-x/no-anonymous-default-export': 'error',
-      // 'import-x/prefer-default-export': 'off',
-      // 'import-x/no-default-export': 'error',
+      'import-x/order': ['error', {
+        groups: [
+          ['builtin', 'external'],
+          'internal',
+          ['parent', 'sibling', 'index'],
+          'type',
+        ],
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc', caseInsensitive: true },
+      }],
+      'import-x/no-duplicates': 'error',
+      'import-x/no-unresolved': 'error',
+      'import-x/no-anonymous-default-export': 'error',
+      'import-x/prefer-default-export': 'off',
+      'import-x/no-default-export': 'error',
 
       'unicorn/prevent-abbreviations': [
         'error',
@@ -135,7 +130,7 @@ export default defineConfig([
       '**/dist/**',
       '**/build/**',
       '**/*.d.ts',
-      'eslint.config.js',
+      'eslint.config.js'
     ],
   },
 ]);
