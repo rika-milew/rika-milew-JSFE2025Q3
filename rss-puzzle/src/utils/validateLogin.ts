@@ -1,5 +1,3 @@
-// validation
-
 const loginPattern = /^[A-Za-z-]+$/;
 const firstLoginLetter = /^[A-Z]/;
 

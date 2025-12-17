@@ -1,8 +1,8 @@
 import { createElement } from '../../utils/createElement';
+import { saveUserCredentials, getUserCredentials } from '../../utils/saveUser';
 import { inputValidation, showInputErrors } from '../../utils/validateLogin';
-import './LoginPage.css';
 
-// login page
+import './LoginPage.css';
 
 export function createLabel(text: string, htmlFor: string): HTMLLabelElement {
   const label = createElement({
@@ -98,6 +98,8 @@ export function createLoginPage(container: HTMLElement): HTMLDivElement {
   loginContainer.append(loginForm);
   container.append(loginContainer);
 
+  getUserCredentials(firstNameInput, surnameInput);
+
   function checkLoginForm(): void {
     const nameError = inputValidation(firstNameInput.value.trim(), 'name');
     const surnameError = inputValidation(surnameInput.value.trim(), 'surname');
@@ -114,9 +116,11 @@ export function createLoginPage(container: HTMLElement): HTMLDivElement {
   loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
     checkLoginForm();
-    // if (!loginButton.disabled) {
-
-    // }
+    const firstName = firstNameInput.value.trim();
+    const surname = surnameInput.value.trim();
+    if (!loginButton.disabled) {
+      saveUserCredentials(firstName, surname);
+    }
   });
 
   return loginContainer;
