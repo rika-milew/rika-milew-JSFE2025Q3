@@ -36,3 +36,8 @@ export type ElementOptions<K extends ElementTag> = {
   textContent?: string;
   attributes?: Record<string, string>;
 };
+
+export type User = {
+  firstName: string;
+  surname: string;
+};
