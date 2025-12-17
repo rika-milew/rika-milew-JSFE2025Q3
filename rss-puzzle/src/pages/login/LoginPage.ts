@@ -1,6 +1,10 @@
+import { Routes } from '../../app/AppRoutes';
+import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
 import { saveUserCredentials, getUserCredentials } from '../../utils/saveUser';
 import { inputValidation, showInputErrors } from '../../utils/validateLogin';
+
+import type { AppRouter } from '../../app/AppRouter';
 
 import './LoginPage.css';
 
@@ -37,7 +41,7 @@ export function createTextInput(
 export function createSubmitButton(text: string): HTMLButtonElement {
   return createElement({
     tag: 'button',
-    className: 'login__button',
+    className: 'login__button button',
     textContent: text,
     attributes: {
       type: 'submit',
@@ -54,7 +58,8 @@ export function createForm(id: string): HTMLFormElement {
   });
 }
 
-export function createLoginPage(container: HTMLElement): HTMLDivElement {
+export function createLoginPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
+  clearContainer(container);
   const loginContainer = createElement({
     tag: 'div',
     className: 'login',
@@ -120,6 +125,7 @@ export function createLoginPage(container: HTMLElement): HTMLDivElement {
     const surname = surnameInput.value.trim();
     if (!loginButton.disabled) {
       saveUserCredentials(firstName, surname);
+      router.navigate(Routes.START);
     }
   });
 

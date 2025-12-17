@@ -81,43 +81,6 @@
     background-color 0.2s;
 }
 
-.login__button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #ffffff;
-  background-color: #492471;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.1s ease,
-    box-shadow 0.2s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .login__button:hover {
-    box-shadow: 0 6px 16px rgba(74, 36, 115, 0.3);
-    background-color: #321353;
-  }
-}
-
-.login__button:active {
-  box-shadow: 0 6px 16px rgba(74, 36, 115, 0.3);
-  background-color: #321353;
-  transform: translateY(1px);
-}
-
-.login__button:disabled {
-  box-shadow: none;
-  background-color: #a89bc3;
-  cursor: default;
-}
-
 .login__error {
   display: block;
   margin-top: 5px;

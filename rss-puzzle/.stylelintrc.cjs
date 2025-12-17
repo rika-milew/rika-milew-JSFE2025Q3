@@ -7,11 +7,12 @@ module.exports = {
     'no-descending-specificity': true,
     'order/properties-order': [
       [
-        { properties: ['position', 'top', 'right', 'bottom', 'float', 'clear', 'z-index'] },
+        { properties: ['position', 'top', 'right', 'bottom', 'left', 'float', 'clear', 'z-index'] },
         {
           properties: ['display',
             'justify-content',
             'align-items',
+            'flex',
             'flex-direction',
             'gap',
             'width',
@@ -26,9 +27,9 @@ module.exports = {
         },
         { properties: ['border', 'border-width', 'border-style', 'border-color', 'border-radius', 'box-shadow'] },
         { properties: ['list-style-type', 'overflow', 'overflow-x', 'overflow-y'] },
-        { properties: ['font', 'font-size', 'font-weight', 'line-height', 'color', 'text-align'] },
+        { properties: ['font', 'font-size', 'font-family', 'font-weight', 'line-height', 'color', 'text-align'] },
         { properties: ['background', 'background-color', 'outline', 'text-decoration'] },
-        { properties: ['cursor', 'transition', 'transform', 'animation'] },
+        { properties: ['cursor', 'transition', 'transform', 'opacity', 'animation'] },
       ],
       {
         unspecified: 'bottomAlphabetical',
