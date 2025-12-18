@@ -41,3 +41,18 @@ body.start-page {
 .start__logout-button {
   min-width: 200px;
 }
+
+.start__greeting {
+  margin-bottom: 12px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #e0554b;
+  opacity: 0;
+  animation: fadeIn 0.7s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
