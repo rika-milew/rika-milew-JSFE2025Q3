@@ -1,4 +1,5 @@
 import { showLogoutModal } from '../../components/Modal';
+import { isUser } from '../../types/typeGuards';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
 import { setBodyBackground } from '../../utils/setBodyBackground';
@@ -54,10 +55,37 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
     });
   });
 
+  createGreeting(startContainer);
+
   startContainer.append(heading, description);
   buttonContainer.append(logoutButton);
   startContainer.append(buttonContainer);
   container.append(startContainer);
 
   return startContainer;
+}
+
+export function createGreeting(container: HTMLElement): HTMLDivElement | undefined {
+  const savedUser = localStorage.getItem('user');
+  if (!savedUser) {
+    return undefined;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(savedUser);
+    if (!isUser(parsed)) {
+      return undefined;
+    }
+
+    const greeting = createElement({
+      tag: 'div',
+      className: 'start__greeting',
+      textContent: `Hello, ${parsed.firstName} ${parsed.surname}!`,
+    });
+
+    container.append(greeting);
+    return greeting;
+  } catch {
+    return undefined;
+  }
 }
