@@ -2,6 +2,7 @@ import { Routes } from '../../app/AppRoutes';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
 import { saveUserCredentials, getUserCredentials } from '../../utils/saveUser';
+import { setBodyBackground } from '../../utils/setBodyBackground';
 import { inputValidation, showInputErrors } from '../../utils/validateLogin';
 
 import type { AppRouter } from '../../app/AppRouter';
@@ -60,6 +61,8 @@ export function createForm(id: string): HTMLFormElement {
 
 export function createLoginPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
+  setBodyBackground('login-page');
+
   const loginContainer = createElement({
     tag: 'div',
     className: 'login',
@@ -95,7 +98,7 @@ export function createLoginPage(container: HTMLElement, router: AppRouter): HTML
     'login__input',
   );
 
-  const loginButton = createSubmitButton('Login');
+  const loginButton = createSubmitButton('Log in');
 
   firstnameDiv.append(firstNameLabel, firstNameInput);
   surnameDiv.append(surnameLabel, surnameInput);

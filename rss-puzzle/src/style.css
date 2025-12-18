@@ -41,15 +41,16 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .button:hover {
+  .button:not(:disabled):hover {
     box-shadow: 0 6px 16px rgba(74, 36, 115, 0.3);
-    background-color: #321353;
+    background-color: #310f55;
+    transform: translateY(-2px);
   }
 }
 
 .button:active {
   box-shadow: 0 6px 16px rgba(74, 36, 115, 0.3);
-  background-color: #321353;
+  background-color: #310f55;
   transform: translateY(1px);
 }
 
