@@ -1,3 +1,4 @@
+import { Routes } from '../../app/routes';
 import { showLogoutModal } from '../../components/Modal';
 import { isUser } from '../../types/typeGuards';
 import { clearContainer } from '../../utils/clearContainer';
@@ -12,6 +13,17 @@ function createLogoutButton(text: string): HTMLButtonElement {
   return createElement({
     tag: 'button',
     className: 'start__logout-button button',
+    textContent: text,
+    attributes: {
+      type: 'button',
+    },
+  });
+}
+
+function createStartButton(text: string): HTMLButtonElement {
+  return createElement({
+    tag: 'button',
+    className: 'start__game-button button',
     textContent: text,
     attributes: {
       type: 'button',
@@ -48,6 +60,7 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
   });
 
   const logoutButton = createLogoutButton('Log out');
+  const startButton = createStartButton('Start');
 
   logoutButton.addEventListener('click', () => {
     showLogoutModal(container, () => {
@@ -55,10 +68,14 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
     });
   });
 
+  startButton.addEventListener('click', () => {
+    router.navigate(Routes.GAME);
+  });
+
   createGreeting(startContainer);
 
   startContainer.append(heading, description);
-  buttonContainer.append(logoutButton);
+  buttonContainer.append(startButton, logoutButton);
   startContainer.append(buttonContainer);
   container.append(startContainer);
 
@@ -74,6 +91,12 @@ export function createGreeting(container: HTMLElement): HTMLDivElement | undefin
   try {
     const parsed: unknown = JSON.parse(savedUser);
     if (!isUser(parsed)) {
+      return undefined;
+    }
+
+    const { firstName, surname } = parsed;
+
+    if (!firstName.trim() || !surname.trim()) {
       return undefined;
     }
 

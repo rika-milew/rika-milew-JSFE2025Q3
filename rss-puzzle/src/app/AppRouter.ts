@@ -1,4 +1,4 @@
-import { routes, Routes } from './AppRoutes';
+import { routes, Routes } from './routes';
 import { clearContainer } from '../utils/clearContainer';
 
 export type AppRouter = {
@@ -19,19 +19,15 @@ export function createAppRouter(container: HTMLElement): AppRouter {
         return;
       }
 
-      const current = container.firstElementChild;
-      if (current) {
-        current.classList.add('page_hidden');
-      }
+      container.classList.add('page_hidden');
 
       setTimeout(() => {
         clearContainer(container);
         const page = showPage(container);
-        page.classList.add('page', 'page_hidden');
         container.append(page);
 
         requestAnimationFrame(() => {
-          page.classList.remove('page_hidden');
+          container.classList.remove('page_hidden');
         });
       }, ANIMATION_TIME);
     },

@@ -1,5 +1,5 @@
 import { createAppRouter } from './AppRouter';
-import { Routes } from './AppRoutes';
+import { Routes } from './routes';
 import { createLoginPage } from '../pages/login/LoginPage';
 import { createStartPage } from '../pages/start/StartPage';
 

@@ -38,7 +38,16 @@ body.start-page {
   text-align: center;
 }
 
-.start__logout-button {
+.start__buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.start__logout-button,
+.start__game-button {
   min-width: 200px;
 }
 

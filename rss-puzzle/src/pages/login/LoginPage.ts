@@ -1,4 +1,4 @@
-import { Routes } from '../../app/AppRoutes';
+import { Routes } from '../../app/routes';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
 import { saveUserCredentials, getUserCredentials } from '../../utils/saveUser';
