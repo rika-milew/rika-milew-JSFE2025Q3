@@ -41,3 +41,32 @@ export type User = {
   firstName: string;
   surname: string;
 };
+
+// game
+
+export type Word = {
+  audioExample: string;
+  textExample: string;
+  textExampleTranslate: string;
+  id: number;
+  word: string;
+  wordTranslate: string;
+};
+
+export type Level = {
+  id: string;
+  name: string;
+  imageSrc: string;
+  cutSrc: string;
+  author: string;
+  year: string;
+};
+
+export type Round = {
+  levelData: Level;
+  words: Word[];
+};
+
+export type Game = {
+  rounds: Round[];
+};
