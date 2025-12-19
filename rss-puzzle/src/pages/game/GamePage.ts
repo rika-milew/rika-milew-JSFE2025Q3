@@ -44,6 +44,8 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const sourceContainer = createElement({ tag: 'div', className: 'game-board__source' });
   const resultContainer = createElement({ tag: 'div', className: 'game-board__result' });
 
+  const resultHeading = createElement({ tag: 'p', className: 'result', textContent: 'Result' });
+
   createWordCards(round.words, sourceContainer, resultContainer);
 
   const backButton = createLogoutButton('Back');
@@ -52,7 +54,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     router.navigate(Routes.START);
   });
 
-  gameBoard.append(sourceContainer, resultContainer);
+  gameBoard.append(sourceContainer, resultHeading, resultContainer);
   gameContainer.append(roundTitle, gameBoard, backButton);
   container.append(gameContainer);
 

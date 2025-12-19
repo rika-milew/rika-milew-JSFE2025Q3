@@ -2,11 +2,11 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 20px;
   padding: 10px;
 }
 
 .game__round {
+  margin-bottom: 20px;
   font-size: 36px;
   font-weight: bold;
   color: #491a8e;
@@ -19,14 +19,33 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 12px;
-  min-height: 80px;
+  margin-bottom: 30px;
+}
+
+.result {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #491a8e;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .word {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 70px;
+  max-width: 220px;
   padding: 10px 18px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
   color: #ffffff;
   background-color: #6d4bd1;
   cursor: pointer;
