@@ -6,15 +6,15 @@
 }
 
 .game__round {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-size: 36px;
   font-weight: bold;
   color: #491a8e;
   text-align: center;
 }
 
-.game-board__source,
-.game-board__result {
+.source,
+.result {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +24,7 @@
   margin-bottom: 30px;
 }
 
-.result {
+.result__heading {
   margin-bottom: 20px;
   font-size: 18px;
   font-weight: 600;
@@ -32,6 +32,18 @@
   color: #491a8e;
   text-align: center;
   text-transform: uppercase;
+}
+
+.result__placeholder {
+  padding: 12px 8px;
+  border: 2px dashed #6d4bd1;
+  border-radius: 8px;
+  font-style: italic;
+  color: #333333;
+  text-align: center;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  user-select: none;
 }
 
 .word {
@@ -50,8 +62,8 @@
   background-color: #6d4bd1;
   cursor: pointer;
   transition:
-    transform 0.3s,
-    opacity 0.3s;
+    box-shadow 0.3s ease,
+    opacity 0.3s ease;
   user-select: none;
 }
 
@@ -64,11 +76,17 @@
 }
 
 .word:active {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transform: scale(1.1);
 }
 
 .word_result {
+  box-shadow: 0 0 0 2px #b7a9ee;
   opacity: 0.7;
+}
+
+.word:not(.word_result) {
+  box-shadow: none;
 }
 
 .game__back-button {

@@ -29,7 +29,7 @@ module.exports = {
         },
         { properties: ['border', 'border-width', 'border-style', 'border-color', 'border-radius', 'box-shadow'] },
         { properties: ['list-style-type', 'overflow', 'overflow-x', 'overflow-y'] },
-        { properties: ['font', 'font-size', 'font-family', 'font-weight', 'line-height', 'letter-spacing', 'white-space', 'color', 'text-align'] },
+        { properties: ['font', 'font-size', 'font-family', 'font-weight', 'font-style', 'line-height', 'letter-spacing', 'white-space', 'color', 'text-align'] },
         { properties: ['background', 'background-color', 'background-image', 'outline', 'text-decoration'] },
         { properties: ['cursor', 'transition', 'transform', 'opacity', 'animation'] },
       ],
