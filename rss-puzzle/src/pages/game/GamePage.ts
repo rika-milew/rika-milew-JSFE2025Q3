@@ -1,5 +1,6 @@
 import { Routes } from '../../app/routes';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
+import { moveWordCards } from '../../utils/animationHelpers.ts';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
 import { setBodyBackground } from '../../utils/setBodyBackground';
@@ -28,6 +29,15 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const round = wordCollection.rounds[0];
 
+  const sentenceWords: Word[] = round.words[0].textExample.split(' ').map((word, index) => ({
+    audioExample: '',
+    textExample: round.words[0].textExample,
+    textExampleTranslate: round.words[0].textExampleTranslate,
+    id: index,
+    word,
+    wordTranslate: '',
+  }));
+
   const gameContainer = createElement({
     tag: 'div',
     className: 'game',
@@ -41,12 +51,22 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     textContent: round.levelData.name,
   });
 
-  const sourceContainer = createElement({ tag: 'div', className: 'game-board__source' });
-  const resultContainer = createElement({ tag: 'div', className: 'game-board__result' });
+  const sourceContainer = createElement({ tag: 'div', className: 'source' });
+  const resultContainer = createElement({ tag: 'div', className: 'result' });
 
-  const resultHeading = createElement({ tag: 'p', className: 'result', textContent: 'Result' });
+  const resultHeading = createElement({
+    tag: 'p',
+    className: 'result__heading',
+    textContent: 'Result',
+  });
 
-  createWordCards(round.words, sourceContainer, resultContainer);
+  const resultPlaceholder = createElement({
+    tag: 'p',
+    className: 'result__placeholder',
+    textContent: 'Build the sentence here',
+  });
+
+  createWordCards(sentenceWords, sourceContainer, resultContainer, resultPlaceholder);
 
   const backButton = createLogoutButton('Back');
 
@@ -55,6 +75,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   });
 
   gameBoard.append(sourceContainer, resultHeading, resultContainer);
+  resultContainer.append(resultPlaceholder);
   gameContainer.append(roundTitle, gameBoard, backButton);
   container.append(gameContainer);
 
@@ -62,12 +83,14 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 }
 
 function shuffleWordCards<T>(array: T[]): T[] {
-  const wordArray = [...array];
-  for (let index = array.length - 1; index > 0; index--) {
+  const shuffledArray = [...array];
+  for (let index = shuffledArray.length - 1; index > 0; index--) {
     const newIndex = Math.floor(Math.random() * (index + 1));
-    [array[index], array[newIndex]] = [array[newIndex], array[index]];
+    [shuffledArray[index], shuffledArray[newIndex]] = [
+      shuffledArray[newIndex],
+      shuffledArray[index],
+    ];
   }
-  const shuffledArray = wordArray;
   return shuffledArray;
 }
 
@@ -75,21 +98,54 @@ function createWordCards(
   words: Word[],
   sourceContainer: HTMLElement,
   resultContainer: HTMLElement,
+  resultPlaceholder: HTMLElement,
 ): void {
   const wordCards = shuffleWordCards(words);
 
-  wordCards.forEach((wordData) => {
-    const wordCard = createElement({
-      tag: 'div',
-      className: 'sentence__word word',
-      textContent: wordData.word,
-    });
-
-    wordCard.addEventListener('click', () => {
-      resultContainer.append(wordCard);
-      wordCard.classList.add('word_result');
-    });
-
-    sourceContainer.append(wordCard);
+  wordCards.forEach((word) => {
+    const card = createWordCard(word.word, sourceContainer, resultContainer, resultPlaceholder);
+    sourceContainer.append(card);
   });
+}
+
+function createWordCard(
+  word: string,
+  sourceContainer: HTMLElement,
+  resultContainer: HTMLElement,
+  resultPlaceholder: HTMLElement,
+): HTMLElement {
+  const wordCard = createElement({
+    tag: 'div',
+    className: 'sentence__word word',
+    textContent: word,
+  });
+
+  wordCard.addEventListener('click', () => {
+    const isInSourceContainer = wordCard.parentElement === sourceContainer;
+    if (isInSourceContainer) {
+      moveWordCards(wordCard, resultContainer);
+      wordCard.classList.add('word_result');
+    } else {
+      moveWordCards(wordCard, sourceContainer);
+      wordCard.classList.remove('word_result');
+    }
+    updateResultPlaceholder(resultContainer, resultPlaceholder);
+  });
+  return wordCard;
+}
+
+function updateResultPlaceholder(resultContainer: HTMLElement, placeholder: HTMLElement): void {
+  const hasWordCards = resultContainer.querySelectorAll('.word').length > 0;
+
+  if (hasWordCards) {
+    if (resultContainer.contains(placeholder)) {
+      placeholder.remove();
+      placeholder.style.opacity = '0';
+    }
+  } else {
+    if (!resultContainer.contains(placeholder)) {
+      resultContainer.append(placeholder);
+      placeholder.style.opacity = '1';
+    }
+  }
 }
