@@ -2,7 +2,11 @@ import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/createButton.ts';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
 import { moveWordCards } from '../../utils/animationHelpers.ts';
-import { checkSentence, highlightSentence } from '../../utils/checkSentence.ts';
+import {
+  checkSentence,
+  highlightSentence,
+  highlightCorrectSentence,
+} from '../../utils/checkSentence.ts';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
 import { setBodyBackground } from '../../utils/setBodyBackground';
@@ -60,12 +64,6 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     className: 'game__back-button button',
   });
 
-  const continueButton = createButton({
-    text: 'Continue',
-    className: 'game__continue-button button',
-    disabled: true,
-  });
-
   const checkButton = createButton({
     text: 'Check',
     className: 'game__check-button button',
@@ -77,7 +75,6 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     sourceContainer,
     resultContainer,
     resultPlaceholder,
-    continueButton,
     correctSentence,
     checkButton,
   );
@@ -86,29 +83,46 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     router.navigate(Routes.START);
   });
 
-  continueButton.addEventListener('click', () => {
-    continueGame(
-      wordCollection.rounds,
-      roundIndex,
-      sentenceIndex,
-      (value) => (roundIndex = value),
-      (value) => (sentenceIndex = value),
-      sourceContainer,
-      resultContainer,
-      resultPlaceholder,
-      continueButton,
-      roundTitle,
-      checkButton,
-    );
-  });
+  checkButton.addEventListener('click', function handleCheck() {
+    const isCorrect = checkSentence(resultContainer, correctSentence);
 
-  checkButton.addEventListener('click', () => {
-    highlightSentence(resultContainer, correctSentence);
+    updateGameState(resultContainer, resultPlaceholder, correctSentence, checkButton);
+    if (!isCorrect) {
+      highlightSentence(resultContainer, correctSentence);
+      return;
+    }
+
+    highlightCorrectSentence(resultContainer);
+    transformCheckButton(checkButton);
+    checkButton.removeEventListener('click', handleCheck);
+
+    const handleContinue = (): void => {
+      resetCheckButton(checkButton);
+
+      continueGame(
+        wordCollection.rounds,
+        roundIndex,
+        sentenceIndex,
+        (value) => (roundIndex = value),
+        (value) => (sentenceIndex = value),
+        sourceContainer,
+        resultContainer,
+        resultPlaceholder,
+        roundTitle,
+        checkButton,
+        correctSentence,
+      );
+
+      checkButton.removeEventListener('click', handleContinue);
+      checkButton.addEventListener('click', handleCheck);
+    };
+
+    checkButton.addEventListener('click', handleContinue);
   });
 
   gameBoard.append(sourceContainer, resultHeading, resultContainer);
   resultContainer.append(resultPlaceholder);
-  gameButtons.append(checkButton, continueButton, backButton);
+  gameButtons.append(checkButton, backButton);
   gameContainer.append(roundTitle, gameBoard, gameButtons);
   container.append(gameContainer);
 
@@ -132,7 +146,6 @@ function createWordCards(
   sourceContainer: HTMLElement,
   resultContainer: HTMLElement,
   resultPlaceholder: HTMLElement,
-  continueButton: HTMLButtonElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): void {
@@ -148,7 +161,6 @@ function createWordCards(
       sourceContainer,
       resultContainer,
       resultPlaceholder,
-      continueButton,
       correctSentence,
       checkButton,
     );
@@ -161,7 +173,6 @@ function createWordCard(
   sourceContainer: HTMLElement,
   resultContainer: HTMLElement,
   resultPlaceholder: HTMLElement,
-  continueButton: HTMLButtonElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): HTMLElement {
@@ -181,13 +192,7 @@ function createWordCard(
       wordCard.classList.remove('word_result');
     }
 
-    updateGameState(
-      resultContainer,
-      resultPlaceholder,
-      correctSentence,
-      checkButton,
-      continueButton,
-    );
+    updateGameState(resultContainer, resultPlaceholder, correctSentence, checkButton);
   });
   return wordCard;
 }
@@ -217,13 +222,12 @@ function continueGame(
   sourceContainer: HTMLElement,
   resultContainer: HTMLElement,
   resultPlaceholder: HTMLElement,
-  continueButton: HTMLButtonElement,
   roundTitle: HTMLElement,
   checkButton: HTMLButtonElement,
+  correctSentence: string[],
 ): void {
   let nextSentenceIndex = sentenceIndex + 1;
   let nextRoundIndex = roundIndex;
-  checkButton.disabled = true;
 
   if (nextSentenceIndex >= rounds[roundIndex].words.length) {
     nextRoundIndex += 1;
@@ -244,14 +248,14 @@ function continueGame(
   sourceContainer.innerHTML = '';
   resultContainer.innerHTML = '';
   resultContainer.append(resultPlaceholder);
-  continueButton.disabled = true;
+
+  correctSentence.splice(0, correctSentence.length, ...nextSentence.textExample.split(' '));
 
   createWordCards(
     nextSentence,
     sourceContainer,
     resultContainer,
     resultPlaceholder,
-    continueButton,
     nextSentence.textExample.split(' '),
     checkButton,
   );
@@ -262,30 +266,10 @@ function updateGameState(
   resultPlaceholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
-  continueButton: HTMLButtonElement,
 ): void {
   updateResultPlaceholder(resultContainer, resultPlaceholder);
-
   updateCheckButtonState(resultContainer, checkButton, correctSentence.length);
-
-  const isSentenceCorrect = checkSentence(resultContainer, correctSentence);
-  continueButton.disabled = !isSentenceCorrect;
-  updateResultState(resultContainer, isSentenceCorrect);
-}
-
-function updateResultState(resultContainer: HTMLElement, isSentenceCorrect: boolean): void {
-  const ANIMATION_DELAY = 400;
-  const ANIMATION_DURATION = 1000;
-  if (isSentenceCorrect) {
-    setTimeout(() => {
-      resultContainer.querySelectorAll('.word').forEach((word) => {
-        word.classList.add('correct');
-        setTimeout(() => {
-          word.classList.remove('correct');
-        }, ANIMATION_DURATION);
-      });
-    }, ANIMATION_DELAY);
-  }
+  resultContainer.style.pointerEvents = 'auto';
 }
 
 function updateCheckButtonState(
@@ -294,5 +278,17 @@ function updateCheckButtonState(
   sentenceLength: number,
 ): void {
   const resultWords = resultContainer.querySelectorAll('.word').length;
-  checkButton.disabled = resultWords !== sentenceLength;
+  checkButton.disabled = resultWords === sentenceLength ? false : true;
+}
+
+function transformCheckButton(checkButton: HTMLButtonElement): void {
+  checkButton.textContent = 'Continue';
+  checkButton.classList.add('game__continue-button');
+  checkButton.disabled = false;
+}
+
+function resetCheckButton(checkButton: HTMLButtonElement): void {
+  checkButton.textContent = 'Check';
+  checkButton.classList.remove('game__continue-button');
+  checkButton.disabled = true;
 }

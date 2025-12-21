@@ -160,3 +160,12 @@
 .game__check-button {
   min-width: 200px;
 }
+
+.game__check-button {
+  background-color: #492471;
+  transition: background-color 0.8s ease;
+}
+
+.game__continue-button {
+  background-color: #113d61;
+}

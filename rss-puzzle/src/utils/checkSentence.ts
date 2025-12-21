@@ -25,3 +25,13 @@ export function highlightSentence(resultContainer: HTMLElement, correctSentence:
     }, ANIMATION_DURATION);
   });
 }
+
+export function highlightCorrectSentence(resultContainer: HTMLElement): void {
+  const wordCards = [...resultContainer.querySelectorAll<HTMLElement>('.word')];
+  resultContainer.style.pointerEvents = 'none';
+
+  wordCards.forEach((wordCard) => {
+    wordCard.classList.remove('correct', 'wrong');
+    wordCard.classList.add('correct');
+  });
+}
