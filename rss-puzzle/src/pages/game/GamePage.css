@@ -115,6 +115,7 @@
 }
 
 .game__back-button,
-.game__continue-button {
+.game__continue-button,
+.game__check-button {
   min-width: 200px;
 }

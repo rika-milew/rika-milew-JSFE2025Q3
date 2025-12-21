@@ -1,5 +1,6 @@
 import { Routes } from '../../app/routes';
-import { showLogoutModal } from '../../components/Modal';
+import { createButton } from '../../components/button/createButton';
+import { showLogoutModal } from '../../components/modal/Modal';
 import { isUser } from '../../types/typeGuards';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
@@ -8,28 +9,6 @@ import { setBodyBackground } from '../../utils/setBodyBackground';
 import type { AppRouter } from '../../app/AppRouter';
 
 import './StartPage.css';
-
-function createLogoutButton(text: string): HTMLButtonElement {
-  return createElement({
-    tag: 'button',
-    className: 'start__logout-button button',
-    textContent: text,
-    attributes: {
-      type: 'button',
-    },
-  });
-}
-
-function createStartButton(text: string): HTMLButtonElement {
-  return createElement({
-    tag: 'button',
-    className: 'start__game-button button',
-    textContent: text,
-    attributes: {
-      type: 'button',
-    },
-  });
-}
 
 export function createStartPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
@@ -59,8 +38,15 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
     className: 'start__buttons',
   });
 
-  const logoutButton = createLogoutButton('Log out');
-  const startButton = createStartButton('Start');
+  const logoutButton = createButton({
+    text: 'Log out',
+    className: 'start__logout-button button',
+  });
+
+  const startButton = createButton({
+    text: 'Start',
+    className: 'start__game-button button',
+  });
 
   logoutButton.addEventListener('click', () => {
     showLogoutModal(container, () => {

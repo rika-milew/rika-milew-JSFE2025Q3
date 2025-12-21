@@ -1,4 +1,5 @@
 import { Routes } from '../../app/routes';
+import { createButton } from '../../components/button/createButton.ts';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
 import { moveWordCards } from '../../utils/animationHelpers.ts';
 import { checkSentence } from '../../utils/checkSentence.ts';
@@ -12,29 +13,6 @@ import type { Game, Word } from '../../types/types';
 import './GamePage.css';
 
 const wordCollection: Game = wordCollectionData;
-
-function createLogoutButton(text: string): HTMLButtonElement {
-  return createElement({
-    tag: 'button',
-    className: 'game__back-button button',
-    textContent: text,
-    attributes: {
-      type: 'button',
-    },
-  });
-}
-
-function createContinueButton(text: string): HTMLButtonElement {
-  return createElement({
-    tag: 'button',
-    className: 'game__continue-button button',
-    textContent: text,
-    attributes: {
-      type: 'button',
-      disabled: 'true',
-    },
-  });
-}
 
 export function createGamePage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
@@ -77,8 +55,22 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const gameButtons = createElement({ tag: 'div', className: 'game__buttons' });
 
-  const backButton = createLogoutButton('Back');
-  const continueButton = createContinueButton('Continue');
+  const backButton = createButton({
+    text: 'Back',
+    className: 'game__back-button button',
+  });
+
+  const continueButton = createButton({
+    text: 'Continue',
+    className: 'game__continue-button button',
+    disabled: true,
+  });
+
+  const checkButton = createButton({
+    text: 'Check',
+    className: 'game__check-button button',
+    disabled: true,
+  });
 
   createWordCards(
     round.words[sentenceIndex],
@@ -110,7 +102,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   gameBoard.append(sourceContainer, resultHeading, resultContainer);
   resultContainer.append(resultPlaceholder);
-  gameButtons.append(continueButton, backButton);
+  gameButtons.append(checkButton, continueButton, backButton);
   gameContainer.append(roundTitle, gameBoard, gameButtons);
   container.append(gameContainer);
 
