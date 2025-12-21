@@ -2,7 +2,7 @@ import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/createButton.ts';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
 import { moveWordCards } from '../../utils/animationHelpers.ts';
-import { checkSentence } from '../../utils/checkSentence.ts';
+import { checkSentence, highlightSentence } from '../../utils/checkSentence.ts';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
 import { setBodyBackground } from '../../utils/setBodyBackground';
@@ -79,6 +79,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     resultPlaceholder,
     continueButton,
     correctSentence,
+    checkButton,
   );
 
   backButton.addEventListener('click', () => {
@@ -97,7 +98,12 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
       resultPlaceholder,
       continueButton,
       roundTitle,
+      checkButton,
     );
+  });
+
+  checkButton.addEventListener('click', () => {
+    highlightSentence(resultContainer, correctSentence);
   });
 
   gameBoard.append(sourceContainer, resultHeading, resultContainer);
@@ -128,6 +134,7 @@ function createWordCards(
   resultPlaceholder: HTMLElement,
   continueButton: HTMLButtonElement,
   correctSentence: string[],
+  checkButton: HTMLButtonElement,
 ): void {
   const words = sentence.textExample.split(' ').map((word, index) => ({
     id: index,
@@ -143,6 +150,7 @@ function createWordCards(
       resultPlaceholder,
       continueButton,
       correctSentence,
+      checkButton,
     );
     sourceContainer.append(card);
   });
@@ -155,6 +163,7 @@ function createWordCard(
   resultPlaceholder: HTMLElement,
   continueButton: HTMLButtonElement,
   correctSentence: string[],
+  checkButton: HTMLButtonElement,
 ): HTMLElement {
   const wordCard = createElement({
     tag: 'div',
@@ -171,11 +180,14 @@ function createWordCard(
       moveWordCards(wordCard, sourceContainer);
       wordCard.classList.remove('word_result');
     }
-    updateResultPlaceholder(resultContainer, resultPlaceholder);
 
-    const isSentenceCorrect = checkSentence(resultContainer, correctSentence);
-    continueButton.toggleAttribute('disabled', !isSentenceCorrect);
-    updateResultState(resultContainer, isSentenceCorrect);
+    updateGameState(
+      resultContainer,
+      resultPlaceholder,
+      correctSentence,
+      checkButton,
+      continueButton,
+    );
   });
   return wordCard;
 }
@@ -207,9 +219,11 @@ function continueGame(
   resultPlaceholder: HTMLElement,
   continueButton: HTMLButtonElement,
   roundTitle: HTMLElement,
+  checkButton: HTMLButtonElement,
 ): void {
   let nextSentenceIndex = sentenceIndex + 1;
   let nextRoundIndex = roundIndex;
+  checkButton.disabled = true;
 
   if (nextSentenceIndex >= rounds[roundIndex].words.length) {
     nextRoundIndex += 1;
@@ -239,7 +253,24 @@ function continueGame(
     resultPlaceholder,
     continueButton,
     nextSentence.textExample.split(' '),
+    checkButton,
   );
+}
+
+function updateGameState(
+  resultContainer: HTMLElement,
+  resultPlaceholder: HTMLElement,
+  correctSentence: string[],
+  checkButton: HTMLButtonElement,
+  continueButton: HTMLButtonElement,
+): void {
+  updateResultPlaceholder(resultContainer, resultPlaceholder);
+
+  updateCheckButtonState(resultContainer, checkButton, correctSentence.length);
+
+  const isSentenceCorrect = checkSentence(resultContainer, correctSentence);
+  continueButton.disabled = !isSentenceCorrect;
+  updateResultState(resultContainer, isSentenceCorrect);
 }
 
 function updateResultState(resultContainer: HTMLElement, isSentenceCorrect: boolean): void {
@@ -255,4 +286,13 @@ function updateResultState(resultContainer: HTMLElement, isSentenceCorrect: bool
       });
     }, ANIMATION_DELAY);
   }
+}
+
+function updateCheckButtonState(
+  resultContainer: HTMLElement,
+  checkButton: HTMLButtonElement,
+  sentenceLength: number,
+): void {
+  const resultWords = resultContainer.querySelectorAll('.word').length;
+  checkButton.disabled = resultWords !== sentenceLength;
 }
