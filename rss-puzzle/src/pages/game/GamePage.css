@@ -89,6 +89,32 @@
   box-shadow: none;
 }
 
-.game__back-button {
+.word.correct {
+  background-color: #184823;
+  animation: correctSentence 1s ease forwards;
+}
+
+@keyframes correctSentence {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.game__buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.game__back-button,
+.game__continue-button {
   min-width: 200px;
 }
