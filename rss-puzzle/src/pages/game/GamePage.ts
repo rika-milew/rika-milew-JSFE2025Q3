@@ -2,6 +2,7 @@ import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/createButton.ts';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
 import { moveWordCards } from '../../utils/animationHelpers.ts';
+import { startAutoComplete } from '../../utils/autoComplete.ts';
 import {
   checkSentence,
   highlightSentence,
@@ -24,6 +25,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   let sentenceIndex = 0;
   let roundIndex = 0;
+  let isCompleted = false;
 
   const round = wordCollection.rounds[roundIndex];
 
@@ -70,6 +72,11 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     disabled: true,
   });
 
+  const autoCompleteButton = createButton({
+    text: 'Auto-Complete',
+    className: 'game__complete-button button',
+  });
+
   createWordCards(
     round.words[sentenceIndex],
     sourceContainer,
@@ -83,21 +90,10 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     router.navigate(Routes.START);
   });
 
-  checkButton.addEventListener('click', function handleCheck() {
-    const isCorrect = checkSentence(resultContainer, correctSentence);
-
-    updateGameState(resultContainer, resultPlaceholder, correctSentence, checkButton);
-    if (!isCorrect) {
-      highlightSentence(resultContainer, correctSentence);
-      return;
-    }
-
-    highlightCorrectSentence(resultContainer);
-    transformCheckButton(checkButton);
-    checkButton.removeEventListener('click', handleCheck);
-
-    const handleContinue = (): void => {
+  checkButton.addEventListener('click', () => {
+    if (isCompleted) {
       resetCheckButton(checkButton);
+      isCompleted = false;
 
       continueGame(
         wordCollection.rounds,
@@ -111,18 +107,40 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
         roundTitle,
         checkButton,
         correctSentence,
+        autoCompleteButton,
+        (value) => (isCompleted = value),
       );
+      return;
+    }
+    const isCorrect = checkSentence(resultContainer, correctSentence);
+    updateGameState(resultContainer, resultPlaceholder, correctSentence, checkButton);
 
-      checkButton.removeEventListener('click', handleContinue);
-      checkButton.addEventListener('click', handleCheck);
-    };
+    if (!isCorrect) {
+      highlightSentence(resultContainer, correctSentence);
+      return;
+    }
 
-    checkButton.addEventListener('click', handleContinue);
+    isCompleted = true;
+    highlightCorrectSentence(resultContainer);
+    transformCheckButton(checkButton);
+    autoCompleteButton.disabled = true;
+  });
+
+  autoCompleteButton.addEventListener('click', () => {
+    startAutoComplete(
+      resultContainer,
+      sourceContainer,
+      correctSentence,
+      resultPlaceholder,
+      autoCompleteButton,
+    );
+    isCompleted = true;
+    transformCheckButton(checkButton);
   });
 
   gameBoard.append(sourceContainer, resultHeading, resultContainer);
   resultContainer.append(resultPlaceholder);
-  gameButtons.append(checkButton, backButton);
+  gameButtons.append(checkButton, autoCompleteButton, backButton);
   gameContainer.append(roundTitle, gameBoard, gameButtons);
   container.append(gameContainer);
 
@@ -197,7 +215,10 @@ function createWordCard(
   return wordCard;
 }
 
-function updateResultPlaceholder(resultContainer: HTMLElement, placeholder: HTMLElement): void {
+export function updateResultPlaceholder(
+  resultContainer: HTMLElement,
+  placeholder: HTMLElement,
+): void {
   const hasWordCards = resultContainer.querySelectorAll('.word').length > 0;
 
   if (hasWordCards) {
@@ -225,7 +246,12 @@ function continueGame(
   roundTitle: HTMLElement,
   checkButton: HTMLButtonElement,
   correctSentence: string[],
+  autoCompleteButton: HTMLButtonElement,
+  setSolved: (value: boolean) => void,
 ): void {
+  setSolved(false);
+  autoCompleteButton.disabled = false;
+
   let nextSentenceIndex = sentenceIndex + 1;
   let nextRoundIndex = roundIndex;
 
