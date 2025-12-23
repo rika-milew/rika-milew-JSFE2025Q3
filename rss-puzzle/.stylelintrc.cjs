@@ -20,6 +20,7 @@ module.exports = {
             'min-width',
             'max-width',
             'height',
+            'min-height',
             'margin',
             'margin-top',
             'margin-bottom',

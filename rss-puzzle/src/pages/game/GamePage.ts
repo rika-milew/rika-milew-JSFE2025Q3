@@ -1,5 +1,5 @@
 import { Routes } from '../../app/routes';
-import { createButton } from '../../components/button/createButton.ts';
+import { createButton } from '../../components/button/createButton';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
 import { moveWordCards } from '../../utils/animationHelpers.ts';
 import { startAutoComplete } from '../../utils/autoComplete.ts';
@@ -10,6 +10,7 @@ import {
 } from '../../utils/checkSentence.ts';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
+import { implementDragAndDrop } from '../../utils/dragAndDrop';
 import { setBodyBackground } from '../../utils/setBodyBackground';
 
 import type { AppRouter } from '../../app/AppRouter';
@@ -196,6 +197,16 @@ function createWordCards(
       correctSentence,
       checkButton,
     );
+
+    implementDragAndDrop(
+      card,
+      sourceContainer,
+      activeResultSentence,
+      resultPlaceholder,
+      correctSentence,
+      checkButton,
+    );
+
     sourceContainer.append(card);
   });
 }
@@ -308,7 +319,7 @@ function continueGame(
   return activeResultSentence;
 }
 
-function updateGameState(
+export function updateGameState(
   activeResultSentence: HTMLElement,
   resultPlaceholder: HTMLElement,
   correctSentence: string[],
