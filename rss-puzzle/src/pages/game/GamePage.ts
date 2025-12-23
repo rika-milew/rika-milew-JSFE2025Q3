@@ -1,7 +1,8 @@
+import { continueGame, updateGameState, blockResultSentence } from './GameController.ts';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/createButton';
+import { createWordCards } from '../../components/word/Word';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
-import { moveWordCards } from '../../utils/animationHelpers.ts';
 import { startAutoComplete } from '../../utils/autoComplete.ts';
 import {
   checkSentence,
@@ -10,17 +11,16 @@ import {
 } from '../../utils/checkSentence.ts';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
-import { implementDragAndDrop } from '../../utils/dragAndDrop';
 import { setBodyBackground } from '../../utils/setBodyBackground';
 
 import type { AppRouter } from '../../app/AppRouter';
-import type { Game, Word } from '../../types/types';
+import type { Game } from '../../types/types';
 
 import './GamePage.css';
 
 const wordCollection: Game = wordCollectionData;
 
-function createResultSentence(resultContainer: HTMLElement): HTMLElement {
+export function createResultSentence(resultContainer: HTMLElement): HTMLElement {
   const sentence = createElement({
     tag: 'div',
     className: 'result__sentence result__sentence_active',
@@ -162,175 +162,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   return gameContainer;
 }
 
-function shuffleWordCards<T>(array: T[]): T[] {
-  const shuffledArray = [...array];
-  for (let index = shuffledArray.length - 1; index > 0; index--) {
-    const newIndex = Math.floor(Math.random() * (index + 1));
-    [shuffledArray[index], shuffledArray[newIndex]] = [
-      shuffledArray[newIndex],
-      shuffledArray[index],
-    ];
-  }
-  return shuffledArray;
-}
-
-function createWordCards(
-  sentence: Word,
-  sourceContainer: HTMLElement,
-  activeResultSentence: HTMLElement,
-  resultPlaceholder: HTMLElement,
-  correctSentence: string[],
-  checkButton: HTMLButtonElement,
-): void {
-  const words = sentence.textExample.split(' ').map((word, index) => ({
-    id: index,
-    word,
-  }));
-  const wordCards = shuffleWordCards(words);
-
-  wordCards.forEach((word) => {
-    const card = createWordCard(
-      word.word,
-      sourceContainer,
-      activeResultSentence,
-      resultPlaceholder,
-      correctSentence,
-      checkButton,
-    );
-
-    implementDragAndDrop(
-      card,
-      sourceContainer,
-      activeResultSentence,
-      resultPlaceholder,
-      correctSentence,
-      checkButton,
-    );
-
-    sourceContainer.append(card);
-  });
-}
-
-function createWordCard(
-  word: string,
-  sourceContainer: HTMLElement,
-  activeResultSentence: HTMLElement,
-  resultPlaceholder: HTMLElement,
-  correctSentence: string[],
-  checkButton: HTMLButtonElement,
-): HTMLElement {
-  const wordCard = createElement({
-    tag: 'div',
-    className: 'sentence__word word',
-    textContent: word,
-  });
-
-  wordCard.addEventListener('click', () => {
-    const isInSourceContainer = wordCard.parentElement === sourceContainer;
-    if (isInSourceContainer) {
-      moveWordCards(wordCard, activeResultSentence);
-      wordCard.classList.add('word_result');
-    } else {
-      moveWordCards(wordCard, sourceContainer);
-      wordCard.classList.remove('word_result');
-    }
-
-    updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
-  });
-  return wordCard;
-}
-
-export function updateResultPlaceholder(
-  activeResultSentence: HTMLElement,
-  placeholder: HTMLElement,
-): void {
-  const hasWordCards = activeResultSentence.querySelectorAll('.word').length > 0;
-
-  if (hasWordCards) {
-    if (activeResultSentence.contains(placeholder)) {
-      placeholder.remove();
-      placeholder.style.opacity = '0';
-    }
-  } else {
-    if (!activeResultSentence.contains(placeholder)) {
-      activeResultSentence.append(placeholder);
-      placeholder.style.opacity = '1';
-    }
-  }
-}
-
-function continueGame(
-  rounds: Game['rounds'],
-  roundIndex: number,
-  sentenceIndex: number,
-  selectRoundIndex: (value: number) => void,
-  selectSentenceIndex: (value: number) => void,
-  sourceContainer: HTMLElement,
-  resultContainer: HTMLElement,
-  resultPlaceholder: HTMLElement,
-  roundTitle: HTMLElement,
-  checkButton: HTMLButtonElement,
-  correctSentence: string[],
-  autoCompleteButton: HTMLButtonElement,
-  activeResultSentence: HTMLElement,
-  setSolved: (value: boolean) => void,
-): HTMLElement {
-  let nextSentenceIndex = sentenceIndex + 1;
-  let nextRoundIndex = roundIndex;
-
-  if (nextSentenceIndex >= rounds[roundIndex].words.length) {
-    nextRoundIndex += 1;
-    nextSentenceIndex = 0;
-    resultContainer.innerHTML = '';
-
-    if (nextRoundIndex >= rounds.length) {
-      return activeResultSentence;
-    }
-  }
-
-  blockResultSentence(activeResultSentence);
-  activeResultSentence = createResultSentence(resultContainer);
-  activeResultSentence.append(resultPlaceholder);
-
-  setSolved(false);
-
-  autoCompleteButton.disabled = false;
-  selectRoundIndex(nextRoundIndex);
-  selectSentenceIndex(nextSentenceIndex);
-
-  const nextRound = rounds[nextRoundIndex];
-  const nextSentence = nextRound.words[nextSentenceIndex];
-
-  roundTitle.textContent = nextRound.levelData.name;
-
-  sourceContainer.innerHTML = '';
-
-  correctSentence.splice(0, correctSentence.length, ...nextSentence.textExample.split(' '));
-
-  createWordCards(
-    nextSentence,
-    sourceContainer,
-    activeResultSentence,
-    resultPlaceholder,
-    correctSentence,
-    checkButton,
-  );
-
-  return activeResultSentence;
-}
-
-export function updateGameState(
-  activeResultSentence: HTMLElement,
-  resultPlaceholder: HTMLElement,
-  correctSentence: string[],
-  checkButton: HTMLButtonElement,
-): void {
-  updateResultPlaceholder(activeResultSentence, resultPlaceholder);
-  updateCheckButtonState(activeResultSentence, checkButton, correctSentence.length);
-  activeResultSentence.style.pointerEvents = 'auto';
-}
-
-function updateCheckButtonState(
+export function updateCheckButtonState(
   activeResultSentence: HTMLElement,
   checkButton: HTMLButtonElement,
   sentenceLength: number,
@@ -349,10 +181,4 @@ function resetCheckButton(checkButton: HTMLButtonElement): void {
   checkButton.textContent = 'Check';
   checkButton.classList.remove('game__continue-button');
   checkButton.disabled = true;
-}
-
-function blockResultSentence(sentence: HTMLElement): void {
-  sentence.classList.remove('result__sentence_active');
-  sentence.classList.add('result__sentence_done');
-  sentence.style.pointerEvents = 'none';
 }

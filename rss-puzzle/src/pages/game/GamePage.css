@@ -63,6 +63,7 @@
 }
 
 .result__placeholder {
+  width: 100%;
   margin: 0 auto;
   padding: 12px 8px;
   border: 2px dashed #6d4bd1;
@@ -73,114 +74,6 @@
   transition: opacity 0.3s;
   pointer-events: none;
   user-select: none;
-}
-
-.sentence__word {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1 1 auto;
-  min-width: 70px;
-  max-width: 180px;
-}
-
-.word {
-  padding: 10px 18px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  color: #ffffff;
-  background-color: #6d4bd1;
-  cursor: grab;
-  transition:
-    box-shadow 0.3s ease,
-    opacity 0.3s ease,
-    transform 0.2s ease,
-    border-color 0.2s ease;
-  touch-action: none;
-  user-select: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .word:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transform: scale(1.05);
-    /* background-color: #927add; */
-  }
-}
-
-.word:active {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  cursor: grabbing;
-  transform: scale(1.05);
-}
-
-.word_result {
-  border: 1px solid #b7a9ee;
-  border-radius: 0;
-  opacity: 0.7;
-}
-
-.word:not(.word_result) {
-  box-shadow: none;
-}
-
-.word.correct {
-  background-color: #184823;
-  animation: correctSentence 1s ease forwards;
-}
-
-@keyframes correctSentence {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.word.wrong {
-  background-color: #b62b29;
-  animation: wrongSentence 1s ease forwards;
-}
-
-@keyframes wrongSentence {
-  0% {
-    transform: translate(0, 0);
-  }
-  10% {
-    transform: translate(-2px, 2px);
-  }
-  20% {
-    transform: translate(2px, -2px);
-  }
-  30% {
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    transform: translate(2px, -2px);
-  }
-  50% {
-    transform: translate(-1px, 1px);
-  }
-  60% {
-    transform: translate(1px, -1px);
-  }
-  70% {
-    transform: translate(-1px, 1px);
-  }
-  80% {
-    transform: translate(1px, -1px);
-  }
-  90% {
-    transform: translate(-1px, 1px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
 }
 
 .game__buttons {
@@ -207,20 +100,11 @@
   background-color: #113d61;
 }
 
-.word_dragging {
-  z-index: 1000;
-  border: 2px solid #f7c706;
-  transform: scale(1.05);
-}
-
 .container_drag-over {
   border: 2px dashed #7256c9;
   transition: border-color 0.2s ease;
 }
 
-.word_mobile-dragging {
-  position: fixed;
-  z-index: 1000;
-  border: 2px solid #f7c706;
-  pointer-events: none;
+.result__sentence.container_drag-over {
+  border: none;
 }

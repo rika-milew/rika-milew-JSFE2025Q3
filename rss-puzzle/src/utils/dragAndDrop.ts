@@ -1,4 +1,4 @@
-import { updateGameState } from '../pages/game/GamePage';
+import { updateGameState } from '../pages/game/GameController';
 
 export function implementDragAndDrop(
   wordCard: HTMLElement,
