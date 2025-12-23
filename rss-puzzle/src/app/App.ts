@@ -1,9 +1,9 @@
-import { createAppRouter } from './AppRouter';
+import { createAppRouter } from './app-router';
 import { Routes } from './routes';
-import { createLoginPage } from '../pages/login/LoginPage';
-import { createStartPage } from '../pages/start/StartPage';
+import { createLoginPage } from '../pages/login/login-page';
+import { createStartPage } from '../pages/start/start-page';
 
-import type { AppRouter } from './AppRouter';
+import type { AppRouter } from './app-router';
 
 export function startApp(root: HTMLElement): void {
   while (root.firstChild) {

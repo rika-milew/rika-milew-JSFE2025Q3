@@ -1,14 +1,14 @@
 import { Routes } from '../../app/routes';
-import { createButton } from '../../components/button/createButton';
-import { showLogoutModal } from '../../components/modal/Modal';
-import { isUser } from '../../types/typeGuards';
-import { clearContainer } from '../../utils/clearContainer';
-import { createElement } from '../../utils/createElement';
-import { setBodyBackground } from '../../utils/setBodyBackground';
+import { createButton } from '../../components/button/create-button';
+import { showLogoutModal } from '../../components/modal/modal.ts';
+import { isUser } from '../../types/type-guards';
+import { clearContainer } from '../../utils/clear-container';
+import { createElement } from '../../utils/create-element';
+import { setBodyBackground } from '../../utils/set-body-background';
 
-import type { AppRouter } from '../../app/AppRouter';
+import type { AppRouter } from '../../app/app-router';
 
-import './StartPage.css';
+import './start-page.css';
 
 export function createStartPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);

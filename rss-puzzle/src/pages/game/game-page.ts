@@ -1,22 +1,22 @@
-import { continueGame, updateGameState, blockResultSentence } from './GameController.ts';
-import { Routes } from '../../app/routes';
-import { createButton } from '../../components/button/createButton';
-import { createWordCards } from '../../components/word/Word';
-import wordCollectionData from '../../data/wordCollectionLevel1.json';
-import { startAutoComplete } from '../../utils/autoComplete.ts';
+import { continueGame, updateGameState, blockResultSentence } from './game-controller.ts';
+import { Routes } from '../../app/routes.ts';
+import { createButton } from '../../components/button/create-button.ts';
+import { createWordCards } from '../../components/word/word.ts';
+import wordCollectionData from '../../data/word-collection-level-1.json';
+import { startAutoComplete } from '../../utils/auto-complete.ts';
 import {
   checkSentence,
   highlightSentence,
   highlightCorrectSentence,
-} from '../../utils/checkSentence.ts';
-import { clearContainer } from '../../utils/clearContainer';
-import { createElement } from '../../utils/createElement';
-import { setBodyBackground } from '../../utils/setBodyBackground';
+} from '../../utils/check-sentence.ts';
+import { clearContainer } from '../../utils/clear-container.ts';
+import { createElement } from '../../utils/create-element.ts';
+import { setBodyBackground } from '../../utils/set-body-background.ts';
 
-import type { AppRouter } from '../../app/AppRouter';
-import type { Game } from '../../types/types';
+import type { AppRouter } from '../../app/app-router.ts';
+import type { Game } from '../../types/types.ts';
 
-import './GamePage.css';
+import './game-page.css';
 
 const wordCollection: Game = wordCollectionData;
 

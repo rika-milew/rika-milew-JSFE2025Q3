@@ -1,11 +1,11 @@
-import { updateGameState } from '../../pages/game/GameController.ts';
-import { moveWordCards } from '../../utils/animationHelpers.ts';
-import { createElement } from '../../utils/createElement';
-import { implementDragAndDrop } from '../../utils/dragAndDrop';
+import { updateGameState } from '../../pages/game/game-controller.ts';
+import { moveWordCards } from '../../utils/animation-helpers.ts';
+import { createElement } from '../../utils/create-element.ts';
+import { implementDragAndDrop } from '../../utils/drag-and-drop.ts';
 
-import type { Word } from '../../types/types';
+import type { Word } from '../../types/types.ts';
 
-import './Word.css';
+import './word.css';
 
 export function createWordCards(
   sentence: Word,

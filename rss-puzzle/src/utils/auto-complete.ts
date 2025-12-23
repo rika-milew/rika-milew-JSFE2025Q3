@@ -1,5 +1,5 @@
-import { moveWordCards } from './animationHelpers';
-import { highlightCorrectSentence } from './checkSentence.ts';
+import { moveWordCards } from './animation-helpers.ts';
+import { highlightCorrectSentence } from './check-sentence.ts';
 
 export function startAutoComplete(
   activeResultSentence: HTMLElement,
