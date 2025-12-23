@@ -41,6 +41,9 @@ export function createWordCards(
     );
 
     sourceContainer.append(card);
+    requestAnimationFrame(() => {
+      fixWordCardWidth(card);
+    });
   });
 }
 
@@ -83,4 +86,10 @@ function shuffleWordCards<T>(array: T[]): T[] {
     ];
   }
   return shuffledArray;
+}
+
+function fixWordCardWidth(wordCard: HTMLElement): void {
+  const width = wordCard.getBoundingClientRect().width;
+  wordCard.style.width = `${width}px`;
+  wordCard.style.flex = '0 0 auto';
 }
