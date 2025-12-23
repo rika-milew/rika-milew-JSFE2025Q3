@@ -2,7 +2,7 @@ import { moveWordCards } from './animationHelpers';
 import { highlightCorrectSentence } from './checkSentence.ts';
 
 export function startAutoComplete(
-  resultContainer: HTMLElement,
+  activeResultSentence: HTMLElement,
   sourceContainer: HTMLElement,
   correctSentence: string[],
   resultPlaceholder: HTMLElement,
@@ -12,12 +12,12 @@ export function startAutoComplete(
 
   const ANIMATION_DELAY = 450;
 
-  if (resultContainer.contains(resultPlaceholder)) {
+  if (activeResultSentence.contains(resultPlaceholder)) {
     resultPlaceholder.remove();
   }
 
   const wordCards = [
-    ...resultContainer.querySelectorAll<HTMLElement>('.word'),
+    ...activeResultSentence.querySelectorAll<HTMLElement>('.word'),
     ...sourceContainer.querySelectorAll<HTMLElement>('.word'),
   ];
 
@@ -33,12 +33,12 @@ export function startAutoComplete(
   correctSentence.forEach((word) => {
     const wordCard = wordMap.get(word)?.shift();
     if (wordCard) {
-      moveWordCards(wordCard, resultContainer);
+      moveWordCards(wordCard, activeResultSentence);
       wordCard.classList.add('word_result');
     }
   });
 
   setTimeout(() => {
-    highlightCorrectSentence(resultContainer);
+    highlightCorrectSentence(activeResultSentence);
   }, ANIMATION_DELAY);
 }

@@ -1,5 +1,5 @@
 import { Routes } from '../../app/routes';
-import { createButton } from '../../components/button/createButton.ts';
+import { createButton } from '../../components/button/createButton';
 import wordCollectionData from '../../data/wordCollectionLevel1.json';
 import { moveWordCards } from '../../utils/animationHelpers.ts';
 import { startAutoComplete } from '../../utils/autoComplete.ts';
@@ -10,6 +10,7 @@ import {
 } from '../../utils/checkSentence.ts';
 import { clearContainer } from '../../utils/clearContainer';
 import { createElement } from '../../utils/createElement';
+import { implementDragAndDrop } from '../../utils/dragAndDrop';
 import { setBodyBackground } from '../../utils/setBodyBackground';
 
 import type { AppRouter } from '../../app/AppRouter';
@@ -18,6 +19,16 @@ import type { Game, Word } from '../../types/types';
 import './GamePage.css';
 
 const wordCollection: Game = wordCollectionData;
+
+function createResultSentence(resultContainer: HTMLElement): HTMLElement {
+  const sentence = createElement({
+    tag: 'div',
+    className: 'result__sentence result__sentence_active',
+  });
+
+  resultContainer.append(sentence);
+  return sentence;
+}
 
 export function createGamePage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
@@ -46,6 +57,8 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const sourceContainer = createElement({ tag: 'div', className: 'source' });
   const resultContainer = createElement({ tag: 'div', className: 'result' });
+
+  let activeResultSentence = createResultSentence(resultContainer);
 
   const resultHeading = createElement({
     tag: 'p',
@@ -80,7 +93,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   createWordCards(
     round.words[sentenceIndex],
     sourceContainer,
-    resultContainer,
+    activeResultSentence,
     resultPlaceholder,
     correctSentence,
     checkButton,
@@ -95,7 +108,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
       resetCheckButton(checkButton);
       isCompleted = false;
 
-      continueGame(
+      activeResultSentence = continueGame(
         wordCollection.rounds,
         roundIndex,
         sentenceIndex,
@@ -108,27 +121,29 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
         checkButton,
         correctSentence,
         autoCompleteButton,
+        activeResultSentence,
         (value) => (isCompleted = value),
       );
       return;
     }
-    const isCorrect = checkSentence(resultContainer, correctSentence);
-    updateGameState(resultContainer, resultPlaceholder, correctSentence, checkButton);
+    const isCorrect = checkSentence(activeResultSentence, correctSentence);
+    updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
 
     if (!isCorrect) {
-      highlightSentence(resultContainer, correctSentence);
+      highlightSentence(activeResultSentence, correctSentence);
       return;
     }
 
     isCompleted = true;
-    highlightCorrectSentence(resultContainer);
+    blockResultSentence(activeResultSentence);
+    highlightCorrectSentence(activeResultSentence);
     transformCheckButton(checkButton);
     autoCompleteButton.disabled = true;
   });
 
   autoCompleteButton.addEventListener('click', () => {
     startAutoComplete(
-      resultContainer,
+      activeResultSentence,
       sourceContainer,
       correctSentence,
       resultPlaceholder,
@@ -138,8 +153,8 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     transformCheckButton(checkButton);
   });
 
-  gameBoard.append(sourceContainer, resultHeading, resultContainer);
-  resultContainer.append(resultPlaceholder);
+  activeResultSentence.append(resultPlaceholder);
+  gameBoard.append(resultHeading, resultContainer, sourceContainer);
   gameButtons.append(checkButton, autoCompleteButton, backButton);
   gameContainer.append(roundTitle, gameBoard, gameButtons);
   container.append(gameContainer);
@@ -162,7 +177,7 @@ function shuffleWordCards<T>(array: T[]): T[] {
 function createWordCards(
   sentence: Word,
   sourceContainer: HTMLElement,
-  resultContainer: HTMLElement,
+  activeResultSentence: HTMLElement,
   resultPlaceholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
@@ -177,11 +192,21 @@ function createWordCards(
     const card = createWordCard(
       word.word,
       sourceContainer,
-      resultContainer,
+      activeResultSentence,
       resultPlaceholder,
       correctSentence,
       checkButton,
     );
+
+    implementDragAndDrop(
+      card,
+      sourceContainer,
+      activeResultSentence,
+      resultPlaceholder,
+      correctSentence,
+      checkButton,
+    );
+
     sourceContainer.append(card);
   });
 }
@@ -189,7 +214,7 @@ function createWordCards(
 function createWordCard(
   word: string,
   sourceContainer: HTMLElement,
-  resultContainer: HTMLElement,
+  activeResultSentence: HTMLElement,
   resultPlaceholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
@@ -203,32 +228,32 @@ function createWordCard(
   wordCard.addEventListener('click', () => {
     const isInSourceContainer = wordCard.parentElement === sourceContainer;
     if (isInSourceContainer) {
-      moveWordCards(wordCard, resultContainer);
+      moveWordCards(wordCard, activeResultSentence);
       wordCard.classList.add('word_result');
     } else {
       moveWordCards(wordCard, sourceContainer);
       wordCard.classList.remove('word_result');
     }
 
-    updateGameState(resultContainer, resultPlaceholder, correctSentence, checkButton);
+    updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
   });
   return wordCard;
 }
 
 export function updateResultPlaceholder(
-  resultContainer: HTMLElement,
+  activeResultSentence: HTMLElement,
   placeholder: HTMLElement,
 ): void {
-  const hasWordCards = resultContainer.querySelectorAll('.word').length > 0;
+  const hasWordCards = activeResultSentence.querySelectorAll('.word').length > 0;
 
   if (hasWordCards) {
-    if (resultContainer.contains(placeholder)) {
+    if (activeResultSentence.contains(placeholder)) {
       placeholder.remove();
       placeholder.style.opacity = '0';
     }
   } else {
-    if (!resultContainer.contains(placeholder)) {
-      resultContainer.append(placeholder);
+    if (!activeResultSentence.contains(placeholder)) {
+      activeResultSentence.append(placeholder);
       placeholder.style.opacity = '1';
     }
   }
@@ -247,22 +272,29 @@ function continueGame(
   checkButton: HTMLButtonElement,
   correctSentence: string[],
   autoCompleteButton: HTMLButtonElement,
+  activeResultSentence: HTMLElement,
   setSolved: (value: boolean) => void,
-): void {
-  setSolved(false);
-  autoCompleteButton.disabled = false;
-
+): HTMLElement {
   let nextSentenceIndex = sentenceIndex + 1;
   let nextRoundIndex = roundIndex;
 
   if (nextSentenceIndex >= rounds[roundIndex].words.length) {
     nextRoundIndex += 1;
     nextSentenceIndex = 0;
+    resultContainer.innerHTML = '';
 
     if (nextRoundIndex >= rounds.length) {
-      return;
+      return activeResultSentence;
     }
   }
+
+  blockResultSentence(activeResultSentence);
+  activeResultSentence = createResultSentence(resultContainer);
+  activeResultSentence.append(resultPlaceholder);
+
+  setSolved(false);
+
+  autoCompleteButton.disabled = false;
   selectRoundIndex(nextRoundIndex);
   selectSentenceIndex(nextSentenceIndex);
 
@@ -272,38 +304,38 @@ function continueGame(
   roundTitle.textContent = nextRound.levelData.name;
 
   sourceContainer.innerHTML = '';
-  resultContainer.innerHTML = '';
-  resultContainer.append(resultPlaceholder);
 
   correctSentence.splice(0, correctSentence.length, ...nextSentence.textExample.split(' '));
 
   createWordCards(
     nextSentence,
     sourceContainer,
-    resultContainer,
+    activeResultSentence,
     resultPlaceholder,
-    nextSentence.textExample.split(' '),
+    correctSentence,
     checkButton,
   );
+
+  return activeResultSentence;
 }
 
-function updateGameState(
-  resultContainer: HTMLElement,
+export function updateGameState(
+  activeResultSentence: HTMLElement,
   resultPlaceholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): void {
-  updateResultPlaceholder(resultContainer, resultPlaceholder);
-  updateCheckButtonState(resultContainer, checkButton, correctSentence.length);
-  resultContainer.style.pointerEvents = 'auto';
+  updateResultPlaceholder(activeResultSentence, resultPlaceholder);
+  updateCheckButtonState(activeResultSentence, checkButton, correctSentence.length);
+  activeResultSentence.style.pointerEvents = 'auto';
 }
 
 function updateCheckButtonState(
-  resultContainer: HTMLElement,
+  activeResultSentence: HTMLElement,
   checkButton: HTMLButtonElement,
   sentenceLength: number,
 ): void {
-  const resultWords = resultContainer.querySelectorAll('.word').length;
+  const resultWords = activeResultSentence.querySelectorAll('.word').length;
   checkButton.disabled = resultWords === sentenceLength ? false : true;
 }
 
@@ -317,4 +349,10 @@ function resetCheckButton(checkButton: HTMLButtonElement): void {
   checkButton.textContent = 'Check';
   checkButton.classList.remove('game__continue-button');
   checkButton.disabled = true;
+}
+
+function blockResultSentence(sentence: HTMLElement): void {
+  sentence.classList.remove('result__sentence_active');
+  sentence.classList.add('result__sentence_done');
+  sentence.style.pointerEvents = 'none';
 }
