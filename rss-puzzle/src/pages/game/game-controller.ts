@@ -1,4 +1,5 @@
-import { updateCheckButtonState, createResultSentence } from './game-page';
+import { updateCheckButtonState } from './game-page';
+import { createResultSentence } from '../../components/sentence/sentence';
 import { createWordCards } from '../../components/word/Word';
 
 import type { Game } from '../../types/types';

@@ -36,22 +36,6 @@
   margin-bottom: 30px;
 }
 
-.result__sentence {
-  display: flex;
-  justify-content: start;
-  flex-direction: row;
-  width: 100%;
-}
-
-.result__sentence_done {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.result__sentence_active {
-  opacity: 1;
-}
-
 .result__heading {
   margin-bottom: 20px;
   font-size: 18px;
@@ -84,27 +68,17 @@
   gap: 15px;
 }
 
-.game__back-button,
-.game__continue-button,
-.game__check-button,
-.game__complete-button {
-  min-width: 200px;
-}
-
-.game__check-button {
-  background-color: #492471;
-  transition: background-color 0.8s ease;
-}
-
-.game__continue-button {
+.button.game__continue-button {
   background-color: #113d61;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button.game__continue-button:hover {
+    background-color: #0b2b46;
+  }
 }
 
 .container_drag-over {
   border: 2px dashed #7256c9;
   transition: border-color 0.2s ease;
-}
-
-.result__sentence.container_drag-over {
-  border: none;
 }

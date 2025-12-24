@@ -1,6 +1,7 @@
 import { continueGame, updateGameState, blockResultSentence } from './game-controller';
 import { Routes } from '../../app/routes.ts';
 import { createButton } from '../../components/button/button';
+import { createResultSentence } from '../../components/sentence/sentence';
 import { createWordCards } from '../../components/word/Word';
 import wordCollectionData from '../../data/word-collection-level-1.json';
 import { startAutoComplete } from '../../utils/auto-complete';
@@ -19,16 +20,6 @@ import type { Game } from '../../types/types.ts';
 import './game-page.css';
 
 const wordCollection: Game = wordCollectionData;
-
-export function createResultSentence(resultContainer: HTMLElement): HTMLElement {
-  const sentence = createElement({
-    tag: 'div',
-    className: 'result__sentence result__sentence_active',
-  });
-
-  resultContainer.append(sentence);
-  return sentence;
-}
 
 export function createGamePage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
