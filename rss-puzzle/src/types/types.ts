@@ -37,12 +37,6 @@ export type ElementOptions<K extends ElementTag> = {
   attributes?: Record<string, string>;
 };
 
-export type Button = {
-  text: string;
-  className: string;
-  disabled?: boolean;
-};
-
 export type User = {
   firstName: string;
   surname: string;

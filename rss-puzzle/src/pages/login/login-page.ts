@@ -1,4 +1,5 @@
 import { Routes } from '../../app/routes';
+import { createButton } from '../../components/button/button';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
 import { saveUserCredentials, getUserCredentials } from '../../utils/save-user';
@@ -35,18 +36,6 @@ export function createTextInput(
       required: 'true',
       type: 'text',
       name,
-    },
-  });
-}
-
-export function createSubmitButton(text: string): HTMLButtonElement {
-  return createElement({
-    tag: 'button',
-    className: 'login__button button',
-    textContent: text,
-    attributes: {
-      type: 'submit',
-      disabled: 'true',
     },
   });
 }
@@ -98,7 +87,14 @@ export function createLoginPage(container: HTMLElement, router: AppRouter): HTML
     'login__input',
   );
 
-  const loginButton = createSubmitButton('Log in');
+  const loginButton = createButton({
+    text: 'Log in',
+    className: 'login__button',
+    type: 'submit',
+    disabled: true,
+  });
+
+  loginButton.classList.remove('middle-button');
 
   firstnameDiv.append(firstNameLabel, firstNameInput);
   surnameDiv.append(surnameLabel, surnameInput);

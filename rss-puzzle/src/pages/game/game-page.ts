@@ -1,6 +1,6 @@
 import { continueGame, updateGameState, blockResultSentence } from './game-controller';
 import { Routes } from '../../app/routes.ts';
-import { createButton } from '../../components/button/create-button';
+import { createButton } from '../../components/button/button';
 import { createWordCards } from '../../components/word/Word';
 import wordCollectionData from '../../data/word-collection-level-1.json';
 import { startAutoComplete } from '../../utils/auto-complete';
@@ -76,18 +76,15 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const backButton = createButton({
     text: 'Back',
-    className: 'game__back-button button',
   });
 
   const checkButton = createButton({
     text: 'Check',
-    className: 'game__check-button button',
     disabled: true,
   });
 
   const autoCompleteButton = createButton({
     text: 'Auto-Complete',
-    className: 'game__complete-button button',
   });
 
   createWordCards(

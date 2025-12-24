@@ -46,11 +46,6 @@ body.start-page {
   gap: 20px;
 }
 
-.start__logout-button,
-.start__game-button {
-  min-width: 200px;
-}
-
 .start__greeting {
   margin-bottom: 12px;
   font-size: 22px;

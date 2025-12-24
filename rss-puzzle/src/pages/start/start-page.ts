@@ -1,5 +1,5 @@
 import { Routes } from '../../app/routes';
-import { createButton } from '../../components/button/create-button';
+import { createButton } from '../../components/button/button';
 import { showLogoutModal } from '../../components/modal/Modal';
 import { isUser } from '../../types/type-guards';
 import { clearContainer } from '../../utils/clear-container';
@@ -40,12 +40,10 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
 
   const logoutButton = createButton({
     text: 'Log out',
-    className: 'start__logout-button button',
   });
 
   const startButton = createButton({
     text: 'Start',
-    className: 'start__game-button button',
   });
 
   logoutButton.addEventListener('click', () => {
