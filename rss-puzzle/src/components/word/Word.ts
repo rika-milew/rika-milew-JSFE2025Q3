@@ -1,12 +1,12 @@
-import { updateGameState } from '../../pages/game/game-controller';
-import { moveWordCards } from '../../utils/animation-helpers';
-import { createElement } from '../../utils/create-element';
-import { designPuzzleEdges } from '../../utils/designPuzzleEdges';
-import { implementDragAndDrop } from '../../utils/drag-and-drop';
+import { updateGameState } from '../../pages/game/game-controller.ts';
+import { moveWordCards } from '../../utils/animation-helpers.ts';
+import { createElement } from '../../utils/create-element.ts';
+import { designPuzzleEdges } from '../../utils/designPuzzleEdges.ts';
+import { implementDragAndDrop } from '../../utils/drag-and-drop.ts';
 
 import type { Word } from '../../types/types.ts';
 
-import './word.css';
+import './Word.css';
 
 export function createWordCards(
   sentence: Word,
@@ -79,10 +79,10 @@ export function createWordCard(
     const isInSourceContainer = wordWrapper.parentElement === sourceContainer;
     if (isInSourceContainer) {
       moveWordCards(wordWrapper, activeResultSentence);
-      wordCard.classList.add('word-wrapper_result');
+      wordWrapper.classList.add('word-wrapper_result');
     } else {
       moveWordCards(wordWrapper, sourceContainer);
-      wordCard.classList.remove('word-wrapper_result');
+      wordWrapper.classList.remove('word-wrapper_result');
     }
 
     updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
