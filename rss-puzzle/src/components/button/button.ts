@@ -1,6 +1,6 @@
 import { createElement } from '../../utils/create-element';
 
-import type { ButtonConfig } from '../../configs/button-config';
+import type { ButtonConfig } from '../../configs/button.config';
 
 import './button.css';
 

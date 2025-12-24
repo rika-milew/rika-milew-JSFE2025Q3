@@ -1,6 +1,7 @@
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { showLogoutModal } from '../../components/modal/Modal';
+import { START_PAGE_TEXT } from '../../configs/text.config';
 import { isUser } from '../../types/type-guards';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
@@ -22,15 +23,13 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
   const heading = createElement({
     tag: 'h1',
     className: 'start__heading',
-    textContent: 'RSS Puzzle',
+    textContent: START_PAGE_TEXT.content.title,
   });
 
   const description = createElement({
     tag: 'p',
     className: 'start__description',
-    textContent: `RSS Puzzle is a language learning mini-game where you assemble 
-      sentences from mixed-up words. Train your English, solve puzzles, and enjoy a thoughtful, 
-      visual gameplay experience.`,
+    textContent: START_PAGE_TEXT.content.description,
   });
 
   const buttonContainer = createElement({
