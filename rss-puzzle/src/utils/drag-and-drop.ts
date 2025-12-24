@@ -1,4 +1,4 @@
-import { updateGameState } from '../pages/game/game-controller';
+import { updateGameState, updateResultPlaceholder } from '../pages/game/game-controller';
 
 export function implementDragAndDrop(
   wordCard: HTMLElement,
@@ -17,6 +17,11 @@ export function implementDragAndDrop(
 
   wordCard.addEventListener('dragend', () => {
     wordCard.classList.remove('word_dragging');
+    if (wordCard.parentElement !== activeResultSentence) {
+      sourceContainer.append(wordCard);
+      wordCard.classList.remove('word_result');
+    }
+    updateResultPlaceholder(activeResultSentence, resultPlaceholder);
   });
 
   [sourceContainer, activeResultSentence].forEach((container) => {
@@ -47,6 +52,19 @@ export function implementDragAndDrop(
 
     container.addEventListener('drop', (event: DragEvent) => {
       event.preventDefault();
+
+      const draggedWord = document.querySelector<HTMLElement>('.dragging');
+
+      if (!draggedWord) {
+        throw new Error('Dragged word is not found');
+      }
+
+      if (draggedWord.parentElement !== activeResultSentence) {
+        sourceContainer.append(draggedWord);
+        draggedWord.classList.remove('word_result');
+        updateResultPlaceholder(activeResultSentence, resultPlaceholder);
+      }
+
       container.classList.remove('container_drag-over');
 
       const wordDragging = document.querySelector<HTMLElement>('.word_dragging');

@@ -51,6 +51,7 @@
 .word.correct {
   background-color: #184823;
   animation: correctSentence 1s ease forwards;
+  pointer-events: none;
 }
 
 @keyframes correctSentence {

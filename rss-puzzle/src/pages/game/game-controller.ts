@@ -67,17 +67,17 @@ export function updateResultPlaceholder(
   activeResultSentence: HTMLElement,
   placeholder: HTMLElement,
 ): void {
-  const hasWordCards = activeResultSentence.querySelectorAll('.word').length > 0;
+  const words = [...activeResultSentence.querySelectorAll('.word')].filter(
+    (word) => word.parentElement === activeResultSentence,
+  );
 
-  if (hasWordCards) {
+  if (words.length > 0) {
     if (activeResultSentence.contains(placeholder)) {
       placeholder.remove();
-      placeholder.style.opacity = '0';
     }
   } else {
     if (!activeResultSentence.contains(placeholder)) {
       activeResultSentence.append(placeholder);
-      placeholder.style.opacity = '1';
     }
   }
 }
