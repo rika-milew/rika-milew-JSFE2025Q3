@@ -1,9 +1,9 @@
-import { continueGame, updateGameState, blockResultSentence } from './game-controller.ts';
+import { continueGame, updateGameState, blockResultSentence } from './game-controller';
 import { Routes } from '../../app/routes.ts';
-import { createButton } from '../../components/button/create-button.ts';
-import { createWordCards } from '../../components/word/word.ts';
+import { createButton } from '../../components/button/create-button';
+import { createWordCards } from '../../components/word/Word';
 import wordCollectionData from '../../data/word-collection-level-1.json';
-import { startAutoComplete } from '../../utils/auto-complete.ts';
+import { startAutoComplete } from '../../utils/auto-complete';
 import {
   checkSentence,
   highlightSentence,

@@ -1,6 +1,6 @@
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/create-button';
-import { showLogoutModal } from '../../components/modal/modal.ts';
+import { showLogoutModal } from '../../components/modal/Modal';
 import { isUser } from '../../types/type-guards';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';

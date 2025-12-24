@@ -6,7 +6,7 @@ import { implementDragAndDrop } from '../../utils/drag-and-drop.ts';
 
 import type { Word } from '../../types/types.ts';
 
-import './word.css';
+import './Word.css';
 
 export function createWordCards(
   sentence: Word,
