@@ -1,6 +1,6 @@
-import { createElement } from '../../utils/createElement';
+import { createElement } from '../../utils/create-element';
 
-import './Modal.css';
+import './modal.css';
 
 export function showLogoutModal(root: HTMLElement, confirmLogout: () => void): void {
   const modalOverlay = createElement({

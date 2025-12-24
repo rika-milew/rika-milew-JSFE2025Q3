@@ -1,4 +1,4 @@
-import { isUser } from '../types/typeGuards';
+import { isUser } from '../types/type-guards';
 
 export function saveUserCredentials(firstName: string, surname: string): void {
   const user = {

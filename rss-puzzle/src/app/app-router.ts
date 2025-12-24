@@ -1,5 +1,5 @@
 import { routes, Routes } from './routes';
-import { clearContainer } from '../utils/clearContainer';
+import { clearContainer } from '../utils/clear-container';
 
 export type AppRouter = {
   navigate: (route: Routes) => void;

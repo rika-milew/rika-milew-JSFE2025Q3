@@ -2,7 +2,7 @@ export function checkSentence(
   activeResultSentence: HTMLElement,
   correctSentence: string[],
 ): boolean {
-  const playerSentence = [...activeResultSentence.querySelectorAll('.word')].map(
+  const playerSentence = [...activeResultSentence.querySelectorAll('.word-wrapper')].map(
     (card) => card.textContent || '',
   );
 
@@ -17,7 +17,7 @@ export function highlightSentence(
   correctSentence: string[],
 ): void {
   const ANIMATION_DURATION = 1000;
-  const wordCards = [...activeResultSentence.querySelectorAll<HTMLElement>('.word')];
+  const wordCards = [...activeResultSentence.querySelectorAll<HTMLElement>('.word-wrapper')];
   activeResultSentence.style.pointerEvents = 'none';
 
   wordCards.forEach((wordCard, index) => {
@@ -33,7 +33,7 @@ export function highlightSentence(
 }
 
 export function highlightCorrectSentence(resultContainer: HTMLElement): void {
-  const wordCards = [...resultContainer.querySelectorAll<HTMLElement>('.word')];
+  const wordCards = [...resultContainer.querySelectorAll<HTMLElement>('.word-wrapper')];
   resultContainer.style.pointerEvents = 'none';
 
   wordCards.forEach((wordCard) => {

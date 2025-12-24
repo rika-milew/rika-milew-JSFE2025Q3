@@ -1,4 +1,4 @@
-import { createElement } from '../../utils/createElement';
+import { createElement } from '../../utils/create-element';
 
 import type { Button } from '../../types/types';
 

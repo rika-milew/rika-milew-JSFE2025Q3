@@ -1,4 +1,4 @@
-import { isUser } from '../types/typeGuards';
+import { isUser } from '../types/type-guards';
 
 export function isLoggedIn(): boolean {
   const savedUser = localStorage.getItem('user');

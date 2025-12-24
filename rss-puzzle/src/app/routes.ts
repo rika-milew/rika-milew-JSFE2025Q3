@@ -1,8 +1,8 @@
-import { createGamePage } from '../pages/game/GamePage';
-import { createLoginPage } from '../pages/login/LoginPage';
-import { createStartPage } from '../pages/start/StartPage';
+import { createGamePage } from '../pages/game/game-page';
+import { createLoginPage } from '../pages/login/login-page';
+import { createStartPage } from '../pages/start/start-page';
 
-import type { AppRouter } from './AppRouter';
+import type { AppRouter } from './app-router';
 
 export enum Routes {
   LOGIN = 'login',

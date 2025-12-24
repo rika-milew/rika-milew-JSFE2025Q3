@@ -1,5 +1,5 @@
-import { moveWordCards } from './animationHelpers';
-import { highlightCorrectSentence } from './checkSentence.ts';
+import { moveWordCards } from './animation-helpers.ts';
+import { highlightCorrectSentence } from './check-sentence.ts';
 
 export function startAutoComplete(
   activeResultSentence: HTMLElement,
@@ -17,8 +17,8 @@ export function startAutoComplete(
   }
 
   const wordCards = [
-    ...activeResultSentence.querySelectorAll<HTMLElement>('.word'),
-    ...sourceContainer.querySelectorAll<HTMLElement>('.word'),
+    ...activeResultSentence.querySelectorAll<HTMLElement>('.word-wrapper'),
+    ...sourceContainer.querySelectorAll<HTMLElement>('.word-wrapper'),
   ];
 
   const wordMap = new Map<string, HTMLElement[]>();
@@ -34,7 +34,7 @@ export function startAutoComplete(
     const wordCard = wordMap.get(word)?.shift();
     if (wordCard) {
       moveWordCards(wordCard, activeResultSentence);
-      wordCard.classList.add('word_result');
+      wordCard.classList.add('word-wrapper_result');
     }
   });
 

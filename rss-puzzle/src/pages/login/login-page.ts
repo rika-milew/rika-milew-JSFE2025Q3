@@ -1,13 +1,13 @@
 import { Routes } from '../../app/routes';
-import { clearContainer } from '../../utils/clearContainer';
-import { createElement } from '../../utils/createElement';
-import { saveUserCredentials, getUserCredentials } from '../../utils/saveUser';
-import { setBodyBackground } from '../../utils/setBodyBackground';
-import { inputValidation, showInputErrors } from '../../utils/validateLogin';
+import { clearContainer } from '../../utils/clear-container';
+import { createElement } from '../../utils/create-element';
+import { saveUserCredentials, getUserCredentials } from '../../utils/save-user';
+import { setBodyBackground } from '../../utils/set-body-background';
+import { inputValidation, showInputErrors } from '../../utils/validate-login';
 
-import type { AppRouter } from '../../app/AppRouter';
+import type { AppRouter } from '../../app/app-router';
 
-import './LoginPage.css';
+import './login-page.css';
 
 export function createLabel(text: string, htmlFor: string): HTMLLabelElement {
   const label = createElement({

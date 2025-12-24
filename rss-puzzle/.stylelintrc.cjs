@@ -15,6 +15,8 @@ module.exports = {
             'flex',
             'flex-direction',
             'flex-wrap',
+            'flex-grow',
+            'flex-basis',
             'gap',
             'width',
             'min-width',
