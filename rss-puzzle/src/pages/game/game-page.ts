@@ -1,6 +1,7 @@
 import { continueGame, updateGameState, blockResultSentence } from './game-controller';
 import { Routes } from '../../app/routes.ts';
 import { createButton } from '../../components/button/button';
+import { createHeading } from '../../components/heading/heading';
 import { createResultSentence } from '../../components/sentence/sentence';
 import { createWordCards } from '../../components/word/Word';
 import wordCollectionData from '../../data/word-collection-level-1.json';
@@ -40,11 +41,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const gameBoard = createElement({ tag: 'div', className: 'game-board' });
 
-  const roundTitle = createElement({
-    tag: 'h2',
-    className: 'game__round',
-    textContent: round.levelData.name,
-  });
+  const roundTitle = createHeading('gamePage', round.levelData.name);
 
   const sourceContainer = createElement({ tag: 'div', className: 'source' });
   const resultContainer = createElement({ tag: 'div', className: 'result' });

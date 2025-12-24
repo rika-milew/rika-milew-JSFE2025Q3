@@ -1,5 +1,6 @@
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
+import { createHeading } from '../../components/heading/heading';
 import { showLogoutModal } from '../../components/modal/Modal';
 import { START_PAGE_TEXT } from '../../configs/text.config';
 import { isUser } from '../../types/type-guards';
@@ -20,11 +21,7 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
     className: 'start',
   });
 
-  const heading = createElement({
-    tag: 'h1',
-    className: 'start__heading',
-    textContent: START_PAGE_TEXT.content.title,
-  });
+  const heading = createHeading('startPage', START_PAGE_TEXT.content.title);
 
   const description = createElement({
     tag: 'p',
