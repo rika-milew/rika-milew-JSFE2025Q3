@@ -67,7 +67,7 @@ export function updateResultPlaceholder(
   activeResultSentence: HTMLElement,
   placeholder: HTMLElement,
 ): void {
-  const words = [...activeResultSentence.querySelectorAll('.word')].filter(
+  const words = [...activeResultSentence.querySelectorAll('.word-wrapper')].filter(
     (word) => word.parentElement === activeResultSentence,
   );
 

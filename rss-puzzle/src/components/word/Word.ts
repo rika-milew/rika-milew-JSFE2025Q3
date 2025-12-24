@@ -1,7 +1,8 @@
-import { updateGameState } from '../../pages/game/game-controller.ts';
-import { moveWordCards } from '../../utils/animation-helpers.ts';
-import { createElement } from '../../utils/create-element.ts';
-import { implementDragAndDrop } from '../../utils/drag-and-drop.ts';
+import { updateGameState } from '../../pages/game/game-controller';
+import { moveWordCards } from '../../utils/animation-helpers';
+import { createElement } from '../../utils/create-element';
+import { designPuzzleEdges } from '../../utils/designPuzzleEdges';
+import { implementDragAndDrop } from '../../utils/drag-and-drop';
 
 import type { Word } from '../../types/types.ts';
 
@@ -22,7 +23,7 @@ export function createWordCards(
   const wordCards = shuffleWordCards(words);
 
   wordCards.forEach((word) => {
-    const card = createWordCard(
+    const wordWrapper = createWordCard(
       word.word,
       sourceContainer,
       activeResultSentence,
@@ -31,8 +32,15 @@ export function createWordCards(
       checkButton,
     );
 
+    const card = wordWrapper.querySelector<HTMLElement>('.word');
+    if (!card) {
+      return;
+    }
+
+    designPuzzleEdges(wordWrapper, card, word.word, correctSentence);
+
     implementDragAndDrop(
-      card,
+      wordWrapper,
       sourceContainer,
       activeResultSentence,
       resultPlaceholder,
@@ -40,9 +48,9 @@ export function createWordCards(
       checkButton,
     );
 
-    sourceContainer.append(card);
+    sourceContainer.append(wordWrapper);
     requestAnimationFrame(() => {
-      fixWordCardWidth(card);
+      fixWordCardWidth(wordWrapper);
     });
   });
 }
@@ -55,25 +63,31 @@ export function createWordCard(
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): HTMLElement {
+  const wordWrapper = createElement({
+    tag: 'div',
+    className: 'word-wrapper',
+  });
   const wordCard = createElement({
     tag: 'div',
     className: 'sentence__word word',
     textContent: word,
   });
 
-  wordCard.addEventListener('click', () => {
-    const isInSourceContainer = wordCard.parentElement === sourceContainer;
+  wordWrapper.append(wordCard);
+
+  wordWrapper.addEventListener('click', () => {
+    const isInSourceContainer = wordWrapper.parentElement === sourceContainer;
     if (isInSourceContainer) {
-      moveWordCards(wordCard, activeResultSentence);
-      wordCard.classList.add('word_result');
+      moveWordCards(wordWrapper, activeResultSentence);
+      wordCard.classList.add('word-wrapper_result');
     } else {
-      moveWordCards(wordCard, sourceContainer);
-      wordCard.classList.remove('word_result');
+      moveWordCards(wordWrapper, sourceContainer);
+      wordCard.classList.remove('word-wrapper_result');
     }
 
     updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
   });
-  return wordCard;
+  return wordWrapper;
 }
 
 function shuffleWordCards<T>(array: T[]): T[] {
@@ -88,8 +102,8 @@ function shuffleWordCards<T>(array: T[]): T[] {
   return shuffledArray;
 }
 
-function fixWordCardWidth(wordCard: HTMLElement): void {
-  const width = wordCard.getBoundingClientRect().width;
-  wordCard.style.width = `${width}px`;
-  wordCard.style.flex = '0 0 auto';
+function fixWordCardWidth(wordWrapper: HTMLElement): void {
+  const width = wordWrapper.getBoundingClientRect().width;
+  wordWrapper.style.width = `${width}px`;
+  wordWrapper.style.flex = '0 0 auto';
 }
