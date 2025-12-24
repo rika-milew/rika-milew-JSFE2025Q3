@@ -1,5 +1,5 @@
 import { updateCheckButtonState, createResultSentence } from './game-page';
-import { createWordCards } from '../../components/word/Word';
+import { createWordCards } from '../../components/word/word';
 
 import type { Game } from '../../types/types';
 

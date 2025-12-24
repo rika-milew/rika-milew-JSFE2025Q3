@@ -6,7 +6,7 @@ import { implementDragAndDrop } from '../../utils/drag-and-drop.ts';
 
 import type { Word } from '../../types/types.ts';
 
-import './Word.css';
+import './word.css';
 
 export function createWordCards(
   sentence: Word,
@@ -72,6 +72,9 @@ export function createWordCard(
     className: 'sentence__word word',
     textContent: word,
   });
+
+  const length = word.length;
+  wordWrapper.style.setProperty('--grow', String(length));
 
   wordWrapper.append(wordCard);
 

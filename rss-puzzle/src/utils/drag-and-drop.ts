@@ -12,11 +12,11 @@ export function implementDragAndDrop(
 
   wordWrapper.addEventListener('dragstart', (event: DragEvent) => {
     event.dataTransfer?.setData('text/plain', wordWrapper.textContent || '');
-    wordWrapper.classList.add('word-wrapper_dragging');
+    wordWrapper.classList.add('dragging');
   });
 
   wordWrapper.addEventListener('dragend', () => {
-    wordWrapper.classList.remove('word-wrapper_dragging');
+    wordWrapper.classList.remove('dragging');
     if (wordWrapper.parentElement !== activeResultSentence) {
       sourceContainer.append(wordWrapper);
       wordWrapper.classList.remove('word-wrapper_result');
@@ -29,7 +29,7 @@ export function implementDragAndDrop(
       event.preventDefault();
       container.classList.add('container_drag-over');
 
-      const wordDragging = document.querySelector<HTMLElement>('.word-wrapper_dragging');
+      const wordDragging = document.querySelector<HTMLElement>('.dragging');
       if (!wordDragging) {
         return;
       }
@@ -53,7 +53,7 @@ export function implementDragAndDrop(
     container.addEventListener('drop', (event: DragEvent) => {
       event.preventDefault();
 
-      const draggedWord = document.querySelector<HTMLElement>('.word-wrapper_dragging');
+      const draggedWord = document.querySelector<HTMLElement>('.dragging');
 
       if (!draggedWord) {
         throw new Error('Dragged word is not found');
@@ -67,7 +67,7 @@ export function implementDragAndDrop(
 
       container.classList.remove('container_drag-over');
 
-      const wordDragging = document.querySelector<HTMLElement>('.word-wrapper_dragging');
+      const wordDragging = document.querySelector<HTMLElement>('.dragging');
 
       if (!wordDragging) {
         return;
@@ -92,13 +92,14 @@ export function implementDragAndDrop(
     offsetX = touch.clientX - rect.left;
     offsetY = touch.clientY - rect.top;
 
-    wordWrapper.classList.add('word-wrapper_mobile-dragging');
+    wordWrapper.classList.add('mobile-dragging');
   });
 
   document.addEventListener('touchmove', (event: TouchEvent) => {
     if (!draggedWord) {
       return;
     }
+    event.preventDefault();
     const touch = event.touches[0];
 
     draggedWord.style.left = `${touch.clientX - offsetX}px`;
@@ -113,12 +114,13 @@ export function implementDragAndDrop(
     const touch = event.changedTouches[0];
 
     const sentenceRect = activeResultSentence.getBoundingClientRect();
+
     const isValidTarget = touch.clientY >= sentenceRect.top && touch.clientY <= sentenceRect.bottom;
 
     const targetContainer = isValidTarget ? activeResultSentence : sourceContainer;
 
     const wordWrappers = [
-      ...targetContainer.querySelectorAll<HTMLElement>('.word-wrapper:not(.word-wrapper_dragging)'),
+      ...targetContainer.querySelectorAll<HTMLElement>('.word-wrapper:not(.dragging)'),
     ];
 
     let dragged = false;
@@ -137,8 +139,10 @@ export function implementDragAndDrop(
     }
 
     draggedWord.classList.toggle('word-wrapper_result', targetContainer === activeResultSentence);
+    draggedWord.style.top = '';
+    draggedWord.style.left = '';
 
-    wordWrapper.classList.remove('word-wrapper_mobile-dragging');
+    wordWrapper.classList.remove('mobile-dragging');
 
     draggedWord = undefined;
 
@@ -148,7 +152,7 @@ export function implementDragAndDrop(
 
 function findWordPosition(container: HTMLElement, x: number): HTMLElement | undefined {
   const draggableWords = [
-    ...container.querySelectorAll<HTMLElement>('.word-wrapper:not(.word-wrapper_dragging)'),
+    ...container.querySelectorAll<HTMLElement>('.word-wrapper:not(.dragging)'),
   ];
 
   let closestWord: HTMLElement | undefined;
