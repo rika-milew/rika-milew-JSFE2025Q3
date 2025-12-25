@@ -1,12 +1,12 @@
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { createHeading } from '../../components/heading/heading';
-import { showLogoutModal } from '../../components/modal/Modal';
+import { showLogoutModal } from '../../components/modal/modal';
 import { START_PAGE_TEXT } from '../../configs/text.config';
 import { isUser } from '../../types/type-guards';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
-import { setBodyBackground } from '../../utils/set-body-background';
+import { setBackground } from '../../utils/set-background';
 
 import type { AppRouter } from '../../app/app-router';
 
@@ -14,7 +14,7 @@ import './start-page.css';
 
 export function createStartPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
-  setBodyBackground('start-page');
+  setBackground('start-page');
 
   const startContainer = createElement({
     tag: 'div',

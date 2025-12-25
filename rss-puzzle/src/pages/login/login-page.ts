@@ -3,7 +3,7 @@ import { createButton } from '../../components/button/button';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
 import { saveUserCredentials, getUserCredentials } from '../../utils/save-user';
-import { setBodyBackground } from '../../utils/set-body-background';
+import { setBackground } from '../../utils/set-background';
 import { inputValidation, showInputErrors } from '../../utils/validate-login';
 
 import type { AppRouter } from '../../app/app-router';
@@ -50,7 +50,7 @@ export function createForm(id: string): HTMLFormElement {
 
 export function createLoginPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
-  setBodyBackground('login-page');
+  setBackground('login-page');
 
   const loginContainer = createElement({
     tag: 'div',

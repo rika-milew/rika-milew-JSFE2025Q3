@@ -1,30 +1,30 @@
 import { updateGameState, updateResultPlaceholder } from '../pages/game/game-controller';
 
-export function implementDragAndDrop(
-  wordWrapper: HTMLElement,
-  sourceContainer: HTMLElement,
-  activeResultSentence: HTMLElement,
-  resultPlaceholder: HTMLElement,
+export function dragAndDrop(
+  word: HTMLElement,
+  source: HTMLElement,
+  userSentence: HTMLElement,
+  placeholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): void {
-  wordWrapper.setAttribute('draggable', 'true');
+  word.setAttribute('draggable', 'true');
 
-  wordWrapper.addEventListener('dragstart', (event: DragEvent) => {
-    event.dataTransfer?.setData('text/plain', wordWrapper.textContent || '');
-    wordWrapper.classList.add('dragging');
+  word.addEventListener('dragstart', (event: DragEvent) => {
+    event.dataTransfer?.setData('text/plain', word.textContent || '');
+    word.classList.add('dragging');
   });
 
-  wordWrapper.addEventListener('dragend', () => {
-    wordWrapper.classList.remove('dragging');
-    if (wordWrapper.parentElement !== activeResultSentence) {
-      sourceContainer.append(wordWrapper);
-      wordWrapper.classList.remove('word-wrapper_result');
+  word.addEventListener('dragend', () => {
+    word.classList.remove('dragging');
+    if (word.parentElement !== userSentence) {
+      source.append(word);
+      word.classList.remove('word-wrapper_result');
     }
-    updateResultPlaceholder(activeResultSentence, resultPlaceholder);
+    updateResultPlaceholder(userSentence, placeholder);
   });
 
-  [sourceContainer, activeResultSentence].forEach((container) => {
+  [source, userSentence].forEach((container) => {
     container.addEventListener('dragover', (event: DragEvent) => {
       event.preventDefault();
       container.classList.add('container_drag-over');
@@ -43,7 +43,7 @@ export function implementDragAndDrop(
         container.append(wordDragging);
       }
 
-      wordDragging.classList.toggle('word-wrapper_result', container === activeResultSentence);
+      wordDragging.classList.toggle('word-wrapper_result', container === userSentence);
     });
 
     container.addEventListener('dragleave', () => {
@@ -59,10 +59,10 @@ export function implementDragAndDrop(
         throw new Error('Dragged word is not found');
       }
 
-      if (draggedWord.parentElement !== activeResultSentence) {
-        sourceContainer.append(draggedWord);
+      if (draggedWord.parentElement !== userSentence) {
+        source.append(draggedWord);
         draggedWord.classList.remove('word_result');
-        updateResultPlaceholder(activeResultSentence, resultPlaceholder);
+        updateResultPlaceholder(userSentence, placeholder);
       }
 
       container.classList.remove('container_drag-over');
@@ -77,7 +77,7 @@ export function implementDragAndDrop(
         container.append(wordDragging);
       }
 
-      updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
+      updateGameState(userSentence, placeholder, correctSentence, checkButton);
     });
   });
 
@@ -85,14 +85,14 @@ export function implementDragAndDrop(
   let offsetX = 0;
   let offsetY = 0;
 
-  wordWrapper.addEventListener('touchstart', (event: TouchEvent) => {
-    draggedWord = wordWrapper;
+  word.addEventListener('touchstart', (event: TouchEvent) => {
+    draggedWord = word;
     const touch = event.touches[0];
-    const rect = wordWrapper.getBoundingClientRect();
+    const rect = word.getBoundingClientRect();
     offsetX = touch.clientX - rect.left;
     offsetY = touch.clientY - rect.top;
 
-    wordWrapper.classList.add('mobile-dragging');
+    word.classList.add('mobile-dragging');
   });
 
   document.addEventListener('touchmove', (event: TouchEvent) => {
@@ -113,22 +113,22 @@ export function implementDragAndDrop(
 
     const touch = event.changedTouches[0];
 
-    const sentenceRect = activeResultSentence.getBoundingClientRect();
+    const sentenceRect = userSentence.getBoundingClientRect();
 
     const isValidTarget = touch.clientY >= sentenceRect.top && touch.clientY <= sentenceRect.bottom;
 
-    const targetContainer = isValidTarget ? activeResultSentence : sourceContainer;
+    const targetContainer = isValidTarget ? userSentence : source;
 
-    const wordWrappers = [
+    const words = [
       ...targetContainer.querySelectorAll<HTMLElement>('.word-wrapper:not(.dragging)'),
     ];
 
     let dragged = false;
 
-    for (const wordWrapper of wordWrappers) {
-      const rect = wordWrapper.getBoundingClientRect();
+    for (const word of words) {
+      const rect = word.getBoundingClientRect();
       if (touch.clientX < rect.left + rect.width / 2) {
-        wordWrapper.before(draggedWord);
+        word.before(draggedWord);
         dragged = true;
         break;
       }
@@ -138,15 +138,15 @@ export function implementDragAndDrop(
       targetContainer.append(draggedWord);
     }
 
-    draggedWord.classList.toggle('word-wrapper_result', targetContainer === activeResultSentence);
+    draggedWord.classList.toggle('word-wrapper_result', targetContainer === userSentence);
     draggedWord.style.top = '';
     draggedWord.style.left = '';
 
-    wordWrapper.classList.remove('mobile-dragging');
+    word.classList.remove('mobile-dragging');
 
     draggedWord = undefined;
 
-    updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
+    updateGameState(userSentence, placeholder, correctSentence, checkButton);
   });
 }
 

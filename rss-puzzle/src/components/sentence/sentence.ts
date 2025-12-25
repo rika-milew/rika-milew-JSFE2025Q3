@@ -2,10 +2,10 @@ import { createElement } from '../../utils/create-element';
 
 import './sentence.css';
 
-export function createResultSentence(resultContainer: HTMLElement): HTMLElement {
+export function createSentence(resultContainer: HTMLElement): HTMLElement {
   const sentence = createElement({
     tag: 'div',
-    className: 'result__sentence result__sentence_active',
+    className: 'sentence sentence_active',
   });
 
   resultContainer.append(sentence);

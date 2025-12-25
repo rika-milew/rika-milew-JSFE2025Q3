@@ -1,9 +1,9 @@
 export type GameUI = {
   roundTitle: HTMLElement;
-  sourceContainer: HTMLElement;
-  resultContainer: HTMLElement;
-  activeResultSentence: HTMLElement;
-  resultPlaceholder: HTMLElement;
+  source: HTMLElement;
+  result: HTMLElement;
+  userSentence: HTMLElement;
+  placeholder: HTMLElement;
   checkButton: HTMLButtonElement;
   autoCompleteButton: HTMLButtonElement;
 };

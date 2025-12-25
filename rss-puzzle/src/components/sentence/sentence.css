@@ -1,19 +1,19 @@
-.result__sentence {
+.sentence {
   display: flex;
   justify-content: start;
   flex-direction: row;
   width: 100%;
 }
 
-.result__sentence_done {
+.sentence_done {
   opacity: 0.5;
   pointer-events: none;
 }
 
-.result__sentence_active {
+.sentence_active {
   opacity: 1;
 }
 
-.result__sentence.container_drag-over {
+.sentence.container_drag-over {
   border: none;
 }
