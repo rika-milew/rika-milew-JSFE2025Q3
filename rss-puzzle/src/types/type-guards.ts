@@ -14,3 +14,10 @@ export function isUser(value: unknown): value is User {
 
   return typeof firstName === 'string' && typeof surname === 'string';
 }
+
+export function checkElement<T extends HTMLElement>(element: T | undefined, name: string): T {
+  if (!element) {
+    throw new Error(`This element "${name}" is not initialized`);
+  }
+  return element;
+}

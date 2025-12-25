@@ -1,4 +1,5 @@
 import { continueGame, updateGameState, blockResultSentence } from './game-controller';
+import { gameState } from './game-state.ts';
 import { Routes } from '../../app/routes.ts';
 import { createButton } from '../../components/button/button';
 import { createHeading } from '../../components/heading/heading';
@@ -26,13 +27,11 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   clearContainer(container);
   setBodyBackground('game-page');
 
-  let sentenceIndex = 0;
-  let roundIndex = 0;
-  let isCompleted = false;
+  gameState.resetGame();
 
-  const round = wordCollection.rounds[roundIndex];
+  const round = wordCollection.rounds[gameState.roundIndex];
 
-  const correctSentence = round.words[sentenceIndex].textExample.split(' ');
+  gameState.correctSentence = round.words[gameState.sentenceIndex].textExample.split(' ');
 
   const gameContainer = createElement({
     tag: 'div',
@@ -41,12 +40,14 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const gameBoard = createElement({ tag: 'div', className: 'game-board' });
 
-  const roundTitle = createHeading('gamePage', round.levelData.name);
+  gameState.elements.roundTitle = createHeading('gamePage', round.levelData.name);
 
-  const sourceContainer = createElement({ tag: 'div', className: 'source' });
-  const resultContainer = createElement({ tag: 'div', className: 'result' });
+  gameState.elements.sourceContainer = createElement({ tag: 'div', className: 'source' });
+  gameState.elements.resultContainer = createElement({ tag: 'div', className: 'result' });
 
-  let activeResultSentence = createResultSentence(resultContainer);
+  gameState.elements.activeResultSentence = createResultSentence(
+    gameState.elements.resultContainer,
+  );
 
   const resultHeading = createElement({
     tag: 'p',
@@ -54,7 +55,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     textContent: 'Result',
   });
 
-  const resultPlaceholder = createElement({
+  gameState.elements.resultPlaceholder = createElement({
     tag: 'p',
     className: 'result__placeholder',
     textContent: 'Build the sentence here',
@@ -66,82 +67,72 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     text: 'Back',
   });
 
-  const checkButton = createButton({
+  gameState.elements.checkButton = createButton({
     text: 'Check',
     disabled: true,
   });
 
-  const autoCompleteButton = createButton({
+  gameState.elements.autoCompleteButton = createButton({
     text: 'Auto-Complete',
   });
 
   createWordCards(
-    round.words[sentenceIndex],
-    sourceContainer,
-    activeResultSentence,
-    resultPlaceholder,
-    correctSentence,
-    checkButton,
+    round.words[gameState.sentenceIndex],
+    gameState.sourceContainer,
+    gameState.activeResultSentence,
+    gameState.resultPlaceholder,
+    gameState.correctSentence,
+    gameState.checkButton,
   );
 
   backButton.addEventListener('click', () => {
     router.navigate(Routes.START);
   });
 
-  checkButton.addEventListener('click', () => {
-    if (isCompleted) {
-      resetCheckButton(checkButton);
-      isCompleted = false;
-
-      activeResultSentence = continueGame(
-        wordCollection.rounds,
-        roundIndex,
-        sentenceIndex,
-        (value) => (roundIndex = value),
-        (value) => (sentenceIndex = value),
-        sourceContainer,
-        resultContainer,
-        resultPlaceholder,
-        roundTitle,
-        checkButton,
-        correctSentence,
-        autoCompleteButton,
-        activeResultSentence,
-        (value) => (isCompleted = value),
-      );
+  gameState.checkButton.addEventListener('click', () => {
+    if (gameState.isCompleted) {
+      resetCheckButton(gameState.checkButton);
+      gameState.isCompleted = false;
+      continueGame();
       return;
     }
-    const isCorrect = checkSentence(activeResultSentence, correctSentence);
-    updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
+
+    const isCorrect = checkSentence(gameState.activeResultSentence, gameState.correctSentence);
+    updateGameState(
+      gameState.activeResultSentence,
+      gameState.resultPlaceholder,
+      gameState.correctSentence,
+      gameState.checkButton,
+    );
 
     if (!isCorrect) {
-      highlightSentence(activeResultSentence, correctSentence);
+      highlightSentence(gameState.activeResultSentence, gameState.correctSentence);
       return;
     }
 
-    isCompleted = true;
-    blockResultSentence(activeResultSentence);
-    highlightCorrectSentence(activeResultSentence);
-    transformCheckButton(checkButton);
-    autoCompleteButton.disabled = true;
+    gameState.isCompleted = true;
+    blockResultSentence(gameState.activeResultSentence);
+    highlightCorrectSentence(gameState.activeResultSentence);
+    transformCheckButton(gameState.checkButton);
+    gameState.autoCompleteButton.disabled = true;
   });
 
-  autoCompleteButton.addEventListener('click', () => {
+  gameState.autoCompleteButton.addEventListener('click', () => {
     startAutoComplete(
-      activeResultSentence,
-      sourceContainer,
-      correctSentence,
-      resultPlaceholder,
-      autoCompleteButton,
+      gameState.activeResultSentence,
+      gameState.sourceContainer,
+      gameState.correctSentence,
+      gameState.resultPlaceholder,
+      gameState.autoCompleteButton,
     );
-    isCompleted = true;
-    transformCheckButton(checkButton);
+    gameState.isCompleted = true;
+    transformCheckButton(gameState.checkButton);
   });
 
-  activeResultSentence.append(resultPlaceholder);
-  gameBoard.append(resultHeading, resultContainer, sourceContainer);
-  gameButtons.append(checkButton, autoCompleteButton, backButton);
-  gameContainer.append(roundTitle, gameBoard, gameButtons);
+  gameState.activeResultSentence.append(gameState.resultPlaceholder);
+  gameBoard.append(resultHeading, gameState.resultContainer, gameState.sourceContainer);
+  gameButtons.append(gameState.checkButton, gameState.autoCompleteButton, backButton);
+  gameContainer.append(gameState.roundTitle, gameBoard, gameButtons);
   container.append(gameContainer);
 
   return gameContainer;

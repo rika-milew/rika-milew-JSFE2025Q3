@@ -1,67 +1,57 @@
 import { updateCheckButtonState } from './game-page';
+import { gameState } from './game-state.ts';
 import { createResultSentence } from '../../components/sentence/sentence';
 import { createWordCards } from '../../components/word/Word';
 
-import type { Game } from '../../types/types';
+export function continueGame(): void {
+  const rounds = gameState.rounds;
+  let nextSentenceIndex = gameState.sentenceIndex + 1;
+  let nextRoundIndex = gameState.roundIndex;
 
-export function continueGame(
-  rounds: Game['rounds'],
-  roundIndex: number,
-  sentenceIndex: number,
-  selectRoundIndex: (value: number) => void,
-  selectSentenceIndex: (value: number) => void,
-  sourceContainer: HTMLElement,
-  resultContainer: HTMLElement,
-  resultPlaceholder: HTMLElement,
-  roundTitle: HTMLElement,
-  checkButton: HTMLButtonElement,
-  correctSentence: string[],
-  autoCompleteButton: HTMLButtonElement,
-  activeResultSentence: HTMLElement,
-  setSolved: (value: boolean) => void,
-): HTMLElement {
-  let nextSentenceIndex = sentenceIndex + 1;
-  let nextRoundIndex = roundIndex;
+  if (nextSentenceIndex >= rounds[gameState.roundIndex].words.length) {
+    gameState.nextRound();
+    nextRoundIndex = gameState.roundIndex;
+    nextSentenceIndex = gameState.sentenceIndex;
 
-  if (nextSentenceIndex >= rounds[roundIndex].words.length) {
-    nextRoundIndex += 1;
-    nextSentenceIndex = 0;
-    resultContainer.innerHTML = '';
+    gameState.resultContainer.innerHTML = '';
 
     if (nextRoundIndex >= rounds.length) {
-      return activeResultSentence;
+      gameState.isCompleted = true;
+      return;
     }
   }
 
-  blockResultSentence(activeResultSentence);
-  activeResultSentence = createResultSentence(resultContainer);
-  activeResultSentence.append(resultPlaceholder);
+  blockResultSentence(gameState.activeResultSentence);
 
-  setSolved(false);
+  gameState.elements.activeResultSentence = createResultSentence(gameState.resultContainer);
+  gameState.activeResultSentence.append(gameState.resultPlaceholder);
 
-  autoCompleteButton.disabled = false;
-  selectRoundIndex(nextRoundIndex);
-  selectSentenceIndex(nextSentenceIndex);
+  gameState.isSolved = false;
+
+  gameState.autoCompleteButton.disabled = false;
+
+  gameState.roundIndex = nextRoundIndex;
+  gameState.sentenceIndex = nextSentenceIndex;
 
   const nextRound = rounds[nextRoundIndex];
   const nextSentence = nextRound.words[nextSentenceIndex];
 
-  roundTitle.textContent = nextRound.levelData.name;
+  gameState.roundTitle.textContent = nextRound.levelData.name;
 
-  sourceContainer.innerHTML = '';
+  gameState.sourceContainer.innerHTML = '';
 
-  correctSentence.splice(0, correctSentence.length, ...nextSentence.textExample.split(' '));
+  gameState.correctSentence = nextSentence.textExample.split(' ');
 
   createWordCards(
     nextSentence,
-    sourceContainer,
-    activeResultSentence,
-    resultPlaceholder,
-    correctSentence,
-    checkButton,
+    gameState.sourceContainer,
+    gameState.activeResultSentence,
+    gameState.resultPlaceholder,
+    gameState.correctSentence,
+    gameState.checkButton,
   );
 
-  return activeResultSentence;
+  return;
 }
 
 export function updateResultPlaceholder(
