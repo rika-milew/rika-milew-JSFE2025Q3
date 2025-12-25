@@ -3,7 +3,17 @@ import { gameState } from './game-state.ts';
 import { createResultSentence } from '../../components/sentence/sentence';
 import { createWordCards } from '../../components/word/Word';
 
-export function continueGame(): void {
+import type { GameUI } from './game-types.ts';
+
+export function continueGame(props: GameUI): void {
+  const {
+    sourceContainer,
+    resultContainer,
+    resultPlaceholder,
+    checkButton,
+    autoCompleteButton,
+    roundTitle,
+  } = props;
   const rounds = gameState.rounds;
   let nextSentenceIndex = gameState.sentenceIndex + 1;
   let nextRoundIndex = gameState.roundIndex;
@@ -13,7 +23,7 @@ export function continueGame(): void {
     nextRoundIndex = gameState.roundIndex;
     nextSentenceIndex = gameState.sentenceIndex;
 
-    gameState.resultContainer.innerHTML = '';
+    resultContainer.innerHTML = '';
 
     if (nextRoundIndex >= rounds.length) {
       gameState.isCompleted = true;
@@ -21,14 +31,14 @@ export function continueGame(): void {
     }
   }
 
-  blockResultSentence(gameState.activeResultSentence);
+  blockResultSentence(props.activeResultSentence);
 
-  gameState.elements.activeResultSentence = createResultSentence(gameState.resultContainer);
-  gameState.activeResultSentence.append(gameState.resultPlaceholder);
+  props.activeResultSentence = createResultSentence(resultContainer);
+  props.activeResultSentence.append(resultPlaceholder);
 
   gameState.isSolved = false;
 
-  gameState.autoCompleteButton.disabled = false;
+  autoCompleteButton.disabled = false;
 
   gameState.roundIndex = nextRoundIndex;
   gameState.sentenceIndex = nextSentenceIndex;
@@ -36,19 +46,19 @@ export function continueGame(): void {
   const nextRound = rounds[nextRoundIndex];
   const nextSentence = nextRound.words[nextSentenceIndex];
 
-  gameState.roundTitle.textContent = nextRound.levelData.name;
+  roundTitle.textContent = nextRound.levelData.name;
 
-  gameState.sourceContainer.innerHTML = '';
+  sourceContainer.innerHTML = '';
 
   gameState.correctSentence = nextSentence.textExample.split(' ');
 
   createWordCards(
     nextSentence,
-    gameState.sourceContainer,
-    gameState.activeResultSentence,
-    gameState.resultPlaceholder,
+    sourceContainer,
+    props.activeResultSentence,
+    resultPlaceholder,
     gameState.correctSentence,
-    gameState.checkButton,
+    checkButton,
   );
 
   return;

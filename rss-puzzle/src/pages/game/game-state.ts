@@ -1,15 +1,4 @@
 import wordCollectionData from '../../data/word-collection-level-1.json';
-import { checkElement } from '../../types/type-guards';
-
-export type GameElements = {
-  sourceContainer?: HTMLElement;
-  resultContainer?: HTMLElement;
-  resultPlaceholder?: HTMLElement;
-  activeResultSentence?: HTMLElement;
-  checkButton?: HTMLButtonElement;
-  autoCompleteButton?: HTMLButtonElement;
-  roundTitle?: HTMLElement;
-};
 
 export const gameState: {
   _roundIndex: number;
@@ -19,15 +8,6 @@ export const gameState: {
   _correctSentence: string[];
   _userSentence: string[];
   rounds: typeof wordCollectionData.rounds;
-  elements: GameElements;
-
-  sourceContainer: HTMLElement;
-  resultContainer: HTMLElement;
-  resultPlaceholder: HTMLElement;
-  activeResultSentence: HTMLElement;
-  checkButton: HTMLButtonElement;
-  autoCompleteButton: HTMLButtonElement;
-  roundTitle: HTMLElement;
 
   roundIndex: number;
   sentenceIndex: number;
@@ -47,30 +27,6 @@ export const gameState: {
   _userSentence: [],
 
   rounds: wordCollectionData.rounds,
-
-  elements: {},
-
-  get sourceContainer() {
-    return checkElement(this.elements.sourceContainer, 'sourceContainer');
-  },
-  get resultContainer() {
-    return checkElement(this.elements.resultContainer, 'resultContainer');
-  },
-  get resultPlaceholder() {
-    return checkElement(this.elements.resultPlaceholder, 'resultPlaceholder');
-  },
-  get activeResultSentence() {
-    return checkElement(this.elements.activeResultSentence, 'activeResultSentence');
-  },
-  get checkButton() {
-    return checkElement(this.elements.checkButton, 'checkButton');
-  },
-  get autoCompleteButton() {
-    return checkElement(this.elements.autoCompleteButton, 'autoCompleteButton');
-  },
-  get roundTitle() {
-    return checkElement(this.elements.roundTitle, 'roundTitle');
-  },
 
   get roundIndex() {
     return this._roundIndex;
