@@ -1,10 +1,12 @@
+import { eventState } from './event-state';
 import { continueGame, updateGameState, blockSentence } from './game-controller';
 import { gameState } from './game-state';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { createHeading } from '../../components/heading/heading';
+import { createHint } from '../../components/hint/hint';
 import { createSentence } from '../../components/sentence/sentence';
-import { createWords } from '../../components/word/word';
+import { createWords } from '../../components/word/word.ts';
 import wordCollectionData from '../../data/word-collection-level-1.json';
 import { autoComplete } from '../../utils/auto-complete';
 import {
@@ -122,10 +124,35 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     transformCheckButton(props.checkButton);
   });
 
+  const hintIcons = createElement({ tag: 'div', className: 'hint-icons' });
+
+  const translationIcon = createHint({
+    container: props.result,
+    text: 'Translation',
+    icon: 'icons/translation.svg',
+    className: 'hint',
+  });
+
+  const hintContainer = createElement({ tag: 'div', className: 'hint-container' });
+
+  const translation = createElement({
+    tag: 'div',
+    className: 'translation',
+  });
+
+  eventState.on('translation:update', (text: string) => {
+    translation.textContent = text;
+  });
+
+  const currentSentence = round.words[gameState.sentenceIndex];
+  eventState.emit('translation:update', currentSentence.textExampleTranslate);
+
+  hintIcons.append(translationIcon);
+  hintContainer.append(translation);
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
   gameButtons.append(props.checkButton, props.autoCompleteButton, backButton);
-  gameContainer.append(props.roundTitle, gameBoard, gameButtons);
+  gameContainer.append(hintIcons, props.roundTitle, hintContainer, gameBoard, gameButtons);
   container.append(gameContainer);
 
   return gameContainer;

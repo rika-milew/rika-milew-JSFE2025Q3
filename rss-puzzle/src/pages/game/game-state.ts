@@ -18,6 +18,7 @@ export const gameState: {
 
   resetGame(): void;
   nextRound(): void;
+  nextSentence(): void;
 } = {
   _roundIndex: 0,
   _sentenceIndex: 0,
@@ -81,6 +82,13 @@ export const gameState: {
   nextRound(): void {
     this._roundIndex += 1;
     this._sentenceIndex = 0;
+    this.correctSentence = [];
+    this.isCompleted = false;
+    this._isSolved = false;
+  },
+
+  nextSentence(): void {
+    this._sentenceIndex += 1;
     this.correctSentence = [];
     this.isCompleted = false;
     this._isSolved = false;
