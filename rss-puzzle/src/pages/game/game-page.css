@@ -18,12 +18,12 @@
 
 .result {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
-  gap: 15px;
+  gap: 0;
   width: 800px;
+  height: 400px;
   min-height: 40px;
   margin-bottom: 30px;
 }
@@ -73,4 +73,31 @@
 .container_drag-over {
   border: 2px dashed #7256c9;
   transition: border-color 0.2s ease;
+}
+
+.hint-icons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.translation {
+  margin-bottom: 25px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(245, 245, 0, 0.3);
+  /* opacity: 0; */
+  /* transform: translateY(-5px); */
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.translation.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }

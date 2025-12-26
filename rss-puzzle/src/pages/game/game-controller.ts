@@ -1,25 +1,28 @@
+import { eventState } from './event-state.ts';
 import { updateCheckButtonState } from './game-page';
 import { gameState } from './game-state.ts';
 import { createSentence } from '../../components/sentence/sentence';
-import { createWords } from '../../components/word/word';
+import { createWords } from '../../components/word/word.ts';
 
 import type { GameUI } from './game-types.ts';
 
 export function continueGame(props: GameUI): void {
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
   const rounds = gameState.rounds;
-  const nextSentenceIndex = gameState.sentenceIndex + 1;
-  const nextRoundIndex = gameState.roundIndex;
 
-  if (nextSentenceIndex >= rounds[gameState.roundIndex].words.length) {
+  const currentRound = rounds[gameState.roundIndex];
+  const isLastSentence = gameState.sentenceIndex >= currentRound.words.length - 1;
+
+  if (isLastSentence) {
     gameState.nextRound();
-
     result.innerHTML = '';
 
-    if (nextRoundIndex >= rounds.length) {
+    if (gameState.roundIndex >= rounds.length) {
       gameState.isCompleted = true;
       return;
     }
+  } else {
+    gameState.nextSentence();
   }
 
   blockSentence(props.userSentence);
@@ -28,23 +31,21 @@ export function continueGame(props: GameUI): void {
   props.userSentence.append(placeholder);
 
   gameState.isSolved = false;
-
   autoCompleteButton.disabled = false;
 
-  gameState.roundIndex = nextRoundIndex;
-  gameState.sentenceIndex = nextSentenceIndex;
+  const updatedRound = rounds[gameState.roundIndex];
+  const currentSentence = updatedRound.words[gameState.sentenceIndex];
 
-  const nextRound = rounds[nextRoundIndex];
-  const nextSentence = nextRound.words[nextSentenceIndex];
+  eventState.emit('translation:update', currentSentence.textExampleTranslate);
 
-  roundTitle.textContent = nextRound.levelData.name;
+  roundTitle.textContent = updatedRound.levelData.name;
 
   source.innerHTML = '';
 
-  gameState.correctSentence = nextSentence.textExample.split(' ');
+  gameState.correctSentence = currentSentence.textExample.split(' ');
 
   createWords(
-    nextSentence,
+    currentSentence,
     source,
     props.userSentence,
     placeholder,
