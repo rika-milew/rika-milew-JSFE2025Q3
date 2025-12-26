@@ -23,13 +23,6 @@ body.start-page {
   background-color: rgba(216, 191, 216, 0.8);
 }
 
-.start__heading {
-  margin-bottom: 20px;
-  font-size: 42px;
-  font-weight: 700;
-  color: #4b0082;
-}
-
 .start__description {
   margin-bottom: 20px;
   font-size: 18px;
@@ -44,11 +37,6 @@ body.start-page {
   align-items: center;
   flex-direction: row;
   gap: 20px;
-}
-
-.start__logout-button,
-.start__game-button {
-  min-width: 200px;
 }
 
 .start__greeting {

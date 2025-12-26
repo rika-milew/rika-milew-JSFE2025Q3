@@ -1,18 +1,18 @@
 import { updateGameState } from '../../pages/game/game-controller.ts';
-import { moveWordCards } from '../../utils/animation-helpers.ts';
+import { moveWords } from '../../utils/animation-helpers.ts';
 import { createElement } from '../../utils/create-element.ts';
-import { designPuzzleEdges } from '../../utils/designPuzzleEdges.ts';
-import { implementDragAndDrop } from '../../utils/drag-and-drop.ts';
+import { designPuzzles } from '../../utils/design-puzzles.ts';
+import { dragAndDrop } from '../../utils/drag-and-drop.ts';
 
 import type { Word } from '../../types/types.ts';
 
 import './word.css';
 
-export function createWordCards(
+export function createWords(
   sentence: Word,
-  sourceContainer: HTMLElement,
-  activeResultSentence: HTMLElement,
-  resultPlaceholder: HTMLElement,
+  source: HTMLElement,
+  resultSentence: HTMLElement,
+  placeholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): void {
@@ -20,14 +20,14 @@ export function createWordCards(
     id: index,
     word,
   }));
-  const wordCards = shuffleWordCards(words);
+  const cards = shuffleWords(words);
 
-  wordCards.forEach((word) => {
-    const wordWrapper = createWordCard(
+  cards.forEach((word) => {
+    const wordWrapper = createWord(
       word.word,
-      sourceContainer,
-      activeResultSentence,
-      resultPlaceholder,
+      source,
+      resultSentence,
+      placeholder,
       correctSentence,
       checkButton,
     );
@@ -37,29 +37,22 @@ export function createWordCards(
       return;
     }
 
-    designPuzzleEdges(wordWrapper, card, word.word, correctSentence);
+    designPuzzles(wordWrapper, card, word.word, correctSentence);
 
-    implementDragAndDrop(
-      wordWrapper,
-      sourceContainer,
-      activeResultSentence,
-      resultPlaceholder,
-      correctSentence,
-      checkButton,
-    );
+    dragAndDrop(wordWrapper, source, resultSentence, placeholder, correctSentence, checkButton);
 
-    sourceContainer.append(wordWrapper);
+    source.append(wordWrapper);
     requestAnimationFrame(() => {
-      fixWordCardWidth(wordWrapper);
+      fixWordWidth(wordWrapper);
     });
   });
 }
 
-export function createWordCard(
+export function createWord(
   word: string,
-  sourceContainer: HTMLElement,
-  activeResultSentence: HTMLElement,
-  resultPlaceholder: HTMLElement,
+  source: HTMLElement,
+  resultSentence: HTMLElement,
+  placeholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): HTMLElement {
@@ -79,21 +72,21 @@ export function createWordCard(
   wordWrapper.append(wordCard);
 
   wordWrapper.addEventListener('click', () => {
-    const isInSourceContainer = wordWrapper.parentElement === sourceContainer;
+    const isInSourceContainer = wordWrapper.parentElement === source;
     if (isInSourceContainer) {
-      moveWordCards(wordWrapper, activeResultSentence);
+      moveWords(wordWrapper, resultSentence);
       wordWrapper.classList.add('word-wrapper_result');
     } else {
-      moveWordCards(wordWrapper, sourceContainer);
+      moveWords(wordWrapper, source);
       wordWrapper.classList.remove('word-wrapper_result');
     }
 
-    updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
+    updateGameState(resultSentence, placeholder, correctSentence, checkButton);
   });
   return wordWrapper;
 }
 
-function shuffleWordCards<T>(array: T[]): T[] {
+function shuffleWords<T>(array: T[]): T[] {
   const shuffledArray = [...array];
   for (let index = shuffledArray.length - 1; index > 0; index--) {
     const newIndex = Math.floor(Math.random() * (index + 1));
@@ -105,7 +98,7 @@ function shuffleWordCards<T>(array: T[]): T[] {
   return shuffledArray;
 }
 
-function fixWordCardWidth(wordWrapper: HTMLElement): void {
+function fixWordWidth(wordWrapper: HTMLElement): void {
   const width = wordWrapper.getBoundingClientRect().width;
   wordWrapper.style.width = `${width}px`;
   wordWrapper.style.flex = '0 0 auto';

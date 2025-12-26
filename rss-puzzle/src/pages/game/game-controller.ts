@@ -1,100 +1,89 @@
-import { updateCheckButtonState, createResultSentence } from './game-page';
-import { createWordCards } from '../../components/word/word';
+import { updateCheckButtonState } from './game-page';
+import { gameState } from './game-state.ts';
+import { createSentence } from '../../components/sentence/sentence';
+import { createWords } from '../../components/word/word';
 
-import type { Game } from '../../types/types';
+import type { GameUI } from './game-types.ts';
 
-export function continueGame(
-  rounds: Game['rounds'],
-  roundIndex: number,
-  sentenceIndex: number,
-  selectRoundIndex: (value: number) => void,
-  selectSentenceIndex: (value: number) => void,
-  sourceContainer: HTMLElement,
-  resultContainer: HTMLElement,
-  resultPlaceholder: HTMLElement,
-  roundTitle: HTMLElement,
-  checkButton: HTMLButtonElement,
-  correctSentence: string[],
-  autoCompleteButton: HTMLButtonElement,
-  activeResultSentence: HTMLElement,
-  setSolved: (value: boolean) => void,
-): HTMLElement {
-  let nextSentenceIndex = sentenceIndex + 1;
-  let nextRoundIndex = roundIndex;
+export function continueGame(props: GameUI): void {
+  const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
+  const rounds = gameState.rounds;
+  const nextSentenceIndex = gameState.sentenceIndex + 1;
+  const nextRoundIndex = gameState.roundIndex;
 
-  if (nextSentenceIndex >= rounds[roundIndex].words.length) {
-    nextRoundIndex += 1;
-    nextSentenceIndex = 0;
-    resultContainer.innerHTML = '';
+  if (nextSentenceIndex >= rounds[gameState.roundIndex].words.length) {
+    gameState.nextRound();
+
+    result.innerHTML = '';
 
     if (nextRoundIndex >= rounds.length) {
-      return activeResultSentence;
+      gameState.isCompleted = true;
+      return;
     }
   }
 
-  blockResultSentence(activeResultSentence);
-  activeResultSentence = createResultSentence(resultContainer);
-  activeResultSentence.append(resultPlaceholder);
+  blockSentence(props.userSentence);
 
-  setSolved(false);
+  props.userSentence = createSentence(result);
+  props.userSentence.append(placeholder);
+
+  gameState.isSolved = false;
 
   autoCompleteButton.disabled = false;
-  selectRoundIndex(nextRoundIndex);
-  selectSentenceIndex(nextSentenceIndex);
+
+  gameState.roundIndex = nextRoundIndex;
+  gameState.sentenceIndex = nextSentenceIndex;
 
   const nextRound = rounds[nextRoundIndex];
   const nextSentence = nextRound.words[nextSentenceIndex];
 
   roundTitle.textContent = nextRound.levelData.name;
 
-  sourceContainer.innerHTML = '';
+  source.innerHTML = '';
 
-  correctSentence.splice(0, correctSentence.length, ...nextSentence.textExample.split(' '));
+  gameState.correctSentence = nextSentence.textExample.split(' ');
 
-  createWordCards(
+  createWords(
     nextSentence,
-    sourceContainer,
-    activeResultSentence,
-    resultPlaceholder,
-    correctSentence,
+    source,
+    props.userSentence,
+    placeholder,
+    gameState.correctSentence,
     checkButton,
   );
 
-  return activeResultSentence;
+  return;
 }
 
-export function updateResultPlaceholder(
-  activeResultSentence: HTMLElement,
-  placeholder: HTMLElement,
-): void {
-  const words = [...activeResultSentence.querySelectorAll('.word-wrapper')].filter(
-    (word) => word.parentElement === activeResultSentence,
+export function updateResultPlaceholder(userSentence: HTMLElement, placeholder: HTMLElement): void {
+  const words = [...userSentence.querySelectorAll('.word-wrapper')].filter(
+    (word) => word.parentElement === userSentence,
   );
 
   if (words.length > 0) {
-    if (activeResultSentence.contains(placeholder)) {
+    if (userSentence.contains(placeholder)) {
       placeholder.remove();
     }
   } else {
-    if (!activeResultSentence.contains(placeholder)) {
-      activeResultSentence.append(placeholder);
+    if (!userSentence.contains(placeholder)) {
+      userSentence.append(placeholder);
     }
   }
 }
 
 export function updateGameState(
-  activeResultSentence: HTMLElement,
-  resultPlaceholder: HTMLElement,
+  userSentence: HTMLElement,
+  placeholder: HTMLElement,
   correctSentence: string[],
   checkButton: HTMLButtonElement,
 ): void {
-  updateResultPlaceholder(activeResultSentence, resultPlaceholder);
-  updateCheckButtonState(activeResultSentence, checkButton, correctSentence.length);
-  activeResultSentence.style.pointerEvents = 'auto';
+  updateResultPlaceholder(userSentence, placeholder);
+  updateCheckButtonState(userSentence, checkButton, correctSentence.length);
+  userSentence.style.pointerEvents = 'auto';
 }
 
-export function blockResultSentence(sentence: HTMLElement): void {
-  sentence.classList.remove('result__sentence_active');
-  sentence.classList.add('result__sentence_done');
+export function blockSentence(sentence: HTMLElement): void {
+  sentence.classList.remove('sentence_active');
+  sentence.classList.add('sentence_done');
   sentence.style.pointerEvents = 'none';
 }

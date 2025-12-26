@@ -1,162 +1,131 @@
-import { continueGame, updateGameState, blockResultSentence } from './game-controller.ts';
-import { Routes } from '../../app/routes.ts';
-import { createButton } from '../../components/button/create-button.ts';
-import { createWordCards } from '../../components/word/word.ts';
+import { continueGame, updateGameState, blockSentence } from './game-controller';
+import { gameState } from './game-state';
+import { Routes } from '../../app/routes';
+import { createButton } from '../../components/button/button';
+import { createHeading } from '../../components/heading/heading';
+import { createSentence } from '../../components/sentence/sentence';
+import { createWords } from '../../components/word/word';
 import wordCollectionData from '../../data/word-collection-level-1.json';
-import { startAutoComplete } from '../../utils/auto-complete.ts';
+import { autoComplete } from '../../utils/auto-complete';
 import {
   checkSentence,
   highlightSentence,
   highlightCorrectSentence,
 } from '../../utils/check-sentence.ts';
-import { clearContainer } from '../../utils/clear-container.ts';
-import { createElement } from '../../utils/create-element.ts';
-import { setBodyBackground } from '../../utils/set-body-background.ts';
+import { clearContainer } from '../../utils/clear-container';
+import { createElement } from '../../utils/create-element';
+import { setBackground } from '../../utils/set-background';
 
-import type { AppRouter } from '../../app/app-router.ts';
-import type { Game } from '../../types/types.ts';
+import type { GameUI } from './game-types.ts';
+import type { AppRouter } from '../../app/app-router';
+import type { Game } from '../../types/types';
 
 import './game-page.css';
 
 const wordCollection: Game = wordCollectionData;
 
-export function createResultSentence(resultContainer: HTMLElement): HTMLElement {
-  const sentence = createElement({
-    tag: 'div',
-    className: 'result__sentence result__sentence_active',
-  });
-
-  resultContainer.append(sentence);
-  return sentence;
-}
-
 export function createGamePage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
-  setBodyBackground('game-page');
+  setBackground('game-page');
 
-  let sentenceIndex = 0;
-  let roundIndex = 0;
-  let isCompleted = false;
+  gameState.resetGame();
 
-  const round = wordCollection.rounds[roundIndex];
+  const round = wordCollection.rounds[gameState.roundIndex];
 
-  const correctSentence = round.words[sentenceIndex].textExample.split(' ');
+  gameState.correctSentence = round.words[gameState.sentenceIndex].textExample.split(' ');
 
   const gameContainer = createElement({
     tag: 'div',
-    className: 'game',
+    className: ['game', 'page'],
   });
 
   const gameBoard = createElement({ tag: 'div', className: 'game-board' });
 
-  const roundTitle = createElement({
-    tag: 'h2',
-    className: 'game__round',
-    textContent: round.levelData.name,
-  });
+  const props: GameUI = {
+    roundTitle: createHeading('gamePage', round.levelData.name),
+    source: createElement({ tag: 'div', className: 'source' }),
+    result: createElement({ tag: 'div', className: 'result' }),
+    userSentence: createSentence(createElement({ tag: 'div' })),
+    placeholder: createElement({
+      tag: 'p',
+      className: 'result__placeholder',
+      textContent: 'Build the sentence here',
+    }),
+    checkButton: createButton({ text: 'Check', disabled: true }),
+    autoCompleteButton: createButton({ text: 'Auto-Complete' }),
+  };
 
-  const sourceContainer = createElement({ tag: 'div', className: 'source' });
-  const resultContainer = createElement({ tag: 'div', className: 'result' });
+  props.userSentence = createSentence(props.result);
 
-  let activeResultSentence = createResultSentence(resultContainer);
-
-  const resultHeading = createElement({
+  const heading = createElement({
     tag: 'p',
     className: 'result__heading',
     textContent: 'Result',
-  });
-
-  const resultPlaceholder = createElement({
-    tag: 'p',
-    className: 'result__placeholder',
-    textContent: 'Build the sentence here',
   });
 
   const gameButtons = createElement({ tag: 'div', className: 'game__buttons' });
 
   const backButton = createButton({
     text: 'Back',
-    className: 'game__back-button button',
   });
 
-  const checkButton = createButton({
-    text: 'Check',
-    className: 'game__check-button button',
-    disabled: true,
-  });
-
-  const autoCompleteButton = createButton({
-    text: 'Auto-Complete',
-    className: 'game__complete-button button',
-  });
-
-  createWordCards(
-    round.words[sentenceIndex],
-    sourceContainer,
-    activeResultSentence,
-    resultPlaceholder,
-    correctSentence,
-    checkButton,
+  createWords(
+    round.words[gameState.sentenceIndex],
+    props.source,
+    props.userSentence,
+    props.placeholder,
+    gameState.correctSentence,
+    props.checkButton,
   );
 
   backButton.addEventListener('click', () => {
     router.navigate(Routes.START);
   });
 
-  checkButton.addEventListener('click', () => {
-    if (isCompleted) {
-      resetCheckButton(checkButton);
-      isCompleted = false;
-
-      activeResultSentence = continueGame(
-        wordCollection.rounds,
-        roundIndex,
-        sentenceIndex,
-        (value) => (roundIndex = value),
-        (value) => (sentenceIndex = value),
-        sourceContainer,
-        resultContainer,
-        resultPlaceholder,
-        roundTitle,
-        checkButton,
-        correctSentence,
-        autoCompleteButton,
-        activeResultSentence,
-        (value) => (isCompleted = value),
-      );
+  props.checkButton.addEventListener('click', () => {
+    if (gameState.isCompleted) {
+      resetCheckButton(props.checkButton);
+      gameState.isCompleted = false;
+      continueGame(props);
       return;
     }
-    const isCorrect = checkSentence(activeResultSentence, correctSentence);
-    updateGameState(activeResultSentence, resultPlaceholder, correctSentence, checkButton);
+
+    const isCorrect = checkSentence(props.userSentence, gameState.correctSentence);
+    updateGameState(
+      props.userSentence,
+      props.placeholder,
+      gameState.correctSentence,
+      props.checkButton,
+    );
 
     if (!isCorrect) {
-      highlightSentence(activeResultSentence, correctSentence);
+      highlightSentence(props.userSentence, gameState.correctSentence);
       return;
     }
 
-    isCompleted = true;
-    blockResultSentence(activeResultSentence);
-    highlightCorrectSentence(activeResultSentence);
-    transformCheckButton(checkButton);
-    autoCompleteButton.disabled = true;
+    gameState.isCompleted = true;
+    blockSentence(props.userSentence);
+    highlightCorrectSentence(props.userSentence);
+    transformCheckButton(props.checkButton);
+    props.autoCompleteButton.disabled = true;
   });
 
-  autoCompleteButton.addEventListener('click', () => {
-    startAutoComplete(
-      activeResultSentence,
-      sourceContainer,
-      correctSentence,
-      resultPlaceholder,
-      autoCompleteButton,
+  props.autoCompleteButton.addEventListener('click', () => {
+    autoComplete(
+      props.userSentence,
+      props.source,
+      gameState.correctSentence,
+      props.placeholder,
+      props.autoCompleteButton,
     );
-    isCompleted = true;
-    transformCheckButton(checkButton);
+    gameState.isCompleted = true;
+    transformCheckButton(props.checkButton);
   });
 
-  activeResultSentence.append(resultPlaceholder);
-  gameBoard.append(resultHeading, resultContainer, sourceContainer);
-  gameButtons.append(checkButton, autoCompleteButton, backButton);
-  gameContainer.append(roundTitle, gameBoard, gameButtons);
+  props.userSentence.append(props.placeholder);
+  gameBoard.append(heading, props.result, props.source);
+  gameButtons.append(props.checkButton, props.autoCompleteButton, backButton);
+  gameContainer.append(props.roundTitle, gameBoard, gameButtons);
   container.append(gameContainer);
 
   return gameContainer;

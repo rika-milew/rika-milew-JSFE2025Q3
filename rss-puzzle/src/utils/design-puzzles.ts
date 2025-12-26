@@ -1,4 +1,4 @@
-export function designPuzzleEdges(
+export function designPuzzles(
   wordWrapper: HTMLElement,
   wordCard: HTMLElement,
   word: string,

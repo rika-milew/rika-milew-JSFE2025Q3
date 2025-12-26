@@ -1,0 +1,14 @@
+.start__heading {
+  margin-bottom: 20px;
+  font-size: 42px;
+  font-weight: 700;
+  color: #4b0082;
+}
+
+.game__round {
+  margin-bottom: 30px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #491a8e;
+  text-align: center;
+}

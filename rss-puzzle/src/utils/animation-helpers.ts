@@ -1,23 +1,23 @@
-export function moveWordCards(wordWrapper: HTMLElement, targetContainer: HTMLElement): void {
-  const startPosition = wordWrapper.getBoundingClientRect();
-  targetContainer.append(wordWrapper);
-  const finalPosition = wordWrapper.getBoundingClientRect();
+export function moveWords(word: HTMLElement, targetContainer: HTMLElement): void {
+  const startPosition = word.getBoundingClientRect();
+  targetContainer.append(word);
+  const finalPosition = word.getBoundingClientRect();
 
   const deltaX = startPosition.left - finalPosition.left;
   const deltaY = startPosition.top - finalPosition.top;
 
-  wordWrapper.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+  word.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
-  wordWrapper.getBoundingClientRect();
+  word.getBoundingClientRect();
 
-  wordWrapper.style.transition = 'transform 0.4s ease';
-  wordWrapper.style.transform = 'translate(0, 0)';
+  word.style.transition = 'transform 0.4s ease';
+  word.style.transform = 'translate(0, 0)';
 
-  wordWrapper.addEventListener(
+  word.addEventListener(
     'transitionend',
     () => {
-      wordWrapper.style.transition = '';
-      wordWrapper.style.transform = '';
+      word.style.transition = '';
+      word.style.transform = '';
     },
     { once: true },
   );

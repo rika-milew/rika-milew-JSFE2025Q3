@@ -1,8 +1,5 @@
-export function checkSentence(
-  activeResultSentence: HTMLElement,
-  correctSentence: string[],
-): boolean {
-  const playerSentence = [...activeResultSentence.querySelectorAll('.word-wrapper')].map(
+export function checkSentence(userSentence: HTMLElement, correctSentence: string[]): boolean {
+  const playerSentence = [...userSentence.querySelectorAll('.word-wrapper')].map(
     (card) => card.textContent || '',
   );
 
@@ -12,32 +9,29 @@ export function checkSentence(
   );
 }
 
-export function highlightSentence(
-  activeResultSentence: HTMLElement,
-  correctSentence: string[],
-): void {
+export function highlightSentence(userSentence: HTMLElement, correctSentence: string[]): void {
   const ANIMATION_DURATION = 1000;
-  const wordCards = [...activeResultSentence.querySelectorAll<HTMLElement>('.word-wrapper')];
-  activeResultSentence.style.pointerEvents = 'none';
+  const words = [...userSentence.querySelectorAll<HTMLElement>('.word-wrapper')];
+  userSentence.style.pointerEvents = 'none';
 
-  wordCards.forEach((wordCard, index) => {
-    const isCorrect = wordCard.textContent === correctSentence[index];
+  words.forEach((word, index) => {
+    const isCorrect = word.textContent === correctSentence[index];
 
-    wordCard.classList.remove('correct', 'wrong');
-    wordCard.classList.add(isCorrect ? 'correct' : 'wrong');
+    word.classList.remove('correct', 'wrong');
+    word.classList.add(isCorrect ? 'correct' : 'wrong');
     setTimeout(() => {
-      wordCard.classList.remove('correct', 'wrong');
-      activeResultSentence.style.pointerEvents = 'auto';
+      word.classList.remove('correct', 'wrong');
+      userSentence.style.pointerEvents = 'auto';
     }, ANIMATION_DURATION);
   });
 }
 
-export function highlightCorrectSentence(resultContainer: HTMLElement): void {
-  const wordCards = [...resultContainer.querySelectorAll<HTMLElement>('.word-wrapper')];
-  resultContainer.style.pointerEvents = 'none';
+export function highlightCorrectSentence(result: HTMLElement): void {
+  const words = [...result.querySelectorAll<HTMLElement>('.word-wrapper')];
+  result.style.pointerEvents = 'none';
 
-  wordCards.forEach((wordCard) => {
-    wordCard.classList.remove('correct', 'wrong');
-    wordCard.classList.add('correct');
+  words.forEach((word) => {
+    word.classList.remove('correct', 'wrong');
+    word.classList.add('correct');
   });
 }

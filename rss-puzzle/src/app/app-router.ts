@@ -6,7 +6,7 @@ export type AppRouter = {
   logout: () => void;
 };
 
-const ANIMATION_TIME = 250;
+const ANIMATION_TIME = 300;
 
 export function createAppRouter(container: HTMLElement): AppRouter {
   const router = {
@@ -19,15 +19,21 @@ export function createAppRouter(container: HTMLElement): AppRouter {
         return;
       }
 
-      container.classList.add('page_hidden');
+      const currentPage = container.firstElementChild;
+
+      if (currentPage instanceof HTMLElement) {
+        currentPage.classList.add('page_hidden');
+      }
 
       setTimeout(() => {
         clearContainer(container);
-        const page = showPage(container);
-        container.append(page);
+
+        const nextPage = showPage(container);
+        nextPage.classList.add('page_hidden');
+        container.append(nextPage);
 
         requestAnimationFrame(() => {
-          container.classList.remove('page_hidden');
+          nextPage.classList.remove('page_hidden');
         });
       }, ANIMATION_TIME);
     },

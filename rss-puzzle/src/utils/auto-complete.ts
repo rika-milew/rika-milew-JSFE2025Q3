@@ -1,24 +1,24 @@
-import { moveWordCards } from './animation-helpers.ts';
-import { highlightCorrectSentence } from './check-sentence.ts';
+import { moveWords } from './animation-helpers';
+import { highlightCorrectSentence } from './check-sentence';
 
-export function startAutoComplete(
-  activeResultSentence: HTMLElement,
-  sourceContainer: HTMLElement,
+export function autoComplete(
+  userSentence: HTMLElement,
+  source: HTMLElement,
   correctSentence: string[],
-  resultPlaceholder: HTMLElement,
+  placeholder: HTMLElement,
   autoCompleteButton: HTMLButtonElement,
 ): void {
   autoCompleteButton.disabled = true;
 
   const ANIMATION_DELAY = 450;
 
-  if (activeResultSentence.contains(resultPlaceholder)) {
-    resultPlaceholder.remove();
+  if (userSentence.contains(placeholder)) {
+    placeholder.remove();
   }
 
   const wordCards = [
-    ...activeResultSentence.querySelectorAll<HTMLElement>('.word-wrapper'),
-    ...sourceContainer.querySelectorAll<HTMLElement>('.word-wrapper'),
+    ...userSentence.querySelectorAll<HTMLElement>('.word-wrapper'),
+    ...source.querySelectorAll<HTMLElement>('.word-wrapper'),
   ];
 
   const wordMap = new Map<string, HTMLElement[]>();
@@ -33,12 +33,12 @@ export function startAutoComplete(
   correctSentence.forEach((word) => {
     const wordCard = wordMap.get(word)?.shift();
     if (wordCard) {
-      moveWordCards(wordCard, activeResultSentence);
+      moveWords(wordCard, userSentence);
       wordCard.classList.add('word-wrapper_result');
     }
   });
 
   setTimeout(() => {
-    highlightCorrectSentence(activeResultSentence);
+    highlightCorrectSentence(userSentence);
   }, ANIMATION_DELAY);
 }

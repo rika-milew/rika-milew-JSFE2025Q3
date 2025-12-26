@@ -4,11 +4,13 @@ import { createStartPage } from '../pages/start/start-page';
 
 import type { AppRouter } from './app-router';
 
-export enum Routes {
-  LOGIN = 'login',
-  START = 'start',
-  GAME = 'game',
-}
+export const Routes = {
+  LOGIN: 'login',
+  START: 'start',
+  GAME: 'game',
+} as const;
+
+export type Routes = (typeof Routes)[keyof typeof Routes];
 
 export const routes = (
   router: AppRouter,

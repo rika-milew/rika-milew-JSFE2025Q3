@@ -1,0 +1,19 @@
+.sentence {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  width: 100%;
+}
+
+.sentence_done {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.sentence_active {
+  opacity: 1;
+}
+
+.sentence.container_drag-over {
+  border: none;
+}

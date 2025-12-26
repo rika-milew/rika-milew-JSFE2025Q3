@@ -1,10 +1,12 @@
 import { Routes } from '../../app/routes';
-import { createButton } from '../../components/button/create-button';
-import { showLogoutModal } from '../../components/modal/modal.ts';
+import { createButton } from '../../components/button/button';
+import { createHeading } from '../../components/heading/heading';
+import { showLogoutModal } from '../../components/modal/modal';
+import { START_PAGE_TEXT } from '../../configs/text.config';
 import { isUser } from '../../types/type-guards';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
-import { setBodyBackground } from '../../utils/set-body-background';
+import { setBackground } from '../../utils/set-background';
 
 import type { AppRouter } from '../../app/app-router';
 
@@ -12,25 +14,19 @@ import './start-page.css';
 
 export function createStartPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
-  setBodyBackground('start-page');
+  setBackground('start-page');
 
   const startContainer = createElement({
     tag: 'div',
-    className: 'start',
+    className: ['start', 'page'],
   });
 
-  const heading = createElement({
-    tag: 'h1',
-    className: 'start__heading',
-    textContent: 'RSS Puzzle',
-  });
+  const heading = createHeading('startPage', START_PAGE_TEXT.content.title);
 
   const description = createElement({
     tag: 'p',
     className: 'start__description',
-    textContent: `RSS Puzzle is a language learning mini-game where you assemble 
-      sentences from mixed-up words. Train your English, solve puzzles, and enjoy a thoughtful, 
-      visual gameplay experience.`,
+    textContent: START_PAGE_TEXT.content.description,
   });
 
   const buttonContainer = createElement({
@@ -40,12 +36,10 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
 
   const logoutButton = createButton({
     text: 'Log out',
-    className: 'start__logout-button button',
   });
 
   const startButton = createButton({
     text: 'Start',
-    className: 'start__game-button button',
   });
 
   logoutButton.addEventListener('click', () => {

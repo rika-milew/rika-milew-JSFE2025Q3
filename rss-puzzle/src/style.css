@@ -22,48 +22,13 @@ body {
   height: 100%;
   margin: 0 auto;
   padding: 20px;
+}
+
+.page {
   transition: opacity 0.3s ease;
   opacity: 1;
 }
 
-.button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #ffffff;
-  background-color: #492471;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.1s ease,
-    box-shadow 0.2s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .button:not(:disabled):hover {
-    box-shadow: 0 6px 16px rgba(74, 36, 115, 0.3);
-    background-color: #310f55;
-    transform: translateY(-2px);
-  }
-}
-
-.button:active {
-  box-shadow: 0 6px 16px rgba(74, 36, 115, 0.3);
-  background-color: #310f55;
-  transform: translateY(1px);
-}
-
-.button:disabled {
-  box-shadow: none;
-  background-color: #a89bc3;
-  cursor: default;
-}
-
-.container.page_hidden {
+.page_hidden {
   opacity: 0;
 }

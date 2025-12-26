@@ -8,7 +8,7 @@ export function showLogoutModal(root: HTMLElement, confirmLogout: () => void): v
     className: 'modal__overlay',
   });
 
-  const modalWindow = createElement({
+  const modal = createElement({
     tag: 'div',
     className: 'modal',
   });
@@ -48,7 +48,7 @@ export function showLogoutModal(root: HTMLElement, confirmLogout: () => void): v
   });
 
   modalButtons.append(okButton, cancelButton);
-  modalWindow.append(modalContent, modalButtons);
-  modalOverlay.append(modalWindow);
+  modal.append(modalContent, modalButtons);
+  modalOverlay.append(modal);
   root.append(modalOverlay);
 }
