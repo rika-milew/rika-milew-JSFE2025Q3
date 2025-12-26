@@ -8,13 +8,11 @@ import type { GameUI } from './game-types.ts';
 export function continueGame(props: GameUI): void {
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
   const rounds = gameState.rounds;
-  let nextSentenceIndex = gameState.sentenceIndex + 1;
-  let nextRoundIndex = gameState.roundIndex;
+  const nextSentenceIndex = gameState.sentenceIndex + 1;
+  const nextRoundIndex = gameState.roundIndex;
 
   if (nextSentenceIndex >= rounds[gameState.roundIndex].words.length) {
     gameState.nextRound();
-    nextRoundIndex = gameState.roundIndex;
-    nextSentenceIndex = gameState.sentenceIndex;
 
     result.innerHTML = '';
 
