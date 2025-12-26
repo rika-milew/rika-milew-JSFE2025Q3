@@ -36,7 +36,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const gameContainer = createElement({
     tag: 'div',
-    className: 'game',
+    className: ['game', 'page'],
   });
 
   const gameBoard = createElement({ tag: 'div', className: 'game-board' });

@@ -54,7 +54,7 @@ export function createLoginPage(container: HTMLElement, router: AppRouter): HTML
 
   const loginContainer = createElement({
     tag: 'div',
-    className: 'login',
+    className: ['login', 'page'],
   });
 
   const loginForm = createForm('login__form');

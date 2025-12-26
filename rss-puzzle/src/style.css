@@ -22,10 +22,13 @@ body {
   height: 100%;
   margin: 0 auto;
   padding: 20px;
+}
+
+.page {
   transition: opacity 0.3s ease;
   opacity: 1;
 }
 
-.container.page_hidden {
+.page_hidden {
   opacity: 0;
 }

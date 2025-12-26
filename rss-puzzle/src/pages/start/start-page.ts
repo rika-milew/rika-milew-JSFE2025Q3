@@ -18,7 +18,7 @@ export function createStartPage(container: HTMLElement, router: AppRouter): HTML
 
   const startContainer = createElement({
     tag: 'div',
-    className: 'start',
+    className: ['start', 'page'],
   });
 
   const heading = createHeading('startPage', START_PAGE_TEXT.content.title);
