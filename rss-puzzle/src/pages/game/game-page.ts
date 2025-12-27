@@ -1,6 +1,7 @@
 import { eventState } from './event-state';
 import { continueGame, updateGameState, blockSentence } from './game-controller';
 import { gameState } from './game-state';
+import { hintState } from './hint-state';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { createHeading } from '../../components/heading/heading';
@@ -110,6 +111,10 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     highlightCorrectSentence(props.userSentence);
     transformCheckButton(props.checkButton);
     props.autoCompleteButton.disabled = true;
+
+    if (hintState.getMode('translation') === 'disabled') {
+      translation.classList.add('visible');
+    }
   });
 
   props.autoCompleteButton.addEventListener('click', () => {
@@ -122,6 +127,10 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     );
     gameState.isCompleted = true;
     transformCheckButton(props.checkButton);
+
+    if (hintState.getMode('translation') === 'disabled') {
+      translation.classList.add('visible');
+    }
   });
 
   const hintIcons = createElement({ tag: 'div', className: 'hint-icons' });
@@ -140,15 +149,34 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     className: 'translation',
   });
 
+  hintIcons.append(translationIcon);
+  hintContainer.append(translation);
+
+  eventState.on('hint:translation:toggle', (mode: 'enabled' | 'disabled') => {
+    translation.classList.toggle('visible', mode === 'enabled');
+  });
+
+  eventState.on('hint:translation:toggle', (mode) => {
+    translation.classList.toggle('visible', mode === 'enabled');
+  });
+
   eventState.on('translation:update', (text: string) => {
     translation.textContent = text;
   });
 
+  translationIcon.classList.toggle('active', hintState.getMode('translation') === 'enabled');
+  translation.classList.toggle('visible', hintState.getMode('translation') === 'enabled');
+
+  translationIcon.addEventListener('click', () => {
+    hintState.toggle('translation');
+    translationIcon.classList.toggle('active', hintState.getMode('translation') === 'enabled');
+    eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
+  });
+
   const currentSentence = round.words[gameState.sentenceIndex];
   eventState.emit('translation:update', currentSentence.textExampleTranslate);
+  eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
 
-  hintIcons.append(translationIcon);
-  hintContainer.append(translation);
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
   gameButtons.append(props.checkButton, props.autoCompleteButton, backButton);

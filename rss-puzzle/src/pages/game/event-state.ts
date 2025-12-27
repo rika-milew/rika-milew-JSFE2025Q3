@@ -1,5 +1,6 @@
 type EventMap = {
   'translation:update': string;
+  'hint:translation:toggle': 'enabled' | 'disabled';
 };
 
 type EventState<T extends Record<string, unknown>> = {
