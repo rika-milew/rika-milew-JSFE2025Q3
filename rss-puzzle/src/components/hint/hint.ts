@@ -32,12 +32,12 @@ export function createHint(config: HintConfig): HTMLElement {
 
   container.append(wrapper);
 
-  const set = (newText: string): void => {
+  const setHintText = (newText: string): void => {
     hintText.textContent = newText;
   };
 
   Object.defineProperty(wrapper, 'setText', {
-    value: set,
+    value: setHintText,
     writable: false,
     enumerable: false,
   });

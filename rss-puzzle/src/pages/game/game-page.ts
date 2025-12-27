@@ -152,10 +152,6 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   hintIcons.append(translationIcon);
   hintContainer.append(translation);
 
-  eventState.on('hint:translation:toggle', (mode: 'enabled' | 'disabled') => {
-    translation.classList.toggle('visible', mode === 'enabled');
-  });
-
   eventState.on('hint:translation:toggle', (mode) => {
     translation.classList.toggle('visible', mode === 'enabled');
   });

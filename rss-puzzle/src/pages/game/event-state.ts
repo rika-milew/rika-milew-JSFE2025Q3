@@ -34,7 +34,14 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
       if (!handlers) {
         return;
       }
-      subscribers[event] = handler ? handlers.filter((subscriber) => subscriber !== handler) : [];
+      if (!handler) {
+        handlers.length = 0;
+        return;
+      }
+      const index = handlers.indexOf(handler);
+      if (index !== -1) {
+        handlers.splice(index, 1);
+      }
     },
   };
 }
