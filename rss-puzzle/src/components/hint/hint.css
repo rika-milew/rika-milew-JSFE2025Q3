@@ -2,6 +2,13 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.5;
+}
+
+.hint.active {
+  transform: scale(1.1);
+  opacity: 1;
 }
 
 .hint__icon {

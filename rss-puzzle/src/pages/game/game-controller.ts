@@ -1,6 +1,7 @@
 import { eventState } from './event-state.ts';
 import { updateCheckButtonState } from './game-page';
 import { gameState } from './game-state.ts';
+import { hintState } from './hint-state.ts';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word.ts';
 
@@ -37,6 +38,12 @@ export function continueGame(props: GameUI): void {
   const currentSentence = updatedRound.words[gameState.sentenceIndex];
 
   eventState.emit('translation:update', currentSentence.textExampleTranslate);
+
+  if (hintState.getMode('translation') === 'enabled') {
+    eventState.emit('hint:translation:toggle', 'enabled');
+  } else {
+    eventState.emit('hint:translation:toggle', 'disabled');
+  }
 
   roundTitle.textContent = updatedRound.levelData.name;
 
