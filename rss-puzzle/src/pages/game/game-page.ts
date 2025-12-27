@@ -8,7 +8,7 @@ import { createHeading } from '../../components/heading/heading';
 import { createHint } from '../../components/hint/hint';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word.ts';
-import wordCollectionData from '../../data/word-collection-level-1.json';
+import wordCollectionData from '../../data/words/word-collection-level-1.json';
 import { autoComplete } from '../../utils/auto-complete';
 import {
   checkSentence,
@@ -17,6 +17,7 @@ import {
 } from '../../utils/check-sentence.ts';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
+import { playAudio } from '../../utils/play-audio.ts';
 import { setBackground } from '../../utils/set-background';
 
 import type { GameUI } from './game-types.ts';
@@ -136,7 +137,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const hintIcons = createElement({ tag: 'div', className: 'hint-icons' });
 
   const translationIcon = createHint({
-    container: props.result,
+    container: hintIcons,
     text: 'Translation',
     icon: 'icons/translation.svg',
     className: 'hint',
@@ -149,8 +150,22 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     className: 'translation',
   });
 
-  hintIcons.append(translationIcon);
-  hintContainer.append(translation);
+  const pronunciationIcon = createHint({
+    container: hintIcons,
+    text: 'Pronunciation',
+    icon: 'icons/audio.svg',
+    className: 'hint',
+  });
+
+  const audioIcon = createHint({
+    container: hintContainer,
+    text: 'Play audio',
+    icon: 'icons/audio-pause.svg',
+    className: 'hint audio',
+  });
+
+  hintIcons.append(translationIcon, pronunciationIcon);
+  hintContainer.append(translation, audioIcon);
 
   eventState.on('hint:translation:toggle', (mode) => {
     translation.classList.toggle('visible', mode === 'enabled');
@@ -172,6 +187,11 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const currentSentence = round.words[gameState.sentenceIndex];
   eventState.emit('translation:update', currentSentence.textExampleTranslate);
   eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
+
+  audioIcon.addEventListener('click', () => {
+    const audioPath = `data/${currentSentence.audioExample}`;
+    playAudio(audioPath, audioIcon);
+  });
 
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);

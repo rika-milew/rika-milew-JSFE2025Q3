@@ -80,12 +80,20 @@
   justify-content: flex-end;
   align-items: center;
   flex-direction: row;
+  gap: 10px;
   width: 100%;
   margin-bottom: 40px;
 }
 
-.translation {
+.hint-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
   margin-bottom: 25px;
+}
+
+.translation {
   padding: 8px 10px;
   border-radius: 4px;
   background: rgba(245, 245, 0, 0.3);
@@ -100,4 +108,24 @@
   transform: translateY(0);
   opacity: 1;
   pointer-events: auto;
+}
+
+.audio {
+  opacity: 1;
+}
+
+.audio .hint__icon {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.audio .hint__text {
+  position: absolute;
+  top: -42px;
+  right: -50%;
+}
+
+.audio.playing {
+  background-color: #113d61;
 }
