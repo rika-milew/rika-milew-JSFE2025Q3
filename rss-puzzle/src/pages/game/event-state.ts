@@ -2,6 +2,9 @@ type EventMap = {
   'translation:update': string;
   'hint:translation:toggle': 'enabled' | 'disabled';
   'pronunciation:play': string;
+  'audio:update': string;
+  'pronunciation:state': 'playing' | 'pause';
+  'audio:reset': string;
 };
 
 type EventState<T extends Record<string, unknown>> = {

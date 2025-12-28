@@ -9,6 +9,7 @@ import type { GameUI } from './game-types.ts';
 
 export function continueGame(props: GameUI): void {
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
+
   const rounds = gameState.rounds;
 
   const currentRound = rounds[gameState.roundIndex];
@@ -44,6 +45,8 @@ export function continueGame(props: GameUI): void {
   } else {
     eventState.emit('hint:translation:toggle', 'disabled');
   }
+
+  eventState.emit('audio:update', currentSentence.audioExample);
 
   roundTitle.textContent = updatedRound.levelData.name;
 

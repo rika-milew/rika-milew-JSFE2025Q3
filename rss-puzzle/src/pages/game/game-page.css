@@ -127,5 +127,5 @@
 }
 
 .audio.playing {
-  background-color: #113d61;
+  background-color: red;
 }

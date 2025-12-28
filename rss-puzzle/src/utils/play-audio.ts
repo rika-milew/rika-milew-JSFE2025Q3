@@ -1,21 +1,42 @@
 import { eventState } from '../pages/game/event-state';
+import '../pages/game/game-controller';
 
-export function playAudio(audioPath: string, icon: HTMLElement): void {
-  const audio = new Audio(audioPath);
+let currentAudio: HTMLAudioElement | undefined;
 
-  audio.play().catch((error: unknown) => {
-    if (error instanceof Error) {
-      console.error('Audio playback error:', error.message);
-    } else {
-      console.error('Audio playback error:', error);
-    }
+eventState.on('audio:update', (audioPath: string) => {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    eventState.emit('pronunciation:state', 'pause');
+  }
+  currentAudio = new Audio(audioPath);
+});
+
+eventState.on('pronunciation:play', () => {
+  if (!currentAudio) {
+    return;
+  }
+
+  currentAudio.play().catch((error: unknown) => {
+    console.error(error);
   });
 
-  icon.classList.add('playing');
+  eventState.emit('pronunciation:state', 'playing');
 
-  audio.addEventListener('ended', () => {
-    icon.classList.remove('playing');
-  });
+  currentAudio.addEventListener(
+    'ended',
+    () => {
+      eventState.emit('pronunciation:state', 'pause');
+    },
+    { once: true },
+  );
+});
 
-  eventState.emit('pronunciation:play', audioPath);
-}
+eventState.on('audio:reset', () => {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    eventState.emit('pronunciation:state', 'pause');
+    currentAudio = undefined;
+  }
+});

@@ -10,6 +10,7 @@ import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word.ts';
 import wordCollectionData from '../../data/words/word-collection-level-1.json';
 import { autoComplete } from '../../utils/auto-complete';
+import '../../utils/play-audio';
 import {
   checkSentence,
   highlightSentence,
@@ -17,7 +18,6 @@ import {
 } from '../../utils/check-sentence.ts';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
-import { playAudio } from '../../utils/play-audio.ts';
 import { setBackground } from '../../utils/set-background';
 
 import type { GameUI } from './game-types.ts';
@@ -83,6 +83,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   );
 
   backButton.addEventListener('click', () => {
+    eventState.emit('audio:reset', '');
     router.navigate(Routes.START);
   });
 
@@ -160,7 +161,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const audioIcon = createHint({
     container: hintContainer,
     text: 'Play audio',
-    icon: 'icons/audio-pause.svg',
+    icon: 'icons/audio-play.svg',
     className: 'hint audio',
   });
 
@@ -187,10 +188,14 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const currentSentence = round.words[gameState.sentenceIndex];
   eventState.emit('translation:update', currentSentence.textExampleTranslate);
   eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
+  eventState.emit('audio:update', currentSentence.audioExample);
 
   audioIcon.addEventListener('click', () => {
-    const audioPath = `data/${currentSentence.audioExample}`;
-    playAudio(audioPath, audioIcon);
+    eventState.emit('pronunciation:play', currentSentence.audioExample);
+  });
+
+  eventState.on('pronunciation:state', (state: 'playing' | 'pause') => {
+    audioIcon.classList.toggle('playing', state === 'playing');
   });
 
   props.userSentence.append(props.placeholder);
