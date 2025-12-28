@@ -127,5 +127,26 @@
 }
 
 .audio.playing {
-  background-color: red;
+  animation: audioPlay 0.5s infinite alternate;
+}
+
+@keyframes audioPlay {
+  0% {
+    transform: rotate(0deg);
+    transform: scale(1);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+    transform: scale(1.1);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+    transform: scale(1);
+  }
 }
