@@ -1,6 +1,10 @@
 type EventMap = {
   'translation:update': string;
   'hint:translation:toggle': 'enabled' | 'disabled';
+  'pronunciation:play': string;
+  'audio:update': string;
+  'pronunciation:state': 'playing' | 'pause';
+  'audio:reset': string;
 };
 
 type EventState<T extends Record<string, unknown>> = {
@@ -34,7 +38,14 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
       if (!handlers) {
         return;
       }
-      subscribers[event] = handler ? handlers.filter((subscriber) => subscriber !== handler) : [];
+      if (!handler) {
+        handlers.length = 0;
+        return;
+      }
+      const index = handlers.indexOf(handler);
+      if (index !== -1) {
+        handlers.splice(index, 1);
+      }
     },
   };
 }

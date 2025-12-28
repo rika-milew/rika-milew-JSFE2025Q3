@@ -1,4 +1,4 @@
-import wordCollectionData from '../../data/word-collection-level-1.json';
+import wordCollectionData from '../../data/words/word-collection-level-1.json';
 
 export const gameState: {
   _roundIndex: number;

@@ -8,8 +8,9 @@ import { createHeading } from '../../components/heading/heading';
 import { createHint } from '../../components/hint/hint';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word.ts';
-import wordCollectionData from '../../data/word-collection-level-1.json';
+import wordCollectionData from '../../data/words/word-collection-level-1.json';
 import { autoComplete } from '../../utils/auto-complete';
+import '../../utils/play-audio';
 import {
   checkSentence,
   highlightSentence,
@@ -82,6 +83,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   );
 
   backButton.addEventListener('click', () => {
+    eventState.emit('audio:reset', '');
     router.navigate(Routes.START);
   });
 
@@ -136,7 +138,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const hintIcons = createElement({ tag: 'div', className: 'hint-icons' });
 
   const translationIcon = createHint({
-    container: props.result,
+    container: hintIcons,
     text: 'Translation',
     icon: 'icons/translation.svg',
     className: 'hint',
@@ -149,12 +151,22 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     className: 'translation',
   });
 
-  hintIcons.append(translationIcon);
-  hintContainer.append(translation);
-
-  eventState.on('hint:translation:toggle', (mode: 'enabled' | 'disabled') => {
-    translation.classList.toggle('visible', mode === 'enabled');
+  const pronunciationIcon = createHint({
+    container: hintIcons,
+    text: 'Pronunciation',
+    icon: 'icons/audio.svg',
+    className: 'hint',
   });
+
+  const audioIcon = createHint({
+    container: hintContainer,
+    text: 'Play audio',
+    icon: 'icons/audio-play.svg',
+    className: 'hint audio',
+  });
+
+  hintIcons.append(translationIcon, pronunciationIcon);
+  hintContainer.append(translation, audioIcon);
 
   eventState.on('hint:translation:toggle', (mode) => {
     translation.classList.toggle('visible', mode === 'enabled');
@@ -176,6 +188,15 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const currentSentence = round.words[gameState.sentenceIndex];
   eventState.emit('translation:update', currentSentence.textExampleTranslate);
   eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
+  eventState.emit('audio:update', currentSentence.audioExample);
+
+  audioIcon.addEventListener('click', () => {
+    eventState.emit('pronunciation:play', currentSentence.audioExample);
+  });
+
+  eventState.on('pronunciation:state', (state: 'playing' | 'pause') => {
+    audioIcon.classList.toggle('playing', state === 'playing');
+  });
 
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
