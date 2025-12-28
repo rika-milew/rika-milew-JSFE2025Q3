@@ -40,6 +40,10 @@ export function manageCheckButton(props: GameUI): void {
   if (hintState.getMode('translation') === 'disabled') {
     eventState.emit('hint:translation:toggle', 'enabled');
   }
+
+  if (hintState.getMode('audio') === 'disabled') {
+    eventState.emit('hint:audio:toggle', 'enabled');
+  }
 }
 
 export function updateCheckButtonState(

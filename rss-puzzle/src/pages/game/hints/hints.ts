@@ -46,6 +46,10 @@ export function createHints(currentSentence: Sentence): {
     translation.classList.toggle('visible', mode === 'enabled');
   });
 
+  eventState.on('hint:audio:toggle', (mode) => {
+    audioIcon.classList.toggle('visible', mode === 'enabled');
+  });
+
   eventState.on('translation:update', (text: string) => {
     translation.textContent = text;
   });
@@ -53,15 +57,29 @@ export function createHints(currentSentence: Sentence): {
   translationIcon.classList.toggle('active', hintState.getMode('translation') === 'enabled');
   translation.classList.toggle('visible', hintState.getMode('translation') === 'enabled');
 
+  pronunciationIcon.classList.toggle('active', hintState.getMode('audio') === 'enabled');
+  audioIcon.classList.toggle('visible', hintState.getMode('audio') === 'enabled');
+
   translationIcon.addEventListener('click', () => {
     hintState.toggle('translation');
     translationIcon.classList.toggle('active', hintState.getMode('translation') === 'enabled');
     eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
   });
 
+  pronunciationIcon.addEventListener('click', () => {
+    hintState.toggle('audio');
+    const mode = hintState.getMode('audio');
+    pronunciationIcon.classList.toggle('active', mode === 'enabled');
+    eventState.emit('hint:audio:toggle', mode);
+    if (mode === 'disabled') {
+      eventState.emit('audio:reset', '');
+    }
+  });
+
   eventState.emit('translation:update', currentSentence.textExampleTranslate);
   eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
   eventState.emit('audio:update', currentSentence.audioExample);
+  eventState.emit('hint:audio:toggle', hintState.getMode('audio'));
 
   audioIcon.addEventListener('click', () => {
     eventState.emit('pronunciation:play', currentSentence.audioExample);

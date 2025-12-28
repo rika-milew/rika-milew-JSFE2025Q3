@@ -48,6 +48,12 @@ export function continueGame(props: GameUI): void {
 
   eventState.emit('audio:update', currentSentence.audioExample);
 
+  if (hintState.getMode('audio') === 'enabled') {
+    eventState.emit('hint:audio:toggle', 'enabled');
+  } else {
+    eventState.emit('hint:audio:toggle', 'disabled');
+  }
+
   roundTitle.textContent = updatedRound.levelData.name;
 
   source.innerHTML = '';

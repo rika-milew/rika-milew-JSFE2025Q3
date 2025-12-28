@@ -83,6 +83,10 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     if (hintState.getMode('translation') === 'disabled') {
       eventState.emit('hint:translation:toggle', 'enabled');
     }
+
+    if (hintState.getMode('audio') === 'disabled') {
+      eventState.emit('hint:audio:toggle', 'enabled');
+    }
   });
 
   props.userSentence.append(props.placeholder);

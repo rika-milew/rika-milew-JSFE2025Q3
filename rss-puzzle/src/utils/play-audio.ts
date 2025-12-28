@@ -24,6 +24,8 @@ export function playAudio(): void {
       return;
     }
 
+    currentAudio.currentTime = 0;
+
     currentAudio.play().catch((error: unknown) => {
       console.error(error);
     });
@@ -40,8 +42,12 @@ export function playAudio(): void {
   });
 
   eventState.on('audio:reset', () => {
-    if (currentAudio) {
-      stopAudio();
+    if (!currentAudio) {
+      return;
     }
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+
+    eventState.emit('pronunciation:state', 'pause');
   });
 }
