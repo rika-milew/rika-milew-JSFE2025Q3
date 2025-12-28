@@ -1,11 +1,11 @@
+import { updateCheckButtonState } from './buttons/check-button';
 import { eventState } from './event-state.ts';
-import { updateCheckButtonState } from './game-page';
-import { gameState } from './game-state.ts';
-import { hintState } from './hint-state.ts';
+import { gameState } from './game-state';
+import { hintState } from './hints/hint-state';
 import { createSentence } from '../../components/sentence/sentence';
-import { createWords } from '../../components/word/word.ts';
+import { createWords } from '../../components/word/word';
 
-import type { GameUI } from './game-types.ts';
+import type { GameUI } from './game-ui';
 
 export function continueGame(props: GameUI): void {
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
@@ -47,6 +47,12 @@ export function continueGame(props: GameUI): void {
   }
 
   eventState.emit('audio:update', currentSentence.audioExample);
+
+  if (hintState.getMode('audio') === 'enabled') {
+    eventState.emit('hint:audio:toggle', 'enabled');
+  } else {
+    eventState.emit('hint:audio:toggle', 'disabled');
+  }
 
   roundTitle.textContent = updatedRound.levelData.name;
 

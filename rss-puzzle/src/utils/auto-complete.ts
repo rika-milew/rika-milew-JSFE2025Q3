@@ -1,13 +1,12 @@
 import { moveWords } from './animation-helpers';
 import { highlightCorrectSentence } from './check-sentence';
+import { gameState } from '../pages/game/game-state';
 
-export function autoComplete(
-  userSentence: HTMLElement,
-  source: HTMLElement,
-  correctSentence: string[],
-  placeholder: HTMLElement,
-  autoCompleteButton: HTMLButtonElement,
-): void {
+import type { GameUI } from '../pages/game/game-ui';
+
+export function autoComplete(props: GameUI): void {
+  const { userSentence, source, placeholder, autoCompleteButton } = props;
+
   autoCompleteButton.disabled = true;
 
   const ANIMATION_DELAY = 450;
@@ -30,7 +29,7 @@ export function autoComplete(
     wordMap.get(word)?.push(wordCard);
   });
 
-  correctSentence.forEach((word) => {
+  gameState.correctSentence.forEach((word) => {
     const wordCard = wordMap.get(word)?.shift();
     if (wordCard) {
       moveWords(wordCard, userSentence);
