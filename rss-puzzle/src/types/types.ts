@@ -70,3 +70,9 @@ export type Round = {
 export type Game = {
   rounds: Round[];
 };
+
+export type Sentence = {
+  textExample: string;
+  textExampleTranslate: string;
+  audioExample: string;
+};
