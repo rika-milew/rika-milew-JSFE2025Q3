@@ -174,3 +174,24 @@
     transform: scale(1);
   }
 }
+
+.progress-notification {
+  position: fixed;
+  top: 55px;
+  left: 50%;
+  z-index: 1000;
+  padding: 12px 22px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+  background: #e0d6c8;
+  transition: opacity 0.5s ease;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+.progress-notification.visible {
+  opacity: 1;
+}

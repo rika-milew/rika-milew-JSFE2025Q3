@@ -1,0 +1,65 @@
+import { createElement } from './create-element';
+import { gameState } from '../pages/game/game-state';
+import { levelRounds } from '../pages/game/levels/level-storage';
+
+export function saveProgress(): void {
+  const { levelIndex, roundIndex } = gameState;
+  const progress = { levelIndex, roundIndex };
+  localStorage.setItem('userProgress', JSON.stringify(progress));
+}
+
+export function uploadProgress(): void {
+  const savedProgress = localStorage.getItem('userProgress');
+
+  if (!savedProgress) {
+    return;
+  }
+
+  const { levelIndex, roundIndex } = JSON.parse(savedProgress);
+
+  const currentLevelIndex = Number(levelIndex);
+  const currentRoundIndex = Number(roundIndex) + 1;
+
+  let nextLevel = currentLevelIndex;
+  let nextRound = currentRoundIndex;
+
+  if (nextRound >= levelRounds[currentLevelIndex]) {
+    nextRound = 0;
+    nextLevel = currentLevelIndex + 1;
+
+    if (nextLevel >= levelRounds.length) {
+      nextLevel = 0;
+      nextRound = 0;
+    }
+  }
+
+  gameState.levelIndex = nextLevel;
+  gameState.roundIndex = nextRound;
+  gameState.sentenceIndex = 0;
+  showProgressNotification(gameState.levelIndex, gameState.roundIndex);
+}
+
+function showProgressNotification(level: number, round: number): void {
+  const notification = createElement({
+    tag: 'div',
+    className: 'progress-notification',
+    textContent: `Resuming from Level ${level + 1}, Round ${round + 1}`,
+  });
+
+  document.body.append(notification);
+
+  const ANIMATION_DURATION = 500;
+  const VISIBLE_DURATION = 2000;
+
+  requestAnimationFrame(() => {
+    notification.classList.add('visible');
+  });
+
+  setTimeout(() => {
+    notification.classList.remove('visible');
+
+    setTimeout(() => {
+      notification.remove();
+    }, ANIMATION_DURATION);
+  }, VISIBLE_DURATION);
+}

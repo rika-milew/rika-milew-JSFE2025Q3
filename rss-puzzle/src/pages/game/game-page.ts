@@ -1,10 +1,10 @@
-import { manageCheckButton, transformCheckButton, resetCheckButton } from './buttons/check-button';
+import { manageCheckButton, transformCheckButton } from './buttons/check-button';
 import { eventState } from './event-state';
-import { continueGame } from './game-controller';
 import { gameState } from './game-state';
 import { createGameUI } from './game-ui';
 import { hintState } from './hints/hint-state';
 import { createHints } from './hints/hints';
+import { changeRound } from './levels/game-steps';
 import { initRound } from './levels/level-controller';
 import { createLevelAndRoundsSelector } from './levels/level-selection';
 import { Routes } from '../../app/routes';
@@ -15,6 +15,7 @@ import { autoComplete } from '../../utils/auto-complete';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
 import { playAudio } from '../../utils/play-audio';
+import { uploadProgress } from '../../utils/save-progress';
 import { setBackground } from '../../utils/set-background';
 
 import type { AppRouter } from '../../app/app-router';
@@ -25,7 +26,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   clearContainer(container);
   setBackground('game-page');
 
-  gameState.resetGame();
+  uploadProgress();
 
   const { round, currentSentence } = initRound(gameState.currentLevel);
 
@@ -53,21 +54,12 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   eventState.on('level:changed', () => {
     gameState.roundIndex = 0;
-    changeRound();
+    changeRound(props);
   });
 
   eventState.on('round:changed', () => {
-    changeRound();
+    changeRound(props);
   });
-
-  function changeRound(): void {
-    gameState.sentenceIndex = 0;
-    props.result.innerHTML = '';
-    props.source.innerHTML = '';
-    resetCheckButton(props.checkButton);
-    gameState.isCompleted = false;
-    continueGame(props, 'change');
-  }
 
   levelSelection.append(levelDiv, roundDiv);
 
