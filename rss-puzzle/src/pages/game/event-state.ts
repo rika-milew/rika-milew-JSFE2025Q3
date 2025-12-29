@@ -6,6 +6,8 @@ type EventMap = {
   'audio:update': string;
   'pronunciation:state': 'playing' | 'pause';
   'audio:reset': string;
+  'level:changed': number;
+  'round:changed': number;
 };
 
 type EventState<T extends Record<string, unknown>> = {

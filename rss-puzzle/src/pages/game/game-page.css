@@ -22,7 +22,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   gap: 0;
-  width: 800px;
+  width: 900px;
   height: 400px;
   min-height: 40px;
   margin-bottom: 30px;
@@ -75,6 +75,19 @@
   transition: border-color 0.2s ease;
 }
 
+.settings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.level-selection {
+  display: flex;
+  gap: 10px;
+}
+
 .hint-icons {
   display: flex;
   justify-content: flex-end;
@@ -82,7 +95,6 @@
   flex-direction: row;
   gap: 10px;
   width: 100%;
-  margin-bottom: 40px;
 }
 
 .hint-container {

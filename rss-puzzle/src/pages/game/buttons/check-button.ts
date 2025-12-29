@@ -14,7 +14,7 @@ export function manageCheckButton(props: GameUI): void {
   if (gameState.isCompleted) {
     resetCheckButton(props.checkButton);
     gameState.isCompleted = false;
-    continueGame(props);
+    continueGame(props, 'progress');
     return;
   }
 
@@ -27,7 +27,8 @@ export function manageCheckButton(props: GameUI): void {
   );
 
   if (!isCorrect) {
-    highlightSentence(props.userSentence, gameState.correctSentence);
+    props.autoCompleteButton.disabled = true;
+    highlightSentence(props.autoCompleteButton, props.userSentence, gameState.correctSentence);
     return;
   }
 
@@ -61,7 +62,7 @@ export function transformCheckButton(checkButton: HTMLButtonElement): void {
   checkButton.disabled = false;
 }
 
-function resetCheckButton(checkButton: HTMLButtonElement): void {
+export function resetCheckButton(checkButton: HTMLButtonElement): void {
   checkButton.textContent = 'Check';
   checkButton.classList.remove('game__continue-button');
   checkButton.disabled = true;

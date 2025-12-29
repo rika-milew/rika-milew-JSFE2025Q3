@@ -9,7 +9,11 @@ export function checkSentence(userSentence: HTMLElement, correctSentence: string
   );
 }
 
-export function highlightSentence(userSentence: HTMLElement, correctSentence: string[]): void {
+export function highlightSentence(
+  autoCompleteButton: HTMLButtonElement,
+  userSentence: HTMLElement,
+  correctSentence: string[],
+): void {
   const ANIMATION_DURATION = 1000;
   const words = [...userSentence.querySelectorAll<HTMLElement>('.word-wrapper')];
   userSentence.style.pointerEvents = 'none';
@@ -22,6 +26,7 @@ export function highlightSentence(userSentence: HTMLElement, correctSentence: st
     setTimeout(() => {
       word.classList.remove('correct', 'wrong');
       userSentence.style.pointerEvents = 'auto';
+      autoCompleteButton.disabled = false;
     }, ANIMATION_DURATION);
   });
 }

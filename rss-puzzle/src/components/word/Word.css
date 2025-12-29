@@ -114,7 +114,7 @@
   animation: wrongSentence 1s ease forwards;
 }
 
-.word-wrapper__edge .wrong,
+.word-wrapper.wrong .word-wrapper__edge,
 .word-wrapper.wrong .word {
   background-color: #b62b29;
 }
