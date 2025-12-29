@@ -1,3 +1,4 @@
+import { createElement } from './create-element';
 import { gameState } from '../pages/game/game-state';
 import { levelRounds } from '../pages/game/levels/level-storage';
 
@@ -35,4 +36,30 @@ export function uploadProgress(): void {
   gameState.levelIndex = nextLevel;
   gameState.roundIndex = nextRound;
   gameState.sentenceIndex = 0;
+  showProgressNotification(gameState.levelIndex, gameState.roundIndex);
+}
+
+function showProgressNotification(level: number, round: number): void {
+  const notification = createElement({
+    tag: 'div',
+    className: 'progress-notification',
+    textContent: `Resuming from Level ${level + 1}, Round ${round + 1}`,
+  });
+
+  document.body.append(notification);
+
+  const ANIMATION_DURATION = 500;
+  const VISIBLE_DURATION = 2000;
+
+  requestAnimationFrame(() => {
+    notification.classList.add('visible');
+  });
+
+  setTimeout(() => {
+    notification.classList.remove('visible');
+
+    setTimeout(() => {
+      notification.remove();
+    }, ANIMATION_DURATION);
+  }, VISIBLE_DURATION);
 }
