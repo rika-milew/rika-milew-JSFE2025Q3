@@ -31,9 +31,20 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(157, 131, 235, 0.25);
 }
 
-option {
+.round-option,
+.level-option {
   font-size: 14px;
   font-weight: 500;
   color: #492471;
   background-color: #f2eff6;
+}
+
+.round-option.completed,
+.level-option.completed {
+  background-color: #6aa84f;
+}
+
+select option:checked {
+  font-weight: 600;
+  background-color: #967cd5;
 }
