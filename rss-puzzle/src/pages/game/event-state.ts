@@ -8,6 +8,7 @@ type EventMap = {
   'audio:reset': string;
   'level:changed': number;
   'round:changed': number;
+  'progress:updated': boolean;
 };
 
 type EventState<T extends Record<string, unknown>> = {
