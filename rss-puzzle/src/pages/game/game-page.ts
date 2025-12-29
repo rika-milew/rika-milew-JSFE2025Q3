@@ -1,14 +1,16 @@
-import { manageCheckButton, transformCheckButton } from './buttons/check-button';
+import { manageCheckButton, transformCheckButton, resetCheckButton } from './buttons/check-button';
 import { eventState } from './event-state';
+import { continueGame } from './game-controller';
 import { gameState } from './game-state';
 import { createGameUI } from './game-ui';
 import { hintState } from './hints/hint-state';
 import { createHints } from './hints/hints';
+import { initRound } from './levels/level-controller';
+import { createLevelAndRoundsSelector } from './levels/level-selection';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word';
-import wordCollectionData from '../../data/words/word-collection-level-1.json';
 import { autoComplete } from '../../utils/auto-complete';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
@@ -16,11 +18,8 @@ import { playAudio } from '../../utils/play-audio';
 import { setBackground } from '../../utils/set-background';
 
 import type { AppRouter } from '../../app/app-router';
-import type { Game, Round, Word } from '../../types/types';
 
 import './game-page.css';
-
-const wordCollection: Game = wordCollectionData;
 
 export function createGamePage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);
@@ -28,15 +27,12 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   gameState.resetGame();
 
-  playAudio();
-
-  const { round, currentSentence } = initRound(wordCollection);
+  const { round, currentSentence } = initRound(gameState.currentLevel);
 
   const gameContainer: HTMLDivElement = createElement({
     tag: 'div',
     className: ['game', 'page'],
   });
-
   const gameBoard = createElement({ tag: 'div', className: 'game-board' });
 
   const props = createGameUI(round.levelData.name);
@@ -48,6 +44,32 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     className: 'result__heading',
     textContent: 'Result',
   });
+
+  const settings = createElement({ tag: 'div', className: 'settings' });
+
+  const levelSelection = createElement({ tag: 'div', className: 'level-selection' });
+
+  const [levelDiv, roundDiv] = createLevelAndRoundsSelector();
+
+  eventState.on('level:changed', () => {
+    gameState.roundIndex = 0;
+    changeRound();
+  });
+
+  eventState.on('round:changed', () => {
+    changeRound();
+  });
+
+  function changeRound(): void {
+    gameState.sentenceIndex = 0;
+    props.result.innerHTML = '';
+    props.source.innerHTML = '';
+    resetCheckButton(props.checkButton);
+    gameState.isCompleted = false;
+    continueGame(props, 'change');
+  }
+
+  levelSelection.append(levelDiv, roundDiv);
 
   const gameButtons = createElement({ tag: 'div', className: 'game__buttons' });
 
@@ -89,22 +111,14 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     }
   });
 
+  playAudio();
+
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
   gameButtons.append(props.checkButton, props.autoCompleteButton, backButton);
-  gameContainer.append(hintIcons, props.roundTitle, hintContainer, gameBoard, gameButtons);
+  settings.append(levelSelection, hintIcons);
+  gameContainer.append(settings, props.roundTitle, hintContainer, gameBoard, gameButtons);
   container.append(gameContainer);
 
   return gameContainer;
-}
-
-function initRound(game: Game): {
-  round: Round;
-  currentSentence: Word;
-} {
-  const round = game.rounds[gameState.roundIndex];
-  const currentSentence = round.words[gameState.sentenceIndex];
-  gameState.correctSentence = currentSentence.textExample.split(' ');
-
-  return { round, currentSentence };
 }

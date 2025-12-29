@@ -2,29 +2,23 @@ import { updateCheckButtonState } from './buttons/check-button';
 import { eventState } from './event-state.ts';
 import { gameState } from './game-state';
 import { hintState } from './hints/hint-state';
+import { launchNextStep } from './levels/game-steps';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word';
 
 import type { GameUI } from './game-ui';
 
-export function continueGame(props: GameUI): void {
+export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progress'): void {
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
-
-  const rounds = gameState.rounds;
-
-  const currentRound = rounds[gameState.roundIndex];
-  const isLastSentence = gameState.sentenceIndex >= currentRound.words.length - 1;
-
-  if (isLastSentence) {
-    gameState.nextRound();
-    result.innerHTML = '';
-
-    if (gameState.roundIndex >= rounds.length) {
-      gameState.isCompleted = true;
+  if (mode === 'progress') {
+    const step = launchNextStep();
+    if (step === 'gameover') {
+      // openFinalModal();
       return;
     }
-  } else {
-    gameState.nextSentence();
+    if (step === 'round' || step === 'level') {
+      result.innerHTML = '';
+    }
   }
 
   blockSentence(props.userSentence);
@@ -35,7 +29,7 @@ export function continueGame(props: GameUI): void {
   gameState.isSolved = false;
   autoCompleteButton.disabled = false;
 
-  const updatedRound = rounds[gameState.roundIndex];
+  const updatedRound = gameState.currentLevel.rounds[gameState.roundIndex];
   const currentSentence = updatedRound.words[gameState.sentenceIndex];
 
   eventState.emit('translation:update', currentSentence.textExampleTranslate);

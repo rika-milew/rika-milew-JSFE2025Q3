@@ -1,14 +1,19 @@
-import wordCollectionData from '../../data/words/word-collection-level-1.json';
+import { levels } from './levels/level-storage';
+
+import type { Game } from '../../types/types';
 
 export const gameState: {
+  _levelIndex: number;
+  _levelRounds: number;
   _roundIndex: number;
   _sentenceIndex: number;
   _isCompleted: boolean;
   _isSolved: boolean;
   _correctSentence: string[];
   _userSentence: string[];
-  rounds: typeof wordCollectionData.rounds;
 
+  levelIndex: number;
+  levelRounds: number;
   roundIndex: number;
   sentenceIndex: number;
   isCompleted: boolean;
@@ -17,9 +22,14 @@ export const gameState: {
   userSentence: string[];
 
   resetGame(): void;
+  nextLevel(): void;
   nextRound(): void;
   nextSentence(): void;
+
+  currentLevel: Game;
 } = {
+  _levelIndex: 0,
+  _levelRounds: 0,
   _roundIndex: 0,
   _sentenceIndex: 0,
   _isCompleted: false,
@@ -27,7 +37,24 @@ export const gameState: {
   _correctSentence: [],
   _userSentence: [],
 
-  rounds: wordCollectionData.rounds,
+  get levelIndex() {
+    return this._levelIndex;
+  },
+  set levelIndex(value: number) {
+    this._levelIndex = value;
+  },
+
+  get currentLevel(): Game {
+    return levels[this._levelIndex];
+  },
+
+  get levelRounds() {
+    return this._levelRounds;
+  },
+
+  set levelRounds(value: number) {
+    this._levelRounds = value;
+  },
 
   get roundIndex() {
     return this._roundIndex;
@@ -72,11 +99,21 @@ export const gameState: {
   },
 
   resetGame(): void {
+    this._levelIndex = 0;
     this._roundIndex = 0;
     this._sentenceIndex = 0;
     this._isCompleted = false;
     this._correctSentence = [];
     this._userSentence = [];
+  },
+
+  nextLevel(): void {
+    this._levelIndex += 1;
+    this._roundIndex = 0;
+    this._sentenceIndex = 0;
+    this.correctSentence = [];
+    this.isCompleted = false;
+    this._isSolved = false;
   },
 
   nextRound(): void {

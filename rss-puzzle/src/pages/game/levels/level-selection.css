@@ -1,0 +1,39 @@
+.level-selector,
+.round-selector {
+  padding: 8px 12px;
+  border: 1px solid #a196c8;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(118, 78, 197, 0.1);
+  background: #c6bbe0;
+}
+
+select {
+  padding: 8px 12px;
+  border: 1px solid #9083bc;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #492471;
+  background-color: #f7f4fb;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  select:hover {
+    border-color: #492471;
+  }
+}
+
+select:focus {
+  border-color: #8356ea;
+  box-shadow: 0 0 0 4px rgba(157, 131, 235, 0.25);
+}
+
+option {
+  font-size: 14px;
+  font-weight: 500;
+  color: #492471;
+  background-color: #f2eff6;
+}
