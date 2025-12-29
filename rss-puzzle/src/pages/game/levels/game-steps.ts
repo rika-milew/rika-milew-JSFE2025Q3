@@ -1,7 +1,11 @@
 import { gameState } from '../game-state';
 import { levels } from './level-storage';
 import { markRounds } from '../../../utils/mark-rounds';
+import { resetCheckButton } from '../buttons/check-button';
 import { eventState } from '../event-state';
+import { continueGame } from '../game-controller';
+
+import type { GameUI } from '../game-ui';
 
 type NextStep = 'sentence' | 'round' | 'level' | 'gameover';
 
@@ -27,7 +31,17 @@ export function launchNextStep(): NextStep {
     eventState.emit('level:changed', gameState.levelIndex);
     return 'level';
   }
-
-  gameState.isCompleted = true;
+  markRounds();
+  gameState.resetGame();
+  eventState.emit('level:changed', gameState.levelIndex);
   return 'gameover';
+}
+
+export function changeRound(props: GameUI): void {
+  gameState.sentenceIndex = 0;
+  props.result.innerHTML = '';
+  props.source.innerHTML = '';
+  resetCheckButton(props.checkButton);
+  gameState.isCompleted = false;
+  continueGame(props, 'change');
 }

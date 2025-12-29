@@ -12,11 +12,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
   if (mode === 'progress') {
     const step = launchNextStep();
-    if (step === 'gameover') {
-      // openFinalModal();
-      return;
-    }
-    if (step === 'round' || step === 'level') {
+    if (step === 'gameover' || step === 'round' || step === 'level') {
       result.innerHTML = '';
     }
   }

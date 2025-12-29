@@ -1,3 +1,4 @@
+import { saveProgress } from './save-progress';
 import { eventState } from '../pages/game/event-state';
 import { gameState } from '../pages/game/game-state';
 import { levelRounds } from '../pages/game/levels/level-storage';
@@ -19,4 +20,6 @@ export function markRounds(): void {
   }
 
   eventState.emit('progress:updated', true);
+
+  saveProgress();
 }
