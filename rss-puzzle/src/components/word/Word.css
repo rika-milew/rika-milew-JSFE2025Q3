@@ -18,6 +18,10 @@
     border-color 0.2s ease;
   touch-action: none;
   user-select: none;
+
+  /* background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover; */
 }
 
 .word {
@@ -30,7 +34,7 @@
   white-space: nowrap;
   color: #ffffff;
   text-align: center;
-  background-color: #6d4bd1;
+  /* background-color: #6d4bd1; */
   cursor: grab;
   transition:
     box-shadow 0.3s ease,
@@ -54,7 +58,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #6d4bd1;
+  /* background-color: #6d4bd1; */
   transition:
     box-shadow 0.3s ease,
     background-color 0.3s ease,

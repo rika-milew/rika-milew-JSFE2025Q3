@@ -3,6 +3,7 @@ import { moveWords } from '../../utils/animation-helpers.ts';
 import { createElement } from '../../utils/create-element.ts';
 import { designPuzzles } from '../../utils/design-puzzles.ts';
 import { dragAndDrop } from '../../utils/drag-and-drop.ts';
+import { setPuzzleBackground } from '../../utils/set-puzzle-background.ts';
 
 import type { Word } from '../../types/types.ts';
 
@@ -44,6 +45,14 @@ export function createWords(
     source.append(wordWrapper);
     requestAnimationFrame(() => {
       fixWordWidth(wordWrapper);
+      if (sentence.puzzle) {
+        setPuzzleBackground({
+          wrapper: wordWrapper,
+          index: word.id,
+          total: correctSentence.length,
+          puzzle: sentence.puzzle,
+        });
+      }
     });
   });
 }

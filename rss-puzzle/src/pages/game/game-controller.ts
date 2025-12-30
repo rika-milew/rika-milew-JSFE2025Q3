@@ -4,7 +4,7 @@ import { gameState } from './game-state';
 import { hintState } from './hints/hint-state';
 import { launchNextStep } from './levels/game-steps';
 import { createSentence } from '../../components/sentence/sentence';
-import { createWords } from '../../components/word/word';
+import { createWords } from '../../components/word/word.ts';
 
 import type { GameUI } from './game-ui';
 
