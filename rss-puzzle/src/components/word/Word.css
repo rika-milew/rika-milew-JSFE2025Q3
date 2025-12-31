@@ -1,7 +1,7 @@
 .word-wrapper {
   position: relative;
   z-index: 10;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   flex-grow: var(--grow);
   flex-basis: 0;
@@ -10,6 +10,7 @@
   padding: 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   overflow: visible;
+  background-color: transparent;
   transition:
     box-shadow 0.3s ease,
     background-color 0.3s ease,
@@ -18,19 +19,21 @@
     border-color 0.2s ease;
   touch-action: none;
   user-select: none;
-
-  /* background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover; */
 }
 
 .word {
   position: relative;
   z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-grow: 1;
   width: auto;
-  padding: 10px 18px;
-  border-radius: 8px;
+  min-width: 40px;
+  height: auto;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 700;
   white-space: nowrap;
   color: #ffffff;
   text-align: center;
@@ -42,21 +45,25 @@
     opacity 0.3s ease,
     transform 0.2s ease,
     border-color 0.2s ease;
+  pointer-events: none;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .word_mask {
   z-index: 2;
-  -webkit-mask: radial-gradient(circle 10px at 0% 50%, transparent 98%, black 100%);
-  mask: radial-gradient(circle 10px at 0% 50%, transparent 98%, black 100%);
+  -webkit-mask: radial-gradient(circle 13px at 0% 50%, transparent 98%, black 100%);
+  mask: radial-gradient(circle 13px at 0% 50%, transparent 98%, black 100%);
 }
 
 .word-wrapper__edge {
   position: absolute;
   top: 50%;
-  right: -10px;
+  right: -16px;
   z-index: 2;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   /* background-color: #6d4bd1; */
   transition:
@@ -66,6 +73,7 @@
     transform 0.2s ease,
     border-color 0.2s ease;
   transform: translateY(-50%);
+  pointer-events: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -85,7 +93,6 @@
 .word-wrapper_result {
   border: 1px solid #b7a9ee;
   border-radius: 0;
-  opacity: 0.7;
 }
 
 .word-wrapper:not(.word-wrapper_result) {

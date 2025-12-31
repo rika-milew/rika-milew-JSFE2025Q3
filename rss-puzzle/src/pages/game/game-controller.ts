@@ -45,6 +45,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   }
 
   roundTitle.textContent = updatedRound.levelData.name;
+  gameState.levelImage = updatedRound.levelData.imageSrc;
 
   source.innerHTML = '';
 

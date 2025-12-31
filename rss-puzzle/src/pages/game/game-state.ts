@@ -20,6 +20,7 @@ export const gameState: {
   isSolved: boolean;
   correctSentence: string[];
   userSentence: string[];
+  levelImage: string;
 
   resetGame(): void;
   nextLevel(): void;
@@ -36,6 +37,7 @@ export const gameState: {
   _isSolved: false,
   _correctSentence: [],
   _userSentence: [],
+  levelImage: '',
 
   get levelIndex() {
     return this._levelIndex;

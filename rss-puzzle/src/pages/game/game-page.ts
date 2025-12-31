@@ -29,6 +29,8 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const { round, currentSentence } = initRound(gameState.currentLevel);
 
+  gameState.levelImage = round.levelData.imageSrc;
+
   const gameContainer: HTMLDivElement = createElement({
     tag: 'div',
     className: ['game', 'page'],

@@ -51,7 +51,6 @@ export type Word = {
   id: number;
   word: string;
   wordTranslate: string;
-  puzzle?: Puzzle;
 };
 
 export type Level = {
@@ -76,18 +75,4 @@ export type Sentence = {
   textExample: string;
   textExampleTranslate: string;
   audioExample: string;
-  puzzle?: Puzzle;
-};
-
-export type Puzzle = {
-  imageSrc: string;
-  rows: number;
-  columns: number;
-};
-
-export type PuzzleBackgroundOptions = {
-  wrapper: HTMLElement;
-  index: number;
-  total: number;
-  puzzle: Puzzle;
 };
