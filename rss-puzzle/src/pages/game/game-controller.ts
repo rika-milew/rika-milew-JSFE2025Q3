@@ -4,7 +4,7 @@ import { gameState } from './game-state';
 import { hintState } from './hints/hint-state';
 import { launchNextStep } from './levels/game-steps';
 import { createSentence } from '../../components/sentence/sentence';
-import { createWords } from '../../components/word/word';
+import { createWords } from '../../components/word/word.ts';
 
 import type { GameUI } from './game-ui';
 
@@ -45,6 +45,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   }
 
   roundTitle.textContent = updatedRound.levelData.name;
+  gameState.levelImage = updatedRound.levelData.imageSrc;
 
   source.innerHTML = '';
 

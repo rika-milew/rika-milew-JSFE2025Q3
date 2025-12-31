@@ -9,7 +9,6 @@ import { initRound } from './levels/level-controller';
 import { createLevelAndRoundsSelector } from './levels/level-selection';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
-import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word';
 import { autoComplete } from '../../utils/auto-complete';
 import { clearContainer } from '../../utils/clear-container';
@@ -30,6 +29,8 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   const { round, currentSentence } = initRound(gameState.currentLevel);
 
+  gameState.levelImage = round.levelData.imageSrc;
+
   const gameContainer: HTMLDivElement = createElement({
     tag: 'div',
     className: ['game', 'page'],
@@ -37,8 +38,6 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const gameBoard = createElement({ tag: 'div', className: 'game-board' });
 
   const props = createGameUI(round.levelData.name);
-
-  props.userSentence = createSentence(props.result);
 
   const heading = createElement({
     tag: 'p',

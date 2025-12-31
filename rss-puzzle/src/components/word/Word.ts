@@ -1,10 +1,12 @@
-import { updateGameState } from '../../pages/game/game-controller.ts';
-import { moveWords } from '../../utils/animation-helpers.ts';
-import { createElement } from '../../utils/create-element.ts';
-import { designPuzzles } from '../../utils/design-puzzles.ts';
-import { dragAndDrop } from '../../utils/drag-and-drop.ts';
+import { updateGameState } from '../../pages/game/game-controller';
+import { gameState } from '../../pages/game/game-state';
+import { moveWords } from '../../utils/animation-helpers';
+import { createElement } from '../../utils/create-element';
+import { designPuzzles } from '../../utils/design-puzzles';
+import { dragAndDrop } from '../../utils/drag-and-drop';
+import { setPuzzleBackground } from '../../utils/set-puzzle-background';
 
-import type { Word } from '../../types/types.ts';
+import type { Word } from '../../types/types';
 
 import './word.css';
 
@@ -44,6 +46,13 @@ export function createWords(
     source.append(wordWrapper);
     requestAnimationFrame(() => {
       fixWordWidth(wordWrapper);
+      if (gameState.levelImage) {
+        setPuzzleBackground({
+          wrapper: wordWrapper,
+          index: word.id,
+          correctSentence,
+        });
+      }
     });
   });
 }
