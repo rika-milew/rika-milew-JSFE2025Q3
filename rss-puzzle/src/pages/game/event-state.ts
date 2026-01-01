@@ -2,6 +2,7 @@ type EventMap = {
   'translation:update': string;
   'hint:translation:toggle': 'enabled' | 'disabled';
   'hint:audio:toggle': 'enabled' | 'disabled';
+  'hint:image:toggle': 'enabled' | 'disabled';
   'pronunciation:play': string;
   'audio:update': string;
   'pronunciation:state': 'playing' | 'pause';

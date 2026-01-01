@@ -100,6 +100,10 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     if (hintState.getMode('audio') === 'disabled') {
       eventState.emit('hint:audio:toggle', 'enabled');
     }
+
+    if (hintState.getMode('image') === 'disabled') {
+      eventState.emit('hint:image:toggle', 'enabled');
+    }
   });
 
   playAudio();

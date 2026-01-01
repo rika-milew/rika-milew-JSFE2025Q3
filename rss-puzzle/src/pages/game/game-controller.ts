@@ -44,6 +44,12 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
     eventState.emit('hint:audio:toggle', 'disabled');
   }
 
+  if (hintState.getMode('image') === 'enabled') {
+    eventState.emit('hint:image:toggle', 'enabled');
+  } else {
+    eventState.emit('hint:image:toggle', 'disabled');
+  }
+
   roundTitle.textContent = updatedRound.levelData.name;
   gameState.levelImage = updatedRound.levelData.imageSrc;
 
