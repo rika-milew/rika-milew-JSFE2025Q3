@@ -1,5 +1,4 @@
 import { resolve } from 'path';
-// import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default {
   base: './',

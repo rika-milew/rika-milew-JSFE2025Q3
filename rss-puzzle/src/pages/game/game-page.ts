@@ -26,6 +26,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   setBackground('game-page');
 
   uploadProgress();
+  hintState.upload();
 
   const { round, currentSentence } = initRound(gameState.currentLevel);
 

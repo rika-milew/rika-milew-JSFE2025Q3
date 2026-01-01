@@ -1,4 +1,5 @@
 import { routes, Routes } from './routes';
+import { hintState } from '../pages/game/hints/hint-state';
 import { clearContainer } from '../utils/clear-container';
 
 export type AppRouter = {
@@ -39,6 +40,7 @@ export function createAppRouter(container: HTMLElement): AppRouter {
     },
     logout(): void {
       localStorage.removeItem('user');
+      hintState.reset();
       router.navigate(Routes.LOGIN);
     },
   };
