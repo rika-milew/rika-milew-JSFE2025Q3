@@ -21,10 +21,10 @@ export function highlightSentence(
   words.forEach((word, index) => {
     const isCorrect = word.textContent === correctSentence[index];
 
-    word.classList.remove('correct', 'wrong');
-    word.classList.add(isCorrect ? 'correct' : 'wrong');
+    word.classList.remove('correct-animation', 'wrong');
+    word.classList.add(isCorrect ? 'correct-animation' : 'wrong');
     setTimeout(() => {
-      word.classList.remove('correct', 'wrong');
+      word.classList.remove('correct-animation', 'wrong');
       userSentence.style.pointerEvents = 'auto';
       autoCompleteButton.disabled = false;
     }, ANIMATION_DURATION);
@@ -32,11 +32,15 @@ export function highlightSentence(
 }
 
 export function highlightCorrectSentence(result: HTMLElement): void {
+  const ANIMATION_DURATION = 1000;
   const words = [...result.querySelectorAll<HTMLElement>('.word-wrapper')];
   result.style.pointerEvents = 'none';
 
   words.forEach((word) => {
     word.classList.remove('correct', 'wrong');
-    word.classList.add('correct');
+    word.classList.add('correct', 'correct-animation', 'background');
+    setTimeout(() => {
+      word.classList.remove('correct-animation');
+    }, ANIMATION_DURATION);
   });
 }

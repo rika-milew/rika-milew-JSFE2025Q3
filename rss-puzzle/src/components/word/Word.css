@@ -11,6 +11,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   overflow: visible;
   background-color: transparent;
+  cursor: grab;
   transition:
     box-shadow 0.3s ease,
     background-color 0.3s ease,
@@ -21,6 +22,11 @@
   user-select: none;
 }
 
+.word,
+.word-wrapper__edge {
+  background-color: #6d4bd1;
+}
+
 .word {
   position: relative;
   z-index: 3;
@@ -29,7 +35,7 @@
   align-items: center;
   flex-grow: 1;
   width: auto;
-  min-width: 40px;
+  min-width: 45px;
   height: auto;
   padding: 8px 12px;
   font-size: 14px;
@@ -37,8 +43,6 @@
   white-space: nowrap;
   color: #ffffff;
   text-align: center;
-  /* background-color: #6d4bd1; */
-  cursor: grab;
   transition:
     box-shadow 0.3s ease,
     background-color 0.3s ease,
@@ -51,12 +55,6 @@
     0 0 3px rgba(0, 0, 0, 0.2);
 }
 
-.word_mask {
-  z-index: 2;
-  -webkit-mask: radial-gradient(circle 13px at 0% 50%, transparent 98%, black 100%);
-  mask: radial-gradient(circle 13px at 0% 50%, transparent 98%, black 100%);
-}
-
 .word-wrapper__edge {
   position: absolute;
   top: 50%;
@@ -65,7 +63,6 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  /* background-color: #6d4bd1; */
   transition:
     box-shadow 0.3s ease,
     background-color 0.3s ease,
@@ -74,6 +71,19 @@
     border-color 0.2s ease;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+.word-wrapper.background .word,
+.word-wrapper.background .word-wrapper__edge {
+  background-image: var(--background-image);
+  background-position: var(--background-position);
+  background-size: var(--background-size);
+}
+
+.word_mask {
+  z-index: 2;
+  -webkit-mask: radial-gradient(circle 13px at 0% 50%, transparent 98%, black 100%);
+  mask: radial-gradient(circle 13px at 0% 50%, transparent 98%, black 100%);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -121,6 +131,16 @@
   }
 }
 
+.word-wrapper.correct-animation {
+  animation: correctSentence 1s ease forwards;
+}
+
+.word-wrapper.correct-animation .word,
+.word-wrapper.correct-animation .word-wrapper__edge {
+  background-color: #184823;
+  background-image: none;
+}
+
 .word-wrapper.wrong {
   animation: wrongSentence 1s ease forwards;
 }
@@ -128,6 +148,7 @@
 .word-wrapper.wrong .word-wrapper__edge,
 .word-wrapper.wrong .word {
   background-color: #b62b29;
+  background-image: none;
 }
 
 @keyframes wrongSentence {
@@ -168,7 +189,7 @@
 
 .dragging {
   z-index: 1000;
-  cursor: pointer;
+  cursor: grabbing;
 }
 
 .word-wrapper.dragging .word,
@@ -180,6 +201,7 @@
   position: fixed;
   z-index: 1000;
   color: #000;
+  cursor: grabbing;
   pointer-events: none;
 }
 

@@ -37,15 +37,13 @@ export function setPuzzleBackground({
     );
     const verticalOffset = Math.round(sentenceIndex * rowHeight);
 
-    const setPicture = (card: HTMLElement, extraOffset = 0): void => {
-      card.style.backgroundImage = `url(/pictures/${gameState.levelImage})`;
-      card.style.backgroundSize = `${WIDTH}px ${height}px`;
-      card.style.backgroundPosition = `-${horizontalOffset + extraOffset}px -${verticalOffset}px`;
-      card.classList.add('background');
-    };
-
     if (word) {
-      setPicture(word);
+      word.style.setProperty('--background-image', `url(/pictures/${gameState.levelImage})`);
+      word.style.setProperty('--background-size', `${WIDTH}px ${height}px`);
+      word.style.setProperty(
+        '--background-position',
+        `-${horizontalOffset}px -${verticalOffset}px`,
+      );
     }
 
     if (edge && word) {
@@ -57,10 +55,9 @@ export function setPuzzleBackground({
       const edgeOffsetX = horizontalOffset + wordRect.width - edgeRect.width + EDGE_OVERLAP;
       const edgeOffsetY = verticalOffset + (wordRect.height - edgeRect.height) / 2;
 
-      edge.style.backgroundImage = `url(/pictures/${gameState.levelImage})`;
-      edge.style.backgroundSize = `${WIDTH}px ${height}px`;
-      edge.style.backgroundPosition = `-${edgeOffsetX}px -${edgeOffsetY}px`;
-      edge.classList.add('background');
+      edge.style.setProperty('--background-image', `url(/pictures/${gameState.levelImage})`);
+      edge.style.setProperty('--background-size', `${WIDTH}px ${height}px`);
+      edge.style.setProperty('--background-position', `-${edgeOffsetX}px -${edgeOffsetY}px`);
     }
   });
 }

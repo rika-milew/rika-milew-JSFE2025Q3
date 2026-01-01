@@ -32,6 +32,13 @@ export function createHints(currentSentence: Sentence): {
     className: 'hint',
   });
 
+  const imageIcon = createHint({
+    container: hintIcons,
+    text: 'Show image',
+    icon: 'icons/picture.svg',
+    className: 'hint image',
+  });
+
   const audioIcon = createHint({
     container: hintContainer,
     text: 'Play audio',
@@ -39,7 +46,7 @@ export function createHints(currentSentence: Sentence): {
     className: 'hint audio',
   });
 
-  hintIcons.append(translationIcon, pronunciationIcon);
+  hintIcons.append(translationIcon, pronunciationIcon, imageIcon);
   hintContainer.append(translation, audioIcon);
 
   eventState.on('hint:translation:toggle', (mode) => {
@@ -48,6 +55,15 @@ export function createHints(currentSentence: Sentence): {
 
   eventState.on('hint:audio:toggle', (mode) => {
     audioIcon.classList.toggle('visible', mode === 'enabled');
+  });
+
+  eventState.on('hint:image:toggle', (mode: 'enabled' | 'disabled') => {
+    const wrappers = document.querySelectorAll<HTMLElement>('.word-wrapper');
+
+    wrappers.forEach((wrapper) => {
+      const isSolved = wrapper.classList.contains('correct');
+      wrapper.classList.toggle('background', mode === 'enabled' || isSolved);
+    });
   });
 
   eventState.on('translation:update', (text: string) => {
@@ -59,6 +75,8 @@ export function createHints(currentSentence: Sentence): {
 
   pronunciationIcon.classList.toggle('active', hintState.getMode('audio') === 'enabled');
   audioIcon.classList.toggle('visible', hintState.getMode('audio') === 'enabled');
+
+  imageIcon.classList.toggle('active', hintState.getMode('image') === 'enabled');
 
   translationIcon.addEventListener('click', () => {
     hintState.toggle('translation');
@@ -76,10 +94,17 @@ export function createHints(currentSentence: Sentence): {
     }
   });
 
+  imageIcon.addEventListener('click', () => {
+    hintState.toggle('image');
+    imageIcon.classList.toggle('active', hintState.getMode('image') === 'enabled');
+    eventState.emit('hint:image:toggle', hintState.getMode('image'));
+  });
+
   eventState.emit('translation:update', currentSentence.textExampleTranslate);
   eventState.emit('hint:translation:toggle', hintState.getMode('translation'));
   eventState.emit('audio:update', currentSentence.audioExample);
   eventState.emit('hint:audio:toggle', hintState.getMode('audio'));
+  eventState.emit('hint:image:toggle', hintState.getMode('image'));
 
   audioIcon.addEventListener('click', () => {
     eventState.emit('pronunciation:play', currentSentence.audioExample);

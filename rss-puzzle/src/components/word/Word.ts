@@ -1,5 +1,6 @@
 import { updateGameState } from '../../pages/game/game-controller';
 import { gameState } from '../../pages/game/game-state';
+import { hintState } from '../../pages/game/hints/hint-state';
 import { moveWords } from '../../utils/animation-helpers';
 import { createElement } from '../../utils/create-element';
 import { designPuzzles } from '../../utils/design-puzzles';
@@ -77,6 +78,10 @@ export function createWord(
 
   const length = word.length;
   wordWrapper.style.setProperty('--grow', String(length));
+
+  if (hintState.getMode('image') === 'enabled') {
+    wordWrapper.classList.add('background');
+  }
 
   wordWrapper.append(wordCard);
 
