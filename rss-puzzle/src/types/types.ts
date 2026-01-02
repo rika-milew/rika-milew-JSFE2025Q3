@@ -76,3 +76,10 @@ export type Sentence = {
   textExampleTranslate: string;
   audioExample: string;
 };
+
+export type ImageInfo = {
+  container: HTMLElement;
+  title: HTMLElement;
+  author: HTMLElement;
+  year: HTMLElement;
+};

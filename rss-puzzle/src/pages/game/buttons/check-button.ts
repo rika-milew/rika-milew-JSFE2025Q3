@@ -60,6 +60,10 @@ export function transformCheckButton(checkButton: HTMLButtonElement): void {
   checkButton.textContent = 'Continue';
   checkButton.classList.add('game__continue-button');
   checkButton.disabled = false;
+  const LAST_SENTENCE = 9;
+  if (gameState.sentenceIndex === LAST_SENTENCE) {
+    eventState.emit('round:completed', true);
+  }
 }
 
 export function resetCheckButton(checkButton: HTMLButtonElement): void {

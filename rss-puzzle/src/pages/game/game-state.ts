@@ -21,6 +21,10 @@ export const gameState: {
   correctSentence: string[];
   userSentence: string[];
   levelImage: string;
+  imageName: string;
+  cutImage: string;
+  author: string;
+  year: string;
 
   resetGame(): void;
   nextLevel(): void;
@@ -38,6 +42,10 @@ export const gameState: {
   _correctSentence: [],
   _userSentence: [],
   levelImage: '',
+  imageName: '',
+  cutImage: '',
+  author: '',
+  year: '',
 
   get levelIndex() {
     return this._levelIndex;

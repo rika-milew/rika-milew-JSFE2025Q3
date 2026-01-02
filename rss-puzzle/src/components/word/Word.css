@@ -15,9 +15,10 @@
   transition:
     box-shadow 0.3s ease,
     background-color 0.3s ease,
-    opacity 0.3s ease,
+    opacity 0.8s ease,
     transform 0.2s ease,
     border-color 0.2s ease;
+  opacity: 1;
   touch-action: none;
   user-select: none;
 }
@@ -75,6 +76,7 @@
 
 .word-wrapper.background .word,
 .word-wrapper.background .word-wrapper__edge {
+  background-color: none;
   background-image: var(--background-image);
   background-position: var(--background-position);
   background-size: var(--background-size);
@@ -101,7 +103,7 @@
 }
 
 .word-wrapper_result {
-  border: 1px solid #b7a9ee;
+  /* border: 1px solid #b7a9ee; */
   border-radius: 0;
 }
 

@@ -14,6 +14,7 @@ import { autoComplete } from '../../utils/auto-complete';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
 import { playAudio } from '../../utils/play-audio';
+import { revealImage } from '../../utils/reveal-image';
 import { uploadProgress } from '../../utils/save-progress';
 import { setBackground } from '../../utils/set-background';
 
@@ -31,6 +32,10 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   const { round, currentSentence } = initRound(gameState.currentLevel);
 
   gameState.levelImage = round.levelData.imageSrc;
+  gameState.imageName = round.levelData.name;
+  gameState.cutImage = round.levelData.cutSrc;
+  gameState.author = round.levelData.author;
+  gameState.year = round.levelData.year;
 
   const gameContainer: HTMLDivElement = createElement({
     tag: 'div',
@@ -59,6 +64,10 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   eventState.on('round:changed', () => {
     changeRound(props);
+  });
+
+  eventState.on('round:completed', () => {
+    revealImage(props.result);
   });
 
   levelSelection.append(levelDiv, roundDiv);
