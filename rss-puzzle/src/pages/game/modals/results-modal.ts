@@ -6,10 +6,17 @@ import { gameState } from '../game-state';
 
 import './results-modal.css';
 
+let currentResultsModal: HTMLElement | undefined;
+
 export function openResultsModal(
   container: HTMLElement,
   // stats: RoundStats,
 ): void {
+  if (currentResultsModal) {
+    currentResultsModal.remove();
+    currentResultsModal = undefined;
+  }
+
   const content = createElement({
     tag: 'div',
     className: 'results',
@@ -28,21 +35,17 @@ export function openResultsModal(
     content.append(artworkMiniature);
   }
 
-  createModal({
+  currentResultsModal = createModal({
     container,
     content,
     modalClassName: 'results-modal',
     buttons: [
       {
-        text: 'Continue',
-        className: 'results__continue',
+        text: 'Next Round',
+        className: 'results__button',
         onClick: (): void => {
-          eventState.emit('results:open', true);
+          eventState.emit('round:next', true);
         },
-      },
-      {
-        text: 'Cancel',
-        className: 'results__details',
       },
     ],
   });

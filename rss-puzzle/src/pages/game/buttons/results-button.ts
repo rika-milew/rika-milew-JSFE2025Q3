@@ -6,10 +6,6 @@ export function showResultsButton(resultsButton: HTMLButtonElement): void {
   resultsButton.addEventListener('click', () => {
     eventState.emit('results:open', true);
   });
-
-  eventState.on('results:open', () => {
-    resultsButton.classList.remove('visible');
-  });
 }
 
 export function hideResultsButton(resultsButton: HTMLButtonElement): void {

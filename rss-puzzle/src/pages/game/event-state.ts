@@ -12,6 +12,7 @@ type EventMap = {
   'progress:updated': boolean;
   'round:completed': boolean;
   'results:open': boolean;
+  'round:next': boolean;
 };
 
 type EventState<T extends Record<string, unknown>> = {

@@ -1,6 +1,7 @@
-import { manageCheckButton, transformCheckButton } from './buttons/check-button';
+import { manageCheckButton, transformCheckButton, resetCheckButton } from './buttons/check-button';
 import { showResultsButton } from './buttons/results-button';
 import { eventState } from './event-state';
+import { continueGame } from './game-controller';
 import { gameState } from './game-state';
 import { createGameUI } from './game-ui';
 import { hintState } from './hints/hint-state';
@@ -71,6 +72,12 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   eventState.on('round:completed', () => {
     revealImage(props.result);
     showResultsButton(props.resultsButton);
+  });
+
+  eventState.on('round:next', () => {
+    resetCheckButton(props.checkButton);
+    gameState.isCompleted = false;
+    continueGame(props, 'progress');
   });
 
   eventState.on('results:open', () => {
