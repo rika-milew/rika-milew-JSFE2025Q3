@@ -28,6 +28,21 @@
   border: 8px solid #492471;
   border-radius: 12px;
   overflow: hidden;
+  transition: background-image 1s ease;
+}
+
+.result.revealed {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 20px;
+  background-image: var(--image);
+  background-position: center;
+  background-size: cover;
+}
+
+.result.revealed .word-wrapper {
+  opacity: 0;
 }
 
 .result__heading {
@@ -196,4 +211,18 @@
 
 .progress-notification.visible {
   opacity: 1;
+}
+
+.image-info {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 0 3px rgba(0, 0, 0, 0.2);
 }

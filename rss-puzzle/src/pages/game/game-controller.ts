@@ -5,6 +5,7 @@ import { hintState } from './hints/hint-state';
 import { launchNextStep } from './levels/game-steps';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word.ts';
+import { hideImage } from '../../utils/reveal-image.ts';
 
 import type { GameUI } from './game-ui';
 
@@ -14,6 +15,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
     const step = launchNextStep();
     if (step === 'gameover' || step === 'round' || step === 'level') {
       result.innerHTML = '';
+      hideImage(props.result);
     }
   }
 
@@ -52,6 +54,10 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
 
   roundTitle.textContent = updatedRound.levelData.name;
   gameState.levelImage = updatedRound.levelData.imageSrc;
+  gameState.imageName = updatedRound.levelData.name;
+  gameState.cutImage = updatedRound.levelData.cutSrc;
+  gameState.author = updatedRound.levelData.author;
+  gameState.year = updatedRound.levelData.year;
 
   source.innerHTML = '';
 
