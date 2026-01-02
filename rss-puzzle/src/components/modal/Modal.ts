@@ -4,7 +4,7 @@ import type { ModalElements } from '../../types/types';
 
 import './modal.css';
 
-export function createModal({ container, content, buttons }: ModalElements): void {
+export function createModal({ container, content, buttons, modalClassName }: ModalElements): void {
   const overlay = createElement({
     tag: 'div',
     className: 'modal__overlay',
@@ -12,7 +12,7 @@ export function createModal({ container, content, buttons }: ModalElements): voi
 
   const modal = createElement({
     tag: 'div',
-    className: 'modal',
+    className: `modal ${modalClassName ?? ''}`,
   });
 
   const modalButtons = createElement({

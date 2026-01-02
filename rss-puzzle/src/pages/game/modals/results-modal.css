@@ -1,2 +1,14 @@
 /* background-color: #416a56;
   color: #ffffff; */
+
+.miniature__image {
+  width: 400px;
+  height: auto;
+  background-size: cover;
+}
+
+.results-modal {
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+}

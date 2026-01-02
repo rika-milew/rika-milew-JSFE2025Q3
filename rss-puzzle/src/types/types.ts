@@ -84,6 +84,13 @@ export type ImageInfo = {
   year: HTMLElement;
 };
 
+export type ArtMiniatureInfo = {
+  cutImageSrc: string;
+  name: string;
+  author: string;
+  year: string;
+};
+
 // modal
 
 export type ModalButton = {
@@ -96,4 +103,5 @@ export type ModalElements = {
   container: HTMLElement;
   content: HTMLElement;
   buttons: ModalButton[];
+  modalClassName?: string;
 };
