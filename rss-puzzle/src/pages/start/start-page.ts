@@ -1,7 +1,7 @@
+import { showLogoutModal } from './logout-modal';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { createHeading } from '../../components/heading/heading';
-import { showLogoutModal } from '../../components/modal/modal';
 import { START_PAGE_TEXT } from '../../configs/text.config';
 import { isUser } from '../../types/type-guards';
 import { clearContainer } from '../../utils/clear-container';

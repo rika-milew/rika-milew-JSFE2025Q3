@@ -11,6 +11,7 @@ export type GameUI = {
   placeholder: HTMLElement;
   checkButton: HTMLButtonElement;
   autoCompleteButton: HTMLButtonElement;
+  resultsButton: HTMLButtonElement;
 };
 
 export function createGameUI(round: string): GameUI {
@@ -43,6 +44,11 @@ export function createGameUI(round: string): GameUI {
     text: 'Auto-Complete',
   });
 
+  const resultsButton = createButton({
+    text: 'Results',
+    className: 'result-button',
+  });
+
   return {
     roundTitle,
     source,
@@ -51,5 +57,6 @@ export function createGameUI(round: string): GameUI {
     placeholder,
     checkButton,
     autoCompleteButton,
+    resultsButton,
   };
 }

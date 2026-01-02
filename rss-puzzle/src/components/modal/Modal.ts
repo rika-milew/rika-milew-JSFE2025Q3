@@ -1,9 +1,11 @@
 import { createElement } from '../../utils/create-element';
 
+import type { ModalElements } from '../../types/types';
+
 import './modal.css';
 
-export function showLogoutModal(root: HTMLElement, confirmLogout: () => void): void {
-  const modalOverlay = createElement({
+export function createModal({ container, content, buttons }: ModalElements): void {
+  const overlay = createElement({
     tag: 'div',
     className: 'modal__overlay',
   });
@@ -13,42 +15,28 @@ export function showLogoutModal(root: HTMLElement, confirmLogout: () => void): v
     className: 'modal',
   });
 
-  const modalContent = createElement({
-    tag: 'p',
-    className: 'modal__content',
-    textContent: 'Are you sure you want to log out?',
-  });
-
   const modalButtons = createElement({
     tag: 'div',
     className: 'modal__buttons',
   });
 
-  const okButton = createElement({
-    tag: 'button',
-    className: 'modal__buttons_ok button',
-    textContent: 'Yes',
-    attributes: { type: 'button' },
+  buttons.forEach(({ text, className, onClick }) => {
+    const button = createElement({
+      tag: 'button',
+      className: `button ${className ?? ''}`,
+      textContent: text,
+      attributes: { type: 'button' },
+    });
+
+    button.addEventListener('click', () => {
+      overlay.remove();
+      onClick?.();
+    });
+
+    modalButtons.append(button);
   });
 
-  const cancelButton = createElement({
-    tag: 'button',
-    className: 'modal__buttons_cancel button',
-    textContent: 'No',
-    attributes: { type: 'button' },
-  });
-
-  okButton.addEventListener('click', () => {
-    modalOverlay.remove();
-    confirmLogout();
-  });
-
-  cancelButton.addEventListener('click', () => {
-    modalOverlay.remove();
-  });
-
-  modalButtons.append(okButton, cancelButton);
-  modal.append(modalContent, modalButtons);
-  modalOverlay.append(modal);
-  root.append(modalOverlay);
+  modal.append(content, modalButtons);
+  overlay.append(modal);
+  container.append(overlay);
 }
