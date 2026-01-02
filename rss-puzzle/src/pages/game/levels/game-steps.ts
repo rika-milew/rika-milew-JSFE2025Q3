@@ -1,5 +1,6 @@
 import { gameState } from '../game-state';
 import { levels } from './level-storage';
+import { clearContainer } from '../../../utils/clear-container';
 import { markRounds } from '../../../utils/mark-rounds';
 import { hideImage } from '../../../utils/reveal-image';
 import { resetCheckButton } from '../buttons/check-button';
@@ -41,8 +42,8 @@ export function launchNextStep(): NextStep {
 export function changeRound(props: GameUI): void {
   gameState.sentenceIndex = 0;
   hideImage(props.result);
-  props.result.innerHTML = '';
-  props.source.innerHTML = '';
+  clearContainer(props.result);
+  clearContainer(props.source);
   resetCheckButton(props.checkButton);
   gameState.isCompleted = false;
   continueGame(props, 'change');

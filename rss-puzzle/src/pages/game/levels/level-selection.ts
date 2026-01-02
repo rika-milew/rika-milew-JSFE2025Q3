@@ -3,6 +3,7 @@ import { createElement } from '../../../utils/create-element';
 import { eventState } from '../../game/event-state';
 import { gameState } from '../game-state';
 import { progressState } from './progress-state';
+import { clearContainer } from '../../../utils/clear-container';
 
 import './level-selection.css';
 
@@ -21,7 +22,7 @@ export function createLevelAndRoundsSelector(): [HTMLDivElement, HTMLDivElement]
   });
 
   function updateLevels(): void {
-    levelSelect.innerHTML = '';
+    clearContainer(levelSelect);
     levelRounds.forEach((_, index) => {
       const option = createElement({
         tag: 'option',
@@ -35,7 +36,7 @@ export function createLevelAndRoundsSelector(): [HTMLDivElement, HTMLDivElement]
   }
 
   function updateRounds(levelIndex: number): void {
-    roundSelect.innerHTML = '';
+    clearContainer(roundSelect);
     const roundsCount = levelRounds[levelIndex];
     const completedRounds = progressState.completedRounds.get(levelIndex) ?? new Set();
 

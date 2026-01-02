@@ -5,6 +5,7 @@ import { hintState } from './hints/hint-state';
 import { launchNextStep } from './levels/game-steps';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word.ts';
+import { clearContainer } from '../../utils/clear-container.ts';
 import { hideImage } from '../../utils/reveal-image.ts';
 
 import type { GameUI } from './game-ui';
@@ -14,7 +15,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   if (mode === 'progress') {
     const step = launchNextStep();
     if (step === 'gameover' || step === 'round' || step === 'level') {
-      result.innerHTML = '';
+      clearContainer(result);
       hideImage(props.result);
     }
   }
@@ -59,7 +60,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   gameState.author = updatedRound.levelData.author;
   gameState.year = updatedRound.levelData.year;
 
-  source.innerHTML = '';
+  clearContainer(source);
 
   gameState.correctSentence = currentSentence.textExample.split(' ');
 
