@@ -1,14 +1,31 @@
 /* background-color: #416a56;
   color: #ffffff; */
 
-.miniature__image {
-  width: 400px;
-  height: auto;
-  background-size: cover;
-}
-
 .results-modal {
   display: flex;
   flex-direction: column;
+  gap: 15px;
   width: min-content;
+}
+
+.results__title {
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #491a8e;
+  text-align: center;
+}
+
+.miniature {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.miniature__image {
+  width: 480px;
+  height: auto;
+  margin-bottom: 10px;
 }

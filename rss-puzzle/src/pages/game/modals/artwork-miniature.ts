@@ -8,8 +8,12 @@ export function displayMiniature(): HTMLElement {
   });
 
   const artwork = createElement({
-    tag: 'div',
+    tag: 'img',
     className: 'miniature__image',
+    attributes: {
+      src: `/pictures/${gameState.levelImage}`,
+      alt: gameState.imageName,
+    },
   });
 
   artwork.style.backgroundImage = `url(/pictures/${gameState.cutImage})`;
@@ -23,10 +27,16 @@ export function displayMiniature(): HTMLElement {
   const author = createElement({
     tag: 'div',
     className: 'miniature__author',
-    textContent: `${gameState.author}, ${gameState.year}`,
+    textContent: gameState.author,
   });
 
-  container.append(artwork, title, author);
+  const year = createElement({
+    tag: 'div',
+    className: 'miniature__year',
+    textContent: gameState.year,
+  });
+
+  container.append(artwork, title, author, year);
 
   return container;
 }

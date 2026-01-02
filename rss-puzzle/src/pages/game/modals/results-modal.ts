@@ -17,6 +17,7 @@ export function openResultsModal(
 
   const title = createElement({
     tag: 'h2',
+    className: 'results__title',
     textContent: 'Round Statistics',
   });
 
