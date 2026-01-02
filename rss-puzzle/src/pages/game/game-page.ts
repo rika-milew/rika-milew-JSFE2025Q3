@@ -1,4 +1,5 @@
 import { manageCheckButton, transformCheckButton } from './buttons/check-button';
+import { showResultsButton } from './buttons/results-button';
 import { eventState } from './event-state';
 import { gameState } from './game-state';
 import { createGameUI } from './game-ui';
@@ -7,6 +8,7 @@ import { createHints } from './hints/hints';
 import { changeRound } from './levels/game-steps';
 import { initRound } from './levels/level-controller';
 import { createLevelAndRoundsSelector } from './levels/level-selection';
+import { openResultsModal } from './modals/results-modal';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { createWords } from '../../components/word/word';
@@ -68,6 +70,11 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   eventState.on('round:completed', () => {
     revealImage(props.result);
+    showResultsButton(props.resultsButton);
+  });
+
+  eventState.on('results:open', () => {
+    openResultsModal(container);
   });
 
   levelSelection.append(levelDiv, roundDiv);
@@ -120,7 +127,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
-  gameButtons.append(props.checkButton, props.autoCompleteButton, backButton);
+  gameButtons.append(props.checkButton, props.autoCompleteButton, props.resultsButton, backButton);
   settings.append(levelSelection, hintIcons);
   gameContainer.append(settings, props.roundTitle, hintContainer, gameBoard, gameButtons);
   container.append(gameContainer);

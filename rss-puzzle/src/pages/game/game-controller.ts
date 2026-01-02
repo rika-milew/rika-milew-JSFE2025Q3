@@ -1,4 +1,5 @@
 import { updateCheckButtonState } from './buttons/check-button';
+import { hideResultsButton } from './buttons/results-button.ts';
 import { eventState } from './event-state.ts';
 import { gameState } from './game-state';
 import { hintState } from './hints/hint-state';
@@ -17,6 +18,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
     if (step === 'gameover' || step === 'round' || step === 'level') {
       clearContainer(result);
       hideImage(props.result);
+      hideResultsButton(props.resultsButton);
     }
   }
 

@@ -83,3 +83,17 @@ export type ImageInfo = {
   author: HTMLElement;
   year: HTMLElement;
 };
+
+// modal
+
+export type ModalButton = {
+  text: string;
+  className?: string;
+  onClick?: () => void;
+};
+
+export type ModalElements = {
+  container: HTMLElement;
+  content: HTMLElement;
+  buttons: ModalButton[];
+};
