@@ -11,7 +11,7 @@ type EventMap = {
   'round:changed': number;
   'progress:updated': boolean;
   'round:completed': boolean;
-  'results:open': boolean;
+  'results:open': HTMLElement;
   'round:next': boolean;
 };
 

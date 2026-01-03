@@ -7,6 +7,7 @@ import { eventState } from '../event-state';
 import { continueGame, updateGameState, blockSentence } from '../game-controller';
 import { gameState } from '../game-state';
 import { hintState } from '../hints/hint-state';
+import { resultsState } from '../modals/results-state';
 
 import type { GameUI } from '../game-ui';
 
@@ -32,6 +33,11 @@ export function manageCheckButton(props: GameUI): void {
     return;
   }
 
+  resultsState.addSentence({
+    text: gameState.correctSentence.join(' '),
+    audioSource: gameState.audioSrc,
+    isKnown: true,
+  });
   gameState.isCompleted = true;
   blockSentence(props.userSentence);
   highlightCorrectSentence(props.userSentence);
@@ -53,6 +59,7 @@ export function updateCheckButtonState(
   sentenceLength: number,
 ): void {
   const resultWords = activeResultSentence.querySelectorAll('.word').length;
+
   checkButton.disabled = resultWords === sentenceLength ? false : true;
 }
 

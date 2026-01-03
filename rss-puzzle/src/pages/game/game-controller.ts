@@ -4,6 +4,7 @@ import { eventState } from './event-state.ts';
 import { gameState } from './game-state';
 import { hintState } from './hints/hint-state';
 import { launchNextStep } from './levels/game-steps';
+import { resultsState } from './modals/results-state.ts';
 import { createSentence } from '../../components/sentence/sentence';
 import { createWords } from '../../components/word/word.ts';
 import { clearContainer } from '../../utils/clear-container.ts';
@@ -18,7 +19,12 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
     if (step === 'gameover' || step === 'round' || step === 'level') {
       clearContainer(result);
       hideImage(props.result);
-      hideResultsButton(props.resultsButton);
+      hideResultsButton();
+      resultsState.reset();
+      resultsState.initRound({
+        roundIndex: gameState.roundIndex,
+        levelId: gameState.levelIndex,
+      });
     }
   }
 

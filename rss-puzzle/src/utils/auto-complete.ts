@@ -16,8 +16,14 @@ export function autoComplete(props: GameUI): void {
   }
 
   const wordCards = [
-    ...userSentence.querySelectorAll<HTMLElement>('.word-wrapper'),
-    ...source.querySelectorAll<HTMLElement>('.word-wrapper'),
+    ...[...userSentence.children].filter(
+      (element): element is HTMLElement =>
+        element instanceof HTMLElement && element.classList.contains('word-wrapper'),
+    ),
+    ...[...source.children].filter(
+      (element): element is HTMLElement =>
+        element instanceof HTMLElement && element.classList.contains('word-wrapper'),
+    ),
   ];
 
   const wordMap = new Map<string, HTMLElement[]>();

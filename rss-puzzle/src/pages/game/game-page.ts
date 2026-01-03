@@ -10,6 +10,7 @@ import { changeRound } from './levels/game-steps';
 import { initRound } from './levels/level-controller';
 import { createLevelAndRoundsSelector } from './levels/level-selection';
 import { openResultsModal } from './modals/results-modal';
+import { resultsState } from './modals/results-state';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { createWords } from '../../components/word/word';
@@ -33,6 +34,12 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   hintState.upload();
 
   const { round, currentSentence } = initRound(gameState.currentLevel);
+  gameState.audioSrc = currentSentence.audioExample;
+
+  resultsState.initRound({
+    levelId: gameState.levelIndex,
+    roundIndex: gameState.roundIndex,
+  });
 
   gameState.levelImage = round.levelData.imageSrc;
   gameState.imageName = round.levelData.name;
@@ -71,7 +78,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   eventState.on('round:completed', () => {
     revealImage(props.result);
-    showResultsButton(props.resultsButton);
+    showResultsButton(gameButtons);
   });
 
   eventState.on('round:next', () => {
@@ -80,7 +87,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     continueGame(props, 'progress');
   });
 
-  eventState.on('results:open', () => {
+  eventState.on('results:open', (container: HTMLElement) => {
     openResultsModal(container);
   });
 
@@ -113,6 +120,11 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   });
 
   props.autoCompleteButton.addEventListener('click', () => {
+    resultsState.addSentence({
+      text: gameState.correctSentence.join(' '),
+      audioSrc: gameState.audioSrc,
+      isKnown: false,
+    });
     autoComplete(props);
     gameState.isCompleted = true;
     transformCheckButton(props.checkButton);
@@ -134,7 +146,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
-  gameButtons.append(props.checkButton, props.autoCompleteButton, props.resultsButton, backButton);
+  gameButtons.append(props.checkButton, props.autoCompleteButton, backButton);
   settings.append(levelSelection, hintIcons);
   gameContainer.append(settings, props.roundTitle, hintContainer, gameBoard, gameButtons);
   container.append(gameContainer);

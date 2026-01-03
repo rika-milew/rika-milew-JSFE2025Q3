@@ -9,8 +9,15 @@ export function setPuzzleBackground({
   index: number;
   correctSentence: string[];
 }): void {
-  const word = wrapper.querySelector<HTMLElement>('.word');
-  const edge = wrapper.querySelector<HTMLElement>('.word-wrapper__edge');
+  const word = [...wrapper.children].find(
+    (element): element is HTMLElement =>
+      element instanceof HTMLElement && element.classList.contains('word'),
+  );
+
+  const edge = [...wrapper.children].find(
+    (element): element is HTMLElement =>
+      element instanceof HTMLElement && element.classList.contains('word-wrapper__edge'),
+  );
 
   const picture = new Image();
   picture.src = `/pictures/${gameState.levelImage}`;
