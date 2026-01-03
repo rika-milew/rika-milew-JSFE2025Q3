@@ -58,10 +58,7 @@ export function updateCheckButtonState(
   checkButton: HTMLButtonElement,
   sentenceLength: number,
 ): void {
-  const resultWords = [...activeResultSentence.children].filter(
-    (element): element is HTMLElement =>
-      element instanceof HTMLElement && element.classList.contains('word'),
-  ).length;
+  const resultWords = activeResultSentence.querySelectorAll('.word').length;
 
   checkButton.disabled = resultWords === sentenceLength ? false : true;
 }

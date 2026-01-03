@@ -29,10 +29,7 @@ export function dragAndDrop(
       event.preventDefault();
       container.classList.add('container_drag-over');
 
-      const wordDragging = [...document.body.children].find(
-        (element): element is HTMLElement =>
-          element instanceof HTMLElement && element.classList.contains('dragging'),
-      );
+      const wordDragging = document.querySelector<HTMLElement>('.dragging');
       if (!wordDragging) {
         return;
       }
@@ -56,10 +53,7 @@ export function dragAndDrop(
     container.addEventListener('drop', (event: DragEvent) => {
       event.preventDefault();
 
-      const draggedWord = [...document.body.children].find(
-        (element): element is HTMLElement =>
-          element instanceof HTMLElement && element.classList.contains('dragging'),
-      );
+      const draggedWord = document.querySelector<HTMLElement>('.dragging');
 
       if (!draggedWord) {
         throw new Error('Dragged word is not found');
@@ -73,10 +67,7 @@ export function dragAndDrop(
 
       container.classList.remove('container_drag-over');
 
-      const wordDragging = [...document.body.children].find(
-        (element): element is HTMLElement =>
-          element instanceof HTMLElement && element.classList.contains('dragging'),
-      );
+      const wordDragging = document.querySelector<HTMLElement>('.dragging');
 
       if (!wordDragging) {
         return;
@@ -128,12 +119,9 @@ export function dragAndDrop(
 
     const targetContainer = isValidTarget ? userSentence : source;
 
-    const words = [...targetContainer.children].filter(
-      (element): element is HTMLElement =>
-        element instanceof HTMLElement &&
-        element.classList.contains('word-wrapper') &&
-        !element.classList.contains('dragging'),
-    );
+    const words = [
+      ...targetContainer.querySelectorAll<HTMLElement>('.word-wrapper:not(.dragging)'),
+    ];
 
     let dragged = false;
 
@@ -163,12 +151,9 @@ export function dragAndDrop(
 }
 
 function findWordPosition(container: HTMLElement, x: number): HTMLElement | undefined {
-  const draggableWords = [...container.children].filter(
-    (element): element is HTMLElement =>
-      element instanceof HTMLElement &&
-      element.classList.contains('word-wrapper') &&
-      !element.classList.contains('dragging'),
-  );
+  const draggableWords = [
+    ...container.querySelectorAll<HTMLElement>('.word-wrapper:not(.dragging)'),
+  ];
 
   let closestWord: HTMLElement | undefined;
   let closestOffset = Number.NEGATIVE_INFINITY;
