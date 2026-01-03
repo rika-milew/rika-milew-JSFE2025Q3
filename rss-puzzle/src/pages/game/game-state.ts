@@ -20,6 +20,7 @@ export const gameState: {
   isSolved: boolean;
   correctSentence: string[];
   userSentence: string[];
+  audioSrc: string;
   levelImage: string;
   imageName: string;
   cutImage: string;
@@ -41,6 +42,7 @@ export const gameState: {
   _isSolved: false,
   _correctSentence: [],
   _userSentence: [],
+  audioSrc: '',
   levelImage: '',
   imageName: '',
   cutImage: '',

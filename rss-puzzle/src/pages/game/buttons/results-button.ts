@@ -1,13 +1,31 @@
+import { createButton } from '../../../components/button/button';
 import { eventState } from '../event-state';
 
-export function showResultsButton(resultsButton: HTMLButtonElement): void {
-  resultsButton.classList.add('visible');
+let currentResultsButton: HTMLButtonElement | undefined;
 
-  resultsButton.addEventListener('click', () => {
-    eventState.emit('results:open', true);
+export function showResultsButton(container: HTMLElement): void {
+  if (currentResultsButton) {
+    currentResultsButton.remove();
+    currentResultsButton = undefined;
+  }
+
+  const resultsButton = createButton({
+    text: 'Results',
+    className: 'result-button',
   });
+
+  resultsButton.classList.add('visible');
+  resultsButton.addEventListener('click', () => {
+    eventState.emit('results:open', container);
+  });
+
+  container.append(resultsButton);
+  currentResultsButton = resultsButton;
 }
 
-export function hideResultsButton(resultsButton: HTMLButtonElement): void {
-  resultsButton.classList.remove('visible');
+export function hideResultsButton(): void {
+  if (currentResultsButton) {
+    currentResultsButton.remove();
+    currentResultsButton = undefined;
+  }
 }

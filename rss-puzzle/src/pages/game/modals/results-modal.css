@@ -1,11 +1,11 @@
-/* background-color: #416a56;
-  color: #ffffff; */
-
 .results-modal {
   display: flex;
   flex-direction: column;
   gap: 15px;
   width: min-content;
+  max-height: 80%;
+  overflow-y: scroll;
+  color: #333333;
 }
 
 .results__title {
@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   font-size: 16px;
   font-weight: 600;
 }
@@ -33,4 +33,61 @@
 
 .results-modal .modal__buttons {
   justify-content: center;
+}
+
+.results__section {
+  margin-bottom: 15px;
+}
+
+.results__section-title {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.results__section_known .results__section-title {
+  color: #416a56;
+}
+
+.results__section_unknown .results__section-title {
+  color: #791e1e;
+}
+
+.results__sentence {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 5px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.results__audio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+}
+
+.results__audio img {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.results__button {
+  min-width: 200px;
+  color: #ffffff;
+  background-color: #416a56;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .results__button:not(:disabled):hover {
+    background-color: #114a2e;
+  }
+}
+
+.results__button:active {
+  background-color: #114a2e;
 }

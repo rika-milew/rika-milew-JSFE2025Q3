@@ -105,3 +105,17 @@ export type ModalElements = {
   buttons: ModalButton[];
   modalClassName?: string;
 };
+
+// results
+
+export type SentenceResults = {
+  text: string;
+  audioSource: string;
+  isKnown: boolean;
+};
+
+export type RoundResults = {
+  levelId: number;
+  roundIndex: number;
+  sentences: SentenceResults[];
+};

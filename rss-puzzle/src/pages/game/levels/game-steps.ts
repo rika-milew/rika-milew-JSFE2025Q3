@@ -6,6 +6,7 @@ import { hideImage } from '../../../utils/reveal-image';
 import { resetCheckButton } from '../buttons/check-button';
 import { eventState } from '../event-state';
 import { continueGame } from '../game-controller';
+import { resultsState } from '../modals/results-state';
 
 import type { GameUI } from '../game-ui';
 
@@ -35,6 +36,7 @@ export function launchNextStep(): NextStep {
   }
   markRounds();
   gameState.resetGame();
+  resultsState.reset();
   eventState.emit('level:changed', gameState.levelIndex);
   return 'gameover';
 }

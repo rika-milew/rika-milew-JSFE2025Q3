@@ -23,6 +23,7 @@ module.exports = {
             'max-width',
             'height',
             'min-height',
+            'max-height',
             'margin',
             'margin-top',
             'margin-bottom',
