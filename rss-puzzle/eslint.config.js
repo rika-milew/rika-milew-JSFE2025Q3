@@ -111,17 +111,18 @@ export default defineConfig([
       'indent': ['error', 2, { SwitchCase: 1 }],
       'comma-dangle': ['error', 'always-multiline'],
       'object-curly-spacing': ['error', 'always'],
-      // 'array-bracket-spacing': ['error', 'always'],
       'arrow-parens': ['error', 'always'],
-      'max-len': ['warn', { code: 100, ignoreComments: true }],
+      'max-len': ['warn', { code: 120, ignoreComments: true }],
 
       // 🔧 Switched off
       'unicorn/no-array-reduce': 'off',
       'unicorn/no-array-for-each': 'off',
       'unicorn/filename-case': 'off',
+      'unicorn/prefer-query-selector': 'warn',
       '@typescript-eslint/no-misused-promises': 'off', //* switched off for now
       '@typescript-eslint/restrict-template-expressions': 'off', //* switched off for now
-      // '@typescript-eslint/no-inferrable-types': 'error',
+      '@typescript-eslint/no-inferrable-types': 'error',
+
     },
   },
   {
