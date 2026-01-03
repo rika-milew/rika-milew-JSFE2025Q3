@@ -35,7 +35,11 @@ export function createWords(
       checkButton,
     );
 
-    const card = wordWrapper.querySelector<HTMLElement>('.word');
+    const card = [...wordWrapper.children].find(
+      (element): element is HTMLElement =>
+        element instanceof HTMLElement && element.classList.contains('word'),
+    );
+
     if (!card) {
       return;
     }

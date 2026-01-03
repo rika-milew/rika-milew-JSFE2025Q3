@@ -85,8 +85,11 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
 }
 
 export function updateResultPlaceholder(userSentence: HTMLElement, placeholder: HTMLElement): void {
-  const words = [...userSentence.querySelectorAll('.word-wrapper')].filter(
-    (word) => word.parentElement === userSentence,
+  const words = [...userSentence.children].filter(
+    (element): element is HTMLElement =>
+      element instanceof HTMLElement &&
+      element.classList.contains('word-wrapper') &&
+      element.parentElement === userSentence,
   );
 
   if (words.length > 0) {

@@ -35,7 +35,7 @@ export function manageCheckButton(props: GameUI): void {
 
   resultsState.addSentence({
     text: gameState.correctSentence.join(' '),
-    audioSrc: gameState.audioSrc,
+    audioSource: gameState.audioSrc,
     isKnown: true,
   });
   gameState.isCompleted = true;
@@ -58,7 +58,11 @@ export function updateCheckButtonState(
   checkButton: HTMLButtonElement,
   sentenceLength: number,
 ): void {
-  const resultWords = activeResultSentence.querySelectorAll('.word').length;
+  const resultWords = [...activeResultSentence.children].filter(
+    (element): element is HTMLElement =>
+      element instanceof HTMLElement && element.classList.contains('word'),
+  ).length;
+
   checkButton.disabled = resultWords === sentenceLength ? false : true;
 }
 

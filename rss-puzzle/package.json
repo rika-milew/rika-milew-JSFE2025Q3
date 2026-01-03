@@ -18,7 +18,7 @@
     "deploy": "npx vite build && npx gh-pages -d dist -e rss-puzzle",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,js,jsx,json,md}\"",
     "ci:format": "prettier --check \"src/**/*.{ts,tsx,css,js,jsx,json,md}\"",
-    "lint": "eslint 'src/**/*.ts'",
+    "lint": "eslint src/**/*.{ts,tsx,js}",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "prepare": "cd .. && husky install rss-puzzle/.husky"
