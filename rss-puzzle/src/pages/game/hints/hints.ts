@@ -58,7 +58,9 @@ export function createHints(currentSentence: Sentence): {
   });
 
   eventState.on('hint:image:toggle', (mode: 'enabled' | 'disabled') => {
-    const wrappers = document.querySelectorAll<HTMLElement>('.word-wrapper');
+    const wrappers = [...document.getElementsByClassName('word-wrapper')].filter(
+      (element): element is HTMLElement => element instanceof HTMLElement,
+    );
 
     wrappers.forEach((wrapper) => {
       const isSolved = wrapper.classList.contains('correct');

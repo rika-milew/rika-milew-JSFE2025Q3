@@ -1,7 +1,10 @@
 export function checkSentence(userSentence: HTMLElement, correctSentence: number[]): boolean {
-  const playerSentence = [...userSentence.querySelectorAll<HTMLElement>('.word-wrapper')].map(
-    (card) => Number(card.dataset.wordIndex),
-  );
+  const playerSentence = [...userSentence.children]
+    .filter(
+      (child): child is HTMLElement =>
+        child instanceof HTMLElement && child.classList.contains('word-wrapper'),
+    )
+    .map((card) => Number(card.dataset.wordIndex));
 
   return (
     playerSentence.length === correctSentence.length &&
@@ -15,7 +18,12 @@ export function highlightSentence(
   correctSentenceIndexes: number[],
 ): void {
   const ANIMATION_DURATION = 1000;
-  const words = [...userSentence.querySelectorAll<HTMLElement>('.word-wrapper')];
+
+  const words = [...userSentence.children].filter(
+    (child): child is HTMLElement =>
+      child instanceof HTMLElement && child.classList.contains('word-wrapper'),
+  );
+
   userSentence.style.pointerEvents = 'none';
 
   words.forEach((word, index) => {
@@ -34,7 +42,12 @@ export function highlightSentence(
 
 export function highlightCorrectSentence(result: HTMLElement): void {
   const ANIMATION_DURATION = 1000;
-  const words = [...result.querySelectorAll<HTMLElement>('.word-wrapper')];
+
+  const words = [...result.children].filter(
+    (child): child is HTMLElement =>
+      child instanceof HTMLElement && child.classList.contains('word-wrapper'),
+  );
+
   result.style.pointerEvents = 'none';
 
   words.forEach((word) => {

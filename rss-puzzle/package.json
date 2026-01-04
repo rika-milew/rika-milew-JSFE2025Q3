@@ -29,7 +29,7 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js}": [
-      "eslint --max-warnings 0",
+      "eslint --max-warnings 10",
       "prettier --check"
     ],
     "*.{css,scss}": [

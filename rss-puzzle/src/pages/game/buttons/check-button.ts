@@ -62,7 +62,10 @@ export function updateCheckButtonState(
   checkButton: HTMLButtonElement,
   sentenceLength: number,
 ): void {
-  const resultWords = activeResultSentence.querySelectorAll('.word').length;
+  const resultWords = [...activeResultSentence.children].filter(
+    (child): child is HTMLElement =>
+      child instanceof HTMLElement && child.classList.contains('word-wrapper'),
+  ).length;
 
   checkButton.disabled = resultWords === sentenceLength ? false : true;
 }

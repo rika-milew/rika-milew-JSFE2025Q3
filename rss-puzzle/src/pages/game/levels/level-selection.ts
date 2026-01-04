@@ -21,6 +21,9 @@ export function createLevelAndRoundsSelector(): [HTMLDivElement, HTMLDivElement]
     className: 'round-select',
   });
 
+  levelSelect.id = 'level-select';
+  roundSelect.id = 'round-select';
+
   function updateLevels(): void {
     clearContainer(levelSelect);
     levelRounds.forEach((_, index) => {
@@ -96,7 +99,7 @@ export function createLevelAndRoundsSelector(): [HTMLDivElement, HTMLDivElement]
 
     const completedRounds = progressState.completedRounds.get(gameState.levelIndex) ?? new Set();
 
-    roundSelect.querySelectorAll('option').forEach((option) => {
+    [...roundSelect.options].forEach((option) => {
       const index = Number(option.value);
       option.classList.toggle('completed', completedRounds.has(index));
     });
