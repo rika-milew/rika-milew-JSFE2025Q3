@@ -13,6 +13,7 @@ type EventMap = {
   'round:completed': boolean;
   'results:open': HTMLElement;
   'round:next': boolean;
+  'results:audio': string;
 };
 
 type EventState<T extends Record<string, unknown>> = {

@@ -43,7 +43,7 @@ export function createResultsSentence(text: string, audioSource: string): HTMLDi
   });
 
   audioIcon.addEventListener('click', () => {
-    eventState.emit('pronunciation:play', audioSource);
+    eventState.emit('results:audio', audioSource);
   });
 
   audioIconContainer.append(audioIcon);

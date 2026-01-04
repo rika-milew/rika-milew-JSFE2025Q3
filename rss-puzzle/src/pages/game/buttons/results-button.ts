@@ -3,7 +3,7 @@ import { eventState } from '../event-state';
 
 let currentResultsButton: HTMLButtonElement | undefined;
 
-export function showResultsButton(container: HTMLElement): void {
+export function showResultsButton(gameButtons: HTMLElement, gameContainer: HTMLElement): void {
   if (currentResultsButton) {
     currentResultsButton.remove();
     currentResultsButton = undefined;
@@ -16,10 +16,10 @@ export function showResultsButton(container: HTMLElement): void {
 
   resultsButton.classList.add('visible');
   resultsButton.addEventListener('click', () => {
-    eventState.emit('results:open', container);
+    eventState.emit('results:open', gameContainer);
   });
 
-  container.append(resultsButton);
+  gameButtons.append(resultsButton);
   currentResultsButton = resultsButton;
 }
 
