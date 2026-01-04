@@ -18,6 +18,8 @@ module.exports = {
             'flex-grow',
             'flex-basis',
             'gap',
+            'grid',
+            'grid-template-columns',
             'width',
             'min-width',
             'max-width',

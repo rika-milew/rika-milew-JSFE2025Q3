@@ -28,6 +28,7 @@ export function createWords(
   cards.forEach((word) => {
     const wordWrapper = createWord(
       word.word,
+      word.id,
       source,
       resultSentence,
       placeholder,
@@ -64,6 +65,7 @@ export function createWords(
 
 export function createWord(
   word: string,
+  id: number,
   source: HTMLElement,
   resultSentence: HTMLElement,
   placeholder: HTMLElement,
@@ -74,6 +76,9 @@ export function createWord(
     tag: 'div',
     className: 'word-wrapper',
   });
+
+  wordWrapper.dataset.wordIndex = String(id);
+
   const wordCard = createElement({
     tag: 'div',
     className: 'sentence__word word',

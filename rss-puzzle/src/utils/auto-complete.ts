@@ -26,17 +26,8 @@ export function autoComplete(props: GameUI): void {
     ),
   ];
 
-  const wordMap = new Map<string, HTMLElement[]>();
-  wordCards.forEach((wordCard) => {
-    const word = wordCard.textContent || '';
-    if (!wordMap.has(word)) {
-      wordMap.set(word, []);
-    }
-    wordMap.get(word)?.push(wordCard);
-  });
-
-  gameState.correctSentence.forEach((word) => {
-    const wordCard = wordMap.get(word)?.shift();
+  gameState.correctSentenceIndexes.forEach((index) => {
+    const wordCard = wordCards.find((card) => Number(card.dataset.wordIndex) === index);
     if (wordCard) {
       moveWords(wordCard, userSentence);
       wordCard.classList.add('word-wrapper_result');

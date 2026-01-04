@@ -74,6 +74,8 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   clearContainer(source);
 
   gameState.correctSentence = currentSentence.textExample.split(' ');
+  const words = currentSentence.textExample.split(' ');
+  gameState.correctSentenceIndexes = words.map((_, index) => index);
 
   createWords(
     currentSentence,

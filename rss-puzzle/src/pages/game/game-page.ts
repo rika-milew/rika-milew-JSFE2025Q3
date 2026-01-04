@@ -43,6 +43,9 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     roundIndex: gameState.roundIndex,
   });
 
+  const words = currentSentence.textExample.split(' ');
+  gameState.correctSentenceIndexes = words.map((_, index) => index);
+
   gameState.levelImage = round.levelData.imageSrc;
   gameState.imageName = round.levelData.name;
   gameState.cutImage = round.levelData.cutSrc;

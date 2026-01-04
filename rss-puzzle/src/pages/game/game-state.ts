@@ -10,6 +10,7 @@ export const gameState: {
   _isCompleted: boolean;
   _isSolved: boolean;
   _correctSentence: string[];
+  _correctSentenceIndexes: number[];
   _userSentence: string[];
 
   levelIndex: number;
@@ -19,6 +20,7 @@ export const gameState: {
   isCompleted: boolean;
   isSolved: boolean;
   correctSentence: string[];
+  correctSentenceIndexes: number[];
   userSentence: string[];
   audioSource: string;
   levelImage: string;
@@ -41,6 +43,7 @@ export const gameState: {
   _isCompleted: false,
   _isSolved: false,
   _correctSentence: [],
+  _correctSentenceIndexes: [],
   _userSentence: [],
   audioSource: '',
   levelImage: '',
@@ -103,6 +106,13 @@ export const gameState: {
     this._correctSentence = words;
   },
 
+  get correctSentenceIndexes() {
+    return this._correctSentenceIndexes;
+  },
+  set correctSentenceIndexes(indexes: number[]) {
+    this._correctSentenceIndexes = indexes;
+  },
+
   get userSentence() {
     return this._userSentence;
   },
@@ -111,35 +121,39 @@ export const gameState: {
   },
 
   resetGame(): void {
-    this._levelIndex = 0;
-    this._roundIndex = 0;
-    this._sentenceIndex = 0;
-    this._isCompleted = false;
-    this._correctSentence = [];
-    this._userSentence = [];
+    this.levelIndex = 0;
+    this.roundIndex = 0;
+    this.sentenceIndex = 0;
+    this.isCompleted = false;
+    this.correctSentence = [];
+    this.correctSentenceIndexes = [];
+    this.userSentence = [];
   },
 
   nextLevel(): void {
-    this._levelIndex += 1;
-    this._roundIndex = 0;
-    this._sentenceIndex = 0;
+    this.levelIndex += 1;
+    this.roundIndex = 0;
+    this.sentenceIndex = 0;
     this.correctSentence = [];
+    this.correctSentenceIndexes = [];
     this.isCompleted = false;
-    this._isSolved = false;
+    this.isSolved = false;
   },
 
   nextRound(): void {
-    this._roundIndex += 1;
-    this._sentenceIndex = 0;
+    this.roundIndex += 1;
+    this.sentenceIndex = 0;
     this.correctSentence = [];
+    this.correctSentenceIndexes = [];
     this.isCompleted = false;
-    this._isSolved = false;
+    this.isSolved = false;
   },
 
   nextSentence(): void {
-    this._sentenceIndex += 1;
+    this.sentenceIndex += 1;
     this.correctSentence = [];
+    this.correctSentenceIndexes = [];
     this.isCompleted = false;
-    this._isSolved = false;
+    this.isSolved = false;
   },
 };

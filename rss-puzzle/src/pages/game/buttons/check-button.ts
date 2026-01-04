@@ -19,7 +19,8 @@ export function manageCheckButton(props: GameUI): void {
     return;
   }
 
-  const isCorrect = checkSentence(props.userSentence, gameState.correctSentence);
+  const isCorrect = checkSentence(props.userSentence, gameState.correctSentenceIndexes);
+
   updateGameState(
     props.userSentence,
     props.placeholder,
@@ -29,7 +30,11 @@ export function manageCheckButton(props: GameUI): void {
 
   if (!isCorrect) {
     props.autoCompleteButton.disabled = true;
-    highlightSentence(props.autoCompleteButton, props.userSentence, gameState.correctSentence);
+    highlightSentence(
+      props.autoCompleteButton,
+      props.userSentence,
+      gameState.correctSentenceIndexes,
+    );
     return;
   }
 
