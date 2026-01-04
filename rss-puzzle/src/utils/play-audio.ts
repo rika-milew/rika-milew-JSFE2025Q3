@@ -51,3 +51,32 @@ export function playAudio(): void {
     eventState.emit('pronunciation:state', 'pause');
   });
 }
+
+export function playResultsAudio(): void {
+  let currentAudio: HTMLAudioElement | undefined;
+
+  function stop(): void {
+    if (!currentAudio) {
+      return;
+    }
+
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = undefined;
+  }
+
+  eventState.on('results:audio', (audioSource: string) => {
+    stop();
+
+    currentAudio = new Audio(audioSource);
+    currentAudio.play().catch(console.error);
+
+    currentAudio.addEventListener(
+      'ended',
+      () => {
+        currentAudio = undefined;
+      },
+      { once: true },
+    );
+  });
+}

@@ -4,7 +4,7 @@ import {
   highlightCorrectSentence,
 } from '../../../utils/check-sentence';
 import { eventState } from '../event-state';
-import { continueGame, updateGameState, blockSentence } from '../game-controller';
+import { continueGame, updateGameState } from '../game-controller';
 import { gameState } from '../game-state';
 import { hintState } from '../hints/hint-state';
 import { resultsState } from '../modals/results-state';
@@ -35,11 +35,10 @@ export function manageCheckButton(props: GameUI): void {
 
   resultsState.addSentence({
     text: gameState.correctSentence.join(' '),
-    audioSource: gameState.audioSrc,
+    audioSource: gameState.audioSource,
     isKnown: true,
   });
   gameState.isCompleted = true;
-  blockSentence(props.userSentence);
   highlightCorrectSentence(props.userSentence);
   transformCheckButton(props.checkButton);
   props.autoCompleteButton.disabled = true;

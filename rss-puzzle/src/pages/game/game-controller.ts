@@ -16,6 +16,10 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
   if (mode === 'progress') {
     const step = launchNextStep();
+    if (step === 'sentence') {
+      blockSentence(props.userSentence);
+    }
+
     if (step === 'gameover' || step === 'round' || step === 'level') {
       clearContainer(result);
       hideImage(props.result);
@@ -27,8 +31,6 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
       });
     }
   }
-
-  blockSentence(props.userSentence);
 
   props.userSentence = createSentence(result);
   props.userSentence.append(placeholder);
@@ -67,6 +69,7 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   gameState.cutImage = updatedRound.levelData.cutSrc;
   gameState.author = updatedRound.levelData.author;
   gameState.year = updatedRound.levelData.year;
+  gameState.audioSource = currentSentence.audioExample;
 
   clearContainer(source);
 

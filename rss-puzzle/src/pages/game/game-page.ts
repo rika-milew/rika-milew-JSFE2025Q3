@@ -9,6 +9,7 @@ import { createHints } from './hints/hints';
 import { changeRound } from './levels/game-steps';
 import { initRound } from './levels/level-controller';
 import { createLevelAndRoundsSelector } from './levels/level-selection';
+import { loadProgressState } from './levels/progress-state';
 import { openResultsModal } from './modals/results-modal';
 import { resultsState } from './modals/results-state';
 import { Routes } from '../../app/routes';
@@ -17,7 +18,7 @@ import { createWords } from '../../components/word/word';
 import { autoComplete } from '../../utils/auto-complete';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
-import { playAudio } from '../../utils/play-audio';
+import { playAudio, playResultsAudio } from '../../utils/play-audio';
 import { revealImage } from '../../utils/reveal-image';
 import { uploadProgress } from '../../utils/save-progress';
 import { setBackground } from '../../utils/set-background';
@@ -31,10 +32,11 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   setBackground('game-page');
 
   uploadProgress();
+  loadProgressState();
   hintState.upload();
 
   const { round, currentSentence } = initRound(gameState.currentLevel);
-  gameState.audioSrc = currentSentence.audioExample;
+  gameState.audioSource = currentSentence.audioExample;
 
   resultsState.initRound({
     levelId: gameState.levelIndex,
@@ -69,16 +71,26 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   eventState.on('level:changed', () => {
     gameState.roundIndex = 0;
+    resultsState.reset();
+    resultsState.initRound({
+      roundIndex: gameState.roundIndex,
+      levelId: gameState.levelIndex,
+    });
     changeRound(props);
   });
 
   eventState.on('round:changed', () => {
+    resultsState.reset();
+    resultsState.initRound({
+      roundIndex: gameState.roundIndex,
+      levelId: gameState.levelIndex,
+    });
     changeRound(props);
   });
 
   eventState.on('round:completed', () => {
     revealImage(props.result);
-    showResultsButton(gameButtons);
+    showResultsButton(gameButtons, gameContainer);
   });
 
   eventState.on('round:next', () => {
@@ -122,7 +134,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   props.autoCompleteButton.addEventListener('click', () => {
     resultsState.addSentence({
       text: gameState.correctSentence.join(' '),
-      audioSrc: gameState.audioSrc,
+      audioSource: gameState.audioSource,
       isKnown: false,
     });
     autoComplete(props);
@@ -143,6 +155,7 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   });
 
   playAudio();
+  playResultsAudio();
 
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
