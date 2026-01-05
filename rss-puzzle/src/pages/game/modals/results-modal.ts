@@ -1,5 +1,6 @@
 import { displayMiniature } from './artwork-miniature';
 import { createResultsSection, createResultsSentence } from './results-elements';
+import { createButton } from '../../../components/button/button';
 import { createModal } from '../../../components/modal/modal';
 import { createElement } from '../../../utils/create-element';
 import { eventState } from '../state/event-state';
@@ -60,14 +61,18 @@ export function openResultsModal(container: HTMLElement): void {
     container,
     content,
     modalClassName: 'results-modal',
-    buttons: [
-      {
-        text: 'Next Round',
-        className: 'results__button',
-        onClick: (): void => {
-          eventState.emit('round:next', true);
-        },
-      },
-    ],
+    buttons: [],
   });
+
+  const nextButton = createButton({ className: 'results__button', text: 'Next Round' });
+
+  const handleClick = (): void => {
+    nextButton.removeEventListener('click', handleClick);
+    currentResultsModal?.remove();
+    currentResultsModal = undefined;
+    eventState.emit('round:next', true);
+  };
+  nextButton.addEventListener('click', handleClick);
+
+  content.append(nextButton);
 }
