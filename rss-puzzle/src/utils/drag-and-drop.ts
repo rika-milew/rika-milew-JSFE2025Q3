@@ -1,4 +1,5 @@
-import { updateGameState, updateResultPlaceholder } from '../pages/game/game-controller';
+import { updateResultPlaceholder } from './update-placeholder';
+import { updateGameState } from '../pages/game/levels/game-steps';
 
 export function dragAndDrop(
   word: HTMLElement,
@@ -11,16 +12,22 @@ export function dragAndDrop(
   word.setAttribute('draggable', 'true');
 
   word.addEventListener('dragstart', (event: DragEvent) => {
+    if (word.classList.contains('correct')) {
+      event.preventDefault();
+      return;
+    }
     event.dataTransfer?.setData('text/plain', word.textContent || '');
     word.classList.add('dragging');
   });
 
   word.addEventListener('dragend', () => {
     word.classList.remove('dragging');
+
     if (word.parentElement !== userSentence) {
       source.append(word);
       word.classList.remove('word-wrapper_result');
     }
+
     updateResultPlaceholder(userSentence, placeholder);
   });
 
@@ -38,10 +45,9 @@ export function dragAndDrop(
       }
 
       const wordAfter = findWordPosition(container, event.clientX);
+
       if (wordAfter) {
         wordAfter.before(wordDragging);
-      } else if (container.children.length === 0) {
-        container.prepend(wordDragging);
       } else {
         container.append(wordDragging);
       }
@@ -84,7 +90,9 @@ export function dragAndDrop(
         container.append(wordDragging);
       }
 
-      updateGameState(userSentence, placeholder, correctSentence, checkButton);
+      if (!word.classList.contains('correct')) {
+        updateGameState(userSentence, placeholder, correctSentence, checkButton);
+      }
     });
   });
 
@@ -93,6 +101,10 @@ export function dragAndDrop(
   let offsetY = 0;
 
   word.addEventListener('touchstart', (event: TouchEvent) => {
+    if (word.classList.contains('correct')) {
+      return;
+    }
+
     draggedWord = word;
     const touch = event.touches[0];
     const rect = word.getBoundingClientRect();
@@ -106,6 +118,7 @@ export function dragAndDrop(
     if (!draggedWord) {
       return;
     }
+
     event.preventDefault();
     const touch = event.touches[0];
 
@@ -121,9 +134,7 @@ export function dragAndDrop(
     const touch = event.changedTouches[0];
 
     const sentenceRect = userSentence.getBoundingClientRect();
-
     const isValidTarget = touch.clientY >= sentenceRect.top && touch.clientY <= sentenceRect.bottom;
-
     const targetContainer = isValidTarget ? userSentence : source;
 
     const words = [...targetContainer.children].filter(
@@ -165,21 +176,16 @@ function findWordPosition(container: HTMLElement, x: number): HTMLElement | unde
     (child): child is HTMLElement =>
       child instanceof HTMLElement &&
       child.classList.contains('word-wrapper') &&
-      !child.classList.contains('dragging'),
+      !child.classList.contains('dragging') &&
+      !child.classList.contains('correct'),
   );
 
-  let closestWord: HTMLElement | undefined;
-  let closestOffset = Number.NEGATIVE_INFINITY;
-
   for (const word of draggableWords) {
-    const container = word.getBoundingClientRect();
-    const offset = x - container.left - container.width / 2;
-
-    if (offset < 0 && offset > closestOffset) {
-      closestOffset = offset;
-      closestWord = word;
+    const rect = word.getBoundingClientRect();
+    if (x < rect.left + rect.width / 2) {
+      return word;
     }
   }
 
-  return closestWord;
+  return undefined;
 }

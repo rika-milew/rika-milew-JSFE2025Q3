@@ -1,4 +1,4 @@
-import { gameState } from '../pages/game/game-state';
+import { gameState } from '../pages/game/state/game-state';
 
 export function setPuzzleBackground({
   wrapper,

@@ -32,6 +32,7 @@ export function highlightSentence(
 
     word.classList.remove('correct-animation', 'wrong');
     word.classList.add(isCorrect ? 'correct-animation' : 'wrong');
+
     setTimeout(() => {
       word.classList.remove('correct-animation', 'wrong');
       userSentence.style.pointerEvents = 'auto';

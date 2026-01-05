@@ -10,10 +10,6 @@
   pointer-events: none;
 }
 
-/* .sentence_active {
-  
-} */
-
 .sentence.container_drag-over {
   border: none;
 }

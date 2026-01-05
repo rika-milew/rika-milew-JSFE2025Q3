@@ -8,15 +8,19 @@ const MIN_LENGTHS: Record<string, number> = {
 
 export function inputValidation(value: string, input: 'name' | 'surname'): string | undefined {
   const minLength = MIN_LENGTHS[input] ?? 0;
+
   if (value.length < minLength) {
     return `Please enter at least ${minLength} characters`;
   }
+
   if (!loginPattern.test(value)) {
     return 'Please use only letters A-Z and the hyphen (-)';
   }
+
   if (!firstLoginLetter.test(value)) {
     return 'Please capitalize the first letter';
   }
+
   return undefined;
 }
 

@@ -1,6 +1,6 @@
 import { clearContainer } from './clear-container';
 import { createElement } from './create-element';
-import { gameState } from '../pages/game/game-state';
+import { gameState } from '../pages/game/state/game-state';
 
 export function revealImage(result: HTMLElement): void {
   result.classList.add('revealed');

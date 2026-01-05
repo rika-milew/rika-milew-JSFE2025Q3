@@ -1,9 +1,9 @@
-import level1 from '../../../data/words/word-collection-level-1.json';
-import level2 from '../../../data/words/word-collection-level-2.json';
-import level3 from '../../../data/words/word-collection-level-3.json';
-import level4 from '../../../data/words/word-collection-level-4.json';
-import level5 from '../../../data/words/word-collection-level-5.json';
-import level6 from '../../../data/words/word-collection-level-6.json';
+import level1 from '../../../data/word-collection-level-1.json';
+import level2 from '../../../data/word-collection-level-2.json';
+import level3 from '../../../data/word-collection-level-3.json';
+import level4 from '../../../data/word-collection-level-4.json';
+import level5 from '../../../data/word-collection-level-5.json';
+import level6 from '../../../data/word-collection-level-6.json';
 
 import type { Game } from '../../../types/types';
 

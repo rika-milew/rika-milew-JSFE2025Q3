@@ -1,5 +1,5 @@
 import { createElement } from '../../../utils/create-element';
-import { eventState } from '../event-state';
+import { eventState } from '../state/event-state';
 
 export function createResultsSection(heading: string, type: 'known' | 'unknown'): HTMLDivElement {
   const section = createElement({

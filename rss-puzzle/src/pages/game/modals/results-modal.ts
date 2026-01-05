@@ -1,10 +1,10 @@
+import { displayMiniature } from './artwork-miniature';
+import { createResultsSection, createResultsSentence } from './results-elements';
 import { createModal } from '../../../components/modal/modal';
 import { createElement } from '../../../utils/create-element';
-import { eventState } from '../event-state';
-import { displayMiniature } from './artwork-miniature';
-import { gameState } from '../game-state';
-import { createResultsSection, createResultsSentence } from './results-elements';
-import { resultsState } from './results-state';
+import { eventState } from '../state/event-state';
+import { gameState } from '../state/game-state';
+import { resultsState } from '../state/results-state';
 
 import './results-modal.css';
 

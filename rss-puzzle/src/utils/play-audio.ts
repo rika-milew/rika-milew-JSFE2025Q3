@@ -1,4 +1,4 @@
-import { eventState } from '../pages/game/event-state';
+import { eventState } from '../pages/game/state/event-state';
 
 export function playAudio(): void {
   let currentAudio: HTMLAudioElement | undefined;

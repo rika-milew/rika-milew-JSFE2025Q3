@@ -1,25 +1,17 @@
-import { manageCheckButton, transformCheckButton, resetCheckButton } from './buttons/check-button';
-import { showResultsButton } from './buttons/results-button';
-import { eventState } from './event-state';
-import { continueGame } from './game-controller';
-import { gameState } from './game-state';
+import { createGameButtons } from './buttons/game-buttons';
+import { createGameElements } from './game-elements';
+import { subscribeGameEvents } from './game-events';
 import { createGameUI } from './game-ui';
 import { hintState } from './hints/hint-state';
 import { createHints } from './hints/hints';
-import { changeRound } from './levels/game-steps';
 import { initRound } from './levels/level-controller';
-import { createLevelAndRoundsSelector } from './levels/level-selection';
-import { loadProgressState } from './levels/progress-state';
-import { openResultsModal } from './modals/results-modal';
-import { resultsState } from './modals/results-state';
-import { Routes } from '../../app/routes';
-import { createButton } from '../../components/button/button';
-import { createWords } from '../../components/word/word';
-import { autoComplete } from '../../utils/auto-complete';
+import { gameState } from './state/game-state';
+import { loadProgressState } from './state/progress-state';
+import { resultsState } from './state/results-state';
+import { createWords } from '../../components/word/create-words';
 import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
 import { playAudio, playResultsAudio } from '../../utils/play-audio';
-import { revealImage } from '../../utils/reveal-image';
 import { uploadProgress } from '../../utils/save-progress';
 import { setBackground } from '../../utils/set-background';
 
@@ -56,63 +48,18 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
     tag: 'div',
     className: ['game', 'page'],
   });
+
   const gameBoard = createElement({ tag: 'div', className: 'game-board' });
 
   const props = createGameUI(round.levelData.name);
 
-  const heading = createElement({
-    tag: 'p',
-    className: 'result__heading',
-    textContent: 'Result',
-  });
-
-  const settings = createElement({ tag: 'div', className: 'settings' });
-
-  const levelSelection = createElement({ tag: 'div', className: 'level-selection' });
-
-  const [levelDiv, roundDiv] = createLevelAndRoundsSelector();
-
-  eventState.on('level:changed', () => {
-    gameState.roundIndex = 0;
-    resultsState.reset();
-    resultsState.initRound({
-      roundIndex: gameState.roundIndex,
-      levelId: gameState.levelIndex,
-    });
-    changeRound(props);
-  });
-
-  eventState.on('round:changed', () => {
-    resultsState.reset();
-    resultsState.initRound({
-      roundIndex: gameState.roundIndex,
-      levelId: gameState.levelIndex,
-    });
-    changeRound(props);
-  });
-
-  eventState.on('round:completed', () => {
-    revealImage(props.result);
-    showResultsButton(gameButtons, gameContainer);
-  });
-
-  eventState.on('round:next', () => {
-    resetCheckButton(props.checkButton);
-    gameState.isCompleted = false;
-    continueGame(props, 'progress');
-  });
-
-  eventState.on('results:open', (container: HTMLElement) => {
-    openResultsModal(container);
-  });
-
-  levelSelection.append(levelDiv, roundDiv);
+  const { heading, settings, levelSelection } = createGameElements();
 
   const gameButtons = createElement({ tag: 'div', className: 'game__buttons' });
 
-  const backButton = createButton({
-    text: 'Back',
-  });
+  const backButton = createGameButtons(props, router);
+
+  subscribeGameEvents(props, gameButtons, gameContainer);
 
   createWords(
     round.words[gameState.sentenceIndex],
@@ -124,38 +71,6 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
   );
 
   const { hintIcons, hintContainer } = createHints(currentSentence);
-
-  backButton.addEventListener('click', () => {
-    eventState.emit('audio:reset', '');
-    router.navigate(Routes.START);
-  });
-
-  props.checkButton.addEventListener('click', () => {
-    manageCheckButton(props);
-  });
-
-  props.autoCompleteButton.addEventListener('click', () => {
-    resultsState.addSentence({
-      text: gameState.correctSentence.join(' '),
-      audioSource: gameState.audioSource,
-      isKnown: false,
-    });
-    autoComplete(props);
-    gameState.isCompleted = true;
-    transformCheckButton(props.checkButton);
-
-    if (hintState.getMode('translation') === 'disabled') {
-      eventState.emit('hint:translation:toggle', 'enabled');
-    }
-
-    if (hintState.getMode('audio') === 'disabled') {
-      eventState.emit('hint:audio:toggle', 'enabled');
-    }
-
-    if (hintState.getMode('image') === 'disabled') {
-      eventState.emit('hint:image:toggle', 'enabled');
-    }
-  });
 
   playAudio();
   playResultsAudio();

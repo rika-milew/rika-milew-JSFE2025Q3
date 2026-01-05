@@ -1,5 +1,5 @@
 import { createButton } from '../../../components/button/button';
-import { eventState } from '../event-state';
+import { eventState } from '../state/event-state';
 
 let currentResultsButton: HTMLButtonElement | undefined;
 

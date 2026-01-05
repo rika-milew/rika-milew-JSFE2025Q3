@@ -1,6 +1,6 @@
-import { levels } from './levels/level-storage';
+import { levels } from '../levels/level-storage';
 
-import type { Game } from '../../types/types';
+import type { Game } from '../../../types/types';
 
 export const gameState: {
   _levelIndex: number;

@@ -91,6 +91,27 @@ export type ArtMiniatureInfo = {
   year: string;
 };
 
+export type HintIcons = {
+  hintIcons: HTMLDivElement;
+  translationIcon: HTMLElement;
+  pronunciationIcon: HTMLElement;
+  imageIcon: HTMLElement;
+};
+
+export type HintContainer = {
+  hintContainer: HTMLDivElement;
+  translation: HTMLDivElement;
+  audioIcon: HTMLElement;
+};
+
+export type GameElements = {
+  heading: HTMLParagraphElement;
+  settings: HTMLDivElement;
+  levelSelection: HTMLDivElement;
+  levelDiv: HTMLDivElement;
+  roundDiv: HTMLDivElement;
+};
+
 // modal
 
 export type ModalButton = {

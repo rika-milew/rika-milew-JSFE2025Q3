@@ -1,19 +1,21 @@
-import { updateCheckButtonState } from './buttons/check-button';
-import { hideResultsButton } from './buttons/results-button.ts';
-import { eventState } from './event-state.ts';
-import { gameState } from './game-state';
+import { hideResultsButton } from './buttons/results-button';
 import { hintState } from './hints/hint-state';
 import { launchNextStep } from './levels/game-steps';
-import { resultsState } from './modals/results-state.ts';
+import { eventState } from './state/event-state';
+import { gameState } from './state/game-state';
+import { resultsState } from './state/results-state';
+import { updateGameStateData } from './update-game-state';
 import { createSentence } from '../../components/sentence/sentence';
-import { createWords } from '../../components/word/word.ts';
-import { clearContainer } from '../../utils/clear-container.ts';
-import { hideImage } from '../../utils/reveal-image.ts';
+import { createWords } from '../../components/word/create-words';
+import { blockSentence } from '../../utils/block-sentence';
+import { clearContainer } from '../../utils/clear-container';
+import { hideImage } from '../../utils/reveal-image';
 
 import type { GameUI } from './game-ui';
 
 export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progress'): void {
   const { source, result, placeholder, checkButton, autoCompleteButton, roundTitle } = props;
+
   if (mode === 'progress') {
     const step = launchNextStep();
     if (step === 'sentence') {
@@ -63,19 +65,9 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
     eventState.emit('hint:image:toggle', 'disabled');
   }
 
+  updateGameStateData(updatedRound, currentSentence);
   roundTitle.textContent = updatedRound.levelData.name;
-  gameState.levelImage = updatedRound.levelData.imageSrc;
-  gameState.imageName = updatedRound.levelData.name;
-  gameState.cutImage = updatedRound.levelData.cutSrc;
-  gameState.author = updatedRound.levelData.author;
-  gameState.year = updatedRound.levelData.year;
-  gameState.audioSource = currentSentence.audioExample;
-
   clearContainer(source);
-
-  gameState.correctSentence = currentSentence.textExample.split(' ');
-  const words = currentSentence.textExample.split(' ');
-  gameState.correctSentenceIndexes = words.map((_, index) => index);
 
   createWords(
     currentSentence,
@@ -87,38 +79,4 @@ export function continueGame(props: GameUI, mode: 'change' | 'progress' = 'progr
   );
 
   return;
-}
-
-export function updateResultPlaceholder(userSentence: HTMLElement, placeholder: HTMLElement): void {
-  const words = [...userSentence.children].filter(
-    (child): child is HTMLElement =>
-      child instanceof HTMLElement && child.classList.contains('word-wrapper'),
-  );
-
-  if (words.length > 0) {
-    if (userSentence.contains(placeholder)) {
-      placeholder.remove();
-    }
-  } else {
-    if (!userSentence.contains(placeholder)) {
-      userSentence.append(placeholder);
-    }
-  }
-}
-
-export function updateGameState(
-  userSentence: HTMLElement,
-  placeholder: HTMLElement,
-  correctSentence: string[],
-  checkButton: HTMLButtonElement,
-): void {
-  updateResultPlaceholder(userSentence, placeholder);
-  updateCheckButtonState(userSentence, checkButton, correctSentence.length);
-  userSentence.style.pointerEvents = 'auto';
-}
-
-export function blockSentence(sentence: HTMLElement): void {
-  sentence.classList.remove('sentence_active');
-  sentence.classList.add('sentence_done');
-  sentence.style.pointerEvents = 'none';
 }

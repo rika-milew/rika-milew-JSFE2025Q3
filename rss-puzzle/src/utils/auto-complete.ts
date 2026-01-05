@@ -1,6 +1,6 @@
 import { moveWords } from './animation-helpers';
 import { highlightCorrectSentence } from './check-sentence';
-import { gameState } from '../pages/game/game-state';
+import { gameState } from '../pages/game/state/game-state';
 
 import type { GameUI } from '../pages/game/game-ui';
 
@@ -28,6 +28,7 @@ export function autoComplete(props: GameUI): void {
 
   gameState.correctSentenceIndexes.forEach((index) => {
     const wordCard = wordCards.find((card) => Number(card.dataset.wordIndex) === index);
+
     if (wordCard) {
       moveWords(wordCard, userSentence);
       wordCard.classList.add('word-wrapper_result');

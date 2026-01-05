@@ -1,67 +1,9 @@
-import { updateGameState } from '../../pages/game/game-controller';
-import { gameState } from '../../pages/game/game-state';
 import { hintState } from '../../pages/game/hints/hint-state';
+import { updateGameState } from '../../pages/game/levels/game-steps';
 import { moveWords } from '../../utils/animation-helpers';
 import { createElement } from '../../utils/create-element';
-import { designPuzzles } from '../../utils/design-puzzles';
-import { dragAndDrop } from '../../utils/drag-and-drop';
-import { setPuzzleBackground } from '../../utils/set-puzzle-background';
-
-import type { Word } from '../../types/types';
 
 import './word.css';
-
-export function createWords(
-  sentence: Word,
-  source: HTMLElement,
-  resultSentence: HTMLElement,
-  placeholder: HTMLElement,
-  correctSentence: string[],
-  checkButton: HTMLButtonElement,
-): void {
-  const words = sentence.textExample.split(' ').map((word, index) => ({
-    id: index,
-    word,
-  }));
-  const cards = shuffleWords(words);
-
-  cards.forEach((word) => {
-    const wordWrapper = createWord(
-      word.word,
-      word.id,
-      source,
-      resultSentence,
-      placeholder,
-      correctSentence,
-      checkButton,
-    );
-
-    const card = [...wordWrapper.children].find(
-      (element): element is HTMLElement =>
-        element instanceof HTMLElement && element.classList.contains('word'),
-    );
-
-    if (!card) {
-      return;
-    }
-
-    designPuzzles(wordWrapper, card, word.word, correctSentence);
-
-    dragAndDrop(wordWrapper, source, resultSentence, placeholder, correctSentence, checkButton);
-
-    source.append(wordWrapper);
-    requestAnimationFrame(() => {
-      fixWordWidth(wordWrapper);
-      if (gameState.levelImage) {
-        setPuzzleBackground({
-          wrapper: wordWrapper,
-          index: word.id,
-          correctSentence,
-        });
-      }
-    });
-  });
-}
 
 export function createWord(
   word: string,
@@ -106,23 +48,6 @@ export function createWord(
 
     updateGameState(resultSentence, placeholder, correctSentence, checkButton);
   });
+
   return wordWrapper;
-}
-
-function shuffleWords<T>(array: T[]): T[] {
-  const shuffledArray = [...array];
-  for (let index = shuffledArray.length - 1; index > 0; index--) {
-    const newIndex = Math.floor(Math.random() * (index + 1));
-    [shuffledArray[index], shuffledArray[newIndex]] = [
-      shuffledArray[newIndex],
-      shuffledArray[index],
-    ];
-  }
-  return shuffledArray;
-}
-
-function fixWordWidth(wordWrapper: HTMLElement): void {
-  const width = wordWrapper.getBoundingClientRect().width;
-  wordWrapper.style.width = `${width}px`;
-  wordWrapper.style.flex = '0 0 auto';
 }

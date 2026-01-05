@@ -5,6 +5,7 @@ export function saveUserCredentials(firstName: string, surname: string): void {
     firstName,
     surname,
   };
+
   localStorage.setItem('user', JSON.stringify(user));
 }
 
