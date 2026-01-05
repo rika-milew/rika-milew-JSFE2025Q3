@@ -520,7 +520,7 @@ function markRounds() {
 
 function revealImage(result) {
   result.classList.add("revealed");
-  result.style.setProperty("--image", `url(pictures/${gameState.levelImage})`);
+  result.style.setProperty("--image", `url(../pictures/${gameState.levelImage})`);
   const imageInfo = addImageInfo();
   result.append(imageInfo);
   imageInfo.classList.add("visible");
@@ -901,7 +901,7 @@ function setPuzzleBackground({
     );
     const verticalOffset = Math.round(sentenceIndex * rowHeight);
     if (word) {
-      word.style.setProperty("--background-image", `url(pictures/${gameState.levelImage})`);
+      word.style.setProperty("--background-image", `url(../pictures/${gameState.levelImage})`);
       word.style.setProperty("--background-size", `${WIDTH}px ${height}px`);
       word.style.setProperty(
         "--background-position",
@@ -914,7 +914,7 @@ function setPuzzleBackground({
       const EDGE_OVERLAP = 16;
       const edgeOffsetX = horizontalOffset + wordRect.width - edgeRect.width + EDGE_OVERLAP;
       const edgeOffsetY = verticalOffset + (wordRect.height - edgeRect.height) / 2;
-      edge.style.setProperty("--background-image", `url(pictures/${gameState.levelImage})`);
+      edge.style.setProperty("--background-image", `url(../pictures/${gameState.levelImage})`);
       edge.style.setProperty("--background-size", `${WIDTH}px ${height}px`);
       edge.style.setProperty("--background-position", `-${edgeOffsetX}px -${edgeOffsetY}px`);
     }
@@ -1243,7 +1243,6 @@ function displayMiniature() {
       alt: gameState.imageName
     }
   });
-  artwork.style.backgroundImage = `url(pictures/${gameState.cutImage})`;
   const title = createElement({
     tag: "div",
     className: "miniature__title",
@@ -2062,4 +2061,4 @@ function startApp(root) {
 document.addEventListener("DOMContentLoaded", () => {
   startApp(document.body);
 });
-//# sourceMappingURL=main-BiuFQ83j.js.map
+//# sourceMappingURL=main-Ct73n3r_.js.map
