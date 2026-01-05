@@ -45,7 +45,7 @@ export function setPuzzleBackground({
     const verticalOffset = Math.round(sentenceIndex * rowHeight);
 
     if (word) {
-      word.style.setProperty('--background-image', `url(pictures/${gameState.levelImage})`);
+      word.style.setProperty('--background-image', `url(../pictures/${gameState.levelImage})`);
       word.style.setProperty('--background-size', `${WIDTH}px ${height}px`);
       word.style.setProperty(
         '--background-position',
@@ -62,7 +62,7 @@ export function setPuzzleBackground({
       const edgeOffsetX = horizontalOffset + wordRect.width - edgeRect.width + EDGE_OVERLAP;
       const edgeOffsetY = verticalOffset + (wordRect.height - edgeRect.height) / 2;
 
-      edge.style.setProperty('--background-image', `url(pictures/${gameState.levelImage})`);
+      edge.style.setProperty('--background-image', `url(../pictures/${gameState.levelImage})`);
       edge.style.setProperty('--background-size', `${WIDTH}px ${height}px`);
       edge.style.setProperty('--background-position', `-${edgeOffsetX}px -${edgeOffsetY}px`);
     }
