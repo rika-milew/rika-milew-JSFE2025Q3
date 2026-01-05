@@ -16,8 +16,6 @@ export function displayMiniature(): HTMLElement {
     },
   });
 
-  artwork.style.backgroundImage = `url(pictures/${gameState.cutImage})`;
-
   const title = createElement({
     tag: 'div',
     className: 'miniature__title',
