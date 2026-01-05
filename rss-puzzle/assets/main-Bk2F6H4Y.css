@@ -429,7 +429,7 @@ select option:checked {
 }
 
 .results__title {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   font-size: 28px;
   font-weight: bold;
   color: #491a8e;
@@ -456,7 +456,7 @@ select option:checked {
 }
 
 .results__section {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .results__section-title {
@@ -499,6 +499,7 @@ select option:checked {
 
 .results__button {
   min-width: 200px;
+  margin: auto;
   color: #ffffff;
   background-color: #416a56;
 }

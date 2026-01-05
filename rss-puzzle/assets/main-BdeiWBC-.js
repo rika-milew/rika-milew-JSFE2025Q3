@@ -1378,16 +1378,17 @@ function openResultsModal(container) {
     container,
     content,
     modalClassName: "results-modal",
-    buttons: [
-      {
-        text: "Next Round",
-        className: "results__button",
-        onClick: () => {
-          eventState.emit("round:next", true);
-        }
-      }
-    ]
+    buttons: []
   });
+  const nextButton = createButton({ className: "results__button", text: "Next Round" });
+  const handleClick = () => {
+    nextButton.removeEventListener("click", handleClick);
+    currentResultsModal?.remove();
+    currentResultsModal = void 0;
+    eventState.emit("round:next", true);
+  };
+  nextButton.addEventListener("click", handleClick);
+  content.append(nextButton);
 }
 
 function subscribeGameEvents(props, gameButtons, gameContainer) {
@@ -2061,4 +2062,4 @@ function startApp(root) {
 document.addEventListener("DOMContentLoaded", () => {
   startApp(document.body);
 });
-//# sourceMappingURL=main-Ct73n3r_.js.map
+//# sourceMappingURL=main-BdeiWBC-.js.map
