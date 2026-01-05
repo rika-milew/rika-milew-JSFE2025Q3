@@ -28,6 +28,25 @@ true              &&(function polyfill() {
 	}
 }());
 
+const sounds = {
+  click: new Audio("sounds/button.mp3"),
+  correct: new Audio("sounds/correct.mp3"),
+  level: new Audio("sounds/level.mp3"),
+  lose: new Audio("sounds/lose.mp3"),
+  move: new Audio("sounds/move.mp3")
+};
+Object.values(sounds).forEach((audio) => {
+  audio.volume = 0.4;
+  audio.preload = "auto";
+});
+function playSound(name) {
+  const audio = sounds[name];
+  audio.currentTime = 0;
+  audio.play().catch((error) => {
+    console.error(error);
+  });
+}
+
 function checkSentence(userSentence, correctSentence) {
   const playerSentence = [...userSentence.children].filter(
     (child) => child instanceof HTMLElement && child.classList.contains("word-wrapper")
@@ -40,6 +59,7 @@ function highlightSentence(autoCompleteButton, userSentence, correctSentenceInde
     (child) => child instanceof HTMLElement && child.classList.contains("word-wrapper")
   );
   userSentence.style.pointerEvents = "none";
+  playSound("lose");
   words.forEach((word, index) => {
     const wordIndex = Number(word.dataset.wordIndex);
     const isCorrect = wordIndex === correctSentenceIndexes[index];
@@ -58,6 +78,7 @@ function highlightCorrectSentence(result) {
     (child) => child instanceof HTMLElement && child.classList.contains("word-wrapper")
   );
   result.style.pointerEvents = "none";
+  playSound("correct");
   words.forEach((word) => {
     word.classList.remove("correct", "wrong");
     word.classList.add("correct", "correct-animation", "background");
@@ -499,7 +520,7 @@ function markRounds() {
 
 function revealImage(result) {
   result.classList.add("revealed");
-  result.style.setProperty("--image", `url(/pictures/${gameState.levelImage})`);
+  result.style.setProperty("--image", `url(pictures/${gameState.levelImage})`);
   const imageInfo = addImageInfo();
   result.append(imageInfo);
   imageInfo.classList.add("visible");
@@ -654,6 +675,7 @@ function moveWords(word, targetContainer) {
   word.getBoundingClientRect();
   word.style.transition = "transform 0.4s ease";
   word.style.transform = "translate(0, 0)";
+  playSound("move");
   word.addEventListener(
     "transitionend",
     () => {
@@ -709,73 +731,20 @@ function designPuzzles(wordWrapper, wordCard, word, correctSentence) {
   }
 }
 
-function dragAndDrop(word, source, userSentence, placeholder, correctSentence, checkButton) {
-  word.setAttribute("draggable", "true");
-  word.addEventListener("dragstart", (event) => {
-    if (word.classList.contains("correct")) {
-      event.preventDefault();
-      return;
+function findWordPosition(container, x) {
+  const draggableWords = [...container.children].filter(
+    (child) => child instanceof HTMLElement && child.classList.contains("word-wrapper") && !child.classList.contains("dragging") && !child.classList.contains("correct")
+  );
+  for (const word of draggableWords) {
+    const rect = word.getBoundingClientRect();
+    if (x < rect.left + rect.width / 2) {
+      return word;
     }
-    event.dataTransfer?.setData("text/plain", word.textContent || "");
-    word.classList.add("dragging");
-  });
-  word.addEventListener("dragend", () => {
-    word.classList.remove("dragging");
-    if (word.parentElement !== userSentence) {
-      source.append(word);
-      word.classList.remove("word-wrapper_result");
-    }
-    updateResultPlaceholder(userSentence, placeholder);
-  });
-  [source, userSentence].forEach((container) => {
-    container.addEventListener("dragover", (event) => {
-      event.preventDefault();
-      container.classList.add("container_drag-over");
-      const wordDragging = [...document.getElementsByClassName("dragging")].find(
-        (element) => element instanceof HTMLElement
-      );
-      if (!wordDragging) {
-        return;
-      }
-      const wordAfter = findWordPosition(container, event.clientX);
-      if (wordAfter) {
-        wordAfter.before(wordDragging);
-      } else {
-        container.append(wordDragging);
-      }
-      wordDragging.classList.toggle("word-wrapper_result", container === userSentence);
-    });
-    container.addEventListener("dragleave", () => {
-      container.classList.remove("container_drag-over");
-    });
-    container.addEventListener("drop", (event) => {
-      event.preventDefault();
-      const draggedWord2 = [...document.getElementsByClassName("dragging")].find(
-        (element) => element instanceof HTMLElement
-      );
-      if (!draggedWord2) {
-        throw new Error("Dragged word is not found");
-      }
-      if (draggedWord2.parentElement !== userSentence) {
-        source.append(draggedWord2);
-        draggedWord2.classList.remove("word_result");
-        updateResultPlaceholder(userSentence, placeholder);
-      }
-      container.classList.remove("container_drag-over");
-      const wordDragging = [...document.getElementsByClassName("dragging")].find(
-        (element) => element instanceof HTMLElement
-      );
-      if (!wordDragging) {
-        return;
-      }
-      if (!container.contains(wordDragging)) {
-        container.append(wordDragging);
-      }
-      if (!word.classList.contains("correct")) {
-        updateGameState(userSentence, placeholder, correctSentence, checkButton);
-      }
-    });
-  });
+  }
+  return void 0;
+}
+
+function dragAndDropMobile(word, source, userSentence, placeholder, correctSentence, checkButton) {
   let draggedWord = void 0;
   let offsetX = 0;
   let offsetY = 0;
@@ -830,17 +799,76 @@ function dragAndDrop(word, source, userSentence, placeholder, correctSentence, c
     updateGameState(userSentence, placeholder, correctSentence, checkButton);
   });
 }
-function findWordPosition(container, x) {
-  const draggableWords = [...container.children].filter(
-    (child) => child instanceof HTMLElement && child.classList.contains("word-wrapper") && !child.classList.contains("dragging") && !child.classList.contains("correct")
-  );
-  for (const word of draggableWords) {
-    const rect = word.getBoundingClientRect();
-    if (x < rect.left + rect.width / 2) {
-      return word;
+
+function dragAndDrop(word, source, userSentence, placeholder, correctSentence, checkButton) {
+  word.setAttribute("draggable", "true");
+  word.addEventListener("dragstart", (event) => {
+    if (word.classList.contains("correct")) {
+      event.preventDefault();
+      return;
     }
-  }
-  return void 0;
+    event.dataTransfer?.setData("text/plain", word.textContent || "");
+    word.classList.add("dragging");
+  });
+  word.addEventListener("dragend", () => {
+    word.classList.remove("dragging");
+    if (word.parentElement !== userSentence) {
+      source.append(word);
+      word.classList.remove("word-wrapper_result");
+    }
+    updateResultPlaceholder(userSentence, placeholder);
+  });
+  [source, userSentence].forEach((container) => {
+    container.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      container.classList.add("container_drag-over");
+      const wordDragging = [...document.getElementsByClassName("dragging")].find(
+        (element) => element instanceof HTMLElement
+      );
+      if (!wordDragging) {
+        return;
+      }
+      const wordAfter = findWordPosition(container, event.clientX);
+      if (wordAfter) {
+        wordAfter.before(wordDragging);
+      } else {
+        container.append(wordDragging);
+      }
+      wordDragging.classList.toggle("word-wrapper_result", container === userSentence);
+    });
+    container.addEventListener("dragleave", () => {
+      container.classList.remove("container_drag-over");
+    });
+    container.addEventListener("drop", (event) => {
+      event.preventDefault();
+      const draggedWord = [...document.getElementsByClassName("dragging")].find(
+        (element) => element instanceof HTMLElement
+      );
+      if (!draggedWord) {
+        throw new Error("Dragged word is not found");
+      }
+      if (draggedWord.parentElement !== userSentence) {
+        source.append(draggedWord);
+        draggedWord.classList.remove("word_result");
+        updateResultPlaceholder(userSentence, placeholder);
+      }
+      container.classList.remove("container_drag-over");
+      const wordDragging = [...document.getElementsByClassName("dragging")].find(
+        (element) => element instanceof HTMLElement
+      );
+      if (!wordDragging) {
+        return;
+      }
+      if (!container.contains(wordDragging)) {
+        container.append(wordDragging);
+      }
+      if (!word.classList.contains("correct")) {
+        updateGameState(userSentence, placeholder, correctSentence, checkButton);
+      }
+      playSound("move");
+    });
+  });
+  dragAndDropMobile(word, source, userSentence, placeholder, correctSentence, checkButton);
 }
 
 function setPuzzleBackground({
@@ -855,7 +883,7 @@ function setPuzzleBackground({
     (element) => element instanceof HTMLElement && element.classList.contains("word-wrapper__edge")
   );
   const picture = new Image();
-  picture.src = `/pictures/${gameState.levelImage}`;
+  picture.src = `pictures/${gameState.levelImage}`;
   picture.addEventListener("load", () => {
     const WIDTH = 720;
     const scale = WIDTH / picture.width;
@@ -873,7 +901,7 @@ function setPuzzleBackground({
     );
     const verticalOffset = Math.round(sentenceIndex * rowHeight);
     if (word) {
-      word.style.setProperty("--background-image", `url(/pictures/${gameState.levelImage})`);
+      word.style.setProperty("--background-image", `url(pictures/${gameState.levelImage})`);
       word.style.setProperty("--background-size", `${WIDTH}px ${height}px`);
       word.style.setProperty(
         "--background-position",
@@ -886,7 +914,7 @@ function setPuzzleBackground({
       const EDGE_OVERLAP = 16;
       const edgeOffsetX = horizontalOffset + wordRect.width - edgeRect.width + EDGE_OVERLAP;
       const edgeOffsetY = verticalOffset + (wordRect.height - edgeRect.height) / 2;
-      edge.style.setProperty("--background-image", `url(/pictures/${gameState.levelImage})`);
+      edge.style.setProperty("--background-image", `url(pictures/${gameState.levelImage})`);
       edge.style.setProperty("--background-size", `${WIDTH}px ${height}px`);
       edge.style.setProperty("--background-position", `-${edgeOffsetX}px -${edgeOffsetY}px`);
     }
@@ -1211,11 +1239,11 @@ function displayMiniature() {
     tag: "img",
     className: "miniature__image",
     attributes: {
-      src: `/pictures/${gameState.levelImage}`,
+      src: `pictures/${gameState.levelImage}`,
       alt: gameState.imageName
     }
   });
-  artwork.style.backgroundImage = `url(/pictures/${gameState.cutImage})`;
+  artwork.style.backgroundImage = `url(pictures/${gameState.cutImage})`;
   const title = createElement({
     tag: "div",
     className: "miniature__title",
@@ -1265,7 +1293,7 @@ function createResultsSentence(text, audioSource) {
     tag: "img",
     className: "results__audio-icon",
     attributes: {
-      src: "/icons/audio-play.svg",
+      src: "icons/audio-play.svg",
       alt: "Play audio"
     }
   });
@@ -1382,6 +1410,7 @@ function subscribeGameEvents(props, gameButtons, gameContainer) {
     changeRound(props);
   });
   eventState.on("round:completed", () => {
+    playSound("level");
     revealImage(props.result);
     showResultsButton(gameButtons, gameContainer);
   });
@@ -1696,6 +1725,7 @@ function createGamePage(container, router) {
   const { hintIcons, hintContainer } = createHints(currentSentence);
   playAudio();
   playResultsAudio();
+  eventState.emit("audio:update", gameState.audioSource);
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
   gameButtons.append(props.checkButton, props.autoCompleteButton, backButton);
@@ -2032,4 +2062,4 @@ function startApp(root) {
 document.addEventListener("DOMContentLoaded", () => {
   startApp(document.body);
 });
-//# sourceMappingURL=main-BYYy2h8D.js.map
+//# sourceMappingURL=main-BiuFQ83j.js.map
