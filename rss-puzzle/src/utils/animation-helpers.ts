@@ -1,3 +1,5 @@
+import { playSound } from './play-sounds';
+
 export function moveWords(word: HTMLElement, targetContainer: HTMLElement): void {
   const startPosition = word.getBoundingClientRect();
   targetContainer.append(word);
@@ -12,6 +14,8 @@ export function moveWords(word: HTMLElement, targetContainer: HTMLElement): void
 
   word.style.transition = 'transform 0.4s ease';
   word.style.transform = 'translate(0, 0)';
+
+  playSound('move');
 
   word.addEventListener(
     'transitionend',
