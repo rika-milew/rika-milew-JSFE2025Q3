@@ -1,3 +1,5 @@
+import { playSound } from './play-sounds';
+
 export function checkSentence(userSentence: HTMLElement, correctSentence: number[]): boolean {
   const playerSentence = [...userSentence.children]
     .filter(
@@ -26,6 +28,8 @@ export function highlightSentence(
 
   userSentence.style.pointerEvents = 'none';
 
+  playSound('lose');
+
   words.forEach((word, index) => {
     const wordIndex = Number(word.dataset.wordIndex);
     const isCorrect = wordIndex === correctSentenceIndexes[index];
@@ -50,6 +54,8 @@ export function highlightCorrectSentence(result: HTMLElement): void {
   );
 
   result.style.pointerEvents = 'none';
+
+  playSound('correct');
 
   words.forEach((word) => {
     word.classList.remove('correct', 'wrong');

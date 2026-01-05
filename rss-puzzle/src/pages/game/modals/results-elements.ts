@@ -37,7 +37,7 @@ export function createResultsSentence(text: string, audioSource: string): HTMLDi
     tag: 'img',
     className: 'results__audio-icon',
     attributes: {
-      src: '/icons/audio-play.svg',
+      src: 'icons/audio-play.svg',
       alt: 'Play audio',
     },
   });

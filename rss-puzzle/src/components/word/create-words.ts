@@ -1,7 +1,7 @@
 import { createWord } from './word';
 import { gameState } from '../../pages/game/state/game-state';
 import { designPuzzles } from '../../utils/design-puzzles';
-import { dragAndDrop } from '../../utils/drag-and-drop';
+import { dragAndDrop } from '../../utils/drag-and-drop/drag-and-drop';
 import { setPuzzleBackground } from '../../utils/set-puzzle-background';
 import { shuffleWords, fixWordWidth } from '../../utils/word-helpers';
 

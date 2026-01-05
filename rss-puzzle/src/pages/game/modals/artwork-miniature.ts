@@ -11,12 +11,12 @@ export function displayMiniature(): HTMLElement {
     tag: 'img',
     className: 'miniature__image',
     attributes: {
-      src: `/pictures/${gameState.levelImage}`,
+      src: `pictures/${gameState.levelImage}`,
       alt: gameState.imageName,
     },
   });
 
-  artwork.style.backgroundImage = `url(/pictures/${gameState.cutImage})`;
+  artwork.style.backgroundImage = `url(pictures/${gameState.cutImage})`;
 
   const title = createElement({
     tag: 'div',

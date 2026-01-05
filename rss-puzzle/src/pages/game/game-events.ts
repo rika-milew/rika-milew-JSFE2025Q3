@@ -7,6 +7,7 @@ import { eventState } from './state/event-state';
 import { gameState } from './state/game-state';
 import { resultsState } from './state/results-state';
 import { clearContainer } from '../../utils/clear-container';
+import { playSound } from '../../utils/play-sounds';
 import { revealImage } from '../../utils/reveal-image';
 
 import type { GameUI } from './game-ui';
@@ -36,6 +37,7 @@ export function subscribeGameEvents(
   });
 
   eventState.on('round:completed', () => {
+    playSound('level');
     revealImage(props.result);
     showResultsButton(gameButtons, gameContainer);
   });

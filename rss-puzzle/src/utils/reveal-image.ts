@@ -4,7 +4,7 @@ import { gameState } from '../pages/game/state/game-state';
 
 export function revealImage(result: HTMLElement): void {
   result.classList.add('revealed');
-  result.style.setProperty('--image', `url(/pictures/${gameState.levelImage})`);
+  result.style.setProperty('--image', `url(pictures/${gameState.levelImage})`);
 
   const imageInfo = addImageInfo();
 

@@ -5,6 +5,7 @@ import { createGameUI } from './game-ui';
 import { hintState } from './hints/hint-state';
 import { createHints } from './hints/hints';
 import { initRound } from './levels/level-controller';
+import { eventState } from './state/event-state';
 import { gameState } from './state/game-state';
 import { loadProgressState } from './state/progress-state';
 import { resultsState } from './state/results-state';
@@ -74,6 +75,8 @@ export function createGamePage(container: HTMLElement, router: AppRouter): HTMLD
 
   playAudio();
   playResultsAudio();
+
+  eventState.emit('audio:update', gameState.audioSource);
 
   props.userSentence.append(props.placeholder);
   gameBoard.append(heading, props.result, props.source);
