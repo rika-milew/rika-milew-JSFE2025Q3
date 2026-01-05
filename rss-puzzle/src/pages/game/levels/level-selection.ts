@@ -1,9 +1,10 @@
+import { subscribeLevelEvents } from './level-events';
 import { levelRounds } from './level-storage';
-import { createElement } from '../../../utils/create-element';
-import { eventState } from '../../game/event-state';
-import { gameState } from '../game-state';
-import { progressState } from './progress-state';
 import { clearContainer } from '../../../utils/clear-container';
+import { createElement } from '../../../utils/create-element';
+import { eventState } from '../state/event-state';
+import { gameState } from '../state/game-state';
+import { progressState } from '../state/progress-state';
 
 import './level-selection.css';
 
@@ -21,22 +22,32 @@ export function createLevelAndRoundsSelector(): [HTMLDivElement, HTMLDivElement]
     className: 'round-select',
   });
 
+  levelSelect.id = 'level-select';
+  roundSelect.id = 'round-select';
+
+  levelDiv.append(levelSelect);
+  roundDiv.append(roundSelect);
+
   function updateLevels(): void {
     clearContainer(levelSelect);
+
     levelRounds.forEach((_, index) => {
       const option = createElement({
         tag: 'option',
         textContent: `Level ${index + 1}`,
         className: ['level-option', progressState.completedLevels.has(index) ? 'completed' : ''],
       });
+
       option.value = index.toString();
       levelSelect.append(option);
     });
+
     levelSelect.value = gameState.levelIndex.toString();
   }
 
   function updateRounds(levelIndex: number): void {
     clearContainer(roundSelect);
+
     const roundsCount = levelRounds[levelIndex];
     const completedRounds = progressState.completedRounds.get(levelIndex) ?? new Set();
 
@@ -53,42 +64,10 @@ export function createLevelAndRoundsSelector(): [HTMLDivElement, HTMLDivElement]
     roundSelect.value = gameState.roundIndex.toString();
   }
 
+  subscribeLevelEvents(levelSelect, roundSelect, updateRounds);
+
   updateLevels();
   updateRounds(gameState.levelIndex);
-
-  levelSelect.addEventListener('change', () => {
-    const selectedLevel = Number.parseInt(levelSelect.value, 10);
-    gameState.levelIndex = selectedLevel;
-    gameState.roundIndex = 0;
-    gameState.sentenceIndex = 0;
-    updateRounds(selectedLevel);
-
-    eventState.emit('level:changed', selectedLevel);
-    eventState.emit('round:changed', 0);
-  });
-
-  roundSelect.addEventListener('change', () => {
-    const selectedRound = Number.parseInt(roundSelect.value, 10);
-    gameState.roundIndex = selectedRound;
-    gameState.sentenceIndex = 0;
-    eventState.emit('round:changed', selectedRound);
-  });
-
-  eventState.on('level:changed', (levelIndex: number) => {
-    gameState.levelIndex = levelIndex;
-    gameState.roundIndex = 0;
-    gameState.sentenceIndex = 0;
-    levelSelect.value = levelIndex.toString();
-
-    updateRounds(levelIndex);
-  });
-
-  eventState.on('round:changed', (roundIndex: number) => {
-    roundSelect.value = roundIndex.toString();
-  });
-
-  levelDiv.append(levelSelect);
-  roundDiv.append(roundSelect);
 
   eventState.on('progress:updated', () => {
     updateLevels();
@@ -96,7 +75,7 @@ export function createLevelAndRoundsSelector(): [HTMLDivElement, HTMLDivElement]
 
     const completedRounds = progressState.completedRounds.get(gameState.levelIndex) ?? new Set();
 
-    roundSelect.querySelectorAll('option').forEach((option) => {
+    [...roundSelect.options].forEach((option) => {
       const index = Number(option.value);
       option.classList.toggle('completed', completedRounds.has(index));
     });

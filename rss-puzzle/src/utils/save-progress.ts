@@ -1,10 +1,11 @@
 import { createElement } from './create-element';
-import { gameState } from '../pages/game/game-state';
 import { levelRounds } from '../pages/game/levels/level-storage';
+import { gameState } from '../pages/game/state/game-state';
 
 export function saveProgress(): void {
   const { levelIndex, roundIndex } = gameState;
   const progress = { levelIndex, roundIndex };
+
   localStorage.setItem('userProgress', JSON.stringify(progress));
 }
 
@@ -36,6 +37,7 @@ export function uploadProgress(): void {
   gameState.levelIndex = nextLevel;
   gameState.roundIndex = nextRound;
   gameState.sentenceIndex = 0;
+
   showProgressNotification(gameState.levelIndex, gameState.roundIndex);
 }
 

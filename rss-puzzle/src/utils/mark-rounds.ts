@@ -1,8 +1,8 @@
 import { saveProgress } from './save-progress';
-import { eventState } from '../pages/game/event-state';
-import { gameState } from '../pages/game/game-state';
 import { levelRounds } from '../pages/game/levels/level-storage';
-import { progressState, saveProgressState } from '../pages/game/levels/progress-state';
+import { eventState } from '../pages/game/state/event-state';
+import { gameState } from '../pages/game/state/game-state';
+import { progressState, saveProgressState } from '../pages/game/state/progress-state';
 
 export function markRounds(): void {
   const { levelIndex, roundIndex } = gameState;

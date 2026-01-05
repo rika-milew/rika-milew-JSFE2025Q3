@@ -1,7 +1,6 @@
+import { createHintIcons, createHintContainer } from './hint-elements';
 import { hintState } from './hint-state';
-import { createHint } from '../../../components/hint/hint';
-import { createElement } from '../../../utils/create-element';
-import { eventState } from '../event-state';
+import { eventState } from '../state/event-state';
 
 import type { Sentence } from '../../../types/types';
 
@@ -9,45 +8,8 @@ export function createHints(currentSentence: Sentence): {
   hintIcons: HTMLElement;
   hintContainer: HTMLElement;
 } {
-  const hintIcons = createElement({ tag: 'div', className: 'hint-icons' });
-
-  const translationIcon = createHint({
-    container: hintIcons,
-    text: 'Translation',
-    icon: 'icons/translation.svg',
-    className: 'hint',
-  });
-
-  const hintContainer = createElement({ tag: 'div', className: 'hint-container' });
-
-  const translation = createElement({
-    tag: 'div',
-    className: 'translation',
-  });
-
-  const pronunciationIcon = createHint({
-    container: hintIcons,
-    text: 'Pronunciation',
-    icon: 'icons/audio.svg',
-    className: 'hint',
-  });
-
-  const imageIcon = createHint({
-    container: hintIcons,
-    text: 'Show image',
-    icon: 'icons/picture.svg',
-    className: 'hint image',
-  });
-
-  const audioIcon = createHint({
-    container: hintContainer,
-    text: 'Play audio',
-    icon: 'icons/audio-play.svg',
-    className: 'hint audio',
-  });
-
-  hintIcons.append(translationIcon, pronunciationIcon, imageIcon);
-  hintContainer.append(translation, audioIcon);
+  const { hintIcons, translationIcon, pronunciationIcon, imageIcon } = createHintIcons();
+  const { hintContainer, translation, audioIcon } = createHintContainer();
 
   eventState.on('hint:translation:toggle', (mode) => {
     translation.classList.toggle('visible', mode === 'enabled');
@@ -58,7 +20,9 @@ export function createHints(currentSentence: Sentence): {
   });
 
   eventState.on('hint:image:toggle', (mode: 'enabled' | 'disabled') => {
-    const wrappers = document.querySelectorAll<HTMLElement>('.word-wrapper');
+    const wrappers = [...document.getElementsByClassName('word-wrapper')].filter(
+      (element): element is HTMLElement => element instanceof HTMLElement,
+    );
 
     wrappers.forEach((wrapper) => {
       const isSolved = wrapper.classList.contains('correct');
@@ -89,6 +53,7 @@ export function createHints(currentSentence: Sentence): {
     const mode = hintState.getMode('audio');
     pronunciationIcon.classList.toggle('active', mode === 'enabled');
     eventState.emit('hint:audio:toggle', mode);
+
     if (mode === 'disabled') {
       eventState.emit('audio:reset', '');
     }

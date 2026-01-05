@@ -1,3 +1,4 @@
+import { createForm, createLabel, createTextInput } from './login-elements';
 import { Routes } from '../../app/routes';
 import { createButton } from '../../components/button/button';
 import { clearContainer } from '../../utils/clear-container';
@@ -9,44 +10,6 @@ import { inputValidation, showInputErrors } from '../../utils/validate-login';
 import type { AppRouter } from '../../app/app-router';
 
 import './login-page.css';
-
-export function createLabel(text: string, htmlFor: string): HTMLLabelElement {
-  const label = createElement({
-    tag: 'label',
-    className: 'login__label',
-    textContent: text,
-    attributes: { htmlFor },
-  });
-  label.htmlFor = htmlFor;
-  return label;
-}
-
-export function createTextInput(
-  id: string,
-  name: string,
-  placeholder: string,
-  className: string,
-): HTMLInputElement {
-  return createElement({
-    tag: 'input',
-    className,
-    attributes: {
-      id,
-      placeholder,
-      required: 'true',
-      type: 'text',
-      name,
-    },
-  });
-}
-
-export function createForm(id: string): HTMLFormElement {
-  return createElement({
-    tag: 'form',
-    className: 'login__form',
-    attributes: { id },
-  });
-}
 
 export function createLoginPage(container: HTMLElement, router: AppRouter): HTMLDivElement {
   clearContainer(container);

@@ -92,7 +92,6 @@
   .word-wrapper:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     transform: scale(1.05);
-    /* background-color: #927add; */
   }
 }
 
@@ -100,11 +99,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   cursor: grabbing;
   transform: scale(1.05);
-}
-
-.word-wrapper_result {
-  /* border: 1px solid #b7a9ee; */
-  border-radius: 0;
 }
 
 .word-wrapper:not(.word-wrapper_result) {

@@ -4,17 +4,11 @@
   flex-direction: row;
   gap: 0;
   width: 720px;
-  min-height: 40px;
 }
 
 .sentence_done {
-  justify-content: space-between;
   pointer-events: none;
 }
-
-/* .sentence_active {
-  
-} */
 
 .sentence.container_drag-over {
   border: none;

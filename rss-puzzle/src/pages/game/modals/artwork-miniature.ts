@@ -1,5 +1,5 @@
 import { createElement } from '../../../utils/create-element';
-import { gameState } from '../game-state';
+import { gameState } from '../state/game-state';
 
 export function displayMiniature(): HTMLElement {
   const container = createElement({

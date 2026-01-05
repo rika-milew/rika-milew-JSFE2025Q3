@@ -38,6 +38,7 @@ export function createAppRouter(container: HTMLElement): AppRouter {
         });
       }, ANIMATION_TIME);
     },
+
     logout(): void {
       localStorage.removeItem('user');
       hintState.reset();

@@ -1,28 +1,38 @@
-export function checkSentence(userSentence: HTMLElement, correctSentence: string[]): boolean {
-  const playerSentence = [...userSentence.querySelectorAll('.word-wrapper')].map(
-    (card) => card.textContent || '',
-  );
+export function checkSentence(userSentence: HTMLElement, correctSentence: number[]): boolean {
+  const playerSentence = [...userSentence.children]
+    .filter(
+      (child): child is HTMLElement =>
+        child instanceof HTMLElement && child.classList.contains('word-wrapper'),
+    )
+    .map((card) => Number(card.dataset.wordIndex));
 
   return (
     playerSentence.length === correctSentence.length &&
-    playerSentence.every((word, index) => word === correctSentence[index])
+    playerSentence.every((id, index) => id === correctSentence[index])
   );
 }
 
 export function highlightSentence(
   autoCompleteButton: HTMLButtonElement,
   userSentence: HTMLElement,
-  correctSentence: string[],
+  correctSentenceIndexes: number[],
 ): void {
   const ANIMATION_DURATION = 1000;
-  const words = [...userSentence.querySelectorAll<HTMLElement>('.word-wrapper')];
+
+  const words = [...userSentence.children].filter(
+    (child): child is HTMLElement =>
+      child instanceof HTMLElement && child.classList.contains('word-wrapper'),
+  );
+
   userSentence.style.pointerEvents = 'none';
 
   words.forEach((word, index) => {
-    const isCorrect = word.textContent === correctSentence[index];
+    const wordIndex = Number(word.dataset.wordIndex);
+    const isCorrect = wordIndex === correctSentenceIndexes[index];
 
     word.classList.remove('correct-animation', 'wrong');
     word.classList.add(isCorrect ? 'correct-animation' : 'wrong');
+
     setTimeout(() => {
       word.classList.remove('correct-animation', 'wrong');
       userSentence.style.pointerEvents = 'auto';
@@ -33,7 +43,12 @@ export function highlightSentence(
 
 export function highlightCorrectSentence(result: HTMLElement): void {
   const ANIMATION_DURATION = 1000;
-  const words = [...result.querySelectorAll<HTMLElement>('.word-wrapper')];
+
+  const words = [...result.children].filter(
+    (child): child is HTMLElement =>
+      child instanceof HTMLElement && child.classList.contains('word-wrapper'),
+  );
+
   result.style.pointerEvents = 'none';
 
   words.forEach((word) => {
