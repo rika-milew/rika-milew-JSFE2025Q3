@@ -9,10 +9,12 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "isolatedModules": true,
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "resolveJsonModule": true,
 
     /* Linting */
     "strict": true,
@@ -20,7 +22,11 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true,
+    "forceConsistentCasingInFileNames": true,
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "out"]
 }
