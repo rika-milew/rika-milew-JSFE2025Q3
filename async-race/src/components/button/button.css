@@ -1,0 +1,48 @@
+.button {
+  position: relative;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+  }
+}
+
+.winners-button {
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  color: #000;
+  background-color: #ffd700;
+  transition: all 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .winners-button:hover {
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.9);
+  }
+}
+
+.garage-button {
+  color: #dcdcdc;
+  background-color: #1b6ab9;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .garage-button:hover {
+    box-shadow: 0 0 10px rgba(46, 147, 247, 0.9);
+  }
+}
+
+@media screen and (max-width: 768px) {
+}

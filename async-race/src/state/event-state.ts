@@ -1,6 +1,4 @@
-type EventMap = {
-  'car:update': string;
-};
+import type { EventMap } from './event-map';
 
 type EventState<T extends Record<string, unknown>> = {
   on<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
