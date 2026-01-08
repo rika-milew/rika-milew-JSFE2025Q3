@@ -14,22 +14,8 @@ body {
   backdrop-filter: blur(10px);
 }
 
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
+.container {
   width: 100%;
-  padding: 30px 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  background-color: #000000;
-  backdrop-filter: blur(6px);
-}
-
-.header .nav {
-  display: flex;
-  align-items: center;
-  gap: 25px;
   margin: 0 auto;
+  padding: 20px;
 }

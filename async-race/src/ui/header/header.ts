@@ -1,7 +1,9 @@
-import { createButton } from '../components/button/button';
-import { appState } from '../state/app-state';
-import { eventState } from '../state/event-state';
-import { createElement } from '../utils/create-element';
+import { createButton } from '../../components/button/button';
+import { appState } from '../../state/app-state';
+import { eventState } from '../../state/event-state';
+import { createElement } from '../../utils/create-element';
+
+import './header.css';
 
 export function createHeader(): void {
   const header = createElement({ tag: 'header', className: 'header' });
@@ -9,7 +11,7 @@ export function createHeader(): void {
 
   const garageNav = createButton({
     text: 'To Garage',
-    className: 'garage-button',
+    className: `garage-button ${appState.view === 'garage' ? 'active' : ''}`,
     disabled: appState.view === 'garage',
   });
   garageNav.addEventListener('click', () => {
@@ -18,7 +20,7 @@ export function createHeader(): void {
 
   const winnersNav = createButton({
     text: 'To Winners',
-    className: 'winners-button',
+    className: `winners-button ${appState.view === 'winners' ? 'active' : ''}`,
     disabled: appState.view === 'winners',
   });
 

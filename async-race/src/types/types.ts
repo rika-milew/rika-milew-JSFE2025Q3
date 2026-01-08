@@ -39,6 +39,13 @@ export type ElementOptions<K extends ElementTag> = {
   attributes?: Record<string, string>;
 };
 
+export type PageInfoElements = {
+  title: string;
+  page: number;
+  total: number;
+  totalText: string;
+};
+
 // app
 
 export type View = 'garage' | 'winners';
