@@ -3,10 +3,10 @@ import type { EventMap } from './event-map';
 type EventState<T extends Record<string, unknown>> = {
   on<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
   off<K extends keyof T>(event: K, handler?: EventHandler<T[K]>): void;
-  emit<K extends keyof T>(event: K, payload: T[K]): void;
+  emit<K extends keyof T>(event: K, payload?: T[K]): void;
 };
 
-type EventHandler<T> = (payload: T) => void;
+type EventHandler<T> = (payload?: T) => void;
 
 export function createEventState<T extends Record<string, unknown>>(): EventState<T> {
   const subscribers: { [K in keyof T]?: EventHandler<T[K]>[] } = {};

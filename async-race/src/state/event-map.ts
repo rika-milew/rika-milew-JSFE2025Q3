@@ -1,8 +1,16 @@
-import type { View } from '../types/types';
+import type { View, Car } from '../types/types';
 
 export type EventMap = {
-  'car:update': string;
   'view:changed': View;
   'garage:page:changed': number;
   'winners:page:changed': number;
+  'garage:refresh': undefined;
+  'car:create': { name: string; color: string };
+  'car:update': { id: number; name: string; color: string };
+  'car:delete': { id: number };
+  'car:deleted': number;
+  'car:selected': Car;
+  'updateform:fill': { id: number; name: string; color: string };
+  'updateform:reset': undefined;
+  'ui:error': string;
 };

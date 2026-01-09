@@ -46,6 +46,11 @@ export type PageInfoElements = {
   totalText: string;
 };
 
+export type PageInfoResults = {
+  container: HTMLElement;
+  totalInfo: HTMLElement;
+};
+
 // app
 
 export type View = 'garage' | 'winners';
@@ -68,4 +73,16 @@ export type Winner = {
   color: string;
   wins: number;
   time: number;
+};
+
+export type CarForm = {
+  submit?: (name: string, color: string) => void;
+  carData?: { id: number; name: string; color: string };
+  disabled?: boolean;
+  isUpdate?: boolean;
+};
+
+export type GarageList = {
+  container: HTMLDivElement;
+  render: () => Promise<void>;
 };
