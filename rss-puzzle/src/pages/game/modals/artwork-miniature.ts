@@ -7,11 +7,14 @@ export function displayMiniature(): HTMLElement {
     className: 'miniature',
   });
 
+  const BASE_URL =
+    'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/images/';
+
   const artwork = createElement({
     tag: 'img',
     className: 'miniature__image',
     attributes: {
-      src: `pictures/${gameState.levelImage}`,
+      src: `${BASE_URL}${gameState.levelImage}`,
       alt: gameState.imageName,
     },
   });

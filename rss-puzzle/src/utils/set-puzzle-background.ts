@@ -19,8 +19,10 @@ export function setPuzzleBackground({
       element instanceof HTMLElement && element.classList.contains('word-wrapper__edge'),
   );
 
+  const BASE_URL =
+    'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/images/';
   const picture = new Image();
-  picture.src = `pictures/${gameState.levelImage}`;
+  picture.src = `${BASE_URL}${gameState.levelImage}`;
 
   picture.addEventListener('load', () => {
     const WIDTH = 720;
@@ -45,7 +47,7 @@ export function setPuzzleBackground({
     const verticalOffset = Math.round(sentenceIndex * rowHeight);
 
     if (word) {
-      word.style.setProperty('--background-image', `url(../pictures/${gameState.levelImage})`);
+      word.style.setProperty('--background-image', `url(${BASE_URL}${gameState.levelImage})`);
       word.style.setProperty('--background-size', `${WIDTH}px ${height}px`);
       word.style.setProperty(
         '--background-position',
@@ -62,7 +64,7 @@ export function setPuzzleBackground({
       const edgeOffsetX = horizontalOffset + wordRect.width - edgeRect.width + EDGE_OVERLAP;
       const edgeOffsetY = verticalOffset + (wordRect.height - edgeRect.height) / 2;
 
-      edge.style.setProperty('--background-image', `url(../pictures/${gameState.levelImage})`);
+      edge.style.setProperty('--background-image', `url(${BASE_URL}${gameState.levelImage})`);
       edge.style.setProperty('--background-size', `${WIDTH}px ${height}px`);
       edge.style.setProperty('--background-position', `-${edgeOffsetX}px -${edgeOffsetY}px`);
     }

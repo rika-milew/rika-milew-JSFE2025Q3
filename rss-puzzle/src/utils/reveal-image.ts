@@ -4,7 +4,10 @@ import { gameState } from '../pages/game/state/game-state';
 
 export function revealImage(result: HTMLElement): void {
   result.classList.add('revealed');
-  result.style.setProperty('--image', `url(../pictures/${gameState.levelImage})`);
+  result.style.setProperty(
+    '--image',
+    `url(https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/images/${gameState.levelImage})`,
+  );
 
   const imageInfo = addImageInfo();
 

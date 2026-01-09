@@ -13,10 +13,11 @@ export function playAudio(): void {
   }
 
   eventState.on('audio:update', (audioPath: string) => {
+    const audioFile = `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${audioPath}`;
     if (currentAudio) {
       stopAudio();
     }
-    currentAudio = new Audio(audioPath);
+    currentAudio = new Audio(audioFile);
   });
 
   eventState.on('pronunciation:play', () => {
@@ -67,8 +68,8 @@ export function playResultsAudio(): void {
 
   eventState.on('results:audio', (audioSource: string) => {
     stop();
-
-    currentAudio = new Audio(audioSource);
+    const audioFile = `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${audioSource}`;
+    currentAudio = new Audio(audioFile);
     currentAudio.play().catch(console.error);
 
     currentAudio.addEventListener(
