@@ -2,7 +2,7 @@ import { createElement } from '../../utils/create-element';
 
 import type { ModalElements } from '../../types/types';
 
-import './modal1.css';
+import './modal.css';
 
 export function createModal({
   container,
