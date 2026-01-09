@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -10,6 +12,8 @@ body {
   min-height: 100vh;
   margin: 0;
   color: #dcdcdc;
+  font-family: 'Roboto', sans-serif;
+  font-optical-sizing: auto;
   background-color: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(10px);
 }

@@ -82,6 +82,11 @@ export type CarForm = {
   isUpdate?: boolean;
 };
 
+export type CarSvg = {
+  element: SVGElement;
+  setColor: (color: string) => void;
+};
+
 export type GarageList = {
   container: HTMLDivElement;
   render: () => Promise<void>;

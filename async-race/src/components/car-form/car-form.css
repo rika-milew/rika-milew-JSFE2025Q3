@@ -1,0 +1,96 @@
+.car-form {
+  position: relative;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  height: 32px;
+  margin: 0 auto 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+}
+
+.car-form input[type='text'],
+.car-form input[type='color'] {
+  height: 100%;
+  padding: 6px 10px;
+
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #fefefe;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.car-form input[type='text'] {
+  width: 250px;
+}
+
+.car-form input[type='color'] {
+  width: 45px;
+  padding: 2px 2px;
+}
+
+.car-form input[type='text']:focus {
+  border-color: #248248;
+  box-shadow: 0 0 0 2px rgba(96, 137, 112, 0.2);
+}
+
+.car-form button {
+  width: 120px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  color: #e0e0e0;
+  background-color: #23643c;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
+}
+
+.car-form button:disabled {
+  background-color: #948989;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .car-form button:hover:not(:disabled) {
+    background-color: #105425;
+  }
+}
+
+.car-form button:active:not(:disabled) {
+  background-color: #105425;
+}
+
+.car-form input[type='text']:disabled,
+.car-form input[type='color']:disabled {
+  opacity: 0.5;
+}
+
+.car-form .error-text {
+  position: absolute;
+  position: absolute;
+  top: -40px;
+  min-height: 16px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #d9534f;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.car-form .error-text.visible {
+  opacity: 1;
+}

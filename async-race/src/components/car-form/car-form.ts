@@ -1,7 +1,10 @@
 import { eventState } from '../../state/event-state';
 import { createElement } from '../../utils/create-element';
+import { showError } from '../../utils/show-error';
 
 import type { CarForm } from '../../types/types';
+
+import './car-form.css';
 
 export function createCarForm({ isUpdate = false, disabled = false }: CarForm): HTMLFormElement {
   const carForm = createElement({ tag: 'form', className: 'car-form' });
@@ -16,6 +19,20 @@ export function createCarForm({ isUpdate = false, disabled = false }: CarForm): 
     attributes: { type: 'color', value: '#000000' },
   });
 
+  nameInput.id = 'car-name;';
+  colorInput.id = 'car-color';
+
+  colorInput.addEventListener('input', () => {
+    if (!carForm.dataset.carId) {
+      return;
+    }
+
+    eventState.emit('updateform:color', {
+      id: Number(carForm.dataset.carId),
+      color: colorInput.value,
+    });
+  });
+
   const button = createElement({
     tag: 'button',
     textContent: isUpdate ? 'Update' : 'Create',
@@ -24,9 +41,13 @@ export function createCarForm({ isUpdate = false, disabled = false }: CarForm): 
 
   const errorText = createElement({ tag: 'p', className: 'error-text' });
 
-  nameInput.disabled = disabled;
-  colorInput.disabled = disabled;
-  button.disabled = disabled;
+  resetForm();
+
+  function resetForm(): void {
+    nameInput.disabled = disabled;
+    colorInput.disabled = disabled;
+    button.disabled = disabled;
+  }
 
   carForm.append(nameInput, colorInput, button, errorText);
 
@@ -58,9 +79,7 @@ export function createCarForm({ isUpdate = false, disabled = false }: CarForm): 
       carForm.dataset.carId = '';
       nameInput.value = '';
       colorInput.value = '#000000';
-      nameInput.disabled = true;
-      colorInput.disabled = true;
-      button.disabled = true;
+      resetForm();
     });
   }
 
@@ -68,7 +87,8 @@ export function createCarForm({ isUpdate = false, disabled = false }: CarForm): 
     event.preventDefault();
 
     if (!nameInput.value.trim()) {
-      errorText.textContent = 'Enter car name';
+      const ANIMATION_DURATION = 2000;
+      showError(errorText, 'Enter car name', ANIMATION_DURATION);
       return;
     }
     errorText.textContent = '';

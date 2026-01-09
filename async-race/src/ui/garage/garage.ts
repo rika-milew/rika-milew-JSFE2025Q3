@@ -9,7 +9,7 @@ import { createElement } from '../../utils/create-element';
 
 import './garage.css';
 
-export function createGarage(): void {
+export async function createGarage(): Promise<void> {
   const container = createElement({ tag: 'div', className: 'container' });
 
   document.body.append(container);
@@ -38,4 +38,15 @@ export function createGarage(): void {
   eventState.on('garage:refresh', () => {
     infoElements.totalInfo.textContent = `Total Cars: ${carState.cars.length}`;
   });
+
+  try {
+    await garageList.render();
+    eventState.emit('garage:refresh');
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error while rendering garage:', error.message);
+    } else {
+      console.error('Unknown error while rendering garage:', error);
+    }
+  }
 }

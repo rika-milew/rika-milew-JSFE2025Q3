@@ -9,9 +9,17 @@ export type AppRouter = {
 
 export function createAppRouter(): AppRouter {
   return {
-    navigate: (view: View): void => {
+    navigate: async (view: View): Promise<void> => {
       appState.view = view;
-      createApp();
+      try {
+        await createApp();
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error('Error while navigating:', error.message);
+        } else {
+          console.error('Unknown error while navigating:', error);
+        }
+      }
     },
   };
 }

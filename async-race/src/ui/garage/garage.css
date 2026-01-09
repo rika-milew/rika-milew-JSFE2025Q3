@@ -9,11 +9,11 @@ h2 {
   justify-content: center;
   gap: 20px;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 15px;
-  margin: 20px auto;
   max-width: 1200px;
+  margin: 20px auto 40px;
+  padding: 15px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(6px);
   color: #e0e0e0;
 }
@@ -21,4 +21,8 @@ h2 {
 .info {
   font-size: 20px;
   font-weight: 500;
+}
+
+.garage-container {
+  margin-top: 40px;
 }

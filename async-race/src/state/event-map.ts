@@ -11,6 +11,7 @@ export type EventMap = {
   'car:deleted': number;
   'car:selected': Car;
   'updateform:fill': { id: number; name: string; color: string };
+  'updateform:color': { id: number; color: string };
   'updateform:reset': undefined;
   'ui:error': string;
 };
