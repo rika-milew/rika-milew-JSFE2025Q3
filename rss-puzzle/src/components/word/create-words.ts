@@ -1,4 +1,4 @@
-import { createWord } from './word';
+import { createWord } from './word1';
 import { gameState } from '../../pages/game/state/game-state';
 import { designPuzzles } from '../../utils/design-puzzles';
 import { dragAndDrop } from '../../utils/drag-and-drop/drag-and-drop';

@@ -3,7 +3,7 @@ import { updateGameState } from '../../pages/game/levels/game-steps';
 import { moveWords } from '../../utils/animation-helpers';
 import { createElement } from '../../utils/create-element';
 
-import './word.css';
+import './word1.css';
 
 export function createWord(
   word: string,

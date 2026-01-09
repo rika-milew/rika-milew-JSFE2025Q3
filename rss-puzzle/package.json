@@ -28,7 +28,7 @@
     "url": "https://github.com/rolling-scopes-school/rika-milew-JSFE2025Q3.git"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx,js}": [
+    "src/**/*.{ts}": [
       "eslint --max-warnings 5",
       "prettier --write"
     ],
