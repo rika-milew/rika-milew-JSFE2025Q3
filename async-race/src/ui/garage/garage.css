@@ -1,0 +1,24 @@
+h2 {
+  margin: 20px auto 30px;
+  font-size: 38px;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 20px auto;
+  max-width: 1200px;
+  backdrop-filter: blur(6px);
+  color: #e0e0e0;
+}
+
+.info {
+  font-size: 20px;
+  font-weight: 500;
+}
