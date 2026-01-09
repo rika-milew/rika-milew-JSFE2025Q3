@@ -21,6 +21,7 @@ export function setPuzzleBackground({
 
   const BASE_URL =
     'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/images/';
+
   const picture = new Image();
   picture.src = `${BASE_URL}${gameState.levelImage}`;
 
