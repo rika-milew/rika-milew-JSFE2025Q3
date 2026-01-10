@@ -16,9 +16,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "npx vite build && npx gh-pages -d dist -e async-race",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css,js,jsx,json,md}\"",
-    "ci:format": "prettier --check \"src/**/*.{ts,tsx,css,js,jsx,json,md}\"",
-    "lint": "eslint src/**/*.{ts,tsx,js}",
+    "format": "prettier --write \"src/**/*.{ts,css,js,json,md}\"",
+    "ci:format": "prettier --check \"src/**/*.{ts,css,js,json,md}\"",
+    "lint": "eslint src/**/*.{ts,js}",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "prepare": "cd .. && husky install async-race/.husky"
