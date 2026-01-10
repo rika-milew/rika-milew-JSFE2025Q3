@@ -8,18 +8,16 @@
 .car-buttons,
 .animation-buttons {
   display: flex;
-  flex-direction: row;
   align-items: center;
+  flex-direction: row;
   gap: 15px;
 }
 
 .car__track {
   position: relative;
-
   width: 100%;
   height: 2px;
   margin-top: 0;
-
   background-image: repeating-linear-gradient(to right, #888888 0 4px, transparent 4px 8px);
 }
 
@@ -93,6 +91,6 @@
 .car__name {
   margin: 0;
   font-size: 18px;
-  line-height: 20px;
   font-weight: 700;
+  line-height: 20px;
 }

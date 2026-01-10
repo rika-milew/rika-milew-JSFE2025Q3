@@ -1,3 +1,4 @@
+import { createFooter } from './footer/footer';
 import { createGarage } from './garage/garage';
 import { createHeader } from './header/header';
 import { createWinners } from './winners/winners';
@@ -21,4 +22,6 @@ export async function createApp(): Promise<void> {
       console.error('Unknown error while creating the view:', error);
     }
   }
+
+  createFooter();
 }
