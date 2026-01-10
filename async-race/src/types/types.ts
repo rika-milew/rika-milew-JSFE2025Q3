@@ -48,6 +48,7 @@ export type PageInfoElements = {
 
 export type PageInfoResults = {
   container: HTMLElement;
+  pageInfo: HTMLElement;
   totalInfo: HTMLElement;
 };
 
@@ -87,7 +88,18 @@ export type CarSvg = {
   setColor: (color: string) => void;
 };
 
+export type CarBrand = {
+  brand: string;
+  models: string[];
+};
+
+export type PaginationElements = {
+  paginationContainer: HTMLDivElement;
+  previousButton: HTMLButtonElement;
+  nextButton: HTMLButtonElement;
+};
+
 export type GarageList = {
-  container: HTMLDivElement;
   render: () => Promise<void>;
+  setPage: (page: number) => Promise<void>;
 };

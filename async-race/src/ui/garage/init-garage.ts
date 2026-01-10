@@ -1,4 +1,5 @@
-import { getCars } from '../../data/garage/get-cars';
+import { getCars } from '../../api/garage/get-cars';
+import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';
 
 let isDefault = false;
@@ -8,8 +9,8 @@ export async function loadDefaultCars(): Promise<void> {
     return;
   }
 
-  const { cars } = await getCars();
-  carState.set(cars);
+  const { cars, totalCount } = await getCars(appState.garagePage, appState.perPage);
+  carState.set(cars, totalCount);
 
   isDefault = true;
 }

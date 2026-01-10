@@ -5,6 +5,7 @@ export type EventMap = {
   'garage:page:changed': number;
   'winners:page:changed': number;
   'garage:refresh': undefined;
+  'garage:pagination:update': { currentPage: number; totalCount: number };
   'car:create': { name: string; color: string };
   'car:update': { id: number; name: string; color: string };
   'car:delete': { id: number };
