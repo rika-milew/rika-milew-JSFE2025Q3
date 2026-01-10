@@ -7,6 +7,9 @@ import './header.css';
 
 export function createHeader(): void {
   const header = createElement({ tag: 'header', className: 'header' });
+
+  const title = createElement({ tag: 'h1', className: 'title', textContent: 'Async Race' });
+
   const nav = createElement({ tag: 'nav', className: 'nav' });
 
   const garageNav = createButton({
@@ -28,7 +31,7 @@ export function createHeader(): void {
     eventState.emit('view:changed', 'winners');
   });
 
-  header.append(nav);
+  header.append(title, nav);
   nav.append(garageNav, winnersNav);
 
   document.body.append(header);

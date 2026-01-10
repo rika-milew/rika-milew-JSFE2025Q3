@@ -13,7 +13,7 @@
 .footer__image {
   width: 25px;
   height: 25px;
-  background-image: url(/public/github.webp);
+  background-image: url(/github.webp);
   background-size: cover;
 }
 

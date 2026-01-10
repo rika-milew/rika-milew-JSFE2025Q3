@@ -7,12 +7,6 @@ export function createFooter(): void {
 
   const github = createElement({ tag: 'div', className: 'footer__github' });
 
-  const title = createElement({
-    tag: 'span',
-    className: 'footer__title',
-    textContent: 'Async Race',
-  });
-
   const year = createElement({
     tag: 'span',
     className: 'footer__year',
@@ -36,6 +30,6 @@ export function createFooter(): void {
   });
 
   github.append(image, githubLink);
-  footer.append(github, title, year);
+  footer.append(github, year);
   document.body.append(footer);
 }
