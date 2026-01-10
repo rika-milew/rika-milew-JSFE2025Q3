@@ -4,7 +4,14 @@ import { updateCar } from '../../data/garage/update-car';
 import { carState } from '../../state/car-state';
 import { eventState } from '../../state/event-state';
 
+let isControllerStarted = false;
+
 export function startGarageController(): void {
+  if (isControllerStarted) {
+    return;
+  }
+
+  isControllerStarted = true;
   eventState.on('car:create', async (payload) => {
     if (!payload) {
       return;
