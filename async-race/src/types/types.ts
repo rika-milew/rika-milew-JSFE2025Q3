@@ -103,3 +103,11 @@ export type GarageList = {
   render: () => Promise<void>;
   setPage: (page: number) => Promise<void>;
 };
+
+export type CarFormElements = {
+  carForm: HTMLFormElement;
+  nameInput: HTMLInputElement;
+  colorInput: HTMLInputElement;
+  button: HTMLButtonElement;
+  errorText: HTMLParagraphElement;
+};
