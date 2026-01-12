@@ -106,6 +106,7 @@ export default defineConfig([
       'unicorn/no-null': 'error',
       'unicorn/prefer-node-protocol': 'error',
       'unicorn/prefer-top-level-await': 'error',
+      'unicorn/number-literal-case': 'off',
 
       // 🎨 Styles
       'quotes': ['error', 'single', { avoidEscape: true }],

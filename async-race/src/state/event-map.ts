@@ -8,7 +8,7 @@ export type EventMap = {
   'garage:pagination:update': { currentPage: number; totalCount: number };
   'garage:race': undefined;
   'garage:reset': undefined;
-  'garage:generateCars': number;
+  'garage:generate': number;
   'car:create': { name: string; color: string };
   'car:update': { id: number; name: string; color: string };
   'car:delete': { id: number };

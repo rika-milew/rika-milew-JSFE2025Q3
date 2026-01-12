@@ -34,7 +34,7 @@ export function createGarageButtons(): HTMLDivElement {
 
   generateButton.addEventListener('click', () => {
     const CARS_QUANTITY = 100;
-    eventState.emit('garage:generateCars', CARS_QUANTITY);
+    eventState.emit('garage:generate', CARS_QUANTITY);
   });
 
   return container;
