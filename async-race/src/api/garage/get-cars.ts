@@ -22,8 +22,7 @@ export async function getCars(
     const response = await fetch(url);
 
     if (!response.ok) {
-      console.error(`Failed to get the cars: ${response.status} ${response.statusText}`);
-      return { cars: [], totalCount: 0 };
+      throw new Error(`Failed to get cars. Status: ${response.status}`);
     }
 
     const cars: Car[] = await response.json();
@@ -31,7 +30,6 @@ export async function getCars(
 
     return { cars, totalCount };
   } catch (error) {
-    console.error('Error while getting the cars:', error);
-    return { cars: [], totalCount: 0 };
+    throw new Error(error instanceof Error ? error.message : 'Error while getting the cars');
   }
 }

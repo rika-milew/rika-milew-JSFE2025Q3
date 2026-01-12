@@ -17,6 +17,7 @@ module.exports = {
             'flex-wrap',
             'flex-grow',
             'flex-basis',
+            'flex-shrink',
             'gap',
             'grid',
             'grid-template-columns',

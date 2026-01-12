@@ -1,0 +1,29 @@
+.garage__buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 435px;
+}
+
+.race-button {
+  flex-grow: 1;
+  flex-basis: auto;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.race-button {
+  background-color: #182773;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .race-button:hover {
+    background-color: #0b143d;
+  }
+}
+
+.race-button .active {
+  background-color: #0b143d;
+}

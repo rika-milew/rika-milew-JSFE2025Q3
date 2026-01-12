@@ -6,11 +6,11 @@ import { createElement } from '../../utils/create-element';
 import './header.css';
 
 export function createHeader(): void {
-  const header = createElement({ tag: 'header', className: 'header' });
+  const header = createElement({ tag: 'header', className: ['header'] });
 
-  const title = createElement({ tag: 'h1', className: 'title', textContent: 'Async Race' });
+  const title = createElement({ tag: 'h1', className: ['title'], textContent: 'Async Race' });
 
-  const nav = createElement({ tag: 'nav', className: 'nav' });
+  const nav = createElement({ tag: 'nav', className: ['nav'] });
 
   const garageNav = createButton({
     text: 'To Garage',

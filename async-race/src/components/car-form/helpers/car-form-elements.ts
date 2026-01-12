@@ -3,7 +3,7 @@ import { createElement } from '../../../utils/create-element';
 import type { CarFormElements } from '../../../types/types';
 
 export function createCarFormElements(isUpdate: boolean): CarFormElements {
-  const carForm = createElement({ tag: 'form', className: 'car-form' });
+  const carForm = createElement({ tag: 'form', className: ['car-form'] });
 
   const nameInput = createElement({
     tag: 'input',
@@ -24,7 +24,7 @@ export function createCarFormElements(isUpdate: boolean): CarFormElements {
     attributes: { type: 'submit' },
   });
 
-  const errorText = createElement({ tag: 'p', className: 'error-text' });
+  const errorText = createElement({ tag: 'p', className: ['error-text'] });
 
   carForm.append(nameInput, colorInput, button, errorText);
 

@@ -34,7 +34,7 @@ export type ElementTag = keyof HTMLElements;
 
 export type ElementOptions<K extends ElementTag> = {
   tag: K;
-  className?: string | string[];
+  className?: string[];
   textContent?: string;
   attributes?: Record<string, string>;
 };
@@ -50,6 +50,13 @@ export type PageInfoResults = {
   container: HTMLElement;
   pageInfo: HTMLElement;
   totalInfo: HTMLElement;
+};
+
+export type ButtonConfig = {
+  text: string;
+  className?: string;
+  disabled?: boolean;
+  type?: 'button' | 'submit';
 };
 
 // app
@@ -110,4 +117,10 @@ export type CarFormElements = {
   colorInput: HTMLInputElement;
   button: HTMLButtonElement;
   errorText: HTMLParagraphElement;
+};
+
+export type GarageButtons = {
+  raceButton: HTMLButtonElement;
+  resetButton: HTMLButtonElement;
+  generateButton: HTMLButtonElement;
 };

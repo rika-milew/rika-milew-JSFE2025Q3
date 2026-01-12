@@ -8,13 +8,13 @@ import type { Car } from '../../types/types';
 import './car.css';
 
 export function createCarDiv(car: Car): HTMLDivElement {
-  const carItem = createElement({ tag: 'div', className: 'car' });
-  const carButtons = createElement({ tag: 'div', className: 'car-buttons' });
-  const animationButtons = createElement({ tag: 'div', className: 'animation-buttons' });
+  const carItem = createElement({ tag: 'div', className: ['car'] });
+  const carButtons = createElement({ tag: 'div', className: ['car-buttons'] });
+  const animationButtons = createElement({ tag: 'div', className: ['animation-buttons'] });
 
   const carName = createElement({
     tag: 'p',
-    className: 'car__name',
+    className: ['car__name'],
     textContent: car.name,
   });
 
@@ -60,7 +60,7 @@ export function createCarDiv(car: Car): HTMLDivElement {
 
   const carTrack = createElement({
     tag: 'div',
-    className: 'car__track',
+    className: ['car__track'],
   });
 
   const finishFlag = createFinishFlag();
