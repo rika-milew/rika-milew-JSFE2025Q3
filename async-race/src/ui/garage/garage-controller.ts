@@ -1,6 +1,7 @@
-import { updateCar } from '../../api//garage/update-car';
 import { createCar } from '../../api/garage/create-car';
 import { deleteCar } from '../../api/garage/delete-car';
+import { updateCar } from '../../api/garage/update-car';
+import { errorPopup } from '../../components/error/error';
 import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';
 import { eventState } from '../../state/event-state';
@@ -21,7 +22,7 @@ export function startGarageController(): void {
 
     const created = await createCar(payload.name, payload.color);
     if (!created) {
-      console.warn('Failed to create a new car');
+      errorPopup.show('Failed to create a new car');
       return;
     }
 
@@ -37,7 +38,7 @@ export function startGarageController(): void {
 
     const updated = await updateCar(payload.id, payload.name, payload.color);
     if (!updated) {
-      console.warn('Failed to update the chosen car');
+      errorPopup.show('Failed to update the chosen car');
       return;
     }
 
@@ -51,7 +52,7 @@ export function startGarageController(): void {
 
     const deleted = await deleteCar(payload.id);
     if (!deleted) {
-      console.warn('Failed to delete the chosen car');
+      errorPopup.show('Failed to delete the chosen car');
       return;
     }
 

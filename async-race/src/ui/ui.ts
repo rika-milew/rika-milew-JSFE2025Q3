@@ -2,6 +2,7 @@ import { createFooter } from './footer/footer';
 import { createGarage } from './garage/garage';
 import { createHeader } from './header/header';
 import { createWinners } from './winners/winners';
+import { errorPopup } from '../components/error/error';
 import { appState } from '../state/app-state';
 import { clearContainer } from '../utils/clear-container';
 
@@ -15,12 +16,12 @@ export async function createApp(): Promise<void> {
     } else {
       createWinners();
     }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Error while creating the view:', error.message);
-    } else {
-      console.error('Unknown error while creating the view:', error);
-    }
+  } catch {
+    const message =
+      appState.view === 'garage'
+        ? 'Failed to load the garage view'
+        : 'Failed to load the winners view';
+    errorPopup.show(message);
   }
 
   createFooter();

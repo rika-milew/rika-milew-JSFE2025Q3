@@ -1,10 +1,10 @@
 import { createCarFormElements } from './helpers/car-form-elements';
 import { initUpdateFormEvents } from './helpers/car-form-events';
 import { createFormState } from './helpers/car-form-state';
+import { errorPopup } from '../../components/error/error';
 import { appState } from '../../state/app-state';
 import { eventState } from '../../state/event-state';
 import { garageList } from '../../ui/garage/garage-list';
-import { createErrorPopup } from '../error/error';
 
 import type { CarForm } from '../../types/types';
 
@@ -12,8 +12,6 @@ import './car-form.css';
 
 export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
   const { carForm, nameInput, colorInput, button, errorText } = createCarFormElements(isUpdate);
-
-  const errorPopup = createErrorPopup();
 
   nameInput.addEventListener('input', () => {
     if (!isUpdate) {
@@ -63,7 +61,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
       try {
         await garageList.render();
       } catch {
-        errorPopup.show('Failed to update the chosen car');
+        errorPopup.show('Failed to update the chosen car — try again');
       }
 
       appState.updateForm.isDisabled = true;
