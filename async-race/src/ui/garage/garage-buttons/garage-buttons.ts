@@ -5,7 +5,7 @@ import { createElement } from '../../../utils/create-element';
 import './garage-buttons.css';
 
 export function createGarageButtons(): HTMLDivElement {
-  const container = createElement({ tag: 'div', className: 'garage__buttons' });
+  const container = createElement({ tag: 'div', className: ['garage__buttons'] });
 
   const raceButton = createButton({
     text: 'Race',

@@ -3,7 +3,7 @@ import { appState } from '../../state/app-state';
 import { createElement } from '../../utils/create-element';
 
 export function createWinners(): void {
-  const container = createElement({ tag: 'div', className: 'container' });
+  const container = createElement({ tag: 'div', className: ['container'] });
 
   document.body.append(container);
 

@@ -8,16 +8,16 @@ export type PaginationCallbacks = {
 };
 
 export function implementPagination({ onPrev, onNext }: PaginationCallbacks): PaginationElements {
-  const paginationContainer = createElement({ tag: 'div', className: 'pagination' });
+  const paginationContainer = createElement({ tag: 'div', className: ['pagination'] });
 
   const previousButton = createElement({
     tag: 'button',
-    className: 'prev-button',
+    className: ['prev-button'],
     textContent: 'Prev',
   });
   const nextButton = createElement({
     tag: 'button',
-    className: 'next-button',
+    className: ['next-button'],
     textContent: 'Next',
   });
 

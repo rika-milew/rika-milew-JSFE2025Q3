@@ -5,8 +5,8 @@ import './error.css';
 export const errorPopup = createErrorPopup();
 
 export function createErrorPopup(): { show: (message: string) => void } {
-  const overlay = createElement({ tag: 'div', className: 'error-overlay' });
-  const container = createElement({ tag: 'div', className: 'error' });
+  const overlay = createElement({ tag: 'div', className: ['error-overlay'] });
+  const container = createElement({ tag: 'div', className: ['error'] });
   const heading = createElement({ tag: 'h2', textContent: 'Error' });
   const content = createElement({ tag: 'p' });
 

@@ -9,7 +9,7 @@ export const createElement = <K extends ElementTag>({
   const element = document.createElement(tag);
 
   if (className) {
-    element.classList.add(...className);
+    element.className = className.join(' ');
   }
 
   if (textContent) {

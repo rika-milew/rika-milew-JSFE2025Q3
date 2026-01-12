@@ -13,8 +13,8 @@ import { createElement } from '../../utils/create-element';
 import './garage.css';
 
 export async function createGarage(): Promise<void> {
-  const main = createElement({ tag: 'div', className: 'main' });
-  const container = createElement({ tag: 'div', className: 'container' });
+  const main = createElement({ tag: 'div', className: ['main'] });
+  const container = createElement({ tag: 'div', className: ['container'] });
 
   document.body.append(main);
   main.append(container);
@@ -23,7 +23,7 @@ export async function createGarage(): Promise<void> {
     container.append(infoElements.container);
   }
 
-  const formsContainer = createElement({ tag: 'div', className: 'form-container' });
+  const formsContainer = createElement({ tag: 'div', className: ['form-container'] });
   container.append(formsContainer);
 
   const createForm = createCarForm({ isUpdate: false });

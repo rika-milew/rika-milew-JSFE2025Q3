@@ -8,7 +8,7 @@ import { createElement } from '../../../utils/create-element';
 
 import type { GarageList } from '../../../types/types';
 
-export const garageContainer = createElement({ tag: 'div', className: 'garage-container' });
+export const garageContainer = createElement({ tag: 'div', className: ['garage-container'] });
 
 export const garageList: GarageList = ((): GarageList => {
   async function render(): Promise<void> {

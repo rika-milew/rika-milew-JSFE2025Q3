@@ -8,14 +8,14 @@ export function createInfoElements({
   total,
   totalText,
 }: PageInfoElements): PageInfoResults {
-  const container = createElement({ tag: 'div', className: 'page-info' });
-  const content = createElement({ tag: 'div', className: 'content' });
+  const container = createElement({ tag: 'div', className: ['page-info'] });
+  const content = createElement({ tag: 'div', className: ['content'] });
   const heading = createElement({ tag: 'h2', textContent: title });
-  const pageInfo = createElement({ tag: 'p', className: 'info', textContent: `Page: ${page}` });
+  const pageInfo = createElement({ tag: 'p', className: ['info'], textContent: `Page: ${page}` });
 
   const totalInfo = createElement({
     tag: 'p',
-    className: 'info',
+    className: ['info'],
     textContent: `${totalText}: ${total}`,
   });
 
