@@ -6,6 +6,9 @@ export type EventMap = {
   'winners:page:changed': number;
   'garage:refresh': undefined;
   'garage:pagination:update': { currentPage: number; totalCount: number };
+  'garage:race': undefined;
+  'garage:reset': undefined;
+  'garage:generateCars': number;
   'car:create': { name: string; color: string };
   'car:update': { id: number; name: string; color: string };
   'car:delete': { id: number };

@@ -111,3 +111,9 @@ export type CarFormElements = {
   button: HTMLButtonElement;
   errorText: HTMLParagraphElement;
 };
+
+export type GarageButtons = {
+  raceButton: HTMLButtonElement;
+  resetButton: HTMLButtonElement;
+  generateButton: HTMLButtonElement;
+};

@@ -1,3 +1,4 @@
+import { createGarageButtons } from './garage-buttons/garage-buttons';
 import { startGarageController } from './helpers/garage-controller';
 import { garageContainer, garageList } from './helpers/garage-list';
 import { implementPagination } from './helpers/garage-pagination';
@@ -22,13 +23,16 @@ export async function createGarage(): Promise<void> {
     container.append(infoElements.container);
   }
 
-  const formsContainer = createElement({ tag: 'div', className: 'forms-container' });
+  const formsContainer = createElement({ tag: 'div', className: 'form-container' });
   container.append(formsContainer);
 
   const createForm = createCarForm({ isUpdate: false });
   const updateForm = createCarForm({ isUpdate: true, disabled: true });
 
   formsContainer.append(createForm, updateForm);
+
+  const garageButtons = createGarageButtons();
+  formsContainer.append(garageButtons);
 
   const { paginationContainer, previousButton, nextButton } = implementPagination({
     onPrev: async () => {
