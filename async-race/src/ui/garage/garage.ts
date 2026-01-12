@@ -1,7 +1,9 @@
 import { startGarageController } from './garage-controller';
-import { createGarageList } from './garage-list';
+import { garageContainer, garageList } from './garage-list';
+import { implementPagination } from './garage-pagination';
+import { infoElements } from './info-elements';
+import { loadDefaultCars } from './init-garage';
 import { createCarForm } from '../../components/car-form/car-form';
-import { createInfoElements } from '../../components/page-info/page-info';
 import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';
 import { eventState } from '../../state/event-state';
@@ -9,18 +11,16 @@ import { createElement } from '../../utils/create-element';
 
 import './garage.css';
 
-export function createGarage(): void {
+export async function createGarage(): Promise<void> {
+  const main = createElement({ tag: 'div', className: 'main' });
   const container = createElement({ tag: 'div', className: 'container' });
 
-  document.body.append(container);
+  document.body.append(main);
+  main.append(container);
 
-  const infoElements = createInfoElements({
-    title: 'Garage',
-    page: appState.garagePage,
-    total: appState.garage.length,
-    totalText: 'Total Cars',
-  });
-  container.append(infoElements.container);
+  if (!container.contains(infoElements.container)) {
+    container.append(infoElements.container);
+  }
 
   const formsContainer = createElement({ tag: 'div', className: 'forms-container' });
   container.append(formsContainer);
@@ -30,12 +30,36 @@ export function createGarage(): void {
 
   formsContainer.append(createForm, updateForm);
 
-  const garageList = createGarageList();
-  container.append(garageList.container);
+  const { paginationContainer, previousButton, nextButton } = implementPagination({
+    onPrev: async () => {
+      await garageList.setPage(appState.garagePage - 1);
+    },
+    onNext: async () => {
+      await garageList.setPage(appState.garagePage + 1);
+    },
+  });
+
+  container.append(paginationContainer);
+
+  await loadDefaultCars();
+
+  // console.log(carState);
+
+  if (!container.contains(garageContainer)) {
+    container.append(garageContainer);
+  }
 
   startGarageController();
 
-  eventState.on('garage:refresh', () => {
-    infoElements.totalInfo.textContent = `Total Cars: ${carState.cars.length}`;
+  eventState.on('garage:pagination:update', () => {
+    const { garagePage } = appState;
+    const totalCount = carState.totalCount;
+
+    const maxPage = Math.ceil(totalCount / appState.perPage);
+
+    previousButton.disabled = garagePage === 1;
+    nextButton.disabled = garagePage === maxPage || maxPage === 0;
   });
+
+  eventState.emit('garage:refresh');
 }

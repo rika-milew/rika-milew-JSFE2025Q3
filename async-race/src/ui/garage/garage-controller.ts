@@ -1,10 +1,19 @@
-import { createCar } from '../../data/garage/create-car';
-import { deleteCar } from '../../data/garage/delete-car';
-import { updateCar } from '../../data/garage/update-car';
+import { updateCar } from '../../api//garage/update-car';
+import { createCar } from '../../api/garage/create-car';
+import { deleteCar } from '../../api/garage/delete-car';
+import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';
 import { eventState } from '../../state/event-state';
+import { garageList } from '../garage/garage-list';
+
+let isControllerStarted = false;
 
 export function startGarageController(): void {
+  if (isControllerStarted) {
+    return;
+  }
+
+  isControllerStarted = true;
   eventState.on('car:create', async (payload) => {
     if (!payload) {
       return;
@@ -33,7 +42,6 @@ export function startGarageController(): void {
     }
 
     carState.update(updated);
-    eventState.emit('garage:refresh');
   });
 
   eventState.on('car:delete', async (payload) => {
@@ -48,7 +56,13 @@ export function startGarageController(): void {
     }
 
     carState.remove(payload.id);
-    eventState.emit('garage:refresh');
+
+    const maxPage = Math.ceil(carState.totalCount / appState.perPage);
+    if (appState.garagePage > maxPage) {
+      appState.garagePage = maxPage > 0 ? maxPage : 1;
+    }
+
+    await garageList.render();
     eventState.emit('car:deleted', payload.id);
   });
 }

@@ -11,7 +11,7 @@ export function createWinners(): void {
     title: 'Winners',
     page: appState.winnersPage,
     total: appState.winners.length,
-    totalText: 'Total Wins',
+    totalText: 'Total Winners',
   });
   container.append(infoElements.container);
 }

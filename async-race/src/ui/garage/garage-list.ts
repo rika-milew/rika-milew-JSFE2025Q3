@@ -1,38 +1,52 @@
+import { getCars } from '../../api/garage/get-cars';
 import { createCarDiv } from '../../components/car/car';
-import { getCars } from '../../data/garage/get-cars';
+import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';
 import { eventState } from '../../state/event-state';
+import { clearContainer } from '../../utils/clear-container';
 import { createElement } from '../../utils/create-element';
 
 import type { GarageList } from '../../types/types';
 
-export function createGarageList(): GarageList {
-  const container = createElement({ tag: 'div', className: 'garage-container' });
+export const garageContainer = createElement({ tag: 'div', className: 'garage-container' });
 
+export const garageList: GarageList = ((): GarageList => {
   async function render(): Promise<void> {
-    container.innerHTML = '';
+    const { cars, totalCount } = await getCars(appState.garagePage, appState.perPage);
 
-    try {
-      const { cars } = await getCars();
-      carState.set(cars);
+    carState.set(cars, totalCount);
 
-      carState.cars.forEach((car) => {
-        container.append(createCarDiv(car));
-      });
-    } catch (error) {
-      console.error('Failed to create cars:', error);
-    }
+    clearContainer(garageContainer);
+
+    cars.forEach((car) => {
+      garageContainer.append(createCarDiv(car));
+    });
+
+    eventState.emit('garage:pagination:update', {
+      currentPage: appState.garagePage,
+      totalCount: carState.totalCount,
+    });
   }
 
-  render().catch((error: unknown) => {
-    console.error('Failed render:', error);
-  });
+  async function setPage(page: number): Promise<void> {
+    const maxPage = Math.ceil(carState.totalCount / appState.perPage);
 
-  eventState.on('garage:refresh', () => {
-    render().catch((error: unknown) => {
-      console.error('Failed to refresh page:', error);
+    if (page < 1 || page > maxPage) {
+      return;
+    }
+
+    appState.garagePage = page;
+    await render();
+
+    eventState.emit('garage:pagination:update', {
+      currentPage: appState.garagePage,
+      totalCount: carState.totalCount,
     });
+  }
+
+  eventState.on('garage:refresh', async () => {
+    await render();
   });
 
-  return { container, render };
-}
+  return { render, setPage };
+})();

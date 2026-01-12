@@ -1,90 +1,84 @@
+import { createCarFormElements } from './helpers/car-form-elements';
+import { initUpdateFormEvents } from './helpers/car-form-events';
+import { createFormState } from './helpers/car-form-state';
+import { appState } from '../../state/app-state';
 import { eventState } from '../../state/event-state';
-import { createElement } from '../../utils/create-element';
+import { garageList } from '../../ui/garage/garage-list';
+import { createErrorPopup } from '../error/error';
 
 import type { CarForm } from '../../types/types';
 
-export function createCarForm({ isUpdate = false, disabled = false }: CarForm): HTMLFormElement {
-  const carForm = createElement({ tag: 'form', className: 'car-form' });
+import './car-form.css';
 
-  const nameInput = createElement({
-    tag: 'input',
-    attributes: { placeholder: 'Car Name', type: 'text' },
+export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
+  const { carForm, nameInput, colorInput, button, errorText } = createCarFormElements(isUpdate);
+
+  const errorPopup = createErrorPopup();
+
+  nameInput.addEventListener('input', () => {
+    if (!isUpdate) {
+      appState.createForm.name = nameInput.value;
+    }
   });
 
-  const colorInput = createElement({
-    tag: 'input',
-    attributes: { type: 'color', value: '#000000' },
+  colorInput.addEventListener('input', () => {
+    if (!isUpdate) {
+      appState.createForm.color = colorInput.value;
+    }
   });
 
-  const button = createElement({
-    tag: 'button',
-    textContent: isUpdate ? 'Update' : 'Create',
-    attributes: { type: 'submit' },
-  });
+  const { syncDisabledState } = createFormState(isUpdate, nameInput, colorInput, button);
 
-  const errorText = createElement({ tag: 'p', className: 'error-text' });
-
-  nameInput.disabled = disabled;
-  colorInput.disabled = disabled;
-  button.disabled = disabled;
-
-  carForm.append(nameInput, colorInput, button, errorText);
+  syncDisabledState();
 
   if (isUpdate) {
-    eventState.on('updateform:fill', (payload) => {
-      if (!payload) {
-        return;
-      }
-
-      carForm.dataset.carId = String(payload.id);
-      nameInput.value = payload.name;
-      colorInput.value = payload.color;
-      nameInput.disabled = false;
-      colorInput.disabled = false;
-      button.disabled = false;
-    });
-
-    eventState.on('car:deleted', (deletedId) => {
-      if (deletedId === undefined) {
-        return;
-      }
-
-      if (carForm.dataset.carId === String(deletedId)) {
-        eventState.emit('updateform:reset');
-      }
-    });
-
-    eventState.on('updateform:reset', () => {
-      carForm.dataset.carId = '';
-      nameInput.value = '';
-      colorInput.value = '#000000';
-      nameInput.disabled = true;
-      colorInput.disabled = true;
-      button.disabled = true;
-    });
+    initUpdateFormEvents(nameInput, colorInput, syncDisabledState);
   }
 
-  carForm.addEventListener('submit', (event) => {
+  carForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     if (!nameInput.value.trim()) {
-      errorText.textContent = 'Enter car name';
+      errorPopup.show('Please, enter car name');
       return;
     }
     errorText.textContent = '';
 
     if (isUpdate) {
-      const id = Number(carForm.dataset.carId);
+      const id = appState.updateForm.id;
 
       if (!id) {
         return;
       }
-      eventState.emit('car:update', { id, name: nameInput.value, color: colorInput.value });
-      nameInput.disabled = true;
-      colorInput.disabled = true;
-      button.disabled = true;
+
+      appState.updateForm.name = nameInput.value;
+      appState.updateForm.color = colorInput.value;
+
+      eventState.emit('car:update', {
+        id,
+        name: appState.updateForm.name,
+        color: appState.updateForm.color,
+      });
+
+      try {
+        await garageList.render();
+      } catch {
+        errorPopup.show('Failed to update the chosen car');
+      }
+
+      appState.updateForm.isDisabled = true;
+      syncDisabledState();
     } else {
-      eventState.emit('car:create', { name: nameInput.value, color: colorInput.value });
+      eventState.emit('car:create', {
+        name: appState.createForm.name,
+        color: appState.createForm.color,
+      });
+
+      appState.createForm = {
+        name: '',
+        color: '#000000',
+      };
+
       nameInput.value = '';
       colorInput.value = '#000000';
     }

@@ -22,5 +22,5 @@ export function createInfoElements({
   content.append(heading, pageInfo, totalInfo);
   container.append(heading, content);
 
-  return { container, totalInfo };
+  return { container, totalInfo, pageInfo };
 }
