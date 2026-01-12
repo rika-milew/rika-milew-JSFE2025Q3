@@ -20,15 +20,14 @@ export function startGarageController(): void {
       return;
     }
 
-    const created = await createCar(payload.name, payload.color);
-    if (!created) {
+    try {
+      const created = await createCar(payload.name, payload.color);
+      carState.add(created);
+      eventState.emit('updateform:reset');
+      eventState.emit('garage:refresh');
+    } catch {
       errorPopup.show('Failed to create a new car');
-      return;
     }
-
-    carState.add(created);
-    eventState.emit('updateform:reset');
-    eventState.emit('garage:refresh');
   });
 
   eventState.on('car:update', async (payload) => {
@@ -36,13 +35,12 @@ export function startGarageController(): void {
       return;
     }
 
-    const updated = await updateCar(payload.id, payload.name, payload.color);
-    if (!updated) {
+    try {
+      const updated = await updateCar(payload.id, payload.name, payload.color);
+      carState.update(updated);
+    } catch {
       errorPopup.show('Failed to update the chosen car');
-      return;
     }
-
-    carState.update(updated);
   });
 
   eventState.on('car:delete', async (payload) => {
@@ -50,20 +48,19 @@ export function startGarageController(): void {
       return;
     }
 
-    const deleted = await deleteCar(payload.id);
-    if (!deleted) {
+    try {
+      await deleteCar(payload.id);
+      carState.remove(payload.id);
+
+      const maxPage = Math.ceil(carState.totalCount / appState.perPage);
+      if (appState.garagePage > maxPage) {
+        appState.garagePage = maxPage > 0 ? maxPage : 1;
+      }
+
+      await garageList.render();
+      eventState.emit('car:deleted', payload.id);
+    } catch {
       errorPopup.show('Failed to delete the chosen car');
-      return;
     }
-
-    carState.remove(payload.id);
-
-    const maxPage = Math.ceil(carState.totalCount / appState.perPage);
-    if (appState.garagePage > maxPage) {
-      appState.garagePage = maxPage > 0 ? maxPage : 1;
-    }
-
-    await garageList.render();
-    eventState.emit('car:deleted', payload.id);
   });
 }
