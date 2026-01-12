@@ -36,6 +36,9 @@ export default defineConfig([
         },
       },
     },
+    linterOptions: {
+			noInlineConfig: true,
+		},
     rules: {
       // 🔴 Mandatory
       '@typescript-eslint/no-unused-vars': ['error', {
@@ -58,7 +61,7 @@ export default defineConfig([
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-magic-numbers': ['error', { 'ignore': [0, 1, 2, -1] }],
       'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-      'max-lines-per-function': ['off', { max: 40, skipBlankLines: true }], //* switched off for now
+      'max-lines-per-function': ['warn', { max: 60, skipBlankLines: true }],
       '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
       '@typescript-eslint/consistent-type-imports': ['error', {
@@ -111,6 +114,9 @@ export default defineConfig([
       'indent': ['error', 2, { SwitchCase: 1 }],
       'comma-dangle': ['error', 'always-multiline'],
       'object-curly-spacing': ['error', 'always'],
+      'brace-style': ['error', '1tbs', {
+        'allowSingleLine': false,
+      }],
       'arrow-parens': ['error', 'always'],
       'max-len': ['warn', { code: 120, ignoreComments: true }],
 
