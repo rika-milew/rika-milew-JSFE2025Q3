@@ -1,6 +1,6 @@
-import { createElement } from '../../utils/create-element';
+import { createElement } from '../../../utils/create-element';
 
-import type { PaginationElements } from '../../types/types';
+import type { PaginationElements } from '../../../types/types';
 
 export type PaginationCallbacks = {
   onPrev: () => void;

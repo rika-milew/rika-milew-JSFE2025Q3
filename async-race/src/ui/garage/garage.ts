@@ -1,8 +1,8 @@
-import { startGarageController } from './garage-controller';
-import { garageContainer, garageList } from './garage-list';
-import { implementPagination } from './garage-pagination';
+import { startGarageController } from './helpers/garage-controller';
+import { garageContainer, garageList } from './helpers/garage-list';
+import { implementPagination } from './helpers/garage-pagination';
+import { loadDefaultCars } from './helpers/init-garage';
 import { infoElements } from './info-elements';
-import { loadDefaultCars } from './init-garage';
 import { createCarForm } from '../../components/car-form/car-form';
 import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';

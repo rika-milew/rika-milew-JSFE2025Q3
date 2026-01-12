@@ -4,7 +4,7 @@ import { createFormState } from './helpers/car-form-state';
 import { errorPopup } from '../../components/error/error';
 import { appState } from '../../state/app-state';
 import { eventState } from '../../state/event-state';
-import { garageList } from '../../ui/garage/garage-list';
+import { garageList } from '../../ui/garage/helpers/garage-list';
 
 import type { CarForm } from '../../types/types';
 

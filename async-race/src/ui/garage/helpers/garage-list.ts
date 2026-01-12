@@ -1,12 +1,12 @@
-import { getCars } from '../../api/garage/get-cars';
-import { createCarDiv } from '../../components/car/car';
-import { appState } from '../../state/app-state';
-import { carState } from '../../state/car-state';
-import { eventState } from '../../state/event-state';
-import { clearContainer } from '../../utils/clear-container';
-import { createElement } from '../../utils/create-element';
+import { getCars } from '../../../api/garage/get-cars';
+import { createCarDiv } from '../../../components/car/car';
+import { appState } from '../../../state/app-state';
+import { carState } from '../../../state/car-state';
+import { eventState } from '../../../state/event-state';
+import { clearContainer } from '../../../utils/clear-container';
+import { createElement } from '../../../utils/create-element';
 
-import type { GarageList } from '../../types/types';
+import type { GarageList } from '../../../types/types';
 
 export const garageContainer = createElement({ tag: 'div', className: 'garage-container' });
 

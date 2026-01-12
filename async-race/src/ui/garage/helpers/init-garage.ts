@@ -1,6 +1,6 @@
-import { getCars } from '../../api/garage/get-cars';
-import { appState } from '../../state/app-state';
-import { carState } from '../../state/car-state';
+import { getCars } from '../../../api/garage/get-cars';
+import { appState } from '../../../state/app-state';
+import { carState } from '../../../state/car-state';
 
 let isDefault = false;
 
