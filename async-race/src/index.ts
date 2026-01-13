@@ -1,6 +1,6 @@
 import { errorPopup } from './components/error/error';
 import { appState } from './state/app-state';
-import { eventState } from './state/event-state';
+import { eventState } from './state/events/event-state';
 import { createApp } from './ui/ui';
 
 import './style.css';

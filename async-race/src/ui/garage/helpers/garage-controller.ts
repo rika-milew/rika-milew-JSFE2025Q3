@@ -5,7 +5,7 @@ import { updateCar } from '../../../api/garage/update-car';
 import { errorPopup } from '../../../components/error/error';
 import { appState } from '../../../state/app-state';
 import { carState } from '../../../state/car-state';
-import { eventState } from '../../../state/event-state';
+import { eventState } from '../../../state/events/event-state';
 
 let isControllerStarted = false;
 

@@ -1,3 +1,4 @@
+import { startEngineController } from './engine/engine-controller';
 import { createGarageButtons } from './garage-buttons/garage-buttons';
 import { startGarageController } from './helpers/garage-controller';
 import { garageContainer, garageList } from './helpers/garage-list';
@@ -7,7 +8,7 @@ import { infoElements } from './info-elements';
 import { createCarForm } from '../../components/car-form/car-form';
 import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';
-import { eventState } from '../../state/event-state';
+import { eventState } from '../../state/events/event-state';
 import { createElement } from '../../utils/create-element';
 
 import './garage.css';
@@ -47,13 +48,12 @@ export async function createGarage(): Promise<void> {
 
   await loadDefaultCars();
 
-  // console.log(carState);
-
   if (!container.contains(garageContainer)) {
     container.append(garageContainer);
   }
 
   startGarageController();
+  startEngineController();
 
   eventState.on('garage:pagination:update', () => {
     const { garagePage } = appState;

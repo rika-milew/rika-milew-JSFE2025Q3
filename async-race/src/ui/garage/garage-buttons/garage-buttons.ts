@@ -1,5 +1,5 @@
 import { createButton } from '../../../components/button/button';
-import { eventState } from '../../../state/event-state';
+import { eventState } from '../../../state/events/event-state';
 import { createElement } from '../../../utils/create-element';
 
 import './garage-buttons.css';

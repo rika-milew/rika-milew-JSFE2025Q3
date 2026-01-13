@@ -1,10 +1,9 @@
 import { getCars } from '../../../api/garage/get-cars';
-import { createCarDiv } from '../../../components/car/car';
+import { createCarElement } from '../../../components/car/car';
 import { errorPopup } from '../../../components/error/error';
 import { appState } from '../../../state/app-state';
 import { carState } from '../../../state/car-state';
-import { eventState } from '../../../state/event-state';
-import { clearContainer } from '../../../utils/clear-container';
+import { eventState } from '../../../state/events/event-state';
 import { createElement } from '../../../utils/create-element';
 import { createRandomCars } from '../../../utils/generate-cars/generate-cars';
 
@@ -18,10 +17,10 @@ export const garageList: GarageList = ((): GarageList => {
 
     carState.set(cars, totalCount);
 
-    clearContainer(garageContainer);
+    garageContainer.replaceChildren();
 
     cars.forEach((car) => {
-      garageContainer.append(createCarDiv(car));
+      garageContainer.append(createCarElement(car));
     });
 
     eventState.emit('garage:pagination:update', {

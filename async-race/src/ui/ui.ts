@@ -4,10 +4,9 @@ import { createHeader } from './header/header';
 import { createWinners } from './winners/winners';
 import { errorPopup } from '../components/error/error';
 import { appState } from '../state/app-state';
-import { clearContainer } from '../utils/clear-container';
 
 export async function createApp(): Promise<void> {
-  clearContainer(document.body);
+  document.body.replaceChildren();
   createHeader();
 
   try {
