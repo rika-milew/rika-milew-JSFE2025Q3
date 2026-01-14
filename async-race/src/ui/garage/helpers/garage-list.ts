@@ -1,6 +1,7 @@
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { handleErrors } from '@/utils/handle-errors';
 import { getCars } from '@api/garage/get-cars';
 import { createCarElement } from '@components/car/car';
-import { errorPopup } from '@components/error/error';
 import { appState } from '@state/app-state';
 import { carState } from '@state/car-state';
 import { eventState } from '@state/events/event-state';
@@ -13,7 +14,16 @@ export const garageContainer = createElement({ tag: 'div', className: ['garage-c
 
 export const garageList: GarageList = ((): GarageList => {
   async function render(): Promise<void> {
-    const { cars, totalCount } = await getCars(appState.garagePage, appState.perPage);
+    const result = await handleErrors(
+      () => getCars(appState.garagePage, appState.perPage),
+      POPUP_MESSAGES.garageLoadFailed(),
+    );
+
+    if (!result) {
+      return;
+    }
+
+    const { cars, totalCount } = result;
 
     carState.set(cars, totalCount);
 
@@ -50,12 +60,9 @@ export const garageList: GarageList = ((): GarageList => {
   });
 
   eventState.on('garage:generate', async (quantity) => {
-    try {
-      await createRandomCars(quantity);
-      await render();
-    } catch {
-      errorPopup.show('Failed to generate random cars');
-    }
+    await handleErrors(() => createRandomCars(quantity), POPUP_MESSAGES.randomCarsFailed());
+
+    await render();
   });
 
   return { render, setPage };

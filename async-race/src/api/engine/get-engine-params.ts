@@ -2,7 +2,7 @@ import { API_URL, BAD_REQUEST, ERROR_RESPONSE, MANY_REQUESTS, SERVER_ERROR } fro
 
 import type { DriveResponse } from '@/types/types';
 
-export async function startDriveMode(id: number): Promise<DriveResponse> {
+export async function getEngineParams(id: number): Promise<DriveResponse> {
   try {
     const url = new URL(`${API_URL}/engine`);
     url.searchParams.append('id', id.toString());

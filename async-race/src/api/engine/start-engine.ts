@@ -2,7 +2,7 @@ import { API_URL, ERROR_RESPONSE, BAD_REQUEST } from '@data/constants';
 
 import type { EngineResponse } from '../../types/types';
 
-export async function startAndStopEngine(
+export async function startEngine(
   id: number,
   status: 'started' | 'stopped' | 'drive',
 ): Promise<EngineResponse> {

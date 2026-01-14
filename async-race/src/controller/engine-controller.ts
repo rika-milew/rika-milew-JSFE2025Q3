@@ -1,5 +1,5 @@
-import { startDriveMode } from '@api/engine/start-drive-mode';
-import { startAndStopEngine } from '@api/engine/start-engine';
+import { getEngineParams } from '@/api/engine/get-engine-params';
+import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
 import { resetCar } from '@components/car/car-animation/reset-car';
 import { errorPopup } from '@components/error/error';
@@ -23,7 +23,7 @@ export function startEngineController(): void {
     const carId = payload.id;
 
     try {
-      await startAndStopEngine(carId, 'stopped');
+      await startEngine(carId, 'stopped');
       resetCar(carId);
       setEngineButtons(carId, true, false);
     } catch (error) {
@@ -36,11 +36,11 @@ export function startEngineController(): void {
 
 async function handleCarStart(carId: number): Promise<void> {
   try {
-    const { velocity, distance } = await startAndStopEngine(carId, 'started');
+    const { velocity, distance } = await startEngine(carId, 'started');
 
     animateCar(carId, velocity, distance);
     setEngineButtons(carId, false, true);
-    await startDriveMode(carId);
+    await getEngineParams(carId);
   } catch (error) {
     if (error instanceof Error) {
       const isServerError = error.message.includes('broken down') || error.message.includes('500');

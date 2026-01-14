@@ -18,18 +18,14 @@ export async function getCars(
 
   const url = `${API_URL}/garage${parameters.toString() ? '?' + parameters.toString() : ''}`;
 
-  try {
-    const response = await fetch(url);
+  const response = await fetch(url);
 
-    if (!response.ok) {
-      throw new Error(`Failed to get cars. Status: ${response.status}`);
-    }
-
-    const cars: Car[] = await response.json();
-    const totalCount = Number(response.headers.get('X-Total-Count') ?? cars.length);
-
-    return { cars, totalCount };
-  } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Error while getting the cars');
+  if (!response.ok) {
+    throw new Error(`Failed to get the cars. Status: ${response.status}`);
   }
+
+  const cars: Car[] = await response.json();
+  const totalCount = Number(response.headers.get('X-Total-Count') ?? cars.length);
+
+  return { cars, totalCount };
 }
