@@ -1,4 +1,4 @@
-import type { AppState } from '../types/types';
+import type { AppState } from '@/types/types';
 
 export const appState: AppState = {
   view: 'garage',

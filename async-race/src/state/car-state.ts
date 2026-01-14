@@ -1,4 +1,4 @@
-import type { Car } from '../types/types';
+import type { Car } from '@/types/types';
 
 type CarState = {
   cars: Car[];

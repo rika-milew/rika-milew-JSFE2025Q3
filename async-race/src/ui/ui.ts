@@ -1,9 +1,9 @@
-import { createFooter } from './footer/footer';
-import { createGarage } from './garage/garage';
-import { createHeader } from './header/header';
-import { createWinners } from './winners/winners';
-import { errorPopup } from '../components/error/error';
-import { appState } from '../state/app-state';
+import { errorPopup } from '@components/error/error';
+import { appState } from '@state/app-state';
+import { createFooter } from '@ui/footer/footer';
+import { createGarage } from '@ui/garage/garage';
+import { createHeader } from '@ui/header/header';
+import { createWinners } from '@ui/winners/winners';
 
 export async function createApp(): Promise<void> {
   document.body.replaceChildren();

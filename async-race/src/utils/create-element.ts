@@ -1,4 +1,4 @@
-import type { HTMLElements, ElementTag, ElementOptions } from '../types/types';
+import type { HTMLElements, ElementTag, ElementOptions } from '@/types/types';
 
 export const createElement = <K extends ElementTag>({
   tag,

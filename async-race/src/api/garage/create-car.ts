@@ -1,6 +1,6 @@
-import { API_URL } from '../api';
+import { API_URL } from '@api/api';
 
-import type { Car } from '../../types/types';
+import type { Car } from '@/types/types';
 
 export async function createCar(name: string, color: string): Promise<Car> {
   try {

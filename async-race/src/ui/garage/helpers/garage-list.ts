@@ -1,13 +1,13 @@
-import { getCars } from '../../../api/garage/get-cars';
-import { createCarElement } from '../../../components/car/car';
-import { errorPopup } from '../../../components/error/error';
-import { appState } from '../../../state/app-state';
-import { carState } from '../../../state/car-state';
-import { eventState } from '../../../state/events/event-state';
-import { createElement } from '../../../utils/create-element';
-import { createRandomCars } from '../../../utils/generate-cars/generate-cars';
+import { getCars } from '@api/garage/get-cars';
+import { createCarElement } from '@components/car/car';
+import { errorPopup } from '@components/error/error';
+import { appState } from '@state/app-state';
+import { carState } from '@state/car-state';
+import { eventState } from '@state/events/event-state';
+import { createElement } from '@utils/create-element';
+import { createRandomCars } from '@utils/generate-cars/generate-cars';
 
-import type { GarageList } from '../../../types/types';
+import type { GarageList } from '@/types/types';
 
 export const garageContainer = createElement({ tag: 'div', className: ['garage-container'] });
 

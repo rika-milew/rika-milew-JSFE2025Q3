@@ -1,4 +1,4 @@
-import type { SoundTypes, AudioPlayer } from '../types/types';
+import type { SoundTypes, AudioPlayer } from '@/types/types';
 
 export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
   const sounds: Record<SoundTypes, HTMLAudioElement> = {

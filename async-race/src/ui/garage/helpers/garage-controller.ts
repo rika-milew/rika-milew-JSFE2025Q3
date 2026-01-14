@@ -1,11 +1,11 @@
-import { garageList } from './garage-list';
-import { createCar } from '../../../api/garage/create-car';
-import { deleteCar } from '../../../api/garage/delete-car';
-import { updateCar } from '../../../api/garage/update-car';
-import { errorPopup } from '../../../components/error/error';
-import { appState } from '../../../state/app-state';
-import { carState } from '../../../state/car-state';
-import { eventState } from '../../../state/events/event-state';
+import { createCar } from '@api/garage/create-car';
+import { deleteCar } from '@api/garage/delete-car';
+import { updateCar } from '@api/garage/update-car';
+import { errorPopup } from '@components/error/error';
+import { appState } from '@state/app-state';
+import { carState } from '@state/car-state';
+import { eventState } from '@state/events/event-state';
+import { garageList } from '@ui/garage/helpers/garage-list';
 
 let isControllerStarted = false;
 

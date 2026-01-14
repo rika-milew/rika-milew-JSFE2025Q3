@@ -1,5 +1,5 @@
-import { appState } from '../../../state/app-state';
-import { eventState } from '../../../state/events/event-state';
+import { appState } from '@state/app-state';
+import { eventState } from '@state/events/event-state';
 
 export function initUpdateFormEvents(
   nameInput: HTMLInputElement,

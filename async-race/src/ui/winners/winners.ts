@@ -1,6 +1,6 @@
-import { createInfoElements } from '../../components/page-info/page-info';
-import { appState } from '../../state/app-state';
-import { createElement } from '../../utils/create-element';
+import { createInfoElements } from '@components/page-info/page-info';
+import { appState } from '@state/app-state';
+import { createElement } from '@utils/create-element';
 
 export function createWinners(): void {
   const container = createElement({ tag: 'div', className: ['container'] });

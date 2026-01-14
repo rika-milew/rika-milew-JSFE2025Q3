@@ -1,6 +1,6 @@
-import { carElements } from '../../../state/car-elements';
-import { audioPLayer } from '../../../utils/audio-player';
-import { setEngineButtons } from '../../../utils/set-car-buttons';
+import { carElements } from '@state/car-elements';
+import { audioPLayer } from '@utils/audio-player';
+import { setEngineButtons } from '@utils/set-car-buttons';
 
 export function stopCarAnimation(carId: number): void {
   const carObject = carElements[carId];

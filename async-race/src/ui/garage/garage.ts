@@ -1,15 +1,15 @@
-import { startEngineController } from './engine/engine-controller';
-import { createGarageButtons } from './garage-buttons/garage-buttons';
-import { startGarageController } from './helpers/garage-controller';
-import { garageContainer, garageList } from './helpers/garage-list';
-import { implementPagination } from './helpers/garage-pagination';
-import { loadDefaultCars } from './helpers/init-garage';
-import { infoElements } from './info-elements';
-import { createCarForm } from '../../components/car-form/car-form';
-import { appState } from '../../state/app-state';
-import { carState } from '../../state/car-state';
-import { eventState } from '../../state/events/event-state';
-import { createElement } from '../../utils/create-element';
+import { createCarForm } from '@components/car-form/car-form';
+import { appState } from '@state/app-state';
+import { carState } from '@state/car-state';
+import { eventState } from '@state/events/event-state';
+import { startEngineController } from '@ui/garage/engine/engine-controller';
+import { createGarageButtons } from '@ui/garage/garage-buttons/garage-buttons';
+import { startGarageController } from '@ui/garage/helpers/garage-controller';
+import { garageContainer, garageList } from '@ui/garage/helpers/garage-list';
+import { implementPagination } from '@ui/garage/helpers/garage-pagination';
+import { loadDefaultCars } from '@ui/garage/helpers/init-garage';
+import { infoElements } from '@ui/garage/info-elements';
+import { createElement } from '@utils/create-element';
 
 import './garage.css';
 

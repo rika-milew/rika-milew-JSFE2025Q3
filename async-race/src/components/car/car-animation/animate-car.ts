@@ -1,5 +1,5 @@
-import { carElements } from '../../../state/car-elements';
-import { audioPLayer } from '../../../utils/audio-player';
+import { carElements } from '@state/car-elements';
+import { audioPLayer } from '@utils/audio-player';
 
 export function animateCar(carId: number, velocity: number, distance: number): void {
   const FINISH_OFFSET = 5;

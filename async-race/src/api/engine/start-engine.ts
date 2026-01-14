@@ -1,4 +1,4 @@
-import { API_URL, ERROR_RESPONSE, BAD_REQUEST } from '../api';
+import { API_URL, ERROR_RESPONSE, BAD_REQUEST } from '@api/api';
 
 import type { EngineResponse } from '../../types/types';
 

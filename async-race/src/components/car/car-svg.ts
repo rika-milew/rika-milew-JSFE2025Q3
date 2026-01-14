@@ -1,4 +1,4 @@
-import { carSvg1, carSvg2, carSvg3 } from './car.config';
+import { carSvg1, carSvg2, carSvg3 } from '@components/car/car.config';
 
 import type { CarSvg } from '../../types/types';
 

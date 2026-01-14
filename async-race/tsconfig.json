@@ -1,5 +1,17 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@api/*": ["src/api/*"],
+      "@app/*": ["src/app/*"],
+      "@components/*": ["src/components/*"],
+      "@data/*": ["src/data/*"],
+      "@state/*": ["src/state/*"],
+      "@/types/*": ["src/types/*"],
+      "@ui/*": ["src/ui/*"],
+      "@utils/*": ["src/utils/*"],
+    },
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
