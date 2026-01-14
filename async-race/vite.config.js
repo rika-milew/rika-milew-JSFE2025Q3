@@ -7,6 +7,7 @@ export default {
       '@api': resolve(__dirname, 'src/api'),
       '@app': resolve(__dirname, 'src/app'),
       '@components': resolve(__dirname, 'src/components'),
+      '@controller': resolve(__dirname, 'src/controller'),
       '@data': resolve(__dirname, 'src/data'),
       '@state': resolve(__dirname, 'src/state'),
       '@/types': resolve(__dirname, 'src/types'),

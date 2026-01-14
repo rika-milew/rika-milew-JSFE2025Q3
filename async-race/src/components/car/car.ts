@@ -14,7 +14,7 @@ export function createCarElement(car: Car): HTMLDivElement {
   const carItem = createElement({ tag: 'div', className: ['car'] });
 
   const carButtons = createCarButtons(car);
-  const animationButtons = createEngineButtons(car);
+  const engineButtons = createEngineButtons(car);
 
   const { element: carSvg, setColor } = createCarSvg(car.color);
 
@@ -49,7 +49,7 @@ export function createCarElement(car: Car): HTMLDivElement {
   };
 
   carTrack.append(trackLine, carSvg, finishFlag);
-  carItem.append(carButtons, animationButtons, carTrack);
+  carItem.append(carButtons, engineButtons, carTrack);
 
   return carItem;
 }

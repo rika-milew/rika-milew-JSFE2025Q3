@@ -6,6 +6,7 @@
       "@api/*": ["src/api/*"],
       "@app/*": ["src/app/*"],
       "@components/*": ["src/components/*"],
+      "@controller/*": ["src/controller/*"],
       "@data/*": ["src/data/*"],
       "@state/*": ["src/state/*"],
       "@/types/*": ["src/types/*"],

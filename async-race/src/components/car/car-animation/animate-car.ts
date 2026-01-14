@@ -39,7 +39,7 @@ export function animateCar(carId: number, velocity: number, distance: number): v
 
     carSvg.style.transform = `translateX(${distancePx * progress}px)`;
 
-    if (progress < 1) {
+    if (passedTime / raceTime <= 1) {
       carObject.animationId = requestAnimationFrame(startAnimation);
     } else {
       carObject.animationId = undefined;
