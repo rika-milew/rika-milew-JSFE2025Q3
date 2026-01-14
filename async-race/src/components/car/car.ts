@@ -1,6 +1,6 @@
+import { createCarImage, createFinishFlag } from '@/components/car/car-image';
 import { addCarStore } from '@/state/car-store';
 import { createButton } from '@components/button/button';
-import { createCarSvg, createFinishFlag } from '@components/car/car-svg';
 import { engineButtons } from '@state/engine-buttons';
 import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
@@ -16,7 +16,7 @@ export function createCarElement(car: Car): HTMLDivElement {
   const carButtons = createCarButtons(car);
   const engineButtons = createEngineButtons(car);
 
-  const { element: carSvg, setColor } = createCarSvg(car.color);
+  const { element: carSvg, setColor } = createCarImage(car.color);
 
   eventState.on('updateform:color', (payload) => {
     if (!payload) {

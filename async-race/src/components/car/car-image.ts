@@ -2,7 +2,7 @@ import { carSvg1, carSvg2, carSvg3 } from '@components/car/car.config';
 
 import type { CarSvg } from '../../types/types';
 
-export function createCarSvg(initialColor: string): CarSvg {
+export function createCarImage(initialColor: string): CarSvg {
   const svgType = 'http://www.w3.org/2000/svg';
 
   const svg = document.createElementNS(svgType, 'svg');

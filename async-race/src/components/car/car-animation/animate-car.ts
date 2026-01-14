@@ -8,13 +8,13 @@ export function animateCar(carId: number, velocity: number, distance: number): v
   const WIDTH_DIVIDER = 2;
   const MILLISECONDS = 1000;
 
-  const carObject = getCarStore(carId);
+  const carElement = getCarStore(carId);
 
-  if (!carObject) {
+  if (!carElement) {
     return;
   }
 
-  const { svg: carSvg, track, trackLine, finish } = carObject;
+  const { svg: carSvg, track, trackLine, finish } = carElement;
 
   const carWidth = carSvg.getBoundingClientRect().width;
 
@@ -52,20 +52,20 @@ export function animateCar(carId: number, velocity: number, distance: number): v
 }
 
 export function stopCarAnimation(carId: number): void {
-  const carObject = getCarStore(carId);
+  const carElement = getCarStore(carId);
 
-  if (!carObject) {
+  if (!carElement) {
     return;
   }
 
-  if (carObject.animationId !== undefined) {
-    cancelAnimationFrame(carObject.animationId);
+  if (carElement.animationId !== undefined) {
+    cancelAnimationFrame(carElement.animationId);
     setCarAnimationId(carId, undefined);
   }
 
   audioPLayer.stopSound('race');
   audioPLayer.playSound('brake');
-  carObject.track.classList.remove('blink');
+  carElement.track.classList.remove('blink');
 
   setEngineButtons(carId, false, true);
 }
