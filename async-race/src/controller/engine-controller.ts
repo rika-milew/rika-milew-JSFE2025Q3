@@ -1,8 +1,7 @@
 import { startDriveMode } from '@api/engine/start-drive-mode';
 import { startAndStopEngine } from '@api/engine/start-engine';
-import { animateCar } from '@components/car/car-animation/animate-car';
+import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
 import { resetCar } from '@components/car/car-animation/reset-car';
-import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
 import { errorPopup } from '@components/error/error';
 import { eventState } from '@state/events/event-state';
 import { setEngineButtons } from '@utils/set-car-buttons';

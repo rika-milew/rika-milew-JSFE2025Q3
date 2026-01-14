@@ -1,4 +1,4 @@
-import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
+import { stopCarAnimation } from '@/components/car/car-animation/animate-car';
 import { getCarStore, removeCarStore } from '@/state/car-store';
 import { createCar } from '@api/garage/create-car';
 import { deleteCar } from '@api/garage/delete-car';

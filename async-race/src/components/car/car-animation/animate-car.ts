@@ -1,5 +1,6 @@
 import { getCarStore, setCarAnimationId } from '@/state/car-store';
 import { audioPLayer } from '@utils/audio-player';
+import { setEngineButtons } from '@utils/set-car-buttons';
 
 export function animateCar(carId: number, velocity: number, distance: number): void {
   const FINISH_OFFSET = 5;
@@ -43,11 +44,28 @@ export function animateCar(carId: number, velocity: number, distance: number): v
     if (passedTime / raceTime <= 1) {
       setCarAnimationId(carId, requestAnimationFrame(startAnimation));
     } else {
-      setCarAnimationId(carId, undefined);
-      audioPLayer.stopSound('race');
-      trackLine.classList.remove('blink');
+      stopCarAnimation(carId);
     }
   }
 
   setCarAnimationId(carId, requestAnimationFrame(startAnimation));
+}
+
+export function stopCarAnimation(carId: number): void {
+  const carObject = getCarStore(carId);
+
+  if (!carObject) {
+    return;
+  }
+
+  if (carObject.animationId !== undefined) {
+    cancelAnimationFrame(carObject.animationId);
+    setCarAnimationId(carId, undefined);
+  }
+
+  audioPLayer.stopSound('race');
+  audioPLayer.playSound('brake');
+  carObject.track.classList.remove('blink');
+
+  setEngineButtons(carId, false, true);
 }
