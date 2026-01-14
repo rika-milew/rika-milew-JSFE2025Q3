@@ -1,4 +1,4 @@
-import { API_URL, BAD_REQUEST, ERROR_RESPONSE, MANY_REQUESTS, SERVER_ERROR } from '@api/api';
+import { API_URL, BAD_REQUEST, ERROR_RESPONSE, MANY_REQUESTS, SERVER_ERROR } from '@data/constants';
 
 import type { DriveResponse } from '@/types/types';
 

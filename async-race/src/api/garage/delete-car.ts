@@ -1,4 +1,4 @@
-import { API_URL, ERROR_RESPONSE } from '@api/api';
+import { API_URL, ERROR_RESPONSE } from '@data/constants';
 
 export async function deleteCar(id: number): Promise<void> {
   try {
