@@ -1,6 +1,6 @@
+import { addCarStore } from '@/state/car-store';
 import { createButton } from '@components/button/button';
 import { createCarSvg, createFinishFlag } from '@components/car/car-svg';
-import { carElements } from '@state/car-elements';
 import { engineButtons } from '@state/engine-buttons';
 import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
@@ -40,13 +40,13 @@ export function createCarElement(car: Car): HTMLDivElement {
 
   const finishFlag = createFinishFlag();
 
-  carElements[car.id] = {
+  addCarStore(car.id, {
     container: carItem,
     svg: carSvg,
     track: carTrack,
-    trackLine: trackLine,
+    trackLine,
     finish: finishFlag,
-  };
+  });
 
   carTrack.append(trackLine, carSvg, finishFlag);
   carItem.append(carButtons, engineButtons, carTrack);

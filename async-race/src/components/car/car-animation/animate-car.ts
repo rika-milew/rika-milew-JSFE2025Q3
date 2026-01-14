@@ -1,4 +1,4 @@
-import { carElements } from '@state/car-elements';
+import { getCarStore, setCarAnimationId } from '@/state/car-store';
 import { audioPLayer } from '@utils/audio-player';
 
 export function animateCar(carId: number, velocity: number, distance: number): void {
@@ -7,12 +7,13 @@ export function animateCar(carId: number, velocity: number, distance: number): v
   const WIDTH_DIVIDER = 2;
   const MILLISECONDS = 1000;
 
-  const carObject = carElements[carId];
+  const carObject = getCarStore(carId);
 
-  const carSvg = carObject.svg;
-  const track = carObject.track;
-  const trackLine = carObject.trackLine;
-  const finish = carObject.finish;
+  if (!carObject) {
+    return;
+  }
+
+  const { svg: carSvg, track, trackLine, finish } = carObject;
 
   const carWidth = carSvg.getBoundingClientRect().width;
 
@@ -40,13 +41,13 @@ export function animateCar(carId: number, velocity: number, distance: number): v
     carSvg.style.transform = `translateX(${distancePx * progress}px)`;
 
     if (passedTime / raceTime <= 1) {
-      carObject.animationId = requestAnimationFrame(startAnimation);
+      setCarAnimationId(carId, requestAnimationFrame(startAnimation));
     } else {
-      carObject.animationId = undefined;
+      setCarAnimationId(carId, undefined);
       audioPLayer.stopSound('race');
       trackLine.classList.remove('blink');
     }
   }
 
-  carObject.animationId = requestAnimationFrame(startAnimation);
+  setCarAnimationId(carId, requestAnimationFrame(startAnimation));
 }
