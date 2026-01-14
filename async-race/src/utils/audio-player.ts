@@ -1,10 +1,4 @@
-type SoundTypes = 'race' | 'brake' | 'button';
-
-type AudioPlayer = {
-  playSound: (id: SoundTypes) => void;
-  stopSound: (id: SoundTypes) => void;
-  stopAllSounds: () => void;
-};
+import type { SoundTypes, AudioPlayer } from '../types/types';
 
 export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
   const sounds: Record<SoundTypes, HTMLAudioElement> = {

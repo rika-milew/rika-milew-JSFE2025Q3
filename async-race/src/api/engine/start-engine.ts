@@ -1,9 +1,6 @@
 import { API_URL, ERROR_RESPONSE, BAD_REQUEST } from '../api';
 
-export type EngineResponse = {
-  velocity: number;
-  distance: number;
-};
+import type { EngineResponse } from '../../types/types';
 
 export async function startAndStopEngine(
   id: number,

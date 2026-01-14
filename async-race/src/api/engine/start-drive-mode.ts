@@ -1,8 +1,7 @@
 import { API_URL, BAD_REQUEST, ERROR_RESPONSE, MANY_REQUESTS, SERVER_ERROR } from '../api';
 
-export type DriveResponse = {
-  success: boolean;
-};
+import type { DriveResponse } from '../../types/types';
+
 export async function startDriveMode(id: number): Promise<DriveResponse> {
   try {
     const url = new URL(`${API_URL}/engine`);
