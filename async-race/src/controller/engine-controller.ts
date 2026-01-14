@@ -1,8 +1,10 @@
 import { getEngineParams } from '@/api/engine/get-engine-params';
+import { errorPopup } from '@/components/error/error';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { handleErrors } from '@/utils/handle-errors';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
 import { resetCar } from '@components/car/car-animation/reset-car';
-import { errorPopup } from '@components/error/error';
 import { eventState } from '@state/events/event-state';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
@@ -21,40 +23,41 @@ export function startEngineController(): void {
     }
 
     const carId = payload.id;
+    stopCarAnimation(carId);
 
-    try {
-      await startEngine(carId, 'stopped');
-      resetCar(carId);
-      setEngineButtons(carId, true, false);
-    } catch (error) {
-      if (error instanceof Error) {
-        errorPopup.show(`Car with id ${carId} failed to reset: ${error.message}`);
-      }
-    }
+    await handleErrors(() => startEngine(carId, 'stopped'), POPUP_MESSAGES.carResetFailed(carId));
+
+    resetCar(carId);
+    setEngineButtons(carId, true, false);
   });
 }
 
 async function handleCarStart(carId: number): Promise<void> {
-  try {
-    const { velocity, distance } = await startEngine(carId, 'started');
+  const engineData = await handleErrors(
+    () => startEngine(carId, 'started'),
+    POPUP_MESSAGES.carStartFailed(carId),
+  );
 
-    animateCar(carId, velocity, distance);
-    setEngineButtons(carId, false, true);
+  if (!engineData) {
+    stopCarAnimation(carId);
+    setEngineButtons(carId, true, false);
+    return;
+  }
+
+  animateCar(carId, engineData.velocity, engineData.distance);
+  setEngineButtons(carId, false, true);
+
+  try {
     await getEngineParams(carId);
   } catch (error) {
-    if (error instanceof Error) {
-      const isServerError = error.message.includes('broken down') || error.message.includes('500');
-
-      if (isServerError) {
-        errorPopup.show(
-          `Car with id ${carId} has been stopped suddenly. It's engine was broken down.`,
-        );
-        stopCarAnimation(carId);
-        setEngineButtons(carId, false, true);
-        return;
-      }
-
-      errorPopup.show(`Car ${carId} failed: ${error.message}`);
+    if (error instanceof Error && error.message.includes('broken down')) {
+      stopCarAnimation(carId);
+      setEngineButtons(carId, false, true);
+      errorPopup.show(
+        `Car with id ${carId} has been stopped suddenly. It's engine was broken down..`,
+      );
+      return;
     }
+    errorPopup.show(`Car ${carId} drive failed.}`);
   }
 }

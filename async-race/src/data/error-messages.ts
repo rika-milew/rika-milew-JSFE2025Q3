@@ -12,5 +12,16 @@ export const POPUP_MESSAGES = {
 
   randomCarsFailed: (): string => 'Failed to create random cars',
 
+  carResetFailed: (id?: number): string =>
+    id ? `Failed to reset the car with id: ${id}` : 'Failed to reset the chosen car',
+
+  carStartFailed: (id?: number): string =>
+    id ? `Failed to start the car with id: ${id}` : 'Failed to start the chosen car',
+
+  carDriveFailed: (id?: number): string =>
+    id
+      ? `Car with id ${id} has been stopped suddenly. It's engine was broken down.`
+      : "Car with id  has been stopped suddenly. It's engine was broken down.",
+
   generalError: 'Something went wrong',
 };
