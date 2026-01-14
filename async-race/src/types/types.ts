@@ -10,9 +10,6 @@ export type HTMLElements = Pick<
   | 'h1'
   | 'h2'
   | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
   | 'p'
   | 'a'
   | 'img'
@@ -52,6 +49,37 @@ export type PageInfoResults = {
   totalInfo: HTMLElement;
 };
 
+export type CarFormElements = {
+  carForm: HTMLFormElement;
+  nameInput: HTMLInputElement;
+  colorInput: HTMLInputElement;
+  button: HTMLButtonElement;
+  errorText: HTMLParagraphElement;
+};
+
+export type GarageButtons = {
+  raceButton: HTMLButtonElement;
+  resetButton: HTMLButtonElement;
+  generateButton: HTMLButtonElement;
+};
+
+export type PaginationElements = {
+  paginationContainer: HTMLDivElement;
+  previousButton: HTMLButtonElement;
+  nextButton: HTMLButtonElement;
+};
+
+export type PaginationCallbacks = {
+  onPrev: () => void;
+  onNext: () => void;
+};
+
+// app
+
+export type AppRouter = {
+  navigate: (view: View) => void;
+};
+
 export type ButtonConfig = {
   text: string;
   className?: string;
@@ -59,15 +87,7 @@ export type ButtonConfig = {
   type?: 'button' | 'submit';
 };
 
-// app
-
 export type View = 'garage' | 'winners';
-
-export type AppState = {
-  view: View;
-  garagePage: number;
-  winnersPage: number;
-};
 
 export type Car = {
   id: number;
@@ -100,27 +120,49 @@ export type CarBrand = {
   models: string[];
 };
 
-export type PaginationElements = {
-  paginationContainer: HTMLDivElement;
-  previousButton: HTMLButtonElement;
-  nextButton: HTMLButtonElement;
-};
-
 export type GarageList = {
   render: () => Promise<void>;
   setPage: (page: number) => Promise<void>;
 };
 
-export type CarFormElements = {
-  carForm: HTMLFormElement;
-  nameInput: HTMLInputElement;
-  colorInput: HTMLInputElement;
-  button: HTMLButtonElement;
-  errorText: HTMLParagraphElement;
+export type SoundTypes = 'race' | 'brake' | 'button';
+
+export type AudioPlayer = {
+  playSound: (id: SoundTypes) => void;
+  stopSound: (id: SoundTypes) => void;
+  stopAllSounds: () => void;
 };
 
-export type GarageButtons = {
-  raceButton: HTMLButtonElement;
-  resetButton: HTMLButtonElement;
-  generateButton: HTMLButtonElement;
+// state
+
+export type AppState = {
+  view: View;
+  garagePage: number;
+  winnersPage: number;
+  perPage: number;
+  garage: Car[];
+  winners: Winner[];
+
+  createForm: {
+    name: string;
+    color: string;
+  };
+
+  updateForm: {
+    id: number | undefined;
+    name: string;
+    color: string;
+    isDisabled: boolean;
+  };
+};
+
+// api
+
+export type DriveResponse = {
+  success: boolean;
+};
+
+export type EngineResponse = {
+  velocity: number;
+  distance: number;
 };

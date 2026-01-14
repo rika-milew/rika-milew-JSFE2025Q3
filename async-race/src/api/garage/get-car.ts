@@ -1,10 +1,8 @@
-import { API_URL } from '../api';
+import { API_URL, ERROR_RESPONSE } from '../api';
 
 import type { Car } from '../../types/types';
 
 export async function getCar(id: number): Promise<Car> {
-  const ERROR_RESPONSE = 404;
-
   try {
     const response = await fetch(`${API_URL}/garage/${id}`);
 

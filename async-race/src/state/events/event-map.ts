@@ -1,4 +1,4 @@
-import type { View, Car } from '../types/types';
+import type { View, Car } from '../../types/types';
 
 export type EventMap = {
   'view:changed': View;
@@ -18,4 +18,6 @@ export type EventMap = {
   'updateform:color': { id: number; color: string };
   'updateform:reset': undefined;
   'ui:error': string;
+  'car:start': { id: number };
+  'car:reset': { id: number };
 };

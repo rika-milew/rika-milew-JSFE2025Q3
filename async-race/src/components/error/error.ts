@@ -28,6 +28,11 @@ export function createErrorPopup(): { show: (message: string) => void } {
 
   function show(message: string): void {
     const ANIMATION_DURATION = 2000;
+
+    if (!document.body.contains(overlay)) {
+      document.body.append(overlay);
+    }
+
     document.body.style.overflow = 'hidden';
 
     if (timeout) {
@@ -35,10 +40,14 @@ export function createErrorPopup(): { show: (message: string) => void } {
     }
 
     content.textContent = message;
-    overlay.classList.add('visible');
+
+    requestAnimationFrame(() => {
+      overlay.classList.add('visible');
+    });
 
     timeout = setTimeout(() => {
       overlay.classList.remove('visible');
+
       content.textContent = '';
       timeout = undefined;
       document.body.style.overflow = '';

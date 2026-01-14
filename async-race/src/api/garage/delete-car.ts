@@ -1,8 +1,6 @@
-import { API_URL } from '../api';
+import { API_URL, ERROR_RESPONSE } from '../api';
 
 export async function deleteCar(id: number): Promise<void> {
-  const ERROR_RESPONSE = 404;
-
   try {
     const response = await fetch(`${API_URL}/garage/${id}`, { method: 'DELETE' });
 

@@ -1,11 +1,6 @@
 import { createElement } from '../../../utils/create-element';
 
-import type { PaginationElements } from '../../../types/types';
-
-export type PaginationCallbacks = {
-  onPrev: () => void;
-  onNext: () => void;
-};
+import type { PaginationElements, PaginationCallbacks } from '../../../types/types';
 
 export function implementPagination({ onPrev, onNext }: PaginationCallbacks): PaginationElements {
   const paginationContainer = createElement({ tag: 'div', className: ['pagination'] });

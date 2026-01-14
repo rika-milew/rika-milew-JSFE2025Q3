@@ -1,7 +1,7 @@
 import { createInfoElements } from '../../components/page-info/page-info';
 import { appState } from '../../state/app-state';
 import { carState } from '../../state/car-state';
-import { eventState } from '../../state/event-state';
+import { eventState } from '../../state/events/event-state';
 
 export const infoElements = createInfoElements({
   title: 'Garage',

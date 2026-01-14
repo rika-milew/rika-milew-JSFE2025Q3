@@ -1,25 +1,6 @@
-import type { View, Car, Winner } from '../types/types';
+import type { AppState } from '../types/types';
 
-export const appState: {
-  view: View;
-  garagePage: number;
-  winnersPage: number;
-  perPage: number;
-  garage: Car[];
-  winners: Winner[];
-
-  createForm: {
-    name: string;
-    color: string;
-  };
-
-  updateForm: {
-    id: number | undefined;
-    name: string;
-    color: string;
-    isDisabled: boolean;
-  };
-} = {
+export const appState: AppState = {
   view: 'garage',
   garagePage: 1,
   winnersPage: 1,

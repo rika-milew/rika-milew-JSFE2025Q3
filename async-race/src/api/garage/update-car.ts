@@ -1,10 +1,8 @@
-import { API_URL } from '../api';
+import { API_URL, ERROR_RESPONSE } from '../api';
 
 import type { Car } from '../../types/types';
 
 export async function updateCar(id: number, name: string, color: string): Promise<Car> {
-  const ERROR_RESPONSE = 404;
-
   try {
     const response = await fetch(`${API_URL}/garage/${id}`, {
       method: 'PUT',

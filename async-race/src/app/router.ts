@@ -2,11 +2,7 @@ import { errorPopup } from '../components/error/error';
 import { appState } from '../state/app-state';
 import { createApp } from '../ui/ui';
 
-import type { View } from '../types/types';
-
-export type AppRouter = {
-  navigate: (view: View) => void;
-};
+import type { View, AppRouter } from '../types/types';
 
 export function createAppRouter(): AppRouter {
   return {

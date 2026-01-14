@@ -1,6 +1,6 @@
 import { createButton } from '../../components/button/button';
 import { appState } from '../../state/app-state';
-import { eventState } from '../../state/event-state';
+import { eventState } from '../../state/events/event-state';
 import { createElement } from '../../utils/create-element';
 
 import './header.css';
