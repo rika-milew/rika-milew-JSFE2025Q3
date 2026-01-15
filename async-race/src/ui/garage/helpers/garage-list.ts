@@ -1,3 +1,4 @@
+import { resetAllCars } from '@/components/car/car-animation/reset-car';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { handleErrors } from '@/utils/handle-errors';
 import { createCarElement } from '@components/car/car';
@@ -18,6 +19,8 @@ export const garageList: GarageList = ((): GarageList => {
 
     const cars = carState.cars.slice(start, end);
 
+    resetAllCars();
+
     garageContainer.replaceChildren();
 
     cars.forEach((car) => {
@@ -37,6 +40,7 @@ export const garageList: GarageList = ((): GarageList => {
       return;
     }
 
+    resetAllCars();
     appState.garagePage = page;
     render();
 

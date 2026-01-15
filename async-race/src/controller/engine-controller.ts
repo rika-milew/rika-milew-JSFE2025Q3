@@ -43,7 +43,6 @@ async function handleCarStart(carId: number): Promise<void> {
     setEngineButtons(carId, true, false);
     return;
   }
-  stopCarAnimation(carId);
   animateCar(carId, engineData.velocity, engineData.distance);
   setEngineButtons(carId, false, true);
 
@@ -58,6 +57,7 @@ async function handleCarStart(carId: number): Promise<void> {
       );
       return;
     }
+    stopCarAnimation(carId);
     errorPopup.show(`Car ${carId} drive failed.`);
   }
 }

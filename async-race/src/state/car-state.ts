@@ -1,9 +1,16 @@
 import type { Car } from '@/types/types';
 
+type EngineData = {
+  velocity: number;
+  distance: number;
+};
+
 type CarStateItem = Car & {
-  animationId?: number;
   currentPosition?: number;
   isDriving?: boolean;
+  animationId?: number;
+  lastEngine?: EngineData;
+  trackDistance: number;
 };
 
 type CarState = {
@@ -23,9 +30,9 @@ export const carState: CarState = {
   set(cars: Car[], totalCount?: number): void {
     this.cars = cars.map((car) => ({
       ...car,
-      animationId: undefined,
       currentPosition: 0,
       isMoving: false,
+      trackDistance: 0,
     }));
     if (totalCount !== undefined) {
       this.totalCount = totalCount;
@@ -35,9 +42,9 @@ export const carState: CarState = {
   add(car: Car): void {
     this.cars.push({
       ...car,
-      animationId: undefined,
       currentPosition: 0,
       isDriving: false,
+      trackDistance: 0,
     });
     this.totalCount += 1;
   },
@@ -48,9 +55,9 @@ export const carState: CarState = {
       const saved = this.cars[index];
       this.cars[index] = {
         ...updatedCar,
-        animationId: saved.animationId,
         currentPosition: saved.currentPosition,
         isDriving: saved.isDriving,
+        trackDistance: saved.trackDistance,
       };
     }
   },

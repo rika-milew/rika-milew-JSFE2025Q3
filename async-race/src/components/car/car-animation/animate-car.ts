@@ -1,12 +1,20 @@
+import { carState } from '@/state/car-state';
 import { getCarStore, setCarAnimationId } from '@/state/car-store';
-import { audioPLayer } from '@utils/audio-player';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
 export function animateCar(carId: number, velocity: number, distance: number): void {
   const FINISH_OFFSET = 5;
-  const SPEED_MULTIPLIER = 350;
+  const SPEED_MULTIPLIER = 450;
   const WIDTH_DIVIDER = 2;
   const MILLISECONDS = 1000;
+
+  const car = carState.getById(carId);
+
+  if (!car) {
+    return;
+  }
+
+  car.isDriving = true;
 
   const carElement = getCarStore(carId);
 
@@ -32,7 +40,6 @@ export function animateCar(carId: number, velocity: number, distance: number): v
   const raceTime = animationTime / SPEED_MULTIPLIER;
   const startTime = performance.now();
 
-  audioPLayer.playSound('race');
   trackLine.classList.add('blink');
 
   function startAnimation(time: number): void {
@@ -52,20 +59,23 @@ export function animateCar(carId: number, velocity: number, distance: number): v
 }
 
 export function stopCarAnimation(carId: number): void {
-  const carElement = getCarStore(carId);
+  const car = carState.getById(carId);
 
-  if (!carElement) {
+  if (!car) {
     return;
   }
 
-  if (carElement.animationId !== undefined) {
+  const carElement = getCarStore(carId);
+
+  if (carElement?.animationId !== undefined) {
     cancelAnimationFrame(carElement.animationId);
-    setCarAnimationId(carId, undefined);
+    carElement.animationId = undefined;
   }
 
-  audioPLayer.stopSound('race');
-  audioPLayer.playSound('brake');
-  carElement.track.classList.remove('blink');
+  car.isDriving = false;
 
-  setEngineButtons(carId, false, true);
+  if (carElement) {
+    carElement.track.classList.remove('blink');
+    setEngineButtons(carId, false, true);
+  }
 }
