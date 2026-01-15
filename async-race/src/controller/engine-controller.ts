@@ -1,6 +1,7 @@
 import { getEngineParams } from '@/api/engine/get-engine-params';
 import { errorPopup } from '@/components/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';
+import { carState } from '@/state/car-state';
 import { handleErrors } from '@/utils/handle-errors';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
@@ -8,7 +9,14 @@ import { resetCar } from '@components/car/car-animation/reset-car';
 import { eventState } from '@state/events/event-state';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
+let isEngineControllerStarted = false;
+
 export function startEngineController(): void {
+  if (isEngineControllerStarted) {
+    return;
+  }
+  isEngineControllerStarted = true;
+
   eventState.on('car:start', async (payload) => {
     if (!payload) {
       return;
@@ -33,16 +41,28 @@ export function startEngineController(): void {
 }
 
 async function handleCarStart(carId: number): Promise<void> {
+  const car = carState.getById(carId);
+  if (!car) {
+    return;
+  }
+
+  if (car.isDriving) {
+    return;
+  }
+
+  car.isDriving = true;
   const engineData = await handleErrors(
     () => startEngine(carId, 'started'),
     POPUP_MESSAGES.carStartFailed(carId),
   );
 
   if (!engineData) {
+    car.isDriving = false;
     stopCarAnimation(carId);
     setEngineButtons(carId, true, false);
     return;
   }
+
   animateCar(carId, engineData.velocity, engineData.distance);
   setEngineButtons(carId, false, true);
 
@@ -50,6 +70,7 @@ async function handleCarStart(carId: number): Promise<void> {
     await getEngineParams(carId);
   } catch (error) {
     if (error instanceof Error && error.message.includes('broken down')) {
+      car.isDriving = false;
       stopCarAnimation(carId);
       setEngineButtons(carId, false, true);
       errorPopup.show(
@@ -57,6 +78,8 @@ async function handleCarStart(carId: number): Promise<void> {
       );
       return;
     }
+
+    car.isDriving = false;
     stopCarAnimation(carId);
     errorPopup.show(`Car ${carId} drive failed.`);
   }
