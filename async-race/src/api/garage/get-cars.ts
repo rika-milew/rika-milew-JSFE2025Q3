@@ -2,21 +2,8 @@ import { API_URL } from '@data/constants';
 
 import type { Car } from '@/types/types';
 
-export async function getCars(
-  page?: number,
-  limit?: number,
-): Promise<{ cars: Car[]; totalCount: number }> {
-  const parameters = new URLSearchParams();
-
-  if (page) {
-    parameters.append('_page', page.toString());
-  }
-
-  if (limit) {
-    parameters.append('_limit', limit.toString());
-  }
-
-  const url = `${API_URL}/garage${parameters.toString() ? '?' + parameters.toString() : ''}`;
+export async function getCars(): Promise<{ cars: Car[]; totalCount: number }> {
+  const url = `${API_URL}/garage`;
 
   const response = await fetch(url);
 

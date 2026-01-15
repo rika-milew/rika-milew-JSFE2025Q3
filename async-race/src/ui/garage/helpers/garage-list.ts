@@ -13,8 +13,10 @@ export const garageContainer = createElement({ tag: 'div', className: ['garage-c
 
 export const garageList: GarageList = ((): GarageList => {
   function render(): void {
-    const cars = carState.cars;
-    const totalCount = carState.totalCount;
+    const start = (appState.garagePage - 1) * appState.perPage;
+    const end = start + appState.perPage;
+
+    const cars = carState.cars.slice(start, end);
 
     garageContainer.replaceChildren();
 
@@ -24,7 +26,7 @@ export const garageList: GarageList = ((): GarageList => {
 
     eventState.emit('garage:pagination:update', {
       currentPage: appState.garagePage,
-      totalCount,
+      totalCount: carState.totalCount,
     });
   }
 
