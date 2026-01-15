@@ -36,11 +36,11 @@ export async function createGarage(): Promise<void> {
   formsContainer.append(garageButtons);
 
   const { paginationContainer, previousButton, nextButton } = implementPagination({
-    onPrev: async () => {
-      await garageList.setPage(appState.garagePage - 1);
+    onPrev: () => {
+      garageList.setPage(appState.garagePage - 1);
     },
-    onNext: async () => {
-      await garageList.setPage(appState.garagePage + 1);
+    onNext: () => {
+      garageList.setPage(appState.garagePage + 1);
     },
   });
 
@@ -52,6 +52,7 @@ export async function createGarage(): Promise<void> {
     container.append(garageContainer);
   }
 
+  // console.log(carState);
   startGarageController();
   startEngineController();
 

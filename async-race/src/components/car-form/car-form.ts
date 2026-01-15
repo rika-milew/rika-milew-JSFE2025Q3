@@ -33,7 +33,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
     initUpdateFormEvents(nameInput, colorInput, syncDisabledState);
   }
 
-  carForm.addEventListener('submit', async (event) => {
+  carForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
     if (!nameInput.value.trim()) {
@@ -59,7 +59,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
       });
 
       try {
-        await garageList.render();
+        garageList.render();
       } catch {
         errorPopup.show('Failed to update the chosen car — try again');
       }

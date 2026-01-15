@@ -1,7 +1,7 @@
 import { stopCarAnimation } from '@/components/car/car-animation/animate-car';
 import { POPUP_MESSAGES } from '@/data/error-messages';
-import { getCarStore, removeCarStore } from '@/state/car-store';
-import { handleErrors } from '@/utils/handle-errors';
+import { removeCarStore } from '@/state/car-store';
+import { handleErrors, handleErrorsVoid } from '@/utils/handle-errors';
 import { createCar } from '@api/garage/create-car';
 import { deleteCar } from '@api/garage/delete-car';
 import { updateCar } from '@api/garage/update-car';
@@ -51,19 +51,24 @@ export function startGarageController(): void {
     }
 
     carState.update(updated);
+    eventState.emit('garage:refresh');
   });
 
   eventState.on('car:delete', async (payload) => {
     if (!payload) {
       return;
     }
-    await handleErrors(() => deleteCar(payload.id), POPUP_MESSAGES.carDeleteFailed(payload.id));
 
-    const car = getCarStore(payload.id);
-    if (car) {
-      stopCarAnimation(payload.id);
-      car.container.remove();
+    const success = await handleErrorsVoid(
+      () => deleteCar(payload.id),
+      POPUP_MESSAGES.carDeleteFailed(payload.id),
+    );
+
+    if (!success) {
+      return;
     }
+
+    stopCarAnimation(payload.id);
 
     carState.remove(payload.id);
     removeCarStore(payload.id);
@@ -73,7 +78,7 @@ export function startGarageController(): void {
       appState.garagePage = maxPage > 0 ? maxPage : 1;
     }
 
-    await garageList.render();
+    garageList.render();
     eventState.emit('car:deleted', payload.id);
   });
 }

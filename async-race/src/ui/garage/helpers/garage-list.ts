@@ -1,6 +1,5 @@
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { handleErrors } from '@/utils/handle-errors';
-import { getCars } from '@api/garage/get-cars';
 import { createCarElement } from '@components/car/car';
 import { appState } from '@state/app-state';
 import { carState } from '@state/car-state';
@@ -8,24 +7,14 @@ import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
 import { createRandomCars } from '@utils/generate-cars/generate-cars';
 
-import type { GarageList } from '@/types/types';
+import type { GarageList, Car } from '@/types/types';
 
 export const garageContainer = createElement({ tag: 'div', className: ['garage-container'] });
 
 export const garageList: GarageList = ((): GarageList => {
-  async function render(): Promise<void> {
-    const result = await handleErrors(
-      () => getCars(appState.garagePage, appState.perPage),
-      POPUP_MESSAGES.garageLoadFailed(),
-    );
-
-    if (!result) {
-      return;
-    }
-
-    const { cars, totalCount } = result;
-
-    carState.set(cars, totalCount);
+  function render(): void {
+    const cars = carState.cars;
+    const totalCount = carState.totalCount;
 
     garageContainer.replaceChildren();
 
@@ -35,11 +24,11 @@ export const garageList: GarageList = ((): GarageList => {
 
     eventState.emit('garage:pagination:update', {
       currentPage: appState.garagePage,
-      totalCount: carState.totalCount,
+      totalCount,
     });
   }
 
-  async function setPage(page: number): Promise<void> {
+  function setPage(page: number): void {
     const maxPage = Math.ceil(carState.totalCount / appState.perPage);
 
     if (page < 1 || page > maxPage) {
@@ -47,7 +36,7 @@ export const garageList: GarageList = ((): GarageList => {
     }
 
     appState.garagePage = page;
-    await render();
+    render();
 
     eventState.emit('garage:pagination:update', {
       currentPage: appState.garagePage,
@@ -55,14 +44,25 @@ export const garageList: GarageList = ((): GarageList => {
     });
   }
 
-  eventState.on('garage:refresh', async () => {
-    await render();
+  eventState.on('garage:refresh', () => {
+    render();
   });
 
   eventState.on('garage:generate', async (quantity) => {
-    await handleErrors(() => createRandomCars(quantity), POPUP_MESSAGES.randomCarsFailed());
+    const newCars: Car[] | undefined = await handleErrors(
+      () => createRandomCars(quantity),
+      POPUP_MESSAGES.randomCarsFailed(),
+    );
 
-    await render();
+    if (!newCars) {
+      return;
+    }
+
+    newCars.forEach((car) => {
+      carState.add(car);
+    });
+
+    eventState.emit('garage:refresh');
   });
 
   return { render, setPage };

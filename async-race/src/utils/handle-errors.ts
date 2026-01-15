@@ -12,3 +12,17 @@ export async function handleErrors<T>(
     return undefined;
   }
 }
+
+export async function handleErrorsVoid(
+  function_: () => Promise<void>,
+  message: string,
+): Promise<boolean> {
+  try {
+    await function_();
+    return true;
+  } catch (error) {
+    console.error(error);
+    errorPopup.show(message);
+    return false;
+  }
+}

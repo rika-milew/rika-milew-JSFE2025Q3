@@ -121,8 +121,8 @@ export type CarBrand = {
 };
 
 export type GarageList = {
-  render: () => Promise<void>;
-  setPage: (page: number) => Promise<void>;
+  render: () => void;
+  setPage: (page: number) => void;
 };
 
 export type SoundTypes = 'race' | 'brake' | 'button';
