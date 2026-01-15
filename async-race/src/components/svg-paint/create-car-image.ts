@@ -1,4 +1,4 @@
-import { carSvg1, carSvg2, carSvg3 } from '@components/car/car.config';
+import { carLeftWheel, carMain, carRightWheel } from '@/components/svg-paint/car-svg.config';
 
 import type { CarSvg } from '../../types/types';
 
@@ -12,15 +12,15 @@ export function createCarImage(initialColor: string): CarSvg {
   svg.setAttribute('fill', initialColor);
 
   const rightWheel = document.createElementNS(svgType, 'path');
-  rightWheel.setAttribute('d', carSvg1);
+  rightWheel.setAttribute('d', carRightWheel);
   rightWheel.setAttribute('fill', initialColor);
 
   const leftWheel = document.createElementNS(svgType, 'path');
-  leftWheel.setAttribute('d', carSvg2);
+  leftWheel.setAttribute('d', carMain);
   leftWheel.setAttribute('fill', initialColor);
 
   const carBody = document.createElementNS(svgType, 'path');
-  carBody.setAttribute('d', carSvg3);
+  carBody.setAttribute('d', carLeftWheel);
   carBody.setAttribute('fill', initialColor);
 
   svg.append(rightWheel, leftWheel, carBody);
@@ -31,13 +31,4 @@ export function createCarImage(initialColor: string): CarSvg {
       carBody.setAttribute('fill', color);
     },
   };
-}
-
-export function createFinishFlag(): HTMLImageElement {
-  const img = document.createElement('img');
-  img.src = '/finish.svg';
-  img.alt = 'Finish';
-  img.className = 'race__finish';
-
-  return img;
 }

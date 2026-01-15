@@ -5,7 +5,7 @@ import { carState } from '@/state/car-state';
 import { handleErrors } from '@/utils/handle-errors';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
-import { resetCar } from '@components/car/car-animation/reset-car';
+import { resetCarPosition } from '@components/car/car-animation/reset-car';
 import { eventState } from '@state/events/event-state';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
@@ -35,7 +35,7 @@ export function startEngineController(): void {
 
     await handleErrors(() => startEngine(carId, 'stopped'), POPUP_MESSAGES.carResetFailed(carId));
 
-    resetCar(carId);
+    resetCarPosition(carId);
     setEngineButtons(carId, true, false);
   });
 }

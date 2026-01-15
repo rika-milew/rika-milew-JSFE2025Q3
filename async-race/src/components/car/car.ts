@@ -1,6 +1,7 @@
-import { createCarImage, createFinishFlag } from '@/components/car/car-image';
-import { addCarStore } from '@/state/car-store';
 import { createButton } from '@components/button/button';
+import { createCarImage } from '@components/svg-paint/create-car-image';
+import { createFlagImage } from '@components/svg-paint/create-flag-image';
+import { addCarStore } from '@state/car-store';
 import { engineButtons } from '@state/engine-buttons';
 import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
@@ -38,7 +39,7 @@ export function createCarElement(car: Car): HTMLDivElement {
     className: ['car__track-line'],
   });
 
-  const finishFlag = createFinishFlag();
+  const finishFlag = createFlagImage();
 
   addCarStore(car.id, {
     container: carItem,

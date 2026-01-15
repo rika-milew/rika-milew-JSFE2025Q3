@@ -3,7 +3,7 @@ import { getCarStore } from '@/state/car-store';
 import { stopCarAnimation } from '@components/car/car-animation/animate-car';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
-export function resetCar(carId: number): void {
+export function resetCarPosition(carId: number): void {
   const carElement = getCarStore(carId);
   const car = carState.getById(carId);
 
@@ -25,7 +25,7 @@ export function resetCar(carId: number): void {
   setEngineButtons(carId, true, false);
 }
 
-export function resetAllCars(): void {
+export function resetAllCarsPositions(): void {
   carState.cars.forEach((car) => {
     stopCarAnimation(car.id);
     car.currentPosition = 0;
