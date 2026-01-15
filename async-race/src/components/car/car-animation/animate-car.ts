@@ -2,7 +2,12 @@ import { carState } from '@/state/car-state';
 import { getCarStore, setCarAnimationId } from '@/state/car-store';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
-export function animateCar(carId: number, velocity: number, distance: number): void {
+export function animateCar(
+  carId: number,
+  velocity: number,
+  distance: number,
+  onFinish?: (succeeded: boolean) => void,
+): void {
   const FINISH_OFFSET = 5;
   const SPEED_MULTIPLIER = 450;
   const WIDTH_DIVIDER = 2;
@@ -52,6 +57,9 @@ export function animateCar(carId: number, velocity: number, distance: number): v
       setCarAnimationId(carId, requestAnimationFrame(startAnimation));
     } else {
       stopCarAnimation(carId);
+      if (onFinish) {
+        onFinish(true);
+      }
     }
   }
 

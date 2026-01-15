@@ -2,6 +2,7 @@ import { getEngineParams } from '@/api/engine/get-engine-params';
 import { errorPopup } from '@/components/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { carState } from '@/state/car-state';
+import { checkRaceEnd } from '@/utils/finish-race';
 import { handleErrors } from '@/utils/handle-errors';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
@@ -36,6 +37,7 @@ export function startEngineController(): void {
     await handleErrors(() => startEngine(carId, 'stopped'), POPUP_MESSAGES.carResetFailed(carId));
 
     resetCarPosition(carId);
+
     setEngineButtons(carId, true, false);
   });
 }
@@ -59,16 +61,32 @@ async function handleCarStart(carId: number): Promise<void> {
   if (!engineData) {
     car.isDriving = false;
     stopCarAnimation(carId);
-    setEngineButtons(carId, true, false);
+    if (!carState.isRacing) {
+      setEngineButtons(carId, true, false);
+    }
     return;
   }
 
-  animateCar(carId, engineData.velocity, engineData.distance);
-  setEngineButtons(carId, false, true);
+  animateCar(carId, engineData.velocity, engineData.distance, (succeeded) => {
+    car.isDriving = false;
+
+    if (carState.isRacing) {
+      if (succeeded && !carState.winner) {
+        carState.winner = car;
+      }
+
+      checkRaceEnd();
+    }
+  });
+
+  if (!carState.isRacing) {
+    setEngineButtons(carId, false, true);
+  }
 
   try {
     await getEngineParams(carId);
   } catch (error) {
+    checkRaceEnd();
     if (error instanceof Error && error.message.includes('broken down')) {
       car.isDriving = false;
       stopCarAnimation(carId);

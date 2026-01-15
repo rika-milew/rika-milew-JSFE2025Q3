@@ -1,3 +1,5 @@
+import { appState } from '@state/app-state';
+
 import type { Car } from '@/types/types';
 
 type EngineData = {
@@ -21,17 +23,22 @@ type CarState = {
   update(updatedCar: Car): void;
   remove(id: number): void;
   getById(id: number): CarStateItem | undefined;
+  getAllOnCurrentPage(): CarStateItem[];
+  winner: CarStateItem | undefined;
+  isRacing: boolean;
 };
 
 export const carState: CarState = {
   cars: [],
   totalCount: 0,
+  winner: undefined,
+  isRacing: false,
 
   set(cars: Car[], totalCount?: number): void {
     this.cars = cars.map((car) => ({
       ...car,
       currentPosition: 0,
-      isMoving: false,
+      isDriving: false,
       trackDistance: 0,
     }));
     if (totalCount !== undefined) {
@@ -69,5 +76,11 @@ export const carState: CarState = {
 
   getById(id: number): CarStateItem | undefined {
     return this.cars.find((c) => c.id === id);
+  },
+
+  getAllOnCurrentPage(): CarStateItem[] {
+    const start = (appState.garagePage - 1) * appState.perPage;
+    const end = start + appState.perPage;
+    return this.cars.slice(start, end);
   },
 };

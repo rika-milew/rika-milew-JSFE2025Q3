@@ -30,6 +30,7 @@ export function resetAllCarsPositions(): void {
     stopCarAnimation(car.id);
     car.currentPosition = 0;
     car.isDriving = false;
+    carState.isRacing = false;
 
     const carElement = getCarStore(car.id);
     if (carElement) {
