@@ -2,7 +2,8 @@ import { getEngineParams } from '@api/engine/get-engine-params';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
 import { resetCarPosition } from '@components/car/car-animation/reset-car-position';
-import { errorPopup } from '@components/error/error';
+import { errorPopup } from '@components/popup/error/error';
+import { winnerPopup } from '@components/popup/winner/winner';
 import { POPUP_MESSAGES } from '@data/error-messages';
 import { carState } from '@state/car-state';
 import { eventState } from '@state/events/event-state';
@@ -70,6 +71,7 @@ async function handleCarStart(carId: number): Promise<void> {
     if (carState.isRacing) {
       if (succeeded && !carState.winner) {
         carState.winner = car;
+        winnerPopup.show(car.name);
       }
       checkRaceEnd();
     }

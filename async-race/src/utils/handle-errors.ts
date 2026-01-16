@@ -1,4 +1,4 @@
-import { errorPopup } from '@/components/error/error';
+import { errorPopup } from '@/components/popup/error/error';
 
 export async function handleErrors<T>(
   function_: () => Promise<T>,

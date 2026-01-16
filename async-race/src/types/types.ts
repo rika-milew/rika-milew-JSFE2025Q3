@@ -74,6 +74,16 @@ export type PaginationCallbacks = {
   onNext: () => void;
 };
 
+export type PopupOptions = {
+  overlayClass: string;
+  containerClass: string;
+  headingContent: string;
+  imageSrc: string;
+  imageAlt: string;
+  animationDuration: number;
+  messageContent?: (message: string) => string;
+};
+
 // app
 
 export type AppRouter = {

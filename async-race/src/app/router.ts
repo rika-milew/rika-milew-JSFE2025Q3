@@ -1,4 +1,4 @@
-import { errorPopup } from '@components/error/error';
+import { errorPopup } from '@/components/popup/error/error';
 import { appState } from '@state/app-state';
 import { createApp } from '@ui/ui';
 
