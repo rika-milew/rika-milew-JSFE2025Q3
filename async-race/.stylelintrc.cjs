@@ -21,6 +21,7 @@ module.exports = {
             'gap',
             'grid',
             'grid-template-columns',
+            'grid-gap',
             'width',
             'min-width',
             'max-width',

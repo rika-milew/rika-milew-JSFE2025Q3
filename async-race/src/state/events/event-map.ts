@@ -1,4 +1,4 @@
-import type { View, Car } from '@/types/types';
+import type { View, Car, Winner } from '@/types/types';
 
 export type EventMap = {
   'view:changed': View;
@@ -20,4 +20,7 @@ export type EventMap = {
   'ui:error': string;
   'car:start': { id: number };
   'car:reset': { id: number };
+  'winner:create': Winner;
+  'winner:update': Winner;
+  'winner:delete': number;
 };

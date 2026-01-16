@@ -1,17 +1,25 @@
-import { createInfoElements } from '@components/page-info/page-info';
-import { appState } from '@state/app-state';
+import { eventState } from '@state/events/event-state';
+import { createWinnersTable } from '@ui/winners/table/winners-table';
+import { winnerInfoElements } from '@ui/winners/winners-info-elements';
 import { createElement } from '@utils/create-element';
 
 export function createWinners(): void {
+  const main = createElement({ tag: 'div', className: ['main'] });
   const container = createElement({ tag: 'div', className: ['container'] });
 
-  document.body.append(container);
+  document.body.append(main);
+  main.append(container);
 
-  const infoElements = createInfoElements({
-    title: 'Winners',
-    page: appState.winnersPage,
-    total: appState.winners.length,
-    totalText: 'Total Winners',
+  if (!container.contains(winnerInfoElements.container)) {
+    container.append(winnerInfoElements.container);
+  }
+
+  const tableContainer = createElement({ tag: 'div', className: ['table-container'] });
+  container.append(tableContainer);
+
+  createWinnersTable(tableContainer);
+
+  eventState.on('winner:create', () => {
+    createWinnersTable(tableContainer);
   });
-  container.append(infoElements.container);
 }

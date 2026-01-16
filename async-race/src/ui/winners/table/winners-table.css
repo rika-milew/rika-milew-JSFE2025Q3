@@ -1,0 +1,35 @@
+.winners-header,
+.winners-row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 0.8fr 1.3fr 2fr 0.8fr 1.4fr;
+  grid-gap: 10px;
+  width: 800px;
+  margin: 0 auto;
+  font-size: 18px;
+  color: #dcdcdc;
+}
+
+.header-cell {
+  border: 1px solid #777777;
+  border-radius: 12px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  background-color: rgba(255, 215, 0, 0.6);
+}
+
+.winners-cell {
+  padding: 6px 8px;
+}
+
+.car-icon {
+  display: inline-block;
+}
+
+.car-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--car-color, #000);
+}

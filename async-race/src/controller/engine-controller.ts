@@ -7,6 +7,7 @@ import { winnerPopup } from '@components/popup/winner/winner';
 import { POPUP_MESSAGES } from '@data/error-messages';
 import { carState } from '@state/car-state';
 import { eventState } from '@state/events/event-state';
+import { handleWinner } from '@ui/winners/helpers/handle-winner';
 import { checkRaceEnd } from '@utils/finish-race';
 import { handleErrors } from '@utils/handle-errors';
 import { setEngineButtons } from '@utils/set-car-buttons';
@@ -17,7 +18,6 @@ export function startEngineController(): void {
   if (isEngineControllerStarted) {
     return;
   }
-
   isEngineControllerStarted = true;
 
   eventState.on('car:start', async (payload) => {
@@ -43,11 +43,7 @@ export function startEngineController(): void {
 async function handleCarStart(carId: number): Promise<void> {
   const car = carState.getById(carId);
 
-  if (!car) {
-    return;
-  }
-
-  if (car.isDriving) {
+  if (!car || car.isDriving) {
     return;
   }
 
@@ -67,12 +63,14 @@ async function handleCarStart(carId: number): Promise<void> {
     return;
   }
 
-  animateCar(carId, engineData.velocity, engineData.distance, (succeeded) => {
+  animateCar(carId, engineData.velocity, engineData.distance, async (succeeded) => {
     car.isDriving = false;
     if (carState.isRacing) {
       if (succeeded && !carState.winner) {
         carState.winner = car;
         winnerPopup.show(car.name);
+        const finishTime = engineData.distance / engineData.velocity;
+        await handleWinner(car, finishTime);
       }
       checkRaceEnd();
     }
