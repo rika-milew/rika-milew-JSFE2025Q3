@@ -26,13 +26,18 @@ export function resetCarPosition(carId: number): void {
 }
 
 export function resetAllCarsPositions(): void {
+  // console.log('reset');
+  carState.isRacing = false;
+  carState.winner = undefined;
+  carState.garageSessionId += 1;
+
   carState.cars.forEach((car) => {
     stopCarAnimation(car.id);
     car.currentPosition = 0;
     car.isDriving = false;
-    carState.isRacing = false;
 
     const carElement = getCarStore(car.id);
+
     if (carElement) {
       carElement.svg.style.transform = 'translateX(0)';
       carElement.track.classList.remove('blink');

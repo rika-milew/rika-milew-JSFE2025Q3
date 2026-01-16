@@ -1,4 +1,5 @@
-import { errorPopup } from '@/components/popup/error/error';
+import { resetAllCarsPositions } from '@components/car/car-animation/reset-car-position';
+import { errorPopup } from '@components/popup/error/error';
 import { appState } from '@state/app-state';
 import { createFooter } from '@ui/footer/footer';
 import { createGarage } from '@ui/garage/garage';
@@ -13,6 +14,7 @@ export async function createApp(): Promise<void> {
     if (appState.view === 'garage') {
       await createGarage();
     } else {
+      resetAllCarsPositions();
       createWinners();
     }
   } catch {

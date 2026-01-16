@@ -27,9 +27,10 @@ export function startRaceController(): void {
   });
 
   eventState.on('garage:reset', () => {
-    const carsOnPage = carState.getAllOnCurrentPage();
     carState.isRacing = false;
-
+    carState.garageSessionId += 1;
+    carState.winner = undefined;
+    const carsOnPage = carState.getAllOnCurrentPage();
     carsOnPage.forEach((car) => {
       resetCarPosition(car.id);
     });

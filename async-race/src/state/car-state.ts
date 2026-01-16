@@ -26,6 +26,7 @@ type CarState = {
   getAllOnCurrentPage(): CarStateItem[];
   winner: CarStateItem | undefined;
   isRacing: boolean;
+  garageSessionId: number;
 };
 
 export const carState: CarState = {
@@ -33,6 +34,7 @@ export const carState: CarState = {
   totalCount: 0,
   winner: undefined,
   isRacing: false,
+  garageSessionId: 0,
 
   set(cars: Car[], totalCount?: number): void {
     this.cars = cars.map((car) => ({

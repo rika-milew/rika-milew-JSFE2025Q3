@@ -40,7 +40,6 @@ export const garageList: GarageList = ((): GarageList => {
       return;
     }
 
-    resetAllCarsPositions();
     appState.garagePage = page;
     render();
 

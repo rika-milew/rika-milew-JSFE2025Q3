@@ -31,6 +31,7 @@ export function startEngineController(): void {
     if (!payload) {
       return;
     }
+
     const carId = payload.id;
     stopCarAnimation(carId);
     await handleErrors(() => startEngine(carId, 'stopped'), POPUP_MESSAGES.carResetFailed(carId));
@@ -81,9 +82,17 @@ async function handleCarStart(carId: number): Promise<void> {
     setEngineButtons(carId, false, true);
   }
 
+  const sessionId = carState.garageSessionId;
+
   try {
     await getEngineParams(carId);
+    if (carState.garageSessionId !== sessionId) {
+      return;
+    }
   } catch (error) {
+    if (carState.garageSessionId !== sessionId) {
+      return;
+    }
     checkRaceEnd();
 
     if (error instanceof Error && error.message.includes('broken down')) {
