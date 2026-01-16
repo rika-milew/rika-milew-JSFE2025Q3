@@ -1,4 +1,4 @@
-import type { CarBrand } from '../types/types';
+import type { CarBrand } from '@/types/types';
 
 export const carBrands: CarBrand[] = [
   {

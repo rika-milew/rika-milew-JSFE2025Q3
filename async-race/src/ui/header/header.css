@@ -21,3 +21,64 @@
 h1 {
   font-size: 32px;
 }
+
+@media screen and (max-width: 850px) {
+  h1 {
+    font-size: 28px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  .header {
+    padding: 25px 25px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .header {
+    padding: 20px;
+  }
+  h1 {
+    font-size: 26px;
+  }
+
+  .header .nav {
+    gap: 20px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .header .nav {
+    gap: 15px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  h1 {
+    font-size: 22px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  h1 {
+    font-size: 18px;
+  }
+
+  .header .nav {
+    gap: 10px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  h1 {
+    font-size: 16px;
+  }
+}

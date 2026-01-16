@@ -74,6 +74,16 @@ export type PaginationCallbacks = {
   onNext: () => void;
 };
 
+export type PopupOptions = {
+  overlayClass: string;
+  containerClass: string;
+  headingContent: string;
+  imageSrc: string;
+  imageAlt: string;
+  animationDuration: number;
+  messageContent?: (message: string) => string;
+};
+
 // app
 
 export type AppRouter = {
@@ -121,8 +131,8 @@ export type CarBrand = {
 };
 
 export type GarageList = {
-  render: () => Promise<void>;
-  setPage: (page: number) => Promise<void>;
+  render: () => void;
+  setPage: (page: number) => void;
 };
 
 export type SoundTypes = 'race' | 'brake' | 'button';

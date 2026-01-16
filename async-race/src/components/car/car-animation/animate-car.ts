@@ -1,18 +1,29 @@
-import { carElements } from '../../../state/car-elements';
-import { audioPLayer } from '../../../utils/audio-player';
+import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@/data/constants';
+import { carState } from '@state/car-state';
+import { getCarStore, setCarAnimationId } from '@state/car-store';
+import { setEngineButtons } from '@utils/set-car-buttons';
 
-export function animateCar(carId: number, velocity: number, distance: number): void {
-  const FINISH_OFFSET = 5;
-  const SPEED_MULTIPLIER = 350;
-  const WIDTH_DIVIDER = 2;
-  const MILLISECONDS = 1000;
+export function animateCar(
+  carId: number,
+  velocity: number,
+  distance: number,
+  onFinish?: (succeeded: boolean) => void,
+): void {
+  const car = carState.getById(carId);
 
-  const carObject = carElements[carId];
+  if (!car) {
+    return;
+  }
 
-  const carSvg = carObject.svg;
-  const track = carObject.track;
-  const trackLine = carObject.trackLine;
-  const finish = carObject.finish;
+  car.isDriving = true;
+
+  const carElement = getCarStore(carId);
+
+  if (!carElement) {
+    return;
+  }
+
+  const { svg: carSvg, track, trackLine, finish } = carElement;
 
   const carWidth = carSvg.getBoundingClientRect().width;
 
@@ -30,7 +41,6 @@ export function animateCar(carId: number, velocity: number, distance: number): v
   const raceTime = animationTime / SPEED_MULTIPLIER;
   const startTime = performance.now();
 
-  audioPLayer.playSound('race');
   trackLine.classList.add('blink');
 
   function startAnimation(time: number): void {
@@ -39,14 +49,37 @@ export function animateCar(carId: number, velocity: number, distance: number): v
 
     carSvg.style.transform = `translateX(${distancePx * progress}px)`;
 
-    if (progress < 1) {
-      carObject.animationId = requestAnimationFrame(startAnimation);
+    if (passedTime / raceTime <= 1) {
+      setCarAnimationId(carId, requestAnimationFrame(startAnimation));
     } else {
-      carObject.animationId = undefined;
-      audioPLayer.stopSound('race');
-      trackLine.classList.remove('blink');
+      stopCarAnimation(carId);
+      if (onFinish) {
+        onFinish(true);
+      }
     }
   }
 
-  carObject.animationId = requestAnimationFrame(startAnimation);
+  setCarAnimationId(carId, requestAnimationFrame(startAnimation));
+}
+
+export function stopCarAnimation(carId: number): void {
+  const car = carState.getById(carId);
+
+  if (!car) {
+    return;
+  }
+
+  const carElement = getCarStore(carId);
+
+  if (carElement?.animationId !== undefined) {
+    cancelAnimationFrame(carElement.animationId);
+    carElement.animationId = undefined;
+  }
+
+  car.isDriving = false;
+
+  if (carElement) {
+    carElement.track.classList.remove('blink');
+    setEngineButtons(carId, false, true);
+  }
 }

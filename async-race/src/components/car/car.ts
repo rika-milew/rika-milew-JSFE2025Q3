@@ -1,10 +1,11 @@
-import { createCarSvg, createFinishFlag } from './car-svg';
-import { carElements } from '../../state/car-elements';
-import { engineButtons } from '../../state/engine-buttons';
-import { eventState } from '../../state/events/event-state';
-import { createElement } from '../../utils/create-element';
-import { setEngineButtons } from '../../utils/set-car-buttons';
-import { createButton } from '../button/button';
+import { createButton } from '@components/button/button';
+import { createCarImage } from '@components/svg-paint/create-car-image';
+import { createFlagImage } from '@components/svg-paint/create-flag-image';
+import { addCarStore } from '@state/car-store';
+import { engineButtons } from '@state/engine-buttons';
+import { eventState } from '@state/events/event-state';
+import { createElement } from '@utils/create-element';
+import { setEngineButtons } from '@utils/set-car-buttons';
 
 import type { Car } from '../../types/types';
 
@@ -14,15 +15,17 @@ export function createCarElement(car: Car): HTMLDivElement {
   const carItem = createElement({ tag: 'div', className: ['car'] });
 
   const carButtons = createCarButtons(car);
-  const animationButtons = createEngineButtons(car);
+  const engineButtons = createEngineButtons(car);
 
-  const { element: carSvg, setColor } = createCarSvg(car.color);
+  const { element: carSvg, setColor } = createCarImage(car.color);
 
   eventState.on('updateform:color', (payload) => {
     if (!payload) {
       return;
     }
+
     const { id, color } = payload;
+
     if (id === car.id) {
       setColor(color);
     }
@@ -38,18 +41,18 @@ export function createCarElement(car: Car): HTMLDivElement {
     className: ['car__track-line'],
   });
 
-  const finishFlag = createFinishFlag();
+  const finishFlag = createFlagImage();
 
-  carElements[car.id] = {
+  addCarStore(car.id, {
     container: carItem,
     svg: carSvg,
     track: carTrack,
-    trackLine: trackLine,
+    trackLine,
     finish: finishFlag,
-  };
+  });
 
   carTrack.append(trackLine, carSvg, finishFlag);
-  carItem.append(carButtons, animationButtons, carTrack);
+  carItem.append(carButtons, engineButtons, carTrack);
 
   return carItem;
 }

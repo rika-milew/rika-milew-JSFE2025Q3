@@ -1,0 +1,20 @@
+.winner-overlay {
+  z-index: 1000;
+}
+
+.winner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 20px 35px;
+  padding: 20px 35px;
+  border-radius: 8px;
+  color: #dcdcdc;
+  text-align: center;
+  background-color: #921d82f2;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+  transform: translate(-50%, -50%) translateY(-20px);
+  opacity: 0;
+}

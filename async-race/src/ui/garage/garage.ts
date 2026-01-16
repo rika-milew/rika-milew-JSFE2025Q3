@@ -1,15 +1,16 @@
-import { startEngineController } from './engine/engine-controller';
-import { createGarageButtons } from './garage-buttons/garage-buttons';
-import { startGarageController } from './helpers/garage-controller';
-import { garageContainer, garageList } from './helpers/garage-list';
-import { implementPagination } from './helpers/garage-pagination';
-import { loadDefaultCars } from './helpers/init-garage';
-import { infoElements } from './info-elements';
-import { createCarForm } from '../../components/car-form/car-form';
-import { appState } from '../../state/app-state';
-import { carState } from '../../state/car-state';
-import { eventState } from '../../state/events/event-state';
-import { createElement } from '../../utils/create-element';
+import { createCarForm } from '@components/car-form/car-form';
+import { startEngineController } from '@controller/engine-controller';
+import { startGarageController } from '@controller/garage-controller';
+import { startRaceController } from '@controller/race-controller';
+import { appState } from '@state/app-state';
+import { carState } from '@state/car-state';
+import { eventState } from '@state/events/event-state';
+import { createGarageButtons } from '@ui/garage/garage-buttons/garage-buttons';
+import { garageContainer, garageList } from '@ui/garage/helpers/garage-list';
+import { implementPagination } from '@ui/garage/helpers/garage-pagination';
+import { loadDefaultCars } from '@ui/garage/helpers/init-garage';
+import { infoElements } from '@ui/garage/info-elements';
+import { createElement } from '@utils/create-element';
 
 import './garage.css';
 
@@ -36,11 +37,11 @@ export async function createGarage(): Promise<void> {
   formsContainer.append(garageButtons);
 
   const { paginationContainer, previousButton, nextButton } = implementPagination({
-    onPrev: async () => {
-      await garageList.setPage(appState.garagePage - 1);
+    onPrev: () => {
+      garageList.setPage(appState.garagePage - 1);
     },
-    onNext: async () => {
-      await garageList.setPage(appState.garagePage + 1);
+    onNext: () => {
+      garageList.setPage(appState.garagePage + 1);
     },
   });
 
@@ -52,8 +53,10 @@ export async function createGarage(): Promise<void> {
     container.append(garageContainer);
   }
 
+  // console.log(carState);
   startGarageController();
   startEngineController();
+  startRaceController();
 
   eventState.on('garage:pagination:update', () => {
     const { garagePage } = appState;

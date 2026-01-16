@@ -123,3 +123,31 @@
   font-weight: 700;
   line-height: 20px;
 }
+
+@media screen and (max-width: 550px) {
+  .car-button {
+    width: 100px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .car-buttons,
+  .animation-buttons {
+    gap: 10px;
+  }
+
+  .animation-button {
+    width: 85px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .car-button {
+    width: 90px;
+  }
+  .animation-button {
+    width: 75px;
+  }
+}

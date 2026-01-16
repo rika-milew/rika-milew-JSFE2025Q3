@@ -2,15 +2,12 @@ import { API_URL } from '@data/constants';
 
 import { getApiError } from '../get-api-error';
 
-import type { EngineResponse } from '../../types/types';
+import type { DriveResponse } from '@/types/types';
 
-export async function startEngine(
-  id: number,
-  status: 'started' | 'stopped' | 'drive',
-): Promise<EngineResponse> {
+export async function getEngineParams(id: number): Promise<DriveResponse> {
   const url = new URL(`${API_URL}/engine`);
   url.searchParams.append('id', id.toString());
-  url.searchParams.append('status', status);
+  url.searchParams.append('status', 'drive');
 
   const response = await fetch(url.toString(), { method: 'PATCH' });
 
@@ -19,6 +16,6 @@ export async function startEngine(
     throw new Error(errorMessage || getApiError(response.status, id));
   }
 
-  const data: EngineResponse = await response.json();
+  const data: DriveResponse = await response.json();
   return data;
 }

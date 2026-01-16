@@ -1,7 +1,7 @@
-import { createButton } from '../../components/button/button';
-import { appState } from '../../state/app-state';
-import { eventState } from '../../state/events/event-state';
-import { createElement } from '../../utils/create-element';
+import { createButton } from '@components/button/button';
+import { appState } from '@state/app-state';
+import { eventState } from '@state/events/event-state';
+import { createElement } from '@utils/create-element';
 
 import './header.css';
 
@@ -17,6 +17,7 @@ export function createHeader(): void {
     className: `garage-button ${appState.view === 'garage' ? 'active' : ''}`,
     disabled: appState.view === 'garage',
   });
+
   garageNav.addEventListener('click', () => {
     eventState.emit('view:changed', 'garage');
   });

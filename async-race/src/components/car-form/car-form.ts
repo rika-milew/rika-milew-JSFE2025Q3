@@ -1,12 +1,12 @@
-import { createCarFormElements } from './helpers/car-form-elements';
-import { initUpdateFormEvents } from './helpers/car-form-events';
-import { createFormState } from './helpers/car-form-state';
-import { errorPopup } from '../../components/error/error';
-import { appState } from '../../state/app-state';
-import { eventState } from '../../state/events/event-state';
-import { garageList } from '../../ui/garage/helpers/garage-list';
+import { createCarFormElements } from '@components/car-form/helpers/car-form-elements';
+import { updateFormEvents } from '@components/car-form/helpers/car-form-events';
+import { createFormState } from '@components/car-form/helpers/car-form-state';
+import { errorPopup } from '@components/popup/error/error';
+import { appState } from '@state/app-state';
+import { eventState } from '@state/events/event-state';
+import { garageList } from '@ui/garage/helpers/garage-list';
 
-import type { CarForm } from '../../types/types';
+import type { CarForm } from '@/types/types';
 
 import './car-form.css';
 
@@ -30,10 +30,10 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
   syncDisabledState();
 
   if (isUpdate) {
-    initUpdateFormEvents(nameInput, colorInput, syncDisabledState);
+    updateFormEvents(nameInput, colorInput, syncDisabledState);
   }
 
-  carForm.addEventListener('submit', async (event) => {
+  carForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
     if (!nameInput.value.trim()) {
@@ -59,7 +59,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
       });
 
       try {
-        await garageList.render();
+        garageList.render();
       } catch {
         errorPopup.show('Failed to update the chosen car — try again');
       }

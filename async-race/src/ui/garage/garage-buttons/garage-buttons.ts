@@ -1,6 +1,7 @@
-import { createButton } from '../../../components/button/button';
-import { eventState } from '../../../state/events/event-state';
-import { createElement } from '../../../utils/create-element';
+import { CARS_QUANTITY } from '@/data/constants';
+import { createButton } from '@components/button/button';
+import { eventState } from '@state/events/event-state';
+import { createElement } from '@utils/create-element';
 
 import './garage-buttons.css';
 
@@ -33,7 +34,6 @@ export function createGarageButtons(): HTMLDivElement {
   });
 
   generateButton.addEventListener('click', () => {
-    const CARS_QUANTITY = 100;
     eventState.emit('garage:generate', CARS_QUANTITY);
   });
 

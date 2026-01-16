@@ -1,6 +1,6 @@
-import { createElement } from '../../../utils/create-element';
+import { createElement } from '@utils/create-element';
 
-import type { CarFormElements } from '../../../types/types';
+import type { CarFormElements } from '@/types/types';
 
 export function createCarFormElements(isUpdate: boolean): CarFormElements {
   const carForm = createElement({ tag: 'form', className: ['car-form'] });

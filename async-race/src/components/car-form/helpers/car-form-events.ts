@@ -1,7 +1,7 @@
-import { appState } from '../../../state/app-state';
-import { eventState } from '../../../state/events/event-state';
+import { appState } from '@state/app-state';
+import { eventState } from '@state/events/event-state';
 
-export function initUpdateFormEvents(
+export function updateFormEvents(
   nameInput: HTMLInputElement,
   colorInput: HTMLInputElement,
   syncDisabledState: () => void,
