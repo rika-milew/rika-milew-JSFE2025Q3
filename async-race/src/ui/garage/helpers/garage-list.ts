@@ -1,4 +1,4 @@
-import { resetAllCarsPositions } from '@/components/car/car-animation/reset-car';
+import { resetAllCarsPositions } from '@/components/car/car-animation/reset-car-position';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { handleErrors } from '@/utils/handle-errors';
 import { createCarElement } from '@components/car/car';

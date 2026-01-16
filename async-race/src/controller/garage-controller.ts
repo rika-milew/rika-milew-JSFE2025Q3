@@ -16,8 +16,8 @@ export function startGarageController(): void {
   if (isControllerStarted) {
     return;
   }
-
   isControllerStarted = true;
+
   eventState.on('car:create', async (payload) => {
     if (!payload) {
       return;
@@ -31,6 +31,7 @@ export function startGarageController(): void {
     if (!created) {
       return;
     }
+
     carState.add(created);
     eventState.emit('updateform:reset');
     eventState.emit('garage:refresh');

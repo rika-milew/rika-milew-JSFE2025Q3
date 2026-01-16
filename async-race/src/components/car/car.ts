@@ -23,7 +23,9 @@ export function createCarElement(car: Car): HTMLDivElement {
     if (!payload) {
       return;
     }
+
     const { id, color } = payload;
+
     if (id === car.id) {
       setColor(color);
     }

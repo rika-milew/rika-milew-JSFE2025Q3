@@ -1,13 +1,13 @@
-import { getEngineParams } from '@/api/engine/get-engine-params';
-import { errorPopup } from '@/components/error/error';
-import { POPUP_MESSAGES } from '@/data/error-messages';
-import { carState } from '@/state/car-state';
-import { checkRaceEnd } from '@/utils/finish-race';
-import { handleErrors } from '@/utils/handle-errors';
+import { getEngineParams } from '@api/engine/get-engine-params';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
-import { resetCarPosition } from '@components/car/car-animation/reset-car';
+import { resetCarPosition } from '@components/car/car-animation/reset-car-position';
+import { errorPopup } from '@components/error/error';
+import { POPUP_MESSAGES } from '@data/error-messages';
+import { carState } from '@state/car-state';
 import { eventState } from '@state/events/event-state';
+import { checkRaceEnd } from '@utils/finish-race';
+import { handleErrors } from '@utils/handle-errors';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
 let isEngineControllerStarted = false;
@@ -16,13 +16,13 @@ export function startEngineController(): void {
   if (isEngineControllerStarted) {
     return;
   }
+
   isEngineControllerStarted = true;
 
   eventState.on('car:start', async (payload) => {
     if (!payload) {
       return;
     }
-
     await handleCarStart(payload.id);
   });
 
@@ -30,20 +30,17 @@ export function startEngineController(): void {
     if (!payload) {
       return;
     }
-
     const carId = payload.id;
     stopCarAnimation(carId);
-
     await handleErrors(() => startEngine(carId, 'stopped'), POPUP_MESSAGES.carResetFailed(carId));
-
     resetCarPosition(carId);
-
     setEngineButtons(carId, true, false);
   });
 }
 
 async function handleCarStart(carId: number): Promise<void> {
   const car = carState.getById(carId);
+
   if (!car) {
     return;
   }
@@ -53,6 +50,7 @@ async function handleCarStart(carId: number): Promise<void> {
   }
 
   car.isDriving = true;
+
   const engineData = await handleErrors(
     () => startEngine(carId, 'started'),
     POPUP_MESSAGES.carStartFailed(carId),
@@ -69,12 +67,10 @@ async function handleCarStart(carId: number): Promise<void> {
 
   animateCar(carId, engineData.velocity, engineData.distance, (succeeded) => {
     car.isDriving = false;
-
     if (carState.isRacing) {
       if (succeeded && !carState.winner) {
         carState.winner = car;
       }
-
       checkRaceEnd();
     }
   });
@@ -87,6 +83,7 @@ async function handleCarStart(carId: number): Promise<void> {
     await getEngineParams(carId);
   } catch (error) {
     checkRaceEnd();
+
     if (error instanceof Error && error.message.includes('broken down')) {
       car.isDriving = false;
       stopCarAnimation(carId);

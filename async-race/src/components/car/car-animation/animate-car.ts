@@ -1,5 +1,6 @@
-import { carState } from '@/state/car-state';
-import { getCarStore, setCarAnimationId } from '@/state/car-store';
+import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@/data/constants';
+import { carState } from '@state/car-state';
+import { getCarStore, setCarAnimationId } from '@state/car-store';
 import { setEngineButtons } from '@utils/set-car-buttons';
 
 export function animateCar(
@@ -8,11 +9,6 @@ export function animateCar(
   distance: number,
   onFinish?: (succeeded: boolean) => void,
 ): void {
-  const FINISH_OFFSET = 5;
-  const SPEED_MULTIPLIER = 450;
-  const WIDTH_DIVIDER = 2;
-  const MILLISECONDS = 1000;
-
   const car = carState.getById(carId);
 
   if (!car) {

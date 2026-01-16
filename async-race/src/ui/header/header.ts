@@ -17,6 +17,7 @@ export function createHeader(): void {
     className: `garage-button ${appState.view === 'garage' ? 'active' : ''}`,
     disabled: appState.view === 'garage',
   });
+
   garageNav.addEventListener('click', () => {
     eventState.emit('view:changed', 'garage');
   });

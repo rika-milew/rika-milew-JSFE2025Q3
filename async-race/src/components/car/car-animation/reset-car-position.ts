@@ -40,13 +40,3 @@ export function resetAllCarsPositions(): void {
     }
   });
 }
-
-export function stopAllCarAnimations(): void {
-  carState.cars.forEach((car) => {
-    const element = getCarStore(car.id);
-    if (element?.animationId !== undefined) {
-      cancelAnimationFrame(element.animationId);
-      element.animationId = undefined;
-    }
-  });
-}

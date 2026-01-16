@@ -1,7 +1,10 @@
-import { carState } from '@/state/car-state';
-import { setEngineButtons } from '@/utils/set-car-buttons';
-import { resetAllCarsPositions, resetCarPosition } from '@components/car/car-animation/reset-car';
+import {
+  resetAllCarsPositions,
+  resetCarPosition,
+} from '@components/car/car-animation/reset-car-position';
+import { carState } from '@state/car-state';
 import { eventState } from '@state/events/event-state';
+import { setEngineButtons } from '@utils/set-car-buttons';
 
 let isRaceControllerStarted = false;
 
@@ -16,6 +19,7 @@ export function startRaceController(): void {
     carState.winner = undefined;
     carState.isRacing = true;
     const carsOnPage = carState.getAllOnCurrentPage();
+
     carsOnPage.forEach((car) => {
       setEngineButtons(car.id, false, false);
       eventState.emit('car:start', { id: car.id });
@@ -25,6 +29,7 @@ export function startRaceController(): void {
   eventState.on('garage:reset', () => {
     const carsOnPage = carState.getAllOnCurrentPage();
     carState.isRacing = false;
+
     carsOnPage.forEach((car) => {
       resetCarPosition(car.id);
     });

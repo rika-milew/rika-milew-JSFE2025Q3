@@ -1,5 +1,5 @@
 import { createCarFormElements } from '@components/car-form/helpers/car-form-elements';
-import { initUpdateFormEvents } from '@components/car-form/helpers/car-form-events';
+import { updateFormEvents } from '@components/car-form/helpers/car-form-events';
 import { createFormState } from '@components/car-form/helpers/car-form-state';
 import { errorPopup } from '@components/error/error';
 import { appState } from '@state/app-state';
@@ -30,7 +30,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
   syncDisabledState();
 
   if (isUpdate) {
-    initUpdateFormEvents(nameInput, colorInput, syncDisabledState);
+    updateFormEvents(nameInput, colorInput, syncDisabledState);
   }
 
   carForm.addEventListener('submit', (event) => {
