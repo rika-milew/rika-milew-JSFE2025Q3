@@ -95,3 +95,19 @@
 .car-form .error-text.visible {
   opacity: 1;
 }
+
+@media screen and (max-width: 550px) {
+  .car-form {
+    gap: 7px;
+    width: 380px;
+    height: 32px;
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .car-form {
+    gap: 5px;
+    width: 300px;
+    height: 32px;
+  }
+}

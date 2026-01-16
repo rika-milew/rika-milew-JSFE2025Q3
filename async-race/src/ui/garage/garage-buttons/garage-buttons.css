@@ -10,7 +10,7 @@
   flex-basis: auto;
   flex-shrink: 0;
   padding: 8px 16px;
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
 }
 
@@ -26,4 +26,18 @@
 
 .race-button .active {
   background-color: #0b143d;
+}
+
+@media screen and (max-width: 550px) {
+  .garage__buttons {
+    gap: 7px;
+    width: 380px;
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .garage__buttons {
+    gap: 5px;
+    width: 300px;
+  }
 }
