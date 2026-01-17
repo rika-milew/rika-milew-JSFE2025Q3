@@ -1,14 +1,19 @@
 import { carLeftWheel, carMain, carRightWheel } from '@/components/svg-paint/car-svg.config';
+import { GARAGE_CAR_WIDTH, GARAGE_CAR_HEIGHT } from '@/data/constants';
 
 import type { CarSvg } from '../../types/types';
 
-export function createCarImage(initialColor: string): CarSvg {
+export function createCarImage(
+  initialColor: string,
+  width = GARAGE_CAR_WIDTH,
+  height = GARAGE_CAR_HEIGHT,
+): CarSvg {
   const svgType = 'http://www.w3.org/2000/svg';
 
   const svg = document.createElementNS(svgType, 'svg');
-  svg.setAttribute('width', '90');
-  svg.setAttribute('height', '33');
-  svg.setAttribute('viewBox', '0 0 90 33');
+  svg.setAttribute('width', String(width));
+  svg.setAttribute('height', String(height));
+  svg.setAttribute('viewBox', '0 0 width height');
   svg.setAttribute('fill', initialColor);
 
   const rightWheel = document.createElementNS(svgType, 'path');

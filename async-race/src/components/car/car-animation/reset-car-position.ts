@@ -26,7 +26,6 @@ export function resetCarPosition(carId: number): void {
 }
 
 export function resetAllCarsPositions(): void {
-  // console.log('reset');
   carState.isRacing = false;
   carState.winner = undefined;
   carState.garageSessionId += 1;

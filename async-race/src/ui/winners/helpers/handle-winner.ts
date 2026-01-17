@@ -1,7 +1,13 @@
-import { winnersState } from '@state/winners-state';
+import { eventState } from '@/state/events/event-state';
 
 import type { Car } from '@/types/types';
 
-export async function handleWinner(car: Car, time: number): Promise<void> {
-  await winnersState.add(car, time);
+export function handleWinner(car: Car, time: number): void {
+  eventState.emit('winner:add', {
+    id: car.id,
+    name: car.name,
+    color: car.color,
+    time,
+    wins: 1,
+  });
 }

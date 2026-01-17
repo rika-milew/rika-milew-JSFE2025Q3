@@ -1,10 +1,15 @@
+import { createCarImage } from '@components/svg-paint/create-car-image';
+import { WINNERS_CAR_WIDTH, WINNERS_CAR_HEIGHT } from '@data/constants';
 import { winnersState } from '@state/winners-state';
 import { createElement } from '@utils/create-element';
 
 import './winners-table.css';
 
-export function createWinnersTable(container: HTMLElement): void {
-  container.replaceChildren();
+export function createWinnersTable(): HTMLDivElement {
+  const table = createElement({
+    tag: 'div',
+    className: ['winners-table'],
+  });
 
   const header = createElement({ tag: 'div', className: ['winners-header'] });
 
@@ -19,7 +24,7 @@ export function createWinnersTable(container: HTMLElement): void {
     header.append(cell);
   });
 
-  container.append(header);
+  table.append(header);
 
   const winnersArray = Object.values(winnersState.winners);
 
@@ -38,7 +43,9 @@ export function createWinnersTable(container: HTMLElement): void {
       className: ['car-icon'],
     });
 
-    carIcon.style.setProperty('--car-color', winner.color || '#000');
+    const carSvg = createCarImage(winner.color, WINNERS_CAR_WIDTH, WINNERS_CAR_HEIGHT);
+    carIcon.append(carSvg.element);
+
     car.append(carIcon);
     row.append(car);
 
@@ -63,6 +70,8 @@ export function createWinnersTable(container: HTMLElement): void {
     });
     row.append(time);
 
-    container.append(row);
+    table.append(row);
   });
+
+  return table;
 }

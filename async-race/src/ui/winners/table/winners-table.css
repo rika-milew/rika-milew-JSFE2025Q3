@@ -20,16 +20,12 @@
 }
 
 .winners-cell {
-  padding: 6px 8px;
+  padding: 10px 8px;
+  text-align: center;
 }
 
 .car-icon {
-  display: inline-block;
-}
-
-.car-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: var(--car-color, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,9 +1,9 @@
-import { eventState } from '@state/events/event-state';
-import { createWinnersTable } from '@ui/winners/table/winners-table';
+import { loadWinners } from '@ui/winners/helpers/load-winners';
+import { winnersContainer, winnersList } from '@ui/winners/helpers/winners-list';
 import { winnerInfoElements } from '@ui/winners/winners-info-elements';
 import { createElement } from '@utils/create-element';
 
-export function createWinners(): void {
+export async function createWinners(): Promise<void> {
   const main = createElement({ tag: 'div', className: ['main'] });
   const container = createElement({ tag: 'div', className: ['container'] });
 
@@ -14,12 +14,13 @@ export function createWinners(): void {
     container.append(winnerInfoElements.container);
   }
 
+  if (!container.contains(winnersContainer)) {
+    container.append(winnersContainer);
+  }
+
   const tableContainer = createElement({ tag: 'div', className: ['table-container'] });
   container.append(tableContainer);
 
-  createWinnersTable(tableContainer);
-
-  eventState.on('winner:create', () => {
-    createWinnersTable(tableContainer);
-  });
+  await loadWinners();
+  winnersList.renderWinners();
 }

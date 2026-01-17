@@ -63,14 +63,14 @@ async function handleCarStart(carId: number): Promise<void> {
     return;
   }
 
-  animateCar(carId, engineData.velocity, engineData.distance, async (succeeded) => {
+  animateCar(carId, engineData.velocity, engineData.distance, (succeeded) => {
     car.isDriving = false;
     if (carState.isRacing) {
       if (succeeded && !carState.winner) {
         carState.winner = car;
         winnerPopup.show(car.name);
         const finishTime = engineData.distance / engineData.velocity;
-        await handleWinner(car, finishTime);
+        handleWinner(car, finishTime);
       }
       checkRaceEnd();
     }

@@ -2,6 +2,7 @@ import { createCarForm } from '@components/car-form/car-form';
 import { startEngineController } from '@controller/engine-controller';
 import { startGarageController } from '@controller/garage-controller';
 import { startRaceController } from '@controller/race-controller';
+import { startWinnersController } from '@controller/winners-controller';
 import { appState } from '@state/app-state';
 import { carState } from '@state/car-state';
 import { eventState } from '@state/events/event-state';
@@ -53,10 +54,10 @@ export async function createGarage(): Promise<void> {
     container.append(garageContainer);
   }
 
-  // console.log(carState);
   startGarageController();
   startEngineController();
   startRaceController();
+  startWinnersController();
 
   eventState.on('garage:pagination:update', () => {
     const { garagePage } = appState;

@@ -11,3 +11,9 @@ export const FINISH_OFFSET = 5;
 export const SPEED_MULTIPLIER = 450;
 export const WIDTH_DIVIDER = 2;
 export const MILLISECONDS = 1000;
+
+export const GARAGE_CAR_WIDTH = 90;
+export const GARAGE_CAR_HEIGHT = 33;
+
+export const WINNERS_CAR_WIDTH = 70;
+export const WINNERS_CAR_HEIGHT = 26;

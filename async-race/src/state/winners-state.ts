@@ -1,52 +1,48 @@
-import { createWinner } from '@api/winners/create-winner';
-import { updateWinner } from '@api/winners/update-winner';
-import { errorPopup } from '@components/popup/error/error';
+import type { Winner } from '@/types/types';
 
-import type { Car, Winner } from '@/types/types';
-
-type WinnersStateItem = Winner;
+type WinnersStateItem = Winner & { name: string; color: string };
 
 type WinnersStateType = {
   winners: Record<number, WinnersStateItem>;
-  set(winners: Winner[]): void;
-  getWinner(carId: number): WinnersStateItem | undefined;
-  addToState(winner: Winner): void;
-  add(car: Car, time: number): Promise<void>;
+  totalCount: number;
+  set(winners: WinnersStateItem[]): void;
+  add(winner: WinnersStateItem): void;
+  update(winner: WinnersStateItem): void;
+  remove(id: number): void;
+  getById(id: number): WinnersStateItem | undefined;
 };
 
 export const winnersState: WinnersStateType = {
   winners: {},
+  totalCount: 0,
 
-  set(winners: Winner[]): void {
+  set(winners: WinnersStateItem[], totalCount?: number) {
     this.winners = {};
-    winners.forEach((winner) => {
-      this.winners[winner.id] = winner;
+    winners.forEach((w) => {
+      this.winners[w.id] = w;
     });
+    if (totalCount !== undefined) {
+      this.totalCount = totalCount;
+    }
   },
 
-  getWinner(carId: number): WinnersStateItem | undefined {
-    return this.winners[carId];
+  add(winner: WinnersStateItem) {
+    this.winners[winner.id] = winner;
+    this.totalCount += 1;
   },
 
-  addToState(winner: Winner): void {
+  update(winner: WinnersStateItem) {
     this.winners[winner.id] = winner;
   },
 
-  async add(car: Car, time: number): Promise<void> {
-    const currentWinner = this.getWinner(car.id);
+  remove(id: number) {
+    this.winners = Object.fromEntries(
+      Object.entries(this.winners).filter(([key]) => Number(key) !== id),
+    );
+    this.totalCount -= 1;
+  },
 
-    try {
-      if (currentWinner) {
-        currentWinner.wins += 1;
-        currentWinner.time = Math.min(currentWinner.time, time);
-        const updatedWinner = await updateWinner(car.id, currentWinner.wins, currentWinner.time);
-        this.addToState(updatedWinner);
-      } else {
-        const newWinner = await createWinner(car.id, 1, time);
-        this.addToState(newWinner);
-      }
-    } catch {
-      errorPopup.show(`Failed to add winner for the car ${car.id}`);
-    }
+  getById(id: number) {
+    return this.winners[id];
   },
 };

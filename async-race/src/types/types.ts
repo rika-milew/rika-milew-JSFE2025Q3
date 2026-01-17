@@ -135,6 +135,11 @@ export type GarageList = {
   setPage: (page: number) => void;
 };
 
+export type WinnersList = {
+  renderWinners: () => void;
+  // setPage: (page: number) => void;
+};
+
 export type SoundTypes = 'race' | 'brake' | 'button';
 
 export type AudioPlayer = {

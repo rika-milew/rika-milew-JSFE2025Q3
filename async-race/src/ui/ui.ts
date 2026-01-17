@@ -15,7 +15,7 @@ export async function createApp(): Promise<void> {
       await createGarage();
     } else {
       resetAllCarsPositions();
-      createWinners();
+      await createWinners();
     }
   } catch {
     const message =
