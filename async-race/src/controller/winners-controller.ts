@@ -30,7 +30,9 @@ export function startWinnersController(): void {
       const existing = winnersState.getById(id);
 
       if (existing) {
-        const updated = await updateWinner(id, existing.wins + 1, Math.min(existing.time, time));
+        const currentWins = existing.wins + 1;
+        const bestTime = Math.min(existing.time, time);
+        const updated = await updateWinner(id, currentWins, bestTime);
 
         winnersState.update({
           ...updated,

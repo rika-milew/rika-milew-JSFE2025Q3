@@ -1,3 +1,4 @@
+import { MILLISECONDS } from '@/data/constants';
 import { getEngineParams } from '@api/engine/get-engine-params';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar, stopCarAnimation } from '@components/car/car-animation/animate-car';
@@ -63,13 +64,13 @@ async function handleCarStart(carId: number): Promise<void> {
     return;
   }
 
-  animateCar(carId, engineData.velocity, engineData.distance, (succeeded) => {
+  animateCar(carId, engineData.velocity, engineData.distance, (succeeded, time) => {
     car.isDriving = false;
     if (carState.isRacing) {
       if (succeeded && !carState.winner) {
         carState.winner = car;
         winnerPopup.show(car.name);
-        const finishTime = engineData.distance / engineData.velocity;
+        const finishTime = time ?? engineData.distance / engineData.velocity / MILLISECONDS;
         handleWinner(car, finishTime);
       }
       checkRaceEnd();

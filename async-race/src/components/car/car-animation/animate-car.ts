@@ -7,7 +7,7 @@ export function animateCar(
   carId: number,
   velocity: number,
   distance: number,
-  onFinish?: (succeeded: boolean) => void,
+  onFinish?: (succeeded: boolean, time?: number) => void,
 ): void {
   const car = carState.getById(carId);
 
@@ -54,7 +54,7 @@ export function animateCar(
     } else {
       stopCarAnimation(carId);
       if (onFinish) {
-        onFinish(true);
+        onFinish(true, passedTime);
       }
     }
   }

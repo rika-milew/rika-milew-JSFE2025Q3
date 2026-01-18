@@ -21,5 +21,8 @@ eventState.on('winners:pagination:update', (data) => {
 
   const { currentPage, totalCount } = data;
   winnerInfoElements.totalInfo.textContent = `Total Winners: ${totalCount}`;
-  winnerInfoElements.pageInfo.textContent = `Page: ${currentPage} / ${Math.ceil(totalCount / appState.winnersPerPage) || 1}`;
+
+  const totalPages = Math.ceil(totalCount / appState.winnersPerPage) || 1;
+  const pageText = `Page: ${currentPage} / ${totalPages}`;
+  winnerInfoElements.pageInfo.textContent = pageText;
 });
