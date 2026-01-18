@@ -1,20 +1,18 @@
 import { createCarImage } from '@components/svg-paint/create-car-image';
-import { winnersState } from '@state/winners-state';
 import { createElement } from '@utils/create-element';
 import { getWinnerCarSize } from '@utils/get-winner-car-size';
 
-import type { WinnersStateItem } from '@state/winners-state';
+import type { Winner, WinnersStateItem } from '@/types/types';
 
 import './winners-table.css';
 
-export function createWinnersTable(): HTMLDivElement {
+export function createWinnersTable(winners: Winner[]): HTMLDivElement {
   const table = createElement({ tag: 'div', className: ['winners-table'] });
   const headers = ['Position', 'Car', 'Name', 'Wins', 'Best Time (sec)'];
 
   table.append(createHeader(headers));
 
-  const winnersArray = Object.values(winnersState.winners);
-  winnersArray.forEach((winner, index) => {
+  winners.forEach((winner, index) => {
     table.append(createWinnerRow(winner, index));
   });
 

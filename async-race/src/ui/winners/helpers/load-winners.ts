@@ -1,30 +1,35 @@
 import { getWinners } from '@api/winners/get-winners';
-import { errorPopup } from '@components/popup/error/error';
+import { POPUP_MESSAGES } from '@data/error-messages';
 import { carState } from '@state/car-state';
 import { winnersState } from '@state/winners-state';
+import { handleErrors } from '@utils/handle-errors';
 
-let AreWinnersLoaded = false;
+let areWinnersLoaded = false;
 
 export async function loadWinners(): Promise<void> {
-  if (AreWinnersLoaded) {
+  if (areWinnersLoaded) {
+    return;
+  }
+  areWinnersLoaded = true;
+
+  const result = await handleErrors(() => getWinners(), POPUP_MESSAGES.winnersLoadFailed());
+
+  if (!result) {
     return;
   }
 
-  AreWinnersLoaded = true;
+  const { winners } = result;
 
-  try {
-    const response = await getWinners();
-    const winnersData = response.winners.map((winner) => {
-      const car = carState.getById(winner.id);
-      return {
-        ...winner,
-        name: car?.name ?? 'Car',
-        color: car?.color ?? '#000000',
-      };
-    });
+  const winnersData = winners.map((winner) => {
+    const car = carState.getById(winner.id);
 
-    winnersState.set(winnersData);
-  } catch {
-    errorPopup.show('Failed to load winners');
-  }
+    return {
+      ...winner,
+      name: car?.name ?? 'Car',
+      color: car?.color ?? '#000000',
+    };
+  });
+
+  winnersState.set(winnersData);
+  winnersState.totalWinners = Object.keys(winnersState.winners).length;
 }

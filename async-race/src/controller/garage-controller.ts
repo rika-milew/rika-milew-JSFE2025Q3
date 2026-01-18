@@ -53,6 +53,7 @@ export function startGarageController(): void {
 
     carState.update(updated);
     eventState.emit('garage:refresh');
+    eventState.emit('winners:refresh');
   });
 
   eventState.on('car:delete', async (payload) => {

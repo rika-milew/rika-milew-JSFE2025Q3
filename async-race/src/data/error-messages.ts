@@ -10,6 +10,8 @@ export const POPUP_MESSAGES = {
 
   garageLoadFailed: (): string => 'Failed to load the garage',
 
+  winnersLoadFailed: (): string => 'Failed to load the winners',
+
   randomCarsFailed: (): string => 'Failed to create random cars',
 
   carResetFailed: (id?: number): string =>

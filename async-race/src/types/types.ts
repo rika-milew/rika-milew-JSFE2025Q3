@@ -137,7 +137,7 @@ export type GarageList = {
 
 export type WinnersList = {
   renderWinners: () => void;
-  // setPage: (page: number) => void;
+  setWinnersPage: (page: number) => void;
 };
 
 export type SoundTypes = 'race' | 'brake' | 'button';
@@ -155,6 +155,7 @@ export type AppState = {
   garagePage: number;
   winnersPage: number;
   perPage: number;
+  winnersPerPage: number;
   garage: Car[];
   winners: Winner[];
 
@@ -169,6 +170,18 @@ export type AppState = {
     color: string;
     isDisabled: boolean;
   };
+};
+
+export type WinnersStateItem = Winner & { name: string; color: string };
+
+export type WinnersStateType = {
+  winners: Record<number, WinnersStateItem>;
+  totalWinners: number;
+  set(winners: WinnersStateItem[]): void;
+  add(winner: WinnersStateItem): void;
+  update(winner: WinnersStateItem): void;
+  remove(id: number): void;
+  getById(id: number): WinnersStateItem | undefined;
 };
 
 // api

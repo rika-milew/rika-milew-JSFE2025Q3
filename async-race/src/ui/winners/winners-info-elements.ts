@@ -1,5 +1,7 @@
+import { winnersState } from '@/state/winners-state';
 import { createInfoElements } from '@components/page-info/page-info';
 import { appState } from '@state/app-state';
+import { eventState } from '@state/events/event-state';
 
 export const winnerInfoElements = createInfoElements({
   title: 'Winners',
@@ -8,16 +10,16 @@ export const winnerInfoElements = createInfoElements({
   totalText: 'Total Winners',
 });
 
-// eventState.on('winners:refresh', () => {
-//   winnerInfoElements.totalInfo.textContent = `Total Winners: ${carState.totalCount}`;
-// });
+eventState.on('winners:refresh', () => {
+  winnerInfoElements.totalInfo.textContent = `Total Winners: ${winnersState.totalWinners}`;
+});
 
-// eventState.on('winners:pagination:update', (data) => {
-//   if (!data) {
-//     return;
-//   }
+eventState.on('winners:pagination:update', (data) => {
+  if (!data) {
+    return;
+  }
 
-//   const { currentPage, totalCount } = data;
-//   winnerInfoElements.totalInfo.textContent = `Total Winners: ${totalCount}`;
-//   winnerInfoElements.pageInfo.textContent = `Page: ${currentPage} / ${Math.ceil(totalCount / appState.perPage) || 1}`;
-// });
+  const { currentPage, totalCount } = data;
+  winnerInfoElements.totalInfo.textContent = `Total Winners: ${totalCount}`;
+  winnerInfoElements.pageInfo.textContent = `Page: ${currentPage} / ${Math.ceil(totalCount / appState.winnersPerPage) || 1}`;
+});

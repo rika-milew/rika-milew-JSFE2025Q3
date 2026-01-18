@@ -20,8 +20,9 @@ export type EventMap = {
   'ui:error': string;
   'car:start': { id: number };
   'car:reset': { id: number };
-  'winner:refresh': Winner;
+  'winners:refresh': Winner;
   'winner:add': Winner;
   'winner:updated': Winner;
   'winner:delete': number;
+  'winners:pagination:update': { currentPage: number; totalCount: number };
 };
