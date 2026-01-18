@@ -21,6 +21,7 @@ module.exports = {
             'flex-shrink',
             'gap',
             'grid',
+            'grid-template-rows',
             'grid-template-columns',
             'grid-gap',
             'width',

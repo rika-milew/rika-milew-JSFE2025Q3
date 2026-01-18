@@ -158,6 +158,7 @@ export type AppState = {
   winnersPerPage: number;
   garage: Car[];
   winners: Winner[];
+  winnersSort: WinnersSort;
 
   createForm: {
     name: string;
@@ -182,6 +183,11 @@ export type WinnersStateType = {
   update(winner: WinnersStateItem): void;
   remove(id: number): void;
   getById(id: number): WinnersStateItem | undefined;
+};
+
+export type WinnersSort = {
+  sorting: 'wins' | 'time';
+  order: 'ascending' | 'descending';
 };
 
 // api

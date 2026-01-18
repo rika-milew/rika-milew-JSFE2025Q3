@@ -34,8 +34,12 @@ export function startEngineController(): void {
     }
 
     const carId = payload.id;
+    const car = carState.getById(carId);
     stopCarAnimation(carId);
-    await handleErrors(() => startEngine(carId, 'stopped'), POPUP_MESSAGES.carResetFailed(carId));
+    await handleErrors(
+      () => startEngine(carId, 'stopped'),
+      POPUP_MESSAGES.carResetFailed(carId, car?.name),
+    );
     resetCarPosition(carId);
     setEngineButtons(carId, true, false);
   });
@@ -52,7 +56,7 @@ async function handleCarStart(carId: number): Promise<void> {
 
   const engineData = await handleErrors(
     () => startEngine(carId, 'started'),
-    POPUP_MESSAGES.carStartFailed(carId),
+    POPUP_MESSAGES.carStartFailed(carId, car.name),
   );
 
   if (!engineData) {
@@ -99,13 +103,13 @@ async function handleCarStart(carId: number): Promise<void> {
       stopCarAnimation(carId);
       setEngineButtons(carId, false, true);
       errorPopup.show(
-        `Car with id ${carId} has been stopped suddenly. It's engine was broken down.`,
+        `Car ${car.name} with id ${carId} has been stopped suddenly. It's engine was broken down.`,
       );
       return;
     }
 
     car.isDriving = false;
     stopCarAnimation(carId);
-    errorPopup.show(`Car ${carId} drive failed.`);
+    errorPopup.show(`Car ${car.name} with id ${carId} drive failed.`);
   }
 }

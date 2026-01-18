@@ -44,7 +44,7 @@ export function startGarageController(): void {
 
     const updated = await handleErrors(
       () => updateCar(payload.id, payload.name, payload.color),
-      POPUP_MESSAGES.carUpdateFailed(payload.id),
+      POPUP_MESSAGES.carUpdateFailed(payload.id, payload.name),
     );
 
     if (!updated) {
@@ -61,9 +61,11 @@ export function startGarageController(): void {
       return;
     }
 
+    const car = carState.getById(payload.id);
+
     const success = await handleErrorsVoid(
       () => deleteCar(payload.id),
-      POPUP_MESSAGES.carDeleteFailed(payload.id),
+      POPUP_MESSAGES.carDeleteFailed(payload.id, car?.name),
     );
 
     if (!success) {

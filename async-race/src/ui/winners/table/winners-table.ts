@@ -1,4 +1,7 @@
 import { createCarImage } from '@components/svg-paint/create-car-image';
+import { SORTING_ICONS } from '@data/constants';
+import { appState } from '@state/app-state';
+import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
 import { getWinnerCarSize } from '@utils/get-winner-car-size';
 
@@ -28,6 +31,32 @@ function createHeader(headers: string[]): HTMLDivElement {
       className: ['winners-cell', 'header-cell'],
       textContent: text,
     });
+
+    if (text === 'Wins' || text === 'Best Time (sec)') {
+      const sorting = text === 'Wins' ? 'wins' : 'time';
+
+      const icon = createElement({
+        tag: 'span',
+        className: ['sort-icon'],
+        textContent:
+          appState.winnersSort.sorting === sorting
+            ? SORTING_ICONS[appState.winnersSort.order]
+            : SORTING_ICONS.none,
+      });
+      cell.append(icon);
+
+      cell.addEventListener('click', () => {
+        if (appState.winnersSort.sorting === sorting) {
+          appState.winnersSort.order =
+            appState.winnersSort.order === 'ascending' ? 'descending' : 'ascending';
+        } else {
+          appState.winnersSort.sorting = sorting;
+          appState.winnersSort.order = 'ascending';
+        }
+        eventState.emit('winners:refresh');
+      });
+    }
+
     header.append(cell);
   });
 

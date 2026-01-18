@@ -1,3 +1,8 @@
+.no-winners-message {
+  font-size: 18px;
+  text-align: center;
+}
+
 .winners-header,
 .winners-row {
   display: grid;
@@ -30,6 +35,11 @@
 .winners-cell {
   padding: 10px 8px;
   text-align: center;
+}
+
+.sort-icon {
+  margin-top: -4px;
+  margin-left: 5px;
 }
 
 .car-cell {
@@ -82,9 +92,11 @@
   }
 }
 
-@media screen and (max-width: 499px) {
+@media (max-width: 499px) {
   .winners-header {
-    display: none;
+    grid-template-rows: repeat(5, 28px);
+    grid-template-columns: 1fr;
+    margin-bottom: 15px;
   }
 
   .winners-row {

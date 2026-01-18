@@ -3,6 +3,7 @@ import { eventState } from '@state/events/event-state';
 import { winnersState } from '@state/winners-state';
 import { createWinnersTable } from '@ui/winners/table/winners-table';
 import { createElement } from '@utils/create-element';
+import { sortTable } from '@utils/sort-table';
 
 import type { WinnersList } from '@/types/types';
 
@@ -13,15 +14,23 @@ export const winnersList: WinnersList = ((): WinnersList => {
     const start = (appState.winnersPage - 1) * appState.winnersPerPage;
     const end = start + appState.winnersPerPage;
 
-    const winners = Object.values(winnersState.winners).slice(start, end);
+    let winners = Object.values(winnersState.winners);
+    winners = sortTable(winners);
+    const pageWinners = winners.slice(start, end);
 
     winnersContainer.replaceChildren();
 
-    if (winners.length === 0) {
-      winnersContainer.append(createElement({ tag: 'p', textContent: 'No winners yet' }));
+    if (pageWinners.length === 0) {
+      winnersContainer.append(
+        createElement({
+          tag: 'p',
+          className: ['no-winners-message'],
+          textContent: 'No winners yet. Time to start a race!',
+        }),
+      );
       return;
     }
-    winnersContainer.append(createWinnersTable(winners));
+    winnersContainer.append(createWinnersTable(pageWinners));
 
     eventState.emit('winners:pagination:update', {
       currentPage: appState.winnersPage,
