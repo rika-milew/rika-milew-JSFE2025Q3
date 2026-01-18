@@ -1,13 +1,21 @@
 .winners-header,
 .winners-row {
   display: grid;
-  align-items: center;
+  align-items: stretch;
+  align-content: center;
   grid-template-columns: 0.8fr 1.3fr 2fr 0.8fr 1.4fr;
   grid-gap: 10px;
   width: 800px;
   margin: 0 auto;
   font-size: 18px;
   color: #dcdcdc;
+}
+
+.winners-cell,
+.header-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header-cell {
@@ -24,8 +32,83 @@
   text-align: center;
 }
 
+.car-cell {
+  padding: 10px 2px;
+}
+
 .car-icon {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 860px) {
+  .winners-header,
+  .winners-row {
+    width: 700px;
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .winners-header,
+  .winners-row {
+    width: 95%;
+  }
+}
+
+@media screen and (max-width: 715px) {
+  .winners-header,
+  .winners-row {
+    grid-template-columns: 0.8fr 1.1fr 2fr 0.8fr 1.4fr;
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 595px) {
+  .winners-header,
+  .winners-row {
+    grid-template-columns: 0.8fr 1.1fr 2fr 0.8fr 1.5fr;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 565px) {
+  .winners-header,
+  .winners-row {
+    grid-gap: 5px;
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .winners-header {
+    display: none;
+  }
+
+  .winners-row {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 15px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  .winners-cell {
+    position: relative;
+    width: 100%;
+    padding: 3px 5px;
+    text-align: left;
+  }
+
+  .winners-cell::before {
+    margin-right: 5px;
+    font-weight: 600;
+    content: attr(data-label);
+  }
 }

@@ -22,6 +22,10 @@ export const winnersList: WinnersList = ((): WinnersList => {
   eventState.on('winner:updated', renderWinners);
   eventState.on('winner:delete', renderWinners);
 
+  window.addEventListener('resize', () => {
+    renderWinners();
+  });
+
   renderWinners();
 
   return { renderWinners };

@@ -15,5 +15,6 @@ export const MILLISECONDS = 1000;
 export const GARAGE_CAR_WIDTH = 90;
 export const GARAGE_CAR_HEIGHT = 33;
 
-export const WINNERS_CAR_WIDTH = 70;
-export const WINNERS_CAR_HEIGHT = 26;
+export const SCREEN_WIDTH_768 = 768;
+export const SCREEN_WIDTH_595 = 595;
+export const SCREEN_WIDTH_499 = 499;

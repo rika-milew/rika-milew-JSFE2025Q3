@@ -1,19 +1,28 @@
 import { createCarImage } from '@components/svg-paint/create-car-image';
-import { WINNERS_CAR_WIDTH, WINNERS_CAR_HEIGHT } from '@data/constants';
 import { winnersState } from '@state/winners-state';
 import { createElement } from '@utils/create-element';
+import { getWinnerCarSize } from '@utils/get-winner-car-size';
+
+import type { WinnersStateItem } from '@state/winners-state';
 
 import './winners-table.css';
 
 export function createWinnersTable(): HTMLDivElement {
-  const table = createElement({
-    tag: 'div',
-    className: ['winners-table'],
+  const table = createElement({ tag: 'div', className: ['winners-table'] });
+  const headers = ['Position', 'Car', 'Name', 'Wins', 'Best Time (sec)'];
+
+  table.append(createHeader(headers));
+
+  const winnersArray = Object.values(winnersState.winners);
+  winnersArray.forEach((winner, index) => {
+    table.append(createWinnerRow(winner, index));
   });
 
-  const header = createElement({ tag: 'div', className: ['winners-header'] });
+  return table;
+}
 
-  const headers = ['Position', 'Car', 'Name', 'Wins', 'Best Time (sec)'];
+function createHeader(headers: string[]): HTMLDivElement {
+  const header = createElement({ tag: 'div', className: ['winners-header'] });
 
   headers.forEach((text) => {
     const cell = createElement({
@@ -24,54 +33,36 @@ export function createWinnersTable(): HTMLDivElement {
     header.append(cell);
   });
 
-  table.append(header);
+  return header;
+}
 
-  const winnersArray = Object.values(winnersState.winners);
+function createCarCell(color: string): HTMLDivElement {
+  const carCell = createElement({ tag: 'div', className: ['winners-cell', 'car-cell'] });
+  const carIcon = createElement({ tag: 'div', className: ['car-icon'] });
 
-  winnersArray.forEach((winner, index) => {
-    const row = createElement({ tag: 'div', className: ['winners-row'] });
-    const winnerCell = createElement({
-      tag: 'div',
-      className: ['winners-cell'],
-      textContent: String(index + 1),
-    });
-    row.append(winnerCell);
+  const { width, height } = getWinnerCarSize();
+  const carSvg = createCarImage(color, width, height);
 
-    const car = createElement({ tag: 'div', className: ['winners-cell'] });
-    const carIcon = createElement({
-      tag: 'div',
-      className: ['car-icon'],
-    });
+  carIcon.append(carSvg.element);
+  carCell.append(carIcon);
 
-    const carSvg = createCarImage(winner.color, WINNERS_CAR_WIDTH, WINNERS_CAR_HEIGHT);
-    carIcon.append(carSvg.element);
+  return carCell;
+}
 
-    car.append(carIcon);
-    row.append(car);
+function createTextCell(text: string, label: string): HTMLDivElement {
+  const cell = createElement({ tag: 'div', className: ['winners-cell'], textContent: text });
+  cell.dataset.label = label;
+  return cell;
+}
 
-    const name = createElement({
-      tag: 'div',
-      className: ['winners-cell'],
-      textContent: winner.name,
-    });
-    row.append(name);
+function createWinnerRow(winner: WinnersStateItem, index: number): HTMLDivElement {
+  const row = createElement({ tag: 'div', className: ['winners-row'] });
 
-    const wins = createElement({
-      tag: 'div',
-      className: ['winners-cell'],
-      textContent: String(winner.wins),
-    });
-    row.append(wins);
+  row.append(createTextCell(String(index + 1), 'Position:'));
+  row.append(createCarCell(winner.color));
+  row.append(createTextCell(winner.name, 'Name:'));
+  row.append(createTextCell(String(winner.wins), 'Wins:'));
+  row.append(createTextCell(winner.time.toFixed(2), 'Best Time (sec):'));
 
-    const time = createElement({
-      tag: 'div',
-      className: ['winners-cell'],
-      textContent: winner.time.toFixed(2),
-    });
-    row.append(time);
-
-    table.append(row);
-  });
-
-  return table;
+  return row;
 }

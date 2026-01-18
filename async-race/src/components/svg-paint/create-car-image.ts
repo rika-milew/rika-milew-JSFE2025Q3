@@ -13,7 +13,7 @@ export function createCarImage(
   const svg = document.createElementNS(svgType, 'svg');
   svg.setAttribute('width', String(width));
   svg.setAttribute('height', String(height));
-  svg.setAttribute('viewBox', '0 0 width height');
+  svg.setAttribute('viewBox', '0 0 90 33');
   svg.setAttribute('fill', initialColor);
 
   const rightWheel = document.createElementNS(svgType, 'path');

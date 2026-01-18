@@ -1,8 +1,8 @@
 import type { Winner } from '@/types/types';
 
-type WinnersStateItem = Winner & { name: string; color: string };
+export type WinnersStateItem = Winner & { name: string; color: string };
 
-type WinnersStateType = {
+export type WinnersStateType = {
   winners: Record<number, WinnersStateItem>;
   totalCount: number;
   set(winners: WinnersStateItem[]): void;
