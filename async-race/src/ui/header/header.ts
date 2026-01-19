@@ -1,4 +1,5 @@
 import { createButton } from '@components/button/button';
+import { createMuteButton } from '@components/button/mute-button';
 import { appState } from '@state/app-state';
 import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
@@ -9,6 +10,10 @@ export function createHeader(): void {
   const header = createElement({ tag: 'header', className: ['header'] });
 
   const title = createElement({ tag: 'h1', className: ['title'], textContent: 'Async Race' });
+
+  const settings = createElement({ tag: 'div', className: ['settings'] });
+
+  const muteButton = createMuteButton();
 
   const nav = createElement({ tag: 'nav', className: ['nav'] });
 
@@ -32,7 +37,8 @@ export function createHeader(): void {
     eventState.emit('view:changed', 'winners');
   });
 
-  header.append(title, nav);
+  settings.append(nav, muteButton);
+  header.append(title, settings);
   nav.append(garageNav, winnersNav);
 
   document.body.append(header);

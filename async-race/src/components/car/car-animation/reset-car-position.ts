@@ -1,6 +1,7 @@
 import { carState } from '@/state/car-state';
 import { getCarStore } from '@/state/car-store';
 import { stopCarAnimation } from '@components/car/car-animation/animate-car';
+import { updateRaceSound } from '@utils/play-race-sound';
 import { setEngineButtons } from '@utils/set-car-buttons';
 import { setGarageButtons, setRaceButton } from '@utils/set-garage-buttons';
 
@@ -19,6 +20,7 @@ export function resetCarPosition(carId: number): void {
   car.currentPosition = 0;
   car.isDriving = false;
   setRaceButton();
+  updateRaceSound();
 
   carElement.svg.style.transform = 'translateX(0)';
 
@@ -37,6 +39,7 @@ export function resetAllCarsPositions(): void {
     stopCarAnimation(car.id);
     car.currentPosition = 0;
     car.isDriving = false;
+    updateRaceSound();
 
     const carElement = getCarStore(car.id);
 

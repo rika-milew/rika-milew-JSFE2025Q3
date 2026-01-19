@@ -1,6 +1,7 @@
 import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@/data/constants';
 import { carState } from '@state/car-state';
 import { getCarStore, setCarAnimationId } from '@state/car-store';
+import { updateRaceSound } from '@utils/play-race-sound';
 import { setEngineButtons } from '@utils/set-car-buttons';
 import { setRaceButton } from '@utils/set-garage-buttons';
 
@@ -17,6 +18,7 @@ export function animateCar(
   }
 
   car.isDriving = true;
+  updateRaceSound();
 
   const carElement = getCarStore(carId);
 
@@ -79,9 +81,10 @@ export function stopCarAnimation(carId: number): void {
 
   car.isDriving = false;
   setRaceButton();
+  updateRaceSound();
 
   if (carElement) {
-    carElement.track.classList.remove('blink');
+    carElement.trackLine.classList.remove('blink');
     if (!carState.isRacing) {
       setEngineButtons(carId, false, true);
     }

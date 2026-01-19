@@ -1,3 +1,4 @@
+import { audioPLayer } from '@utils/audio-player';
 import { createElement } from '@utils/create-element';
 
 import type { ButtonConfig } from '@/types/types';
@@ -12,7 +13,7 @@ export function createButton(config: ButtonConfig): HTMLButtonElement {
     ? [...defaultClasses, className].join(' ')
     : defaultClasses.join(' ');
 
-  return createElement({
+  const button = createElement({
     tag: 'button',
     className: [allClasses],
     textContent: text,
@@ -21,4 +22,10 @@ export function createButton(config: ButtonConfig): HTMLButtonElement {
       ...(disabled && { disabled: 'true' }),
     },
   });
+
+  button.addEventListener('click', () => {
+    audioPLayer.playOnce('button');
+  });
+
+  return button;
 }

@@ -1,5 +1,6 @@
 import { stopCarAnimation } from '@/components/car/car-animation/animate-car';
 import { carState } from '@state/car-state';
+import { updateRaceSound } from '@utils/play-race-sound';
 import { setEngineButtons } from '@utils/set-car-buttons';
 import { setRaceButton } from '@utils/set-garage-buttons';
 
@@ -11,6 +12,7 @@ export function resetCarState(carId: number): void {
 
   car.isDriving = false;
   setRaceButton();
+  updateRaceSound();
   stopCarAnimation(carId);
 
   if (!carState.isRacing) {

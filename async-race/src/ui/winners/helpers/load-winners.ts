@@ -32,4 +32,5 @@ export async function loadWinners(): Promise<void> {
 
   winnersState.set(winnersData);
   winnersState.totalWinners = Object.keys(winnersState.winners).length;
+  carState.winner = undefined;
 }

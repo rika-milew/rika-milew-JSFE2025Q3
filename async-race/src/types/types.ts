@@ -146,6 +146,11 @@ export type AudioPlayer = {
   playSound: (id: SoundTypes) => void;
   stopSound: (id: SoundTypes) => void;
   stopAllSounds: () => void;
+  toggleMute: () => void;
+  isMuted: boolean;
+  playOnce: (id: SoundTypes) => void;
+  playRaceLoop: () => void;
+  stopRaceLoop: () => void;
 };
 
 // state
