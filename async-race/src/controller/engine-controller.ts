@@ -103,13 +103,13 @@ async function handleCarStart(carId: number): Promise<void> {
       stopCarAnimation(carId);
       setEngineButtons(carId, false, true);
       errorPopup.show(
-        `Car ${car.name} with id ${carId} has been stopped suddenly. It's engine was broken down.`,
+        `The ${car.name} car (ID ${carId}) has been stopped suddenly. It's engine was broken down.`,
       );
       return;
     }
 
     car.isDriving = false;
     stopCarAnimation(carId);
-    errorPopup.show(`Car ${car.name} with id ${carId} drive failed.`);
+    errorPopup.show(`The ${car.name} car (ID ${carId}) drive failed.`);
   }
 }
