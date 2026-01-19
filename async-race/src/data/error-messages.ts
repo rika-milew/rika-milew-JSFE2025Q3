@@ -2,15 +2,18 @@ export const POPUP_MESSAGES = {
   carCreateFailed: (id?: number, name?: string): string =>
     id ? `Failed to create a new ${name ? ` (${name})` : ''} car.` : 'Failed to create a new car',
 
-  carUpdateFailed: (id?: number, name?: string): string =>
-    id
-      ? `Failed to update the ${name ? ` (${name})` : ''} car with ID ${id}.`
-      : 'Failed to update the chosen car',
+  carUpdateFailed: (): string => 'Failed to update the chosen car — try again.',
 
   carDeleteFailed: (id?: number, name?: string): string =>
     id
       ? `Failed to delete the ${name ? ` (${name})` : ''} car with ID ${id}.`
       : 'Failed to delete the chosen car',
+
+  appLoadFailed: (): string => 'Failed to load the app',
+
+  viewChangeFailed: (): string => 'Failed to change the view',
+
+  navigationFailed: (): string => 'Failed to navigate to the selected view',
 
   garageLoadFailed: (): string => 'Failed to load the garage',
 
