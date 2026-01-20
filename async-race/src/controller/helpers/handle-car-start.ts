@@ -1,10 +1,10 @@
-import { MILLISECONDS } from '@/data/constants';
 import { getEngineParams } from '@api/engine/get-engine-params';
 import { startEngine } from '@api/engine/start-engine';
 import { animateCar } from '@components/car/car-animation/animate-car';
 import { errorPopup } from '@components/popup/error/error';
 import { winnerPopup } from '@components/popup/winner/winner';
 import { resetCarState } from '@controller/helpers/reset-car-state';
+import { MILLISECONDS } from '@data/constants';
 import { POPUP_MESSAGES } from '@data/error-messages';
 import { carState } from '@state/car-state';
 import { handleWinner } from '@ui/winners/helpers/handle-winner';
@@ -40,6 +40,7 @@ export async function handleCarStart(carId: number): Promise<void> {
     car.isDriving = false;
     setRaceButton();
     updateRaceSound();
+
     if (carState.isRacing) {
       if (succeeded && !carState.winner) {
         carState.winner = car;
@@ -47,6 +48,7 @@ export async function handleCarStart(carId: number): Promise<void> {
         const finishTime = time ?? engineData.distance / engineData.velocity / MILLISECONDS;
         handleWinner(car, finishTime);
       }
+
       checkRaceEnd();
       audioPLayer.playOnce('brake');
     }

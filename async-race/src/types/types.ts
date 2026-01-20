@@ -54,7 +54,6 @@ export type CarFormElements = {
   nameInput: HTMLInputElement;
   colorInput: HTMLInputElement;
   button: HTMLButtonElement;
-  errorText: HTMLParagraphElement;
 };
 
 export type GarageButtons = {
@@ -193,6 +192,15 @@ export type WinnersStateType = {
 export type WinnersSort = {
   sorting: 'wins' | 'time';
   order: 'ascending' | 'descending';
+};
+
+export type CarStore = {
+  container: HTMLDivElement;
+  svg: SVGElement;
+  track: HTMLDivElement;
+  trackLine: HTMLDivElement;
+  finish: HTMLElement;
+  animationId?: number;
 };
 
 // api

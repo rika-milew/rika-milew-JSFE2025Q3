@@ -1,5 +1,5 @@
-import { CARS_QUANTITY } from '@/data/constants';
 import { createButton } from '@components/button/button';
+import { CARS_QUANTITY } from '@data/constants';
 import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
 import { garageButtons } from '@utils/set-garage-buttons';

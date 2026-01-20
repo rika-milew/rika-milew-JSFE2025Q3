@@ -3,7 +3,7 @@ import { appState } from '@state/app-state';
 import { createApp } from '@ui/ui';
 import { handleErrorsVoid } from '@utils/handle-errors';
 
-import type { View, AppRouter } from '../types/types';
+import type { View, AppRouter } from '@/types/types';
 
 export function createAppRouter(): AppRouter {
   return {

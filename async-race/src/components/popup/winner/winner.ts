@@ -1,4 +1,4 @@
-import { createPopup } from '../popup';
+import { createPopup } from '@components/popup/popup';
 
 import './winner.css';
 
@@ -8,6 +8,6 @@ export const winnerPopup = createPopup({
   headingContent: '🏁 Race Finished!',
   imageSrc: '/winner-cup.svg',
   imageAlt: 'Winner Icon',
-  animationDuration: 3000,
+  animationDuration: 4000,
   messageContent: (name) => `The winner is ${name}!`,
 });

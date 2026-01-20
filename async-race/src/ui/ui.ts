@@ -20,6 +20,7 @@ export async function createApp(): Promise<void> {
         await createWinners();
       }
     },
+
     appState.view === 'garage'
       ? POPUP_MESSAGES.garageLoadFailed()
       : POPUP_MESSAGES.winnersLoadFailed(),

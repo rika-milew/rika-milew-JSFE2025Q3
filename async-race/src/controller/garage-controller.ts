@@ -1,14 +1,14 @@
-import { handleErrors, handleErrorsVoid } from '@/utils/handle-errors';
 import { createCar } from '@api/garage/create-car';
 import { deleteCar } from '@api/garage/delete-car';
 import { updateCar } from '@api/garage/update-car';
-import { stopCarAnimation } from '@components/car/car-animation/animate-car';
+import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
 import { POPUP_MESSAGES } from '@data/error-messages';
 import { appState } from '@state/app-state';
 import { carState } from '@state/car-state';
 import { removeCarStore } from '@state/car-store';
 import { eventState } from '@state/events/event-state';
 import { garageList } from '@ui/garage/helpers/garage-list';
+import { handleErrors, handleErrorsVoid } from '@utils/handle-errors';
 
 let isControllerStarted = false;
 
@@ -44,7 +44,7 @@ export function startGarageController(): void {
 
     const updated = await handleErrors(
       () => updateCar(payload.id, payload.name, payload.color),
-      POPUP_MESSAGES.carUpdateFailed(payload.id, payload.name),
+      POPUP_MESSAGES.carUpdateFailed(),
     );
 
     if (!updated) {
@@ -73,7 +73,6 @@ export function startGarageController(): void {
     }
 
     stopCarAnimation(payload.id);
-
     carState.remove(payload.id);
     removeCarStore(payload.id);
 

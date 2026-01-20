@@ -1,4 +1,4 @@
-import { errorPopup } from '@/components/popup/error/error';
+import { errorPopup } from '@components/popup/error/error';
 
 export async function handleErrors<T>(
   function_: () => Promise<T>,
@@ -9,6 +9,7 @@ export async function handleErrors<T>(
   } catch (error) {
     console.error(error);
     errorPopup.show(message);
+
     return undefined;
   }
 }
@@ -23,6 +24,7 @@ export async function handleErrorsVoid(
   } catch (error) {
     console.error(error);
     errorPopup.show(message);
+
     return false;
   }
 }

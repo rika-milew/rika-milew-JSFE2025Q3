@@ -1,6 +1,6 @@
 import { startEngine } from '@api/engine/start-engine';
-import { stopCarAnimation } from '@components/car/car-animation/animate-car';
 import { resetCarPosition } from '@components/car/car-animation/reset-car-position';
+import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
 import { handleCarStart } from '@controller/helpers/handle-car-start';
 import { POPUP_MESSAGES } from '@data/error-messages';
 import { carState } from '@state/car-state';
@@ -31,10 +31,12 @@ export function startEngineController(): void {
     const carId = payload.id;
     const car = carState.getById(carId);
     stopCarAnimation(carId);
+
     await handleErrors(
       () => startEngine(carId, 'stopped'),
       POPUP_MESSAGES.carResetFailed(carId, car?.name),
     );
+
     resetCarPosition(carId);
     setEngineButtons(carId, true, false);
   });

@@ -1,11 +1,4 @@
-export type CarStore = {
-  container: HTMLDivElement;
-  svg: SVGElement;
-  track: HTMLDivElement;
-  trackLine: HTMLDivElement;
-  finish: HTMLElement;
-  animationId?: number;
-};
+import type { CarStore } from '@/types/types';
 
 const carStore = new Map<number, CarStore>();
 

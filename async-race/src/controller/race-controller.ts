@@ -17,9 +17,12 @@ export function startRaceController(): void {
 
   eventState.on('garage:race', () => {
     resetAllCarsPositions();
+
     carState.winner = undefined;
     carState.isRacing = true;
+
     setGarageButtons(false, true, false);
+
     const carsOnPage = carState.getAllOnCurrentPage();
 
     carsOnPage.forEach((car) => {
@@ -31,8 +34,10 @@ export function startRaceController(): void {
   eventState.on('garage:reset', () => {
     carState.isRacing = false;
     setGarageButtons(true, true, true);
+
     carState.garageSessionId += 1;
     carState.winner = undefined;
+
     const carsOnPage = carState.getAllOnCurrentPage();
     carsOnPage.forEach((car) => {
       resetCarPosition(car.id);

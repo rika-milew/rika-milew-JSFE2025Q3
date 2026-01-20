@@ -1,6 +1,5 @@
+import { getApiError } from '@api/get-api-error';
 import { API_URL } from '@data/constants';
-
-import { getApiError } from '../get-api-error';
 
 import type { EngineResponse } from '../../types/types';
 

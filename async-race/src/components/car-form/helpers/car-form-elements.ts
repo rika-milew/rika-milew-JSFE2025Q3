@@ -24,15 +24,12 @@ export function createCarFormElements(isUpdate: boolean): CarFormElements {
     attributes: { type: 'submit' },
   });
 
-  const errorText = createElement({ tag: 'p', className: ['error-text'] });
-
-  carForm.append(nameInput, colorInput, button, errorText);
+  carForm.append(nameInput, colorInput, button);
 
   return {
     carForm,
     nameInput,
     colorInput,
     button,
-    errorText,
   };
 }

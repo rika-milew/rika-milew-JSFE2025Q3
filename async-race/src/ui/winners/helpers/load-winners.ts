@@ -31,9 +31,7 @@ export async function loadWinners(): Promise<void> {
       color: car?.color ?? '#000000',
     };
   });
-  winnersState.set(winnersData);
-  winnersState.totalWinners = winnersData.length;
 
   winnersState.set(winnersData);
-  winnersState.totalWinners = Object.keys(winnersState.winners).length;
+  winnersState.totalWinners = winnersData.length;
 }

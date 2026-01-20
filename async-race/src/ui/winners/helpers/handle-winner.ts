@@ -1,4 +1,4 @@
-import { eventState } from '@/state/events/event-state';
+import { eventState } from '@state/events/event-state';
 
 import type { Car } from '@/types/types';
 

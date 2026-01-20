@@ -9,6 +9,7 @@ export function createButton(config: ButtonConfig): HTMLButtonElement {
   const { text, className = '', disabled = false, type = 'button' } = config;
 
   const defaultClasses = ['button'];
+
   const allClasses = className
     ? [...defaultClasses, className].join(' ')
     : defaultClasses.join(' ');

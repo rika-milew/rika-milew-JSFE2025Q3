@@ -1,4 +1,4 @@
-import { createPopup } from '../popup';
+import { createPopup } from '@components/popup/popup';
 
 import './error.css';
 

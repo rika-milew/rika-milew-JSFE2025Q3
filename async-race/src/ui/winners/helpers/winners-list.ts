@@ -30,6 +30,7 @@ export const winnersList: WinnersList = ((): WinnersList => {
       );
       return;
     }
+
     winnersContainer.append(createWinnersTable(pageWinners));
 
     eventState.emit('winners:pagination:update', {

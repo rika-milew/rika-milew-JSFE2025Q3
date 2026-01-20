@@ -11,7 +11,7 @@ import type { CarForm } from '@/types/types';
 import './car-form.css';
 
 export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
-  const { carForm, nameInput, colorInput, button, errorText } = createCarFormElements(isUpdate);
+  const { carForm, nameInput, colorInput, button } = createCarFormElements(isUpdate);
 
   const { syncDisabledState } = initCarFormEvents(isUpdate, nameInput, colorInput, button);
 
@@ -26,7 +26,6 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
       errorPopup.show('Please, enter car name');
       return;
     }
-    errorText.textContent = '';
 
     if (isUpdate) {
       const id = appState.updateForm.id;
