@@ -9,8 +9,8 @@ export const appState: AppState = {
   garage: [],
   winners: [],
   winnersSort: {
-    field: 'wins',
-    direction: 'descending',
+    sorting: 'wins',
+    order: 'descending',
   },
 
   createForm: {

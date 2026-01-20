@@ -24,13 +24,16 @@ export async function loadWinners(): Promise<void> {
     const car = carState.getById(winner.id);
 
     return {
-      ...winner,
+      id: winner.id,
+      wins: winner.wins,
+      time: winner.time,
       name: car?.name ?? 'Car',
       color: car?.color ?? '#000000',
     };
   });
+  winnersState.set(winnersData);
+  winnersState.totalWinners = winnersData.length;
 
   winnersState.set(winnersData);
   winnersState.totalWinners = Object.keys(winnersState.winners).length;
-  carState.winner = undefined;
 }
