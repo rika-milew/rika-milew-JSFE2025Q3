@@ -19,6 +19,7 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
 
     emit<K extends keyof T>(event: K, payload: T[K]): void {
       const handlers = subscribers[event];
+
       if (handlers) {
         handlers.forEach((handler) => {
           handler(payload);
@@ -28,13 +29,16 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
 
     off<K extends keyof T>(event: K, handler?: EventHandler<T[K]>): void {
       const handlers = subscribers[event];
+
       if (!handlers) {
         return;
       }
+
       if (!handler) {
         handlers.length = 0;
         return;
       }
+
       const index = handlers.indexOf(handler);
       if (index !== -1) {
         handlers.splice(index, 1);

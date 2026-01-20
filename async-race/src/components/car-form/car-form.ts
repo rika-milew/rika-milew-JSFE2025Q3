@@ -11,23 +11,9 @@ import type { CarForm } from '@/types/types';
 import './car-form.css';
 
 export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
-  const { carForm, nameInput, colorInput, button, errorText } = createCarFormElements(isUpdate);
+  const { carForm, nameInput, colorInput, button } = createCarFormElements(isUpdate);
 
-  nameInput.addEventListener('input', () => {
-    if (!isUpdate) {
-      appState.createForm.name = nameInput.value;
-    }
-  });
-
-  colorInput.addEventListener('input', () => {
-    if (!isUpdate) {
-      appState.createForm.color = colorInput.value;
-    }
-  });
-
-  const { syncDisabledState } = createFormState(isUpdate, nameInput, colorInput, button);
-
-  syncDisabledState();
+  const { syncDisabledState } = initCarFormEvents(isUpdate, nameInput, colorInput, button);
 
   if (isUpdate) {
     updateFormEvents(nameInput, colorInput, syncDisabledState);
@@ -40,7 +26,6 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
       errorPopup.show('Please, enter car name');
       return;
     }
-    errorText.textContent = '';
 
     if (isUpdate) {
       const id = appState.updateForm.id;
@@ -57,6 +42,16 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
         name: appState.updateForm.name,
         color: appState.updateForm.color,
       });
+
+      appState.updateForm = {
+        id: undefined,
+        name: '',
+        color: '#000000',
+        isDisabled: true,
+      };
+
+      nameInput.value = '';
+      colorInput.value = '#000000';
 
       try {
         garageList.render();
@@ -83,4 +78,32 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
   });
 
   return carForm;
+}
+
+export function initCarFormEvents(
+  isUpdate: boolean,
+  nameInput: HTMLInputElement,
+  colorInput: HTMLInputElement,
+  button: HTMLButtonElement,
+): { syncDisabledState: () => void } {
+  nameInput.addEventListener('input', () => {
+    if (isUpdate) {
+      appState.updateForm.name = nameInput.value;
+    } else {
+      appState.createForm.name = nameInput.value;
+    }
+  });
+
+  colorInput.addEventListener('input', () => {
+    if (isUpdate) {
+      appState.updateForm.color = colorInput.value;
+    } else {
+      appState.createForm.color = colorInput.value;
+    }
+  });
+
+  const { syncDisabledState } = createFormState(isUpdate, nameInput, colorInput, button);
+  syncDisabledState();
+
+  return { syncDisabledState };
 }

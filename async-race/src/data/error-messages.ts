@@ -1,27 +1,40 @@
 export const POPUP_MESSAGES = {
-  carCreateFailed: (id?: number): string =>
-    id ? `Failed to create a new car with id: ${id}` : 'Failed to create a new car',
+  carCreateFailed: (id?: number, name?: string): string =>
+    id ? `Failed to create a new ${name ? ` (${name})` : ''} car.` : 'Failed to create a new car',
 
-  carUpdateFailed: (id?: number): string =>
-    id ? `Failed to update the car with id: ${id}` : 'Failed to update the chosen car',
+  carUpdateFailed: (): string => 'Failed to update the chosen car — try again.',
 
-  carDeleteFailed: (id?: number): string =>
-    id ? `Failed to delete the car with id: ${id}` : 'Failed to delete the chosen car',
+  carDeleteFailed: (id?: number, name?: string): string =>
+    id
+      ? `Failed to delete the ${name ? ` (${name})` : ''} car with ID ${id}.`
+      : 'Failed to delete the chosen car',
+
+  appLoadFailed: (): string => 'Failed to load the app',
+
+  viewChangeFailed: (): string => 'Failed to change the view',
+
+  navigationFailed: (): string => 'Failed to navigate to the selected view',
 
   garageLoadFailed: (): string => 'Failed to load the garage',
 
+  winnersLoadFailed: (): string => 'Failed to load the winners',
+
   randomCarsFailed: (): string => 'Failed to create random cars',
 
-  carResetFailed: (id?: number): string =>
-    id ? `Failed to reset the car with id: ${id}` : 'Failed to reset the chosen car',
-
-  carStartFailed: (id?: number): string =>
-    id ? `Failed to start the car with id: ${id}` : 'Failed to start the chosen car',
-
-  carDriveFailed: (id?: number): string =>
+  carResetFailed: (id?: number, name?: string): string =>
     id
-      ? `Car with id ${id} has been stopped suddenly. It's engine was broken down.`
-      : "Car with id  has been stopped suddenly. It's engine was broken down.",
+      ? `Failed to reset the ${name ? ` (${name})` : ''} car with ID ${id}.`
+      : 'Failed to reset the chosen car',
+
+  carStartFailed: (id?: number, name?: string): string =>
+    id
+      ? `Failed to start the ${name ? ` (${name})` : ''} car with ID ${id}.`
+      : 'Failed to start the chosen car',
+
+  carDriveFailed: (id?: number, name?: string): string =>
+    id
+      ? `The ${name ? ` (${name})` : ''} car (ID ${id}) has been stopped suddenly. It's engine was broken down.`
+      : "Car with has been stopped suddenly. It's engine was broken down.",
 
   generalError: 'Something went wrong',
 };

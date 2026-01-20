@@ -5,8 +5,13 @@ export const appState: AppState = {
   garagePage: 1,
   winnersPage: 1,
   perPage: 7,
+  winnersPerPage: 10,
   garage: [],
   winners: [],
+  winnersSort: {
+    sorting: 'wins',
+    order: 'descending',
+  },
 
   createForm: {
     name: '',

@@ -34,8 +34,6 @@ export function createPopup(options: PopupOptions): { show: (message: string) =>
       document.body.append(overlay);
     }
 
-    document.body.style.overflow = 'hidden';
-
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -54,7 +52,6 @@ export function createPopup(options: PopupOptions): { show: (message: string) =>
       overlay.classList.remove('visible');
       content.textContent = '';
       timeout = undefined;
-      document.body.style.overflow = '';
     }, animationDuration);
   }
 

@@ -1,7 +1,9 @@
-import { carState } from '@/state/car-state';
-import { getCarStore } from '@/state/car-store';
-import { stopCarAnimation } from '@components/car/car-animation/animate-car';
+import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
+import { carState } from '@state/car-state';
+import { getCarStore } from '@state/car-store';
+import { updateRaceSound } from '@utils/play-race-sound';
 import { setEngineButtons } from '@utils/set-car-buttons';
+import { setGarageButtons, setRaceButton } from '@utils/set-garage-buttons';
 
 export function resetCarPosition(carId: number): void {
   const carElement = getCarStore(carId);
@@ -10,6 +12,7 @@ export function resetCarPosition(carId: number): void {
   if (!carElement || !car) {
     return;
   }
+
   if (carElement.animationId !== undefined) {
     cancelAnimationFrame(carElement.animationId);
     carElement.animationId = undefined;
@@ -18,15 +21,18 @@ export function resetCarPosition(carId: number): void {
   car.currentPosition = 0;
   car.isDriving = false;
 
-  carElement.svg.style.transform = 'translateX(0)';
+  setRaceButton();
+  updateRaceSound();
 
+  carElement.svg.style.transform = 'translateX(0)';
   carElement.track.classList.remove('blink');
 
   setEngineButtons(carId, true, false);
 }
 
 export function resetAllCarsPositions(): void {
-  // console.log('reset');
+  setGarageButtons(true, true, true);
+
   carState.isRacing = false;
   carState.winner = undefined;
   carState.garageSessionId += 1;
@@ -35,6 +41,7 @@ export function resetAllCarsPositions(): void {
     stopCarAnimation(car.id);
     car.currentPosition = 0;
     car.isDriving = false;
+    updateRaceSound();
 
     const carElement = getCarStore(car.id);
 
@@ -43,5 +50,7 @@ export function resetAllCarsPositions(): void {
       carElement.track.classList.remove('blink');
       setEngineButtons(car.id, true, false);
     }
+
+    setRaceButton();
   });
 }

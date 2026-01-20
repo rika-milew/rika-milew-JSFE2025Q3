@@ -1,13 +1,14 @@
-import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@/data/constants';
+import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
+import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@data/constants';
 import { carState } from '@state/car-state';
 import { getCarStore, setCarAnimationId } from '@state/car-store';
-import { setEngineButtons } from '@utils/set-car-buttons';
+import { updateRaceSound } from '@utils/play-race-sound';
 
 export function animateCar(
   carId: number,
   velocity: number,
   distance: number,
-  onFinish?: (succeeded: boolean) => void,
+  onFinish?: (succeeded: boolean, time?: number) => void,
 ): void {
   const car = carState.getById(carId);
 
@@ -16,6 +17,7 @@ export function animateCar(
   }
 
   car.isDriving = true;
+  updateRaceSound();
 
   const carElement = getCarStore(carId);
 
@@ -54,32 +56,10 @@ export function animateCar(
     } else {
       stopCarAnimation(carId);
       if (onFinish) {
-        onFinish(true);
+        onFinish(true, passedTime);
       }
     }
   }
 
   setCarAnimationId(carId, requestAnimationFrame(startAnimation));
-}
-
-export function stopCarAnimation(carId: number): void {
-  const car = carState.getById(carId);
-
-  if (!car) {
-    return;
-  }
-
-  const carElement = getCarStore(carId);
-
-  if (carElement?.animationId !== undefined) {
-    cancelAnimationFrame(carElement.animationId);
-    carElement.animationId = undefined;
-  }
-
-  car.isDriving = false;
-
-  if (carElement) {
-    carElement.track.classList.remove('blink');
-    setEngineButtons(carId, false, true);
-  }
 }

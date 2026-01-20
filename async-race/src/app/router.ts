@@ -1,18 +1,16 @@
-import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@data/error-messages';
 import { appState } from '@state/app-state';
 import { createApp } from '@ui/ui';
+import { handleErrorsVoid } from '@utils/handle-errors';
 
-import type { View, AppRouter } from '../types/types';
+import type { View, AppRouter } from '@/types/types';
 
 export function createAppRouter(): AppRouter {
   return {
     navigate: async (view: View): Promise<void> => {
       appState.view = view;
-      try {
-        await createApp();
-      } catch {
-        errorPopup.show('Failed to navigate to the selected view');
-      }
+
+      await handleErrorsVoid(() => createApp(), POPUP_MESSAGES.navigationFailed());
     },
   };
 }

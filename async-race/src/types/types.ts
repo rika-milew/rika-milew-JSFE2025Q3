@@ -54,7 +54,6 @@ export type CarFormElements = {
   nameInput: HTMLInputElement;
   colorInput: HTMLInputElement;
   button: HTMLButtonElement;
-  errorText: HTMLParagraphElement;
 };
 
 export type GarageButtons = {
@@ -135,12 +134,22 @@ export type GarageList = {
   setPage: (page: number) => void;
 };
 
+export type WinnersList = {
+  renderWinners: () => void;
+  setWinnersPage: (page: number) => void;
+};
+
 export type SoundTypes = 'race' | 'brake' | 'button';
 
 export type AudioPlayer = {
   playSound: (id: SoundTypes) => void;
   stopSound: (id: SoundTypes) => void;
   stopAllSounds: () => void;
+  toggleMute: () => void;
+  isMuted: boolean;
+  playOnce: (id: SoundTypes) => void;
+  playRaceLoop: () => void;
+  stopRaceLoop: () => void;
 };
 
 // state
@@ -150,8 +159,10 @@ export type AppState = {
   garagePage: number;
   winnersPage: number;
   perPage: number;
+  winnersPerPage: number;
   garage: Car[];
   winners: Winner[];
+  winnersSort: WinnersSort;
 
   createForm: {
     name: string;
@@ -164,6 +175,32 @@ export type AppState = {
     color: string;
     isDisabled: boolean;
   };
+};
+
+export type WinnersStateItem = Winner & { name: string; color: string };
+
+export type WinnersStateType = {
+  winners: Record<number, WinnersStateItem>;
+  totalWinners: number;
+  set(winners: WinnersStateItem[]): void;
+  add(winner: WinnersStateItem): void;
+  update(winner: WinnersStateItem): void;
+  remove(id: number): void;
+  getById(id: number): WinnersStateItem | undefined;
+};
+
+export type WinnersSort = {
+  sorting: 'wins' | 'time';
+  order: 'ascending' | 'descending';
+};
+
+export type CarStore = {
+  container: HTMLDivElement;
+  svg: SVGElement;
+  track: HTMLDivElement;
+  trackLine: HTMLDivElement;
+  finish: HTMLElement;
+  animationId?: number;
 };
 
 // api

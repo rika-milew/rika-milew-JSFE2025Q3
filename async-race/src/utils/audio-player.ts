@@ -14,16 +14,40 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
 
   const activeSounds = new Set<SoundTypes>();
 
-  function playSound(id: SoundTypes): void {
-    void sounds[id].play();
+  const STORAGE_KEY = 'audio';
 
-    sounds[id].currentTime = 0;
+  const saved = localStorage.getItem(STORAGE_KEY);
+  let isMuted = saved ? saved === 'true' : false;
+
+  function updateMute(): void {
+    Object.values(sounds).forEach((sound) => {
+      sound.muted = isMuted;
+    });
+  }
+
+  updateMute();
+
+  function toggleMute(): void {
+    isMuted = !isMuted;
+    localStorage.setItem(STORAGE_KEY, isMuted.toString());
+    updateMute();
+  }
+
+  function playSound(id: SoundTypes): void {
+    if (isMuted) {
+      return;
+    }
+
+    const sound = sounds[id];
+    sound.currentTime = 0;
+    void sound.play();
     activeSounds.add(id);
   }
 
   function stopSound(id: SoundTypes): void {
-    sounds[id].pause();
-    sounds[id].currentTime = 0;
+    const sound = sounds[id];
+    sound.pause();
+    sound.currentTime = 0;
     activeSounds.delete(id);
   }
 
@@ -33,5 +57,45 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
     });
   }
 
-  return { playSound, stopSound, stopAllSounds };
+  function playOnce(id: SoundTypes): void {
+    if (isMuted) {
+      return;
+    }
+
+    const sound = sounds[id];
+    sound.currentTime = 0;
+    void sound.play();
+  }
+
+  function playRaceLoop(): void {
+    if (isMuted) {
+      return;
+    }
+
+    const raceSound = sounds.race;
+    if (!raceSound.paused) {
+      return;
+    }
+
+    raceSound.currentTime = 0;
+    void raceSound.play();
+    activeSounds.add('race');
+  }
+
+  function stopRaceLoop(): void {
+    stopSound('race');
+  }
+
+  return {
+    playSound,
+    stopSound,
+    stopAllSounds,
+    toggleMute,
+    get isMuted(): boolean {
+      return isMuted;
+    },
+    playOnce,
+    playRaceLoop,
+    stopRaceLoop,
+  };
 })();

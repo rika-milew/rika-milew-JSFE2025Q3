@@ -1,7 +1,8 @@
-import { CARS_QUANTITY } from '@/data/constants';
 import { createButton } from '@components/button/button';
+import { CARS_QUANTITY } from '@data/constants';
 import { eventState } from '@state/events/event-state';
 import { createElement } from '@utils/create-element';
+import { garageButtons } from '@utils/set-garage-buttons';
 
 import './garage-buttons.css';
 
@@ -22,6 +23,10 @@ export function createGarageButtons(): HTMLDivElement {
     text: 'Generate Cars',
     className: 'race-button',
   });
+
+  garageButtons.race = raceButton;
+  garageButtons.reset = resetButton;
+  garageButtons.generate = generateButton;
 
   container.append(raceButton, resetButton, generateButton);
 

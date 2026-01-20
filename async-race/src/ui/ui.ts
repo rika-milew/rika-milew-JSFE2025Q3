@@ -1,29 +1,30 @@
 import { resetAllCarsPositions } from '@components/car/car-animation/reset-car-position';
-import { errorPopup } from '@components/popup/error/error';
+import { POPUP_MESSAGES } from '@data/error-messages';
 import { appState } from '@state/app-state';
 import { createFooter } from '@ui/footer/footer';
 import { createGarage } from '@ui/garage/garage';
 import { createHeader } from '@ui/header/header';
 import { createWinners } from '@ui/winners/winners';
+import { handleErrorsVoid } from '@utils/handle-errors';
 
 export async function createApp(): Promise<void> {
   document.body.replaceChildren();
   createHeader();
 
-  try {
-    if (appState.view === 'garage') {
-      await createGarage();
-    } else {
-      resetAllCarsPositions();
-      createWinners();
-    }
-  } catch {
-    const message =
-      appState.view === 'garage'
-        ? 'Failed to load the garage view'
-        : 'Failed to load the winners view';
-    errorPopup.show(message);
-  }
+  await handleErrorsVoid(
+    async () => {
+      if (appState.view === 'garage') {
+        await createGarage();
+      } else {
+        resetAllCarsPositions();
+        await createWinners();
+      }
+    },
+
+    appState.view === 'garage'
+      ? POPUP_MESSAGES.garageLoadFailed()
+      : POPUP_MESSAGES.winnersLoadFailed(),
+  );
 
   createFooter();
 }
