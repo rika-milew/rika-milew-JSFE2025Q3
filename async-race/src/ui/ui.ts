@@ -17,7 +17,7 @@ export async function createApp(): Promise<void> {
         await createGarage();
       } else {
         resetAllCarsPositions();
-        await createWinners();
+        createWinners();
       }
     },
 

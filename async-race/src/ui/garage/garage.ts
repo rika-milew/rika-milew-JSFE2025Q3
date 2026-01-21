@@ -11,6 +11,7 @@ import { garageContainer, garageList } from '@/ui/garage/helpers/garage-list';
 import { implementPagination } from '@/ui/garage/helpers/garage-pagination';
 import { loadDefaultCars } from '@/ui/garage/helpers/init-garage';
 import { infoElements } from '@/ui/garage/info-elements';
+import { loadWinners } from '@/ui/winners/helpers/load-winners';
 import { createElement } from '@/utils/create-element';
 
 import './garage.css';
@@ -49,6 +50,7 @@ export async function createGarage(): Promise<void> {
   container.append(paginationContainer);
 
   await loadDefaultCars();
+  await loadWinners();
 
   if (!container.contains(garageContainer)) {
     container.append(garageContainer);

@@ -10,7 +10,6 @@ import { carState } from '@/state/car-state';
 import { handleWinner } from '@/ui/winners/helpers/handle-winner';
 import { audioPLayer } from '@/utils/audio-player';
 import { checkRaceEnd } from '@/utils/check-race-end';
-import { handleErrors } from '@/utils/handle-errors';
 import { updateRaceSound } from '@/utils/play-race-sound';
 import { setEngineButtons } from '@/utils/set-car-buttons';
 import { setRaceButton } from '@/utils/set-garage-buttons';
@@ -26,13 +25,11 @@ export async function handleCarStart(carId: number): Promise<void> {
   setRaceButton();
   updateRaceSound();
 
-  const engineData = await handleErrors(
-    () => startEngine(carId, 'started'),
-    POPUP_MESSAGES.carStartFailed(carId, car.name),
-  );
+  const engineData = await startEngine(carId, 'started');
 
   if (!engineData) {
     resetCarState(car.id);
+    errorPopup.show(POPUP_MESSAGES.carStartFailed(carId, car.name));
     return;
   }
 
@@ -60,26 +57,21 @@ export async function handleCarStart(carId: number): Promise<void> {
 
   const sessionId = carState.garageSessionId;
 
-  try {
-    await getEngineParams(carId);
+  const engineParams = await getEngineParams(carId);
 
-    if (carState.garageSessionId !== sessionId) {
-      return;
-    }
-  } catch (error) {
-    if (carState.garageSessionId !== sessionId) {
-      return;
-    }
+  if (carState.garageSessionId !== sessionId) {
+    return;
+  }
 
+  if (!engineParams) {
     checkRaceEnd();
     resetCarState(car.id);
     audioPLayer.playOnce('brake');
 
-    const message =
-      error instanceof Error && error.message.includes('broken down')
-        ? `The ${car.name} car (ID ${carId}) has been stopped suddenly. It's engine was broken down.`
-        : `The ${car.name} car (ID ${carId}) drive failed.`;
+    errorPopup.show(
+      `The ${car.name} car (ID ${carId}) has been stopped suddenly. It's engine was broken down.`,
+    );
 
-    errorPopup.show(message);
+    return;
   }
 }

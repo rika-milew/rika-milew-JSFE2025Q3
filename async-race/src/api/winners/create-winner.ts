@@ -3,7 +3,7 @@ import { API_URL } from '@/data/constants';
 import type { Winner } from '@/types/types';
 
 export async function createWinner(id: number, wins: number, time: number): Promise<Winner> {
-  const response = await fetch(`${API_URL}/winners`, {
+  const response: Response = await fetch(`${API_URL}/winners`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id, wins, time }),
