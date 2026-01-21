@@ -1,7 +1,134 @@
+.reveal section {
+  padding: 20px;
+}
+
 .reveal h1 {
-    font-size: 60px;
+  margin-bottom: 30px;
+  font-size: 60px;  
 }
 
 .reveal h2 {
-    font-size: 48px;
+  margin-bottom: 40px;
+  font-size: 58px;
+}
+
+.image {
+  margin: 0 auto;
+  background-size: cover;
+  background-position: center;
+  mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,1) 65%,
+    rgba(0,0,0,0) 100%
+  );
+}
+
+.reveal .slide1__image {
+  width: 622px;
+  height: 350px;
+  border-radius: 16px;
+  background-image: url(images/hero.png);
+}
+
+.reveal .two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.reveal li {
+  margin-bottom: 8px;
+}
+
+.reveal .slide2__image {
+  width: 371px;
+  height: 280px;
+  background-image: url(images/seo1.png);
+}
+
+.reveal .slide3 .fragment {
+  margin-bottom: 5px;
+  font-size: 30px;
+}
+
+.slide3__image {
+  width: 490px;
+  height: 380px;
+  border-radius: 16px;
+  background-image: url(images/div-soup.webp);
+}
+
+.reveal .slide3-1 {
+  width: 650px;
+  height: 630px;
+  border-radius: 16px;
+  background-image: url(images/semantic-html-table.png);
+}
+
+.reveal .tags {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.reveal .slide4__image {      
+  width: 700px;
+  height: 400px;
+  border-radius: 16px;
+  background-image: url(images/core-web-vitals.webp);
+}
+
+.reveal .slide5__content, .reveal .slide6__content, .reveal .slide7__content, .reveal .slide8__content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 45px;
+  margin-bottom: 15px;
+  font-size: 38px;
+}
+
+.reveal .slide6__content {
+  margin-bottom: 35px;
+  font-size: 34px;
+}
+
+.reveal .slide5__image {
+  width: 697px;
+  height: 370px;
+  border-radius: 16px;
+  background-image: url(images/server-side-rendering.webp);
+}
+
+.slide7__image {
+  width: 636px;
+  height: 270px;
+  border-radius: 16px;
+  background-image: url(images/bounce-rate.png);
+}
+
+.slide6__image {
+  width: 660px;
+  height: 340px;
+  border-radius: 16px;
+  background-image: url(images/google-analytics.gif);
+}
+
+.slide9__image {
+  width: 640px;
+  height: 320px;
+  border-radius: 16px;
+  background-image: url(images/code.avif);
+}
+
+.reveal .slide9__content {
+  margin-bottom: 35px;
+  font-size: 36px;
+}
+
+.reveal .slide8__image {
+  width: 700px;
+  height: 320px;
+  border-radius: 16px;
+  background-image: url(images/ui.webp);
 }
