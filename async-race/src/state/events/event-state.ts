@@ -1,4 +1,4 @@
-import type { EventMap } from '@state/events/event-map';
+import type { EventMap } from '@/state/events/event-map';
 
 type EventState<T extends Record<string, unknown>> = {
   on<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;

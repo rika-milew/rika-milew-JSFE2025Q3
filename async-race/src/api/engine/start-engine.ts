@@ -1,7 +1,7 @@
-import { getApiError } from '@api/get-api-error';
-import { API_URL } from '@data/constants';
+import { getApiError } from '@/api/get-api-error';
+import { API_URL } from '@/data/constants';
 
-import type { EngineResponse } from '../../types/types';
+import type { EngineResponse } from '@/types/types';
 
 export async function startEngine(
   id: number,

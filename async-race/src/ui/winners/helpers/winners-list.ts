@@ -1,9 +1,9 @@
-import { appState } from '@state/app-state';
-import { eventState } from '@state/events/event-state';
-import { winnersState } from '@state/winners-state';
-import { createWinnersTable } from '@ui/winners/table/winners-table';
-import { createElement } from '@utils/create-element';
-import { sortTable } from '@utils/sort-table';
+import { appState } from '@/state/app-state';
+import { eventState } from '@/state/events/event-state';
+import { winnersState } from '@/state/winners-state';
+import { createWinnersTable } from '@/ui/winners/table/winners-table';
+import { createElement } from '@/utils/create-element';
+import { sortTable } from '@/utils/sort-table';
 
 import type { WinnersList } from '@/types/types';
 

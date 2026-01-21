@@ -1,6 +1,6 @@
-import { createCar } from '@api/garage/create-car';
-import { generateCarName } from '@utils/generate-cars/generate-car-name';
-import { generateColor } from '@utils/generate-cars/generate-color';
+import { createCar } from '@/api/garage/create-car';
+import { generateCarName } from '@/utils/generate-cars/generate-car-name';
+import { generateColor } from '@/utils/generate-cars/generate-color';
 
 import type { Car } from '@/types/types';
 

@@ -1,19 +1,19 @@
-import { getEngineParams } from '@api/engine/get-engine-params';
-import { startEngine } from '@api/engine/start-engine';
-import { animateCar } from '@components/car/car-animation/animate-car';
-import { errorPopup } from '@components/popup/error/error';
-import { winnerPopup } from '@components/popup/winner/winner';
-import { resetCarState } from '@controller/helpers/reset-car-state';
-import { MILLISECONDS } from '@data/constants';
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { carState } from '@state/car-state';
-import { handleWinner } from '@ui/winners/helpers/handle-winner';
-import { audioPLayer } from '@utils/audio-player';
-import { checkRaceEnd } from '@utils/check-race-end';
-import { handleErrors } from '@utils/handle-errors';
-import { updateRaceSound } from '@utils/play-race-sound';
-import { setEngineButtons } from '@utils/set-car-buttons';
-import { setRaceButton } from '@utils/set-garage-buttons';
+import { getEngineParams } from '@/api/engine/get-engine-params';
+import { startEngine } from '@/api/engine/start-engine';
+import { animateCar } from '@/components/car/car-animation/animate-car';
+import { errorPopup } from '@/components/popup/error/error';
+import { winnerPopup } from '@/components/popup/winner/winner';
+import { resetCarState } from '@/controller/helpers/reset-car-state';
+import { MILLISECONDS } from '@/data/constants';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { carState } from '@/state/car-state';
+import { handleWinner } from '@/ui/winners/helpers/handle-winner';
+import { audioPLayer } from '@/utils/audio-player';
+import { checkRaceEnd } from '@/utils/check-race-end';
+import { handleErrors } from '@/utils/handle-errors';
+import { updateRaceSound } from '@/utils/play-race-sound';
+import { setEngineButtons } from '@/utils/set-car-buttons';
+import { setRaceButton } from '@/utils/set-garage-buttons';
 
 export async function handleCarStart(carId: number): Promise<void> {
   const car = carState.getById(carId);

@@ -1,10 +1,10 @@
-import { createCarFormElements } from '@components/car-form/helpers/car-form-elements';
-import { updateFormEvents } from '@components/car-form/helpers/car-form-events';
-import { createFormState } from '@components/car-form/helpers/car-form-state';
-import { errorPopup } from '@components/popup/error/error';
-import { appState } from '@state/app-state';
-import { eventState } from '@state/events/event-state';
-import { garageList } from '@ui/garage/helpers/garage-list';
+import { createCarFormElements } from '@/components/car-form/helpers/car-form-elements';
+import { updateFormEvents } from '@/components/car-form/helpers/car-form-events';
+import { createFormState } from '@/components/car-form/helpers/car-form-state';
+import { errorPopup } from '@/components/popup/error/error';
+import { appState } from '@/state/app-state';
+import { eventState } from '@/state/events/event-state';
+import { garageList } from '@/ui/garage/helpers/garage-list';
 
 import type { CarForm } from '@/types/types';
 

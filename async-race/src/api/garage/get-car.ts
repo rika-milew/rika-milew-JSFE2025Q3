@@ -1,4 +1,4 @@
-import { API_URL, ERROR_RESPONSE } from '@data/constants';
+import { API_URL, ERROR_RESPONSE } from '@/data/constants';
 
 import type { Car } from '@/types/types';
 

@@ -1,4 +1,4 @@
-import { carState } from '@state/car-state';
+import { carState } from '@/state/car-state';
 
 export const garageButtons: {
   race?: HTMLButtonElement;

@@ -1,12 +1,12 @@
-import { startEngine } from '@api/engine/start-engine';
-import { resetCarPosition } from '@components/car/car-animation/reset-car-position';
-import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
-import { handleCarStart } from '@controller/helpers/handle-car-start';
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { carState } from '@state/car-state';
-import { eventState } from '@state/events/event-state';
-import { handleErrors } from '@utils/handle-errors';
-import { setEngineButtons } from '@utils/set-car-buttons';
+import { startEngine } from '@/api/engine/start-engine';
+import { resetCarPosition } from '@/components/car/car-animation/reset-car-position';
+import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
+import { handleCarStart } from '@/controller/helpers/handle-car-start';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { carState } from '@/state/car-state';
+import { eventState } from '@/state/events/event-state';
+import { handleErrors } from '@/utils/handle-errors';
+import { setEngineButtons } from '@/utils/set-car-buttons';
 
 let isEngineControllerStarted = false;
 

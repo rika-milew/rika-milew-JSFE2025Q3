@@ -1,4 +1,4 @@
-import { API_URL } from '@data/constants';
+import { API_URL } from '@/data/constants';
 
 export async function deleteWinner(id: number): Promise<void> {
   const response = await fetch(`${API_URL}/winners/${id}`, {

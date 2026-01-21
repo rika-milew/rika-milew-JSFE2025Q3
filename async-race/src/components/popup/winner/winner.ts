@@ -1,4 +1,4 @@
-import { createPopup } from '@components/popup/popup';
+import { createPopup } from '@/components/popup/popup';
 
 import './winner.css';
 

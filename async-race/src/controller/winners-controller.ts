@@ -1,8 +1,8 @@
-import { createWinner } from '@api/winners/create-winner';
-import { updateWinner } from '@api/winners/update-winner';
-import { errorPopup } from '@components/popup/error/error';
-import { eventState } from '@state/events/event-state';
-import { winnersState } from '@state/winners-state';
+import { createWinner } from '@/api/winners/create-winner';
+import { updateWinner } from '@/api/winners/update-winner';
+import { errorPopup } from '@/components/popup/error/error';
+import { eventState } from '@/state/events/event-state';
+import { winnersState } from '@/state/winners-state';
 
 let isWinnersControllerStarted = false;
 

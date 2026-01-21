@@ -1,8 +1,8 @@
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { appState } from '@state/app-state';
-import { eventState } from '@state/events/event-state';
-import { createApp } from '@ui/ui';
-import { handleErrorsVoid } from '@utils/handle-errors';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { appState } from '@/state/app-state';
+import { eventState } from '@/state/events/event-state';
+import { createApp } from '@/ui/ui';
+import { handleErrorsVoid } from '@/utils/handle-errors';
 
 import './style.css';
 

@@ -1,8 +1,8 @@
-import { getWinners } from '@api/winners/get-winners';
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { carState } from '@state/car-state';
-import { winnersState } from '@state/winners-state';
-import { handleErrors } from '@utils/handle-errors';
+import { getWinners } from '@/api/winners/get-winners';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { carState } from '@/state/car-state';
+import { winnersState } from '@/state/winners-state';
+import { handleErrors } from '@/utils/handle-errors';
 
 let areWinnersLoaded = false;
 

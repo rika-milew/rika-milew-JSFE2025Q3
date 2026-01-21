@@ -1,5 +1,5 @@
-import { getApiError } from '@api/get-api-error';
-import { API_URL } from '@data/constants';
+import { getApiError } from '@/api/get-api-error';
+import { API_URL } from '@/data/constants';
 
 import type { DriveResponse } from '@/types/types';
 

@@ -1,7 +1,7 @@
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { appState } from '@state/app-state';
-import { createApp } from '@ui/ui';
-import { handleErrorsVoid } from '@utils/handle-errors';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { appState } from '@/state/app-state';
+import { createApp } from '@/ui/ui';
+import { handleErrorsVoid } from '@/utils/handle-errors';
 
 import type { View, AppRouter } from '@/types/types';
 

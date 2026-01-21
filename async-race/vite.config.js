@@ -4,15 +4,6 @@ export default {
    resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      '@api': resolve(__dirname, 'src/api'),
-      '@app': resolve(__dirname, 'src/app'),
-      '@components': resolve(__dirname, 'src/components'),
-      '@controller': resolve(__dirname, 'src/controller'),
-      '@data': resolve(__dirname, 'src/data'),
-      '@state': resolve(__dirname, 'src/state'),
-      '@/types': resolve(__dirname, 'src/types'),
-      '@ui': resolve(__dirname, 'src/ui'),
-      '@utils': resolve(__dirname, 'src/utils'),
     },
   },
   base: './',

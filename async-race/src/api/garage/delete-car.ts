@@ -1,4 +1,4 @@
-import { API_URL, ERROR_RESPONSE } from '@data/constants';
+import { API_URL, ERROR_RESPONSE } from '@/data/constants';
 
 export async function deleteCar(id: number): Promise<void> {
   const garageResponse = await fetch(`${API_URL}/garage/${id}`, { method: 'DELETE' });

@@ -1,4 +1,4 @@
-import { BAD_REQUEST, ERROR_RESPONSE, MANY_REQUESTS, SERVER_ERROR } from '@data/constants';
+import { BAD_REQUEST, ERROR_RESPONSE, MANY_REQUESTS, SERVER_ERROR } from '@/data/constants';
 
 export function getApiError(status: number, id?: number): string {
   switch (status) {
