@@ -9,3 +9,7 @@
 
 
 ### Presentation transcript link:
+
+[Presentation transcript](https://docs.google.com/document/d/1Hm9ZZP8ItcxkcWydcjr_B50bVgVkv8Qili5uHUmPb84/)
+
+
