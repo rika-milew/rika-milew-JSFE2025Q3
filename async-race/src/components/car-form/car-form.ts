@@ -53,11 +53,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
       nameInput.value = '';
       colorInput.value = '#000000';
 
-      try {
-        garageList.render();
-      } catch {
-        errorPopup.show('Failed to update the chosen car — try again');
-      }
+      garageList.render();
 
       appState.updateForm.isDisabled = true;
       syncDisabledState();

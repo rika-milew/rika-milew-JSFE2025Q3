@@ -19,6 +19,12 @@ export const POPUP_MESSAGES = {
 
   winnersLoadFailed: (): string => 'Failed to load the winners',
 
+  winnerCreateFailed: (name?: string): string =>
+    name ? `Failed to create winner ${name}.` : 'Failed to create winner',
+
+  winnerUpdateFailed: (name?: string): string =>
+    name ? `Failed to create winner ${name}.` : 'Failed to create winner',
+
   randomCarsFailed: (): string => 'Failed to create 100 random cars',
 
   carResetFailed: (id?: number, name?: string): string =>

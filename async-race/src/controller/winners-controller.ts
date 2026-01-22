@@ -1,6 +1,7 @@
 import { createWinner } from '@/api/winners/create-winner';
 import { updateWinner } from '@/api/winners/update-winner';
 import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@/data/error-messages';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
 
@@ -26,34 +27,41 @@ export function startWinnersController(): void {
 
     const { id, name, color, time } = payload;
 
-    try {
-      const existing = winnersState.getById(id);
+    const existing = winnersState.getById(id);
 
-      if (existing) {
-        const currentWins = existing.wins + 1;
-        const bestTime = Math.min(existing.time, time);
-        const updated = await updateWinner(id, currentWins, bestTime);
+    if (existing) {
+      const currentWins = existing.wins + 1;
+      const bestTime = Math.min(existing.time, time);
 
-        winnersState.update({
-          ...updated,
-          name,
-          color,
-          wins: updated.wins,
-        });
-      } else {
-        const created = await createWinner(id, 1, time);
+      const updated = await updateWinner(id, currentWins, bestTime);
 
-        winnersState.add({
-          ...created,
-          name,
-          color,
-        });
+      if (!updated) {
+        errorPopup.show(POPUP_MESSAGES.winnerUpdateFailed(name));
+        return;
       }
 
-      eventState.emit('winner:updated');
-    } catch {
-      errorPopup.show(`Failed to save winner ${name}`);
+      winnersState.update({
+        ...updated,
+        name,
+        color,
+        wins: updated.wins,
+      });
+    } else {
+      const created = await createWinner(id, 1, time);
+
+      if (!created) {
+        errorPopup.show(POPUP_MESSAGES.winnerCreateFailed(name));
+        return;
+      }
+
+      winnersState.add({
+        ...created,
+        name,
+        color,
+      });
     }
+
+    eventState.emit('winner:updated');
   });
 
   eventState.on('car:delete', (payload) => {

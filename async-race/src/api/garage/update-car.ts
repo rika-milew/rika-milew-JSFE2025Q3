@@ -1,26 +1,16 @@
-import { API_URL, ERROR_RESPONSE } from '@/data/constants';
+import { fetchData } from '@/api/fetch-data';
+import { API_URL } from '@/data/constants';
 
 import type { Car } from '@/types/types';
 
-export async function updateCar(id: number, name: string, color: string): Promise<Car> {
-  try {
-    const response = await fetch(`${API_URL}/garage/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, color }),
-    });
+export async function updateCar(id: number, name: string, color: string): Promise<Car | undefined> {
+  const url = `${API_URL}/garage/${id}`;
 
-    if (!response.ok) {
-      if (response.status === ERROR_RESPONSE) {
-        throw new Error(`The car with id ${id} not found`);
-      }
-      const errorMessage = await response.text();
-      throw new Error(errorMessage || `Failed to update the car ${id}. Status: ${response.status}`);
-    }
+  const updatedCar = await fetchData<Car>(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, color }),
+  });
 
-    const updatedCar: Car = await response.json();
-    return updatedCar;
-  } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Error while updating the car');
-  }
+  return updatedCar;
 }

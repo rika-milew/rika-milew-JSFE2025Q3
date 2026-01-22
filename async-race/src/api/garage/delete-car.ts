@@ -1,15 +1,13 @@
-import { API_URL, ERROR_RESPONSE } from '@/data/constants';
+import { fetchData } from '@/api/fetch-data';
+import { API_URL } from '@/data/constants';
 
-export async function deleteCar(id: number): Promise<void> {
-  const garageResponse = await fetch(`${API_URL}/garage/${id}`, { method: 'DELETE' });
-  if (!garageResponse.ok) {
-    throw new Error(`Failed to delete the car ${id} from garage. Status: ${garageResponse.status}`);
+export async function deleteCar(id: number): Promise<boolean> {
+  const garageResponse = await fetchData(`${API_URL}/garage/${id}`, { method: 'DELETE' });
+  if (!garageResponse) {
+    return false;
   }
 
-  const winnersResponse = await fetch(`${API_URL}/winners/${id}`, { method: 'DELETE' });
-  if (!winnersResponse.ok && winnersResponse.status !== ERROR_RESPONSE) {
-    throw new Error(
-      `Failed to delete the car ${id} from winners. Status: ${winnersResponse.status}`,
-    );
-  }
+  await fetchData(`${API_URL}/winners/${id}`, { method: 'DELETE' });
+
+  return true;
 }

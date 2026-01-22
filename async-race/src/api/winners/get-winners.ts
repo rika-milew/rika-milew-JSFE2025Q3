@@ -1,22 +1,18 @@
+import { fetchData } from '@/api/fetch-data';
 import { API_URL } from '@/data/constants';
 
-import type { Winner } from '@/types/types';
+import type { Winner, WinnersResponse } from '@/types/types';
 
-export async function getWinners(): Promise<{
-  winners: Winner[];
-  totalWinners: number;
-}> {
+export async function getWinners(): Promise<WinnersResponse | undefined> {
   const url = `${API_URL}/winners`;
 
-  const response = await fetch(url);
+  const winners: Winner[] | undefined = await fetchData<Winner[]>(url);
 
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(errorMessage || `Failed to load winners. Status: ${response.status}`);
+  if (!winners) {
+    return undefined;
   }
 
-  const winners: Winner[] = await response.json();
-  const totalWinners = Number(response.headers.get('X-Total-Count')) || 0;
+  const totalWinners = winners.length;
 
   return { winners, totalWinners };
 }

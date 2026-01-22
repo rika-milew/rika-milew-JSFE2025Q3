@@ -9,7 +9,6 @@ import { carState } from '@/state/car-state';
 import { removeCarStore } from '@/state/car-store';
 import { eventState } from '@/state/events/event-state';
 import { garageList } from '@/ui/garage/helpers/garage-list';
-import { handleErrors, handleErrorsVoid } from '@/utils/handle-errors';
 
 let isControllerStarted = false;
 
@@ -41,12 +40,10 @@ export function startGarageController(): void {
       return;
     }
 
-    const updated = await handleErrors(
-      () => updateCar(payload.id, payload.name, payload.color),
-      POPUP_MESSAGES.carUpdateFailed(),
-    );
+    const updated = await updateCar(payload.id, payload.name, payload.color);
 
     if (!updated) {
+      errorPopup.show(POPUP_MESSAGES.carUpdateFailed());
       return;
     }
 
@@ -62,12 +59,10 @@ export function startGarageController(): void {
 
     const car = carState.getById(payload.id);
 
-    const success = await handleErrorsVoid(
-      () => deleteCar(payload.id),
-      POPUP_MESSAGES.carDeleteFailed(payload.id, car?.name),
-    );
+    const success = await deleteCar(payload.id);
 
     if (!success) {
+      errorPopup.show(POPUP_MESSAGES.carDeleteFailed(payload.id, car?.name));
       return;
     }
 

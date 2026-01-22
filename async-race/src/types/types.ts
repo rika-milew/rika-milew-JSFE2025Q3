@@ -131,6 +131,7 @@ export type CarBrand = {
 
 export type GarageList = {
   render: () => void;
+  renderEmpty: () => void;
   setPage: (page: number) => void;
 };
 
@@ -212,4 +213,9 @@ export type DriveResponse = {
 export type EngineResponse = {
   velocity: number;
   distance: number;
+};
+
+export type WinnersResponse = {
+  winners: Winner[];
+  totalWinners: number;
 };

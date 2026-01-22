@@ -1,8 +1,8 @@
 import { getWinners } from '@/api/winners/get-winners';
+import { errorPopup } from '@/components/popup/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { carState } from '@/state/car-state';
 import { winnersState } from '@/state/winners-state';
-import { handleErrors } from '@/utils/handle-errors';
 
 let areWinnersLoaded = false;
 
@@ -12,12 +12,12 @@ export async function loadWinners(): Promise<void> {
   }
   areWinnersLoaded = true;
 
-  const result = await handleErrors(() => getWinners(), POPUP_MESSAGES.winnersLoadFailed());
+  const result = await getWinners();
 
   if (!result) {
+    errorPopup.show(POPUP_MESSAGES.winnersLoadFailed());
     return;
   }
-
   const { winners } = result;
 
   const winnersData = winners.map((winner) => {

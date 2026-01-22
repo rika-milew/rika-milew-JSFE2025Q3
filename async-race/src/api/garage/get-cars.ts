@@ -1,18 +1,19 @@
+import { fetchData } from '@/api/fetch-data';
 import { API_URL } from '@/data/constants';
 
 import type { Car } from '@/types/types';
 
-export async function getCars(): Promise<{ cars: Car[]; totalCount: number }> {
+export async function getCars(): Promise<{ cars: Car[]; totalCount: number } | undefined> {
   const url = `${API_URL}/garage`;
 
-  const response = await fetch(url);
+  const cars: Car[] | undefined = await fetchData<Car[]>(url);
 
-  if (!response.ok) {
-    throw new Error(`Failed to get the cars. Status: ${response.status}`);
+  if (!cars) {
+    return undefined;
   }
 
-  const cars: Car[] = await response.json();
-  const totalCount = Number(response.headers.get('X-Total-Count') ?? cars.length);
+  const totalCountHeader = Number(await fetchData<number>(url, { method: 'HEAD' }));
+  const totalCount = totalCountHeader > 0 ? totalCountHeader : cars.length;
 
   return { cars, totalCount };
 }
