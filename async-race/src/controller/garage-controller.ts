@@ -2,6 +2,7 @@ import { createCar } from '@/api/garage/create-car';
 import { deleteCar } from '@/api/garage/delete-car';
 import { updateCar } from '@/api/garage/update-car';
 import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
+import { errorPopup } from '@/components/popup/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { appState } from '@/state/app-state';
 import { carState } from '@/state/car-state';
@@ -23,12 +24,10 @@ export function startGarageController(): void {
       return;
     }
 
-    const created = await handleErrors(
-      () => createCar(payload.name, payload.color),
-      POPUP_MESSAGES.carCreateFailed(),
-    );
+    const created = await createCar(payload.name, payload.color);
 
     if (!created) {
+      errorPopup.show(POPUP_MESSAGES.carCreateFailed());
       return;
     }
 
