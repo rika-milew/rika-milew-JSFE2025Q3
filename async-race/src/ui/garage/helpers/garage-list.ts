@@ -21,6 +21,11 @@ export const garageList: GarageList = ((): GarageList => {
 
     garageContainer.replaceChildren();
 
+    if (cars.length === 0) {
+      renderEmpty();
+      return;
+    }
+
     cars.forEach((car) => {
       garageContainer.append(createCarElement(car));
     });
@@ -32,12 +37,20 @@ export const garageList: GarageList = ((): GarageList => {
   }
 
   function renderEmpty(): void {
+    garageContainer.replaceChildren();
+
     const emptyGarage = createElement({
       tag: 'p',
-      className: ['no-garage-message'],
-      textContent: 'No cars in the garage yet! Add some to get started!',
+      className: ['garage-empty'],
+      textContent: 'Your garage is empty. Add a car to get started!',
     });
+
     garageContainer.append(emptyGarage);
+
+    eventState.emit('garage:pagination:update', {
+      currentPage: 1,
+      totalCount: 0,
+    });
   }
 
   function setPage(page: number): void {

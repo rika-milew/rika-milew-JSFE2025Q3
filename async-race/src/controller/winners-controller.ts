@@ -1,6 +1,7 @@
 import { createWinner } from '@/api/winners/create-winner';
 import { updateWinner } from '@/api/winners/update-winner';
 import { errorPopup } from '@/components/popup/error/error';
+import { handleWinnerUpdate } from '@/controller/helpers/handle-winner-update';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
@@ -76,4 +77,6 @@ export function startWinnersController(): void {
       eventState.emit('winner:updated');
     }
   });
+
+  eventState.on('car:update', handleWinnerUpdate);
 }

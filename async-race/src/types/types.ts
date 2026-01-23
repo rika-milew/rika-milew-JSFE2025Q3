@@ -13,10 +13,6 @@ export type HTMLElements = Pick<
   | 'p'
   | 'a'
   | 'img'
-  | 'ul'
-  | 'ol'
-  | 'li'
-  | 'textarea'
   | 'select'
   | 'option'
   | 'label'
@@ -137,6 +133,7 @@ export type GarageList = {
 
 export type WinnersList = {
   renderWinners: () => void;
+  renderEmpty: () => void;
   setWinnersPage: (page: number) => void;
 };
 
