@@ -3,7 +3,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,6 +10,14 @@
   transition: opacity 0.3s ease;
   opacity: 0;
   pointer-events: none;
+}
+
+.winner-overlay {
+  z-index: 1000;
+}
+
+.error-overlay {
+  z-index: 999;
 }
 
 .error-overlay.visible,

@@ -1,9 +1,9 @@
-import { createInfoElements } from '@components/page-info/page-info';
-import { appState } from '@state/app-state';
-import { carState } from '@state/car-state';
-import { eventState } from '@state/events/event-state';
+import { createPageInfo } from '@/components/page-info/page-info';
+import { appState } from '@/state/app-state';
+import { carState } from '@/state/car-state';
+import { eventState } from '@/state/events/event-state';
 
-export const infoElements = createInfoElements({
+export const infoElements = createPageInfo({
   title: 'Garage',
   page: appState.garagePage,
   total: carState.cars.length,

@@ -1,14 +1,14 @@
-import { createCar } from '@api/garage/create-car';
-import { deleteCar } from '@api/garage/delete-car';
-import { updateCar } from '@api/garage/update-car';
-import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { appState } from '@state/app-state';
-import { carState } from '@state/car-state';
-import { removeCarStore } from '@state/car-store';
-import { eventState } from '@state/events/event-state';
-import { garageList } from '@ui/garage/helpers/garage-list';
-import { handleErrors, handleErrorsVoid } from '@utils/handle-errors';
+import { createCar } from '@/api/garage/create-car';
+import { deleteCar } from '@/api/garage/delete-car';
+import { updateCar } from '@/api/garage/update-car';
+import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
+import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { appState } from '@/state/app-state';
+import { carState } from '@/state/car-state';
+import { removeCarStore } from '@/state/car-store';
+import { eventState } from '@/state/events/event-state';
+import { garageList } from '@/ui/garage/helpers/garage-list';
 
 let isControllerStarted = false;
 
@@ -23,16 +23,15 @@ export function startGarageController(): void {
       return;
     }
 
-    const created = await handleErrors(
-      () => createCar(payload.name, payload.color),
-      POPUP_MESSAGES.carCreateFailed(),
-    );
+    const created = await createCar(payload.name, payload.color);
 
     if (!created) {
+      errorPopup.show(POPUP_MESSAGES.carCreateFailed());
       return;
     }
 
     carState.add(created);
+
     eventState.emit('updateform:reset');
     eventState.emit('garage:refresh');
   });
@@ -42,16 +41,15 @@ export function startGarageController(): void {
       return;
     }
 
-    const updated = await handleErrors(
-      () => updateCar(payload.id, payload.name, payload.color),
-      POPUP_MESSAGES.carUpdateFailed(),
-    );
+    const updated = await updateCar(payload.id, payload.name, payload.color);
 
     if (!updated) {
+      errorPopup.show(POPUP_MESSAGES.carUpdateFailed());
       return;
     }
 
     carState.update(updated);
+
     eventState.emit('garage:refresh');
     eventState.emit('winners:refresh');
   });
@@ -63,12 +61,10 @@ export function startGarageController(): void {
 
     const car = carState.getById(payload.id);
 
-    const success = await handleErrorsVoid(
-      () => deleteCar(payload.id),
-      POPUP_MESSAGES.carDeleteFailed(payload.id, car?.name),
-    );
+    const success = await deleteCar(payload.id);
 
     if (!success) {
+      errorPopup.show(POPUP_MESSAGES.carDeleteFailed(payload.id, car?.name));
       return;
     }
 
@@ -82,6 +78,7 @@ export function startGarageController(): void {
     }
 
     garageList.render();
+
     eventState.emit('car:deleted', payload.id);
   });
 }

@@ -1,9 +1,9 @@
-import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
-import { carState } from '@state/car-state';
-import { getCarStore } from '@state/car-store';
-import { updateRaceSound } from '@utils/play-race-sound';
-import { setEngineButtons } from '@utils/set-car-buttons';
-import { setGarageButtons, setRaceButton } from '@utils/set-garage-buttons';
+import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
+import { carState } from '@/state/car-state';
+import { getCarStore } from '@/state/car-store';
+import { updateRaceSound } from '@/utils/play-race-sound';
+import { setEngineButtons } from '@/utils/set-car-buttons';
+import { setGarageButtons, setRaceButton } from '@/utils/set-garage-buttons';
 
 export function resetCarPosition(carId: number): void {
   const carElement = getCarStore(carId);

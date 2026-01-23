@@ -1,10 +1,10 @@
-import { createCarFormElements } from '@components/car-form/helpers/car-form-elements';
-import { updateFormEvents } from '@components/car-form/helpers/car-form-events';
-import { createFormState } from '@components/car-form/helpers/car-form-state';
-import { errorPopup } from '@components/popup/error/error';
-import { appState } from '@state/app-state';
-import { eventState } from '@state/events/event-state';
-import { garageList } from '@ui/garage/helpers/garage-list';
+import { createCarFormElements } from '@/components/car-form/helpers/car-form-elements';
+import { initFormEvents } from '@/components/car-form/helpers/init-form-events';
+import { updateFormEvents } from '@/components/car-form/helpers/update-form-events';
+import { errorPopup } from '@/components/popup/error/error';
+import { appState } from '@/state/app-state';
+import { eventState } from '@/state/events/event-state';
+import { garageList } from '@/ui/garage/helpers/garage-list';
 
 import type { CarForm } from '@/types/types';
 
@@ -13,7 +13,7 @@ import './car-form.css';
 export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
   const { carForm, nameInput, colorInput, button } = createCarFormElements(isUpdate);
 
-  const { syncDisabledState } = initCarFormEvents(isUpdate, nameInput, colorInput, button);
+  const { syncDisabledState } = initFormEvents(isUpdate, nameInput, colorInput, button);
 
   if (isUpdate) {
     updateFormEvents(nameInput, colorInput, syncDisabledState);
@@ -53,11 +53,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
       nameInput.value = '';
       colorInput.value = '#000000';
 
-      try {
-        garageList.render();
-      } catch {
-        errorPopup.show('Failed to update the chosen car — try again');
-      }
+      garageList.render();
 
       appState.updateForm.isDisabled = true;
       syncDisabledState();
@@ -78,32 +74,4 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
   });
 
   return carForm;
-}
-
-export function initCarFormEvents(
-  isUpdate: boolean,
-  nameInput: HTMLInputElement,
-  colorInput: HTMLInputElement,
-  button: HTMLButtonElement,
-): { syncDisabledState: () => void } {
-  nameInput.addEventListener('input', () => {
-    if (isUpdate) {
-      appState.updateForm.name = nameInput.value;
-    } else {
-      appState.createForm.name = nameInput.value;
-    }
-  });
-
-  colorInput.addEventListener('input', () => {
-    if (isUpdate) {
-      appState.updateForm.color = colorInput.value;
-    } else {
-      appState.createForm.color = colorInput.value;
-    }
-  });
-
-  const { syncDisabledState } = createFormState(isUpdate, nameInput, colorInput, button);
-  syncDisabledState();
-
-  return { syncDisabledState };
 }

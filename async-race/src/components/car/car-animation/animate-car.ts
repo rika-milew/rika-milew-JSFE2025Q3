@@ -1,8 +1,8 @@
-import { stopCarAnimation } from '@components/car/car-animation/stop-car-animation';
-import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@data/constants';
-import { carState } from '@state/car-state';
-import { getCarStore, setCarAnimationId } from '@state/car-store';
-import { updateRaceSound } from '@utils/play-race-sound';
+import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
+import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@/data/constants';
+import { carState } from '@/state/car-state';
+import { getCarStore, setCarAnimationId } from '@/state/car-store';
+import { updateRaceSound } from '@/utils/play-race-sound';
 
 export function animateCar(
   carId: number,

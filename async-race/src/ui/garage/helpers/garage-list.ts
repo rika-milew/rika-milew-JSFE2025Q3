@@ -1,12 +1,10 @@
-import { createCarElement } from '@components/car/car';
-import { resetAllCarsPositions } from '@components/car/car-animation/reset-car-position';
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { appState } from '@state/app-state';
-import { carState } from '@state/car-state';
-import { eventState } from '@state/events/event-state';
-import { createElement } from '@utils/create-element';
-import { createRandomCars } from '@utils/generate-cars/generate-cars';
-import { handleErrors } from '@utils/handle-errors';
+import { createCarElement } from '@/components/car/car';
+import { resetAllCarsPositions } from '@/components/car/car-animation/reset-car-position';
+import { appState } from '@/state/app-state';
+import { carState } from '@/state/car-state';
+import { eventState } from '@/state/events/event-state';
+import { createElement } from '@/utils/create-element';
+import { createRandomCars } from '@/utils/generate-cars/generate-cars';
 
 import type { GarageList, Car } from '@/types/types';
 
@@ -23,6 +21,11 @@ export const garageList: GarageList = ((): GarageList => {
 
     garageContainer.replaceChildren();
 
+    if (cars.length === 0) {
+      renderEmpty();
+      return;
+    }
+
     cars.forEach((car) => {
       garageContainer.append(createCarElement(car));
     });
@@ -30,6 +33,23 @@ export const garageList: GarageList = ((): GarageList => {
     eventState.emit('garage:pagination:update', {
       currentPage: appState.garagePage,
       totalCount: carState.totalCount,
+    });
+  }
+
+  function renderEmpty(): void {
+    garageContainer.replaceChildren();
+
+    const emptyGarage = createElement({
+      tag: 'p',
+      className: ['garage-empty'],
+      textContent: 'Your garage is empty. Add a car to get started!',
+    });
+
+    garageContainer.append(emptyGarage);
+
+    eventState.emit('garage:pagination:update', {
+      currentPage: 1,
+      totalCount: 0,
     });
   }
 
@@ -54,14 +74,7 @@ export const garageList: GarageList = ((): GarageList => {
   });
 
   eventState.on('garage:generate', async (quantity) => {
-    const newCars: Car[] | undefined = await handleErrors(
-      () => createRandomCars(quantity),
-      POPUP_MESSAGES.randomCarsFailed(),
-    );
-
-    if (!newCars) {
-      return;
-    }
+    const newCars: Car[] | undefined = await createRandomCars(quantity);
 
     newCars.forEach((car) => {
       carState.add(car);
@@ -70,5 +83,5 @@ export const garageList: GarageList = ((): GarageList => {
     eventState.emit('garage:refresh');
   });
 
-  return { render, setPage };
+  return { render, renderEmpty, setPage };
 })();

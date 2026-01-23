@@ -1,10 +1,10 @@
-import { createButton } from '@components/button/button';
-import { createEngineButtons } from '@components/car/create-engine-buttons';
-import { createCarImage } from '@components/svg-paint/create-car-image';
-import { createFlagImage } from '@components/svg-paint/create-flag-image';
-import { addCarStore } from '@state/car-store';
-import { eventState } from '@state/events/event-state';
-import { createElement } from '@utils/create-element';
+import { createButton } from '@/components/button/button';
+import { createEngineButtons } from '@/components/car/create-engine-buttons';
+import { createCarImage } from '@/components/svg-paint/create-car-image';
+import { createFlagImage } from '@/components/svg-paint/create-flag-image';
+import { addCarStore } from '@/state/car-store';
+import { eventState } from '@/state/events/event-state';
+import { createElement } from '@/utils/create-element';
 
 import type { Car } from '../../types/types';
 

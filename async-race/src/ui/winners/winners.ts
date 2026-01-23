@@ -1,13 +1,12 @@
-import { appState } from '@state/app-state';
-import { eventState } from '@state/events/event-state';
-import { winnersState } from '@state/winners-state';
-import { loadWinners } from '@ui/winners/helpers/load-winners';
-import { winnersContainer, winnersList } from '@ui/winners/helpers/winners-list';
-import { implementWinnersPagination } from '@ui/winners/helpers/winners-pagination';
-import { winnerInfoElements } from '@ui/winners/winners-info-elements';
-import { createElement } from '@utils/create-element';
+import { appState } from '@/state/app-state';
+import { eventState } from '@/state/events/event-state';
+import { winnersState } from '@/state/winners-state';
+import { winnersContainer, winnersList } from '@/ui/winners/helpers/winners-list';
+import { implementWinnersPagination } from '@/ui/winners/helpers/winners-pagination';
+import { winnerInfoElements } from '@/ui/winners/winners-info-elements';
+import { createElement } from '@/utils/create-element';
 
-export async function createWinners(): Promise<void> {
+export function createWinners(): void {
   const main = createElement({ tag: 'div', className: ['main'] });
   const container = createElement({ tag: 'div', className: ['container'] });
 
@@ -36,7 +35,6 @@ export async function createWinners(): Promise<void> {
   const tableContainer = createElement({ tag: 'div', className: ['table-container'] });
   container.append(tableContainer);
 
-  await loadWinners();
   winnersList.renderWinners();
 
   eventState.on('winners:pagination:update', () => {

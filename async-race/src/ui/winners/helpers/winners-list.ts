@@ -1,9 +1,9 @@
-import { appState } from '@state/app-state';
-import { eventState } from '@state/events/event-state';
-import { winnersState } from '@state/winners-state';
-import { createWinnersTable } from '@ui/winners/table/winners-table';
-import { createElement } from '@utils/create-element';
-import { sortTable } from '@utils/sort-table';
+import { appState } from '@/state/app-state';
+import { eventState } from '@/state/events/event-state';
+import { winnersState } from '@/state/winners-state';
+import { createWinnersTable } from '@/ui/winners/table/winners-table';
+import { createElement } from '@/utils/create-element';
+import { sortTable } from '@/utils/sort-table';
 
 import type { WinnersList } from '@/types/types';
 
@@ -20,14 +20,8 @@ export const winnersList: WinnersList = ((): WinnersList => {
 
     winnersContainer.replaceChildren();
 
-    if (pageWinners.length === 0) {
-      winnersContainer.append(
-        createElement({
-          tag: 'p',
-          className: ['no-winners-message'],
-          textContent: 'No winners yet. Time to start a race!',
-        }),
-      );
+    if (winners.length === 0) {
+      renderEmpty();
       return;
     }
 
@@ -36,6 +30,23 @@ export const winnersList: WinnersList = ((): WinnersList => {
     eventState.emit('winners:pagination:update', {
       currentPage: appState.winnersPage,
       totalCount: winnersState.totalWinners,
+    });
+  }
+
+  function renderEmpty(): void {
+    winnersContainer.replaceChildren();
+
+    winnersContainer.append(
+      createElement({
+        tag: 'p',
+        className: ['no-winners-message'],
+        textContent: 'No winners yet. Time to start a race!',
+      }),
+    );
+
+    eventState.emit('winners:pagination:update', {
+      currentPage: 1,
+      totalCount: 0,
     });
   }
 
@@ -69,5 +80,5 @@ export const winnersList: WinnersList = ((): WinnersList => {
 
   renderWinners();
 
-  return { renderWinners, setWinnersPage };
+  return { renderWinners, renderEmpty, setWinnersPage };
 })();

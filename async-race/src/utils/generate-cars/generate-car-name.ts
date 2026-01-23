@@ -1,4 +1,4 @@
-import { carBrands } from '@data/car-models';
+import { carBrands } from '@/data/car-models';
 
 export function generateCarName(): string {
   const carBrand = carBrands[Math.floor(Math.random() * carBrands.length)];

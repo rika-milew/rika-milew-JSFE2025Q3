@@ -1,8 +1,8 @@
-import { createElement } from '@utils/create-element';
+import { createElement } from '@/utils/create-element';
 
 import type { PageInfoElements, PageInfoResults } from '@/types/types';
 
-export function createInfoElements({
+export function createPageInfo({
   title,
   page,
   total,

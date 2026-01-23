@@ -1,7 +1,7 @@
-import { getCars } from '@api/garage/get-cars';
-import { POPUP_MESSAGES } from '@data/error-messages';
-import { carState } from '@state/car-state';
-import { handleErrors } from '@utils/handle-errors';
+import { getCars } from '@/api/garage/get-cars';
+import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@/data/error-messages';
+import { carState } from '@/state/car-state';
 
 let isDefault = false;
 
@@ -10,13 +10,15 @@ export async function loadDefaultCars(): Promise<void> {
     return;
   }
 
-  const result = await handleErrors(() => getCars(), POPUP_MESSAGES.garageLoadFailed());
+  const result = await getCars();
 
   if (!result) {
+    errorPopup.show(POPUP_MESSAGES.garageLoadFailed());
     return;
   }
 
   const { cars, totalCount } = result;
+
   carState.set(cars, totalCount);
 
   isDefault = true;
