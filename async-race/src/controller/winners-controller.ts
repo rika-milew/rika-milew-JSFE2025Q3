@@ -6,14 +6,9 @@ import { POPUP_MESSAGES } from '@/data/error-messages';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
 
-let isWinnersControllerStarted = false;
+import type { WinnerAddPayload } from '@/types/types';
 
-type WinnerAddPayload = {
-  id: number;
-  name: string;
-  color: string;
-  time: number;
-};
+let isWinnersControllerStarted = false;
 
 export function startWinnersController(): void {
   if (isWinnersControllerStarted) {

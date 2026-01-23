@@ -137,6 +137,13 @@ export type WinnersList = {
   setWinnersPage: (page: number) => void;
 };
 
+export type WinnerAddPayload = {
+  id: number;
+  name: string;
+  color: string;
+  time: number;
+};
+
 export type SoundTypes = 'race' | 'brake' | 'button';
 
 export type AudioPlayer = {
@@ -199,6 +206,38 @@ export type CarStore = {
   trackLine: HTMLDivElement;
   finish: HTMLElement;
   animationId?: number;
+};
+
+export type EngineButtons = {
+  startButton: HTMLButtonElement;
+  resetButton: HTMLButtonElement;
+};
+
+export type EngineData = {
+  velocity: number;
+  distance: number;
+};
+
+export type CarStateItem = Car & {
+  currentPosition?: number;
+  isDriving?: boolean;
+  animationId?: number;
+  lastEngine?: EngineData;
+  trackDistance: number;
+};
+
+export type CarState = {
+  cars: CarStateItem[];
+  totalCount: number;
+  set(cars: Car[], totalCount?: number): void;
+  add(car: Car): void;
+  update(updatedCar: Car): void;
+  remove(id: number): void;
+  getById(id: number): CarStateItem | undefined;
+  getAllOnCurrentPage(): CarStateItem[];
+  winner: CarStateItem | undefined;
+  isRacing: boolean;
+  garageSessionId: number;
 };
 
 // api

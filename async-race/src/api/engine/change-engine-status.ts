@@ -8,5 +8,6 @@ export async function changeEngineStatus<T extends EngineResponse | DriveRespons
   status: 'started' | 'stopped' | 'drive',
 ): Promise<T | undefined> {
   const url = `${API_URL}/engine?id=${id}&status=${status}`;
+
   return fetchData<T>(url, { method: 'PATCH' });
 }

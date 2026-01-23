@@ -31,6 +31,7 @@ export function startGarageController(): void {
     }
 
     carState.add(created);
+
     eventState.emit('updateform:reset');
     eventState.emit('garage:refresh');
   });
@@ -48,6 +49,7 @@ export function startGarageController(): void {
     }
 
     carState.update(updated);
+
     eventState.emit('garage:refresh');
     eventState.emit('winners:refresh');
   });
@@ -76,6 +78,7 @@ export function startGarageController(): void {
     }
 
     garageList.render();
+
     eventState.emit('car:deleted', payload.id);
   });
 }

@@ -5,6 +5,7 @@ import type { Car } from '@/types/types';
 
 export async function createCar(name: string, color: string): Promise<Car | undefined> {
   const url = `${API_URL}/garage`;
+
   return fetchData<Car>(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

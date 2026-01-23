@@ -1,33 +1,6 @@
 import { appState } from '@/state/app-state';
 
-import type { Car } from '@/types/types';
-
-type EngineData = {
-  velocity: number;
-  distance: number;
-};
-
-type CarStateItem = Car & {
-  currentPosition?: number;
-  isDriving?: boolean;
-  animationId?: number;
-  lastEngine?: EngineData;
-  trackDistance: number;
-};
-
-type CarState = {
-  cars: CarStateItem[];
-  totalCount: number;
-  set(cars: Car[], totalCount?: number): void;
-  add(car: Car): void;
-  update(updatedCar: Car): void;
-  remove(id: number): void;
-  getById(id: number): CarStateItem | undefined;
-  getAllOnCurrentPage(): CarStateItem[];
-  winner: CarStateItem | undefined;
-  isRacing: boolean;
-  garageSessionId: number;
-};
+import type { Car, CarState, CarStateItem } from '@/types/types';
 
 export const carState: CarState = {
   cars: [],
