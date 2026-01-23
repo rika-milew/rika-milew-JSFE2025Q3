@@ -6,7 +6,8 @@ export async function fetchData<T>(url: string, options?: RequestInit): Promise<
       return undefined;
     }
 
-    const data: T = await response.json();
+    const text = await response.text();
+    const data: T = JSON.parse(text || '{}');
     return data;
   } catch (error) {
     console.error(`Error processing ${url}:`, error);
