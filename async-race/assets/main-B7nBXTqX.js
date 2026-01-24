@@ -98,15 +98,16 @@ const errorPopup = createPopup({
   overlayClass: "error-overlay",
   containerClass: "error",
   headingContent: "Error",
-  imageSrc: "/error-icon.svg",
+  imageSrc: "icons/error-icon.svg",
   imageAlt: "Error Icon",
   animationDuration: 2e3
 });
 
 const POPUP_MESSAGES = {
-  carCreateFailed: (id, name) => id ? `Failed to create a new ${name ? ` (${name})` : ""} car.` : "Failed to create a new car",
+  carCreateFailed: (id, name) => id ? `Failed to create a new ${name ? ` ${name}` : ""} car.` : "Failed to create a new car",
   carUpdateFailed: () => "Failed to update the chosen car — try again.",
-  carDeleteFailed: (id, name) => id ? `Failed to delete the ${name ? ` (${name})` : ""} car with ID ${id}.` : "Failed to delete the chosen car",
+  carDeleteFailed: (id, name) => id ? `Failed to delete the ${name ? ` ${name}` : ""} car with ID ${id}.` : "Failed to delete the chosen car",
+  carFormFailed: () => "Please, enter car name",
   appLoadFailed: () => "Failed to load the app",
   viewChangeFailed: () => "Failed to change the view",
   navigationFailed: () => "Failed to navigate to the selected view",
@@ -115,9 +116,9 @@ const POPUP_MESSAGES = {
   winnerCreateFailed: (name) => name ? `Failed to create winner ${name}.` : "Failed to create winner",
   winnerUpdateFailed: (name) => name ? `Failed to create winner ${name}.` : "Failed to create winner",
   randomCarsFailed: () => "Failed to create 100 random cars",
-  carResetFailed: (id, name) => id ? `Failed to reset the ${name ? ` (${name})` : ""} car with ID ${id}.` : "Failed to reset the chosen car",
-  carStartFailed: (id, name) => id ? `Failed to start the ${name ? ` (${name})` : ""} car with ID ${id}.` : "Failed to start the chosen car",
-  carDriveFailed: (id, name) => id ? `The ${name ? ` (${name})` : ""} car (ID ${id}) has been stopped suddenly. It's engine was broken down.` : "Car with has been stopped suddenly. It's engine was broken down.",
+  carResetFailed: (id, name) => id ? `Failed to reset the ${name ? ` ${name}` : ""} car with ID ${id}.` : "Failed to reset the chosen car",
+  carStartFailed: (id, name) => id ? `Failed to start the ${name ? ` ${name}` : ""} car with ID ${id}.` : "Failed to start the chosen car",
+  carDriveFailed: (id, name) => id ? `The ${name ? ` ${name}` : ""} car (ID ${id}) has been stopped suddenly. It's engine was broken down.` : "The car has been stopped suddenly. It's engine was broken down.",
   generalError: "Something went wrong"
 };
 
@@ -250,9 +251,9 @@ function setCarAnimationId(carId, animationId) {
 
 const audioPLayer = (() => {
   const sounds = {
-    race: new Audio("/sounds/race.mp3"),
-    brake: new Audio("/sounds/brake.mp3"),
-    button: new Audio("/sounds/button.mp3")
+    race: new Audio("sounds/race.mp3"),
+    brake: new Audio("sounds/brake.mp3"),
+    button: new Audio("sounds/button.mp3")
   };
   sounds.race.loop = true;
   sounds.race.volume = 0.3;
@@ -268,6 +269,16 @@ const audioPLayer = (() => {
     });
   }
   updateMute();
+  function safePlay(sound) {
+    sound.currentTime = 0;
+    sound.play().catch((error) => {
+      if (error instanceof Error) {
+        console.error("Audio play failed:", error.message);
+      } else {
+        console.error("Audio play failed:", error);
+      }
+    });
+  }
   function toggleMute() {
     isMuted = !isMuted;
     localStorage.setItem(STORAGE_KEY, isMuted.toString());
@@ -278,8 +289,7 @@ const audioPLayer = (() => {
       return;
     }
     const sound = sounds[id];
-    sound.currentTime = 0;
-    void sound.play();
+    safePlay(sound);
     activeSounds.add(id);
   }
   function stopSound(id) {
@@ -298,8 +308,7 @@ const audioPLayer = (() => {
       return;
     }
     const sound = sounds[id];
-    sound.currentTime = 0;
-    void sound.play();
+    safePlay(sound);
   }
   function playRaceLoop() {
     if (isMuted) {
@@ -309,8 +318,7 @@ const audioPLayer = (() => {
     if (!raceSound.paused) {
       return;
     }
-    raceSound.currentTime = 0;
-    void raceSound.play();
+    safePlay(raceSound);
     activeSounds.add("race");
   }
   function stopRaceLoop() {
@@ -700,7 +708,7 @@ function createFlagImage() {
     tag: "img",
     className: ["race__finish"],
     attributes: {
-      src: "/finish.svg",
+      src: "icons/finish.svg",
       alt: "Finish"
     }
   });
@@ -1148,7 +1156,7 @@ function createCarForm({ isUpdate = false }) {
   carForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!nameInput.value.trim()) {
-      errorPopup.show("Please, enter car name");
+      errorPopup.show(POPUP_MESSAGES.carFormFailed());
       return;
     }
     if (isUpdate) {
@@ -1236,7 +1244,7 @@ const winnerPopup = createPopup({
   overlayClass: "winner-overlay",
   containerClass: "winner",
   headingContent: "🏁 Race Finished!",
-  imageSrc: "/winner-cup.svg",
+  imageSrc: "icons/winner-cup.svg",
   imageAlt: "Winner Icon",
   animationDuration: 3500,
   messageContent: (name) => `The winner is ${name}!`
@@ -1319,9 +1327,7 @@ async function handleCarStart(carId) {
     checkRaceEnd();
     resetCarState(car.id);
     audioPLayer.playOnce("brake");
-    errorPopup.show(
-      `The ${car.name} car (ID ${carId}) has been stopped suddenly. It's engine was broken down.`
-    );
+    errorPopup.show(POPUP_MESSAGES.carDriveFailed(car.id, car.name));
     return;
   }
 }
@@ -2060,4 +2066,4 @@ try {
 } catch {
   errorPopup.show(POPUP_MESSAGES.appLoadFailed());
 }
-//# sourceMappingURL=main-CbHmOl6G.js.map
+//# sourceMappingURL=main-B7nBXTqX.js.map

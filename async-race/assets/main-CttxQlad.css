@@ -74,7 +74,7 @@
 .footer__image {
   width: 25px;
   height: 25px;
-  background-image: url(../github.webp);
+  background-image: url(../icons/github.webp);
   background-size: cover;
 }
 
@@ -657,13 +657,13 @@ h1 {
 .mute-button {
   width: 35px;
   height: 35px;
-  background-image: url(../audio-play.svg);
+  background-image: url(../icons/audio-play.svg);
   background-size: cover;
   cursor: pointer;
 }
 
 .mute-button.mute-button_active {
-  background-image: url(../audio-pause.svg);
+  background-image: url(../icons/audio-pause.svg);
 }
 
 @media screen and (max-width: 850px) {
