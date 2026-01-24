@@ -2,9 +2,9 @@ import type { SoundTypes, AudioPlayer } from '@/types/types';
 
 export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
   const sounds: Record<SoundTypes, HTMLAudioElement> = {
-    race: new Audio('/sounds/race.mp3'),
-    brake: new Audio('/sounds/brake.mp3'),
-    button: new Audio('/sounds/button.mp3'),
+    race: new Audio('sounds/race.mp3'),
+    brake: new Audio('sounds/brake.mp3'),
+    button: new Audio('sounds/button.mp3'),
   };
 
   sounds.race.loop = true;
