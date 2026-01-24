@@ -69,9 +69,7 @@ export async function handleCarStart(carId: number): Promise<void> {
     resetCarState(car.id);
     audioPLayer.playOnce('brake');
 
-    errorPopup.show(
-      `The ${car.name} car (ID ${carId}) has been stopped suddenly. It's engine was broken down.`,
-    );
+    errorPopup.show(POPUP_MESSAGES.carDriveFailed(car.id, car.name));
 
     return;
   }

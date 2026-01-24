@@ -2,6 +2,7 @@ import { createCarFormElements } from '@/components/car-form/helpers/car-form-el
 import { initFormEvents } from '@/components/car-form/helpers/init-form-events';
 import { updateFormEvents } from '@/components/car-form/helpers/update-form-events';
 import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@/data/error-messages';
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { garageList } from '@/ui/garage/helpers/garage-list';
@@ -23,7 +24,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
     event.preventDefault();
 
     if (!nameInput.value.trim()) {
-      errorPopup.show('Please, enter car name');
+      errorPopup.show(POPUP_MESSAGES.carFormFailed());
       return;
     }
 
