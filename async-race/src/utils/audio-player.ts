@@ -27,6 +27,18 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
 
   updateMute();
 
+  function safePlay(sound: HTMLAudioElement): void {
+    sound.currentTime = 0;
+
+    sound.play().catch((error: unknown) => {
+      if (error instanceof Error) {
+        console.error('Audio play failed:', error.message);
+      } else {
+        console.error('Audio play failed:', error);
+      }
+    });
+  }
+
   function toggleMute(): void {
     isMuted = !isMuted;
     localStorage.setItem(STORAGE_KEY, isMuted.toString());
@@ -39,8 +51,7 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
     }
 
     const sound = sounds[id];
-    sound.currentTime = 0;
-    void sound.play();
+    safePlay(sound);
     activeSounds.add(id);
   }
 
@@ -63,8 +74,7 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
     }
 
     const sound = sounds[id];
-    sound.currentTime = 0;
-    void sound.play();
+    safePlay(sound);
   }
 
   function playRaceLoop(): void {
@@ -77,8 +87,7 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
       return;
     }
 
-    raceSound.currentTime = 0;
-    void raceSound.play();
+    safePlay(raceSound);
     activeSounds.add('race');
   }
 
