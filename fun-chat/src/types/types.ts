@@ -1,3 +1,5 @@
+// elements
+
 export type HTMLElements = Pick<
   HTMLElementTagNameMap,
   | 'div'
@@ -8,16 +10,9 @@ export type HTMLElements = Pick<
   | 'h1'
   | 'h2'
   | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
   | 'p'
   | 'a'
   | 'img'
-  | 'ul'
-  | 'ol'
-  | 'li'
-  | 'textarea'
   | 'select'
   | 'option'
   | 'label'
@@ -32,7 +27,7 @@ export type ElementTag = keyof HTMLElements;
 
 export type ElementOptions<K extends ElementTag> = {
   tag: K;
-  className?: string | string[];
+  className?: string[];
   textContent?: string;
   attributes?: Record<string, string>;
 };
