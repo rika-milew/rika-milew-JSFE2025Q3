@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd fun-chat
+npx eslint 'src/**/*.{ts,tsx,js}' && npx validate-branch-name
