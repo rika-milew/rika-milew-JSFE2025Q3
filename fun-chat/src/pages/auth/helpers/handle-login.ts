@@ -6,8 +6,8 @@ import { validateField } from '@/utils/validate-field';
 export async function handleLogin(): Promise<void> {
   const { login, password } = userStore.state;
 
-  const loginValid = validateField('login', login);
-  const passwordValid = validateField('password', password);
+  const loginValid = validateField('login', userStore.state.login, userStore.state.password);
+  const passwordValid = validateField('password', userStore.state.password, userStore.state.login);
 
   if (!loginValid || !passwordValid) {
     return;

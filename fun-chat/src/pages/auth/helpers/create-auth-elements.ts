@@ -2,15 +2,16 @@ import { createButton } from '@/components/button/button';
 import { createElement } from '@/utils/create-element';
 
 type AuthView = {
+  form: HTMLFormElement;
   loginInput: HTMLInputElement;
   passwordInput: HTMLInputElement;
-  loginErrorDiv: HTMLDivElement;
-  passwordErrorDiv: HTMLDivElement;
+  loginError: HTMLDivElement;
+  passwordError: HTMLDivElement;
   button: HTMLButtonElement;
 };
 
 export function createAuthElements(container: HTMLElement): AuthView {
-  const pageContainer = createElement({ tag: 'div', className: ['container'] });
+  const pageContainer = createElement({ tag: 'div', className: ['container auth-container'] });
 
   const title = createElement({
     tag: 'h1',
@@ -18,24 +19,24 @@ export function createAuthElements(container: HTMLElement): AuthView {
     className: ['page-title'],
   });
 
-  const formContainer = createElement({ tag: 'div', className: ['form-container'] });
+  const form = createElement({ tag: 'form', className: ['form-container'] });
 
   const loginWrapper = createElement({ tag: 'div', className: ['input-wrapper'] });
 
   const loginInput = createElement({
     tag: 'input',
     className: ['input'],
-    attributes: { placeholder: 'Login' },
+    attributes: { type: 'text', name: 'login', placeholder: 'Login' },
   });
-  const loginErrorDiv = createElement({ tag: 'div', className: ['input-error'] });
+  const loginError = createElement({ tag: 'div', className: ['input-error'] });
 
   const passwordWrapper = createElement({ tag: 'div', className: ['input-wrapper'] });
   const passwordInput = createElement({
     tag: 'input',
     className: ['input'],
-    attributes: { placeholder: 'Password', type: 'password' },
+    attributes: { type: 'password', name: 'password', placeholder: 'Password' },
   });
-  const passwordErrorDiv = createElement({ tag: 'div', className: ['input-error'] });
+  const passwordError = createElement({ tag: 'div', className: ['input-error'] });
 
   const button = createButton({
     text: 'Login',
@@ -43,12 +44,14 @@ export function createAuthElements(container: HTMLElement): AuthView {
     disabled: false,
   });
 
-  loginWrapper.append(loginInput, loginErrorDiv);
-  passwordWrapper.append(passwordInput, passwordErrorDiv);
-  formContainer.append(loginWrapper, passwordWrapper, button);
-  pageContainer.append(title, formContainer);
+  button.type = 'submit';
+
+  loginWrapper.append(loginInput, loginError);
+  passwordWrapper.append(passwordInput, passwordError);
+  form.append(loginWrapper, passwordWrapper, button);
+  pageContainer.append(title, form);
 
   container.replaceChildren(pageContainer);
 
-  return { loginInput, passwordInput, loginErrorDiv, passwordErrorDiv, button };
+  return { form, loginInput, passwordInput, loginError, passwordError, button };
 }

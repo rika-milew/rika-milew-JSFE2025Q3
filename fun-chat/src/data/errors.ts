@@ -1,6 +1,6 @@
 export const LOGIN_ERRORS = {
   empty: 'Login cannot be empty',
-  invalidChars: 'Login must contain only English letters, numbers or "-"',
+  invalidChars: 'Login can contain only English letters, digits or "-"',
   tooShort: 'Login must be at least 3 characters',
   sameAsPassword: 'Login and password must be different',
 };

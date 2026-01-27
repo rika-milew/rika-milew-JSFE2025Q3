@@ -1,0 +1,70 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 425px;
+  margin: 20px auto 30px;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--color-bg-3);
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input {
+  padding: 12px 15px;
+  border: 1px solid var(--color-bg-2);
+  border-radius: 8px;
+  font-size: 16px;
+  color: var(--color-text-1);
+  background-color: #e0f3f2;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.input:focus {
+  border: 2px solid var(--color-text-accent);
+  box-shadow: 0 0 6px rgba(31, 166, 160, 0.4);
+}
+
+.input-error {
+  min-height: 18px;
+  font-size: 0.85rem;
+  color: #481112;
+}
+
+.login-button {
+  padding: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 500px) {
+  .form-container {
+    width: 90%;
+    max-width: 400px;
+    padding: 20px 15px;
+  }
+  .input {
+    padding: 10px;
+  }
+  .login-button {
+    padding: 10px;
+  }
+}
