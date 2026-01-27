@@ -1,25 +1,44 @@
-import { createButton } from '@/components/button/button';
-import { createElement } from '@/utils/create-element';
+import { createAuthElements } from '@/pages/auth/helpers/create-auth-elements';
+import { handleLogin } from '@/pages/auth/helpers/handle-login';
+import { eventState } from '@/store/events/event-state';
 
 export function renderAuthPage(container: HTMLElement): void {
-  const pageContainer = createElement({
-    tag: 'div',
-    className: ['container'],
+  const view = createAuthElements(container);
+
+  const { loginInput, passwordInput, loginErrorDiv, passwordErrorDiv, button } = view;
+
+  button.addEventListener('click', () => handleLogin());
+
+  loginInput.addEventListener('keydown', (error) => {
+    if (error.key === 'Enter') {
+      handleLogin().catch((error: unknown) => {
+        if (error instanceof Error) {
+          console.error('Login failed:', error.message);
+        } else {
+          console.error('Login failed:', error);
+        }
+      });
+    }
   });
 
-  const title = createElement({
-    tag: 'h1',
-    textContent: 'Login Page',
-    className: ['page-title'],
+  passwordInput.addEventListener('keydown', (error) => {
+    if (error.key === 'Enter') {
+      handleLogin().catch((error: unknown) => {
+        if (error instanceof Error) {
+          console.error('Login failed:', error.message);
+        } else {
+          console.error('Login failed:', error);
+        }
+      });
+    }
   });
 
-  const button = createButton({
-    text: 'Login',
-    className: 'login-button',
-    disabled: false,
-  });
+  eventState.on('user-store:changed', (state) => {
+    if (!state) {
+      return;
+    }
 
-  container.replaceChildren();
-  pageContainer.append(title, button);
-  container.append(pageContainer);
+    loginErrorDiv.textContent = state.errors.login ?? '';
+    passwordErrorDiv.textContent = state.errors.password ?? '';
+  });
 }
