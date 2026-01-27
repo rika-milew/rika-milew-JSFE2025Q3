@@ -31,3 +31,10 @@ export type ElementOptions<K extends ElementTag> = {
   textContent?: string;
   attributes?: Record<string, string>;
 };
+
+export type ButtonConfig = {
+  text: string;
+  className?: string;
+  disabled?: boolean;
+  type?: 'button' | 'submit';
+};

@@ -1,6 +1,11 @@
 import { createElement } from '@/utils/create-element';
 
 export function renderAboutPage(container: HTMLElement): void {
+  const pageContainer = createElement({
+    tag: 'div',
+    className: ['container'],
+  });
+
   const title = createElement({
     tag: 'h1',
     textContent: 'About Page',
@@ -8,5 +13,6 @@ export function renderAboutPage(container: HTMLElement): void {
   });
 
   container.replaceChildren();
-  container.append(title);
+  pageContainer.append(title);
+  container.append(pageContainer);
 }
