@@ -1,14 +1,7 @@
 import { createButton } from '@/components/button/button';
 import { createElement } from '@/utils/create-element';
 
-type AuthView = {
-  form: HTMLFormElement;
-  loginInput: HTMLInputElement;
-  passwordInput: HTMLInputElement;
-  loginError: HTMLDivElement;
-  passwordError: HTMLDivElement;
-  button: HTMLButtonElement;
-};
+import type { AuthView } from '@/types/types';
 
 export function createAuthElements(container: HTMLElement): AuthView {
   const pageContainer = createElement({ tag: 'div', className: ['container auth-container'] });

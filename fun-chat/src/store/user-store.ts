@@ -1,17 +1,10 @@
 import { eventState } from './events/event-state';
 
-type UserState = {
-  login: string;
-  password: string;
-  isLoggedIn: boolean;
-  errors: {
-    login?: string;
-    password?: string;
-  };
-};
+import type { UserState } from '@/types/types';
 
 export const userStore: {
   state: UserState;
+  saveCredentials: (login: string, password: string) => void;
   setLogin: (login: string) => void;
   setPassword: (password: string) => void;
   showError: (field: 'login' | 'password', message: string) => void;
@@ -25,6 +18,12 @@ export const userStore: {
     password: '',
     isLoggedIn: false,
     errors: {},
+  },
+
+  saveCredentials(login: string, password: string) {
+    this.state.login = login;
+    this.state.password = password;
+    eventState.emit('user-store:changed', this.state);
   },
 
   setLogin(login: string) {
@@ -51,6 +50,7 @@ export const userStore: {
 
   loginUser() {
     this.state.isLoggedIn = true;
+    this.state.errors = {};
     eventState.emit('user-store:changed', this.state);
   },
 

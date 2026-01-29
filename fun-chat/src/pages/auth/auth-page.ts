@@ -11,7 +11,9 @@ export function renderAuthPage(container: HTMLElement): void {
 
   const { form, loginInput, passwordInput, loginError, passwordError, button } = view;
 
-  button.addEventListener('click', () => handleLogin());
+  button.addEventListener('click', () => {
+    handleLogin();
+  });
 
   loginInput.addEventListener('input', () => {
     userStore.setLogin(loginInput.value);
@@ -25,13 +27,7 @@ export function renderAuthPage(container: HTMLElement): void {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    handleLogin().catch((error: unknown) => {
-      if (error instanceof Error) {
-        console.error('Login failed:', error.message);
-      } else {
-        console.error('Login failed:', error);
-      }
-    });
+    handleLogin();
   });
 
   eventState.on('user-store:changed', (state) => {
