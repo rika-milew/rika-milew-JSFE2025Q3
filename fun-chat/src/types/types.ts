@@ -13,6 +13,8 @@ export type HTMLElements = Pick<
   | 'p'
   | 'a'
   | 'img'
+  | 'ul'
+  | 'li'
   | 'select'
   | 'option'
   | 'label'

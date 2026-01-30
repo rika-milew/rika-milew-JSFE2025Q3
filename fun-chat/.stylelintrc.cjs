@@ -35,6 +35,7 @@ module.exports = {
             'margin-right',
             'margin-bottom',
             'padding',
+            'padding-left',
             'box-sizing',
           ],
         },
