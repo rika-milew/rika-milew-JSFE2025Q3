@@ -55,8 +55,9 @@ export type WebsocketRequest<T extends keyof WebsocketRequestMap = keyof Websock
 export type WebsocketResponseMap = {
   USER_LOGIN: UserLoginResponse;
   ERROR: ErrorResponse;
-  USER_EXTERNAL_LOGIN: UserLoginResponse;
   USER_LOGOUT: UserLogoutResponse;
+  USER_EXTERNAL_LOGIN: UserExternalAuthResponse;
+  USER_EXTERNAL_LOGOUT: UserExternalAuthResponse;
 };
 
 export type WebsocketResponse<T extends keyof WebsocketResponseMap = keyof WebsocketResponseMap> = {
@@ -93,6 +94,13 @@ export type UserLogoutPayload = {
 };
 
 export type UserLogoutResponse = {
+  user: {
+    login: string;
+    isLogined: boolean;
+  };
+};
+
+export type UserExternalAuthResponse = {
   user: {
     login: string;
     isLogined: boolean;

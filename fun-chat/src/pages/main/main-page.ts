@@ -15,8 +15,8 @@ export function renderMainPage(container: HTMLElement): void {
   });
 
   const button = createButton({
-    text: 'Login',
-    className: 'login-button',
+    text: 'Logout',
+    className: 'logout-button',
     disabled: false,
   });
 

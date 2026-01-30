@@ -1,8 +1,8 @@
 import { router } from '@/app/router';
-import { createConnectionPopup } from '@/components/popup/connection-error';
-import { connectionStore } from '@/server/connection-store';
+import { createConnectionPopup } from '@/components/popup/connection-popup';
 import { startWebSocket } from '@/server/ws-connection';
 import { sendAuth } from '@/server/ws-requests';
+import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/events/event-state';
 import { userStore } from '@/store/user-store';
 

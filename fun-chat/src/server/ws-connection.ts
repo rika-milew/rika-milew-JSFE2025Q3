@@ -1,4 +1,4 @@
-import { handleServerMessage } from '@/server/ws-events';
+import { handleServerMessage } from '@/server/handle-server-message';
 import { eventState } from '@/store/events/event-state';
 
 import type { WebsocketResponse } from '@/types/types';

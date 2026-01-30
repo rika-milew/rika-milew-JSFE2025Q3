@@ -15,3 +15,15 @@ export function isUserLogoutMessage(
 ): message is WebsocketResponse<'USER_LOGOUT'> {
   return message.type === 'USER_LOGOUT';
 }
+
+export function isUserExternalLoginMessage(
+  message: WebsocketResponse,
+): message is WebsocketResponse<'USER_EXTERNAL_LOGIN'> {
+  return message.type === 'USER_EXTERNAL_LOGIN';
+}
+
+export function isUserExternalLogoutMessage(
+  message: WebsocketResponse,
+): message is WebsocketResponse<'USER_EXTERNAL_LOGOUT'> {
+  return message.type === 'USER_EXTERNAL_LOGOUT';
+}

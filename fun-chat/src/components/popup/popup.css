@@ -21,7 +21,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  padding: 20px 35px;
+  min-width: 300px;
   padding: 20px 35px;
   border-radius: 8px;
   color: #dcdcdc;
@@ -32,6 +32,16 @@
     opacity 0.3s ease;
   transform: translate(-50%, -50%) translateY(-20px);
   opacity: 0;
+}
+
+.connection-popup {
+  color: #dcdcdc;
+  background-color: #95126df2;
+}
+
+.notification-popup {
+  color: #dcdcdc;
+  background-color: #0a3d3a;
 }
 
 .popup-overlay.visible .popup {
@@ -45,6 +55,6 @@
 }
 
 .popup p {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   font-size: 16px;
 }

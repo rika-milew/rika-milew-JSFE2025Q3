@@ -1,8 +1,15 @@
 import { navigate } from '@/app/router';
 import { errorPopup } from '@/components/popup/error-popup';
+import { notificationPopup } from '@/components/popup/notification-popup';
 import { SERVER_ERRORS } from '@/data/errors';
 import { userStore } from '@/store/user-store';
-import { isUserLoginMessage, isUserLogoutMessage, isErrorMessage } from '@/types/type-guards';
+import {
+  isUserLoginMessage,
+  isUserLogoutMessage,
+  isErrorMessage,
+  isUserExternalLoginMessage,
+  isUserExternalLogoutMessage,
+} from '@/types/type-guards';
 
 import type { WebsocketResponse, WebsocketResponseMap } from '@/types/types';
 
@@ -21,6 +28,16 @@ export function handleServerMessage<T extends keyof WebsocketResponseMap>(
 
   if (isErrorMessage(message)) {
     handleError(message);
+    return;
+  }
+
+  if (isUserExternalLoginMessage(message)) {
+    handleExternalLogin(message);
+    return;
+  }
+
+  if (isUserExternalLogoutMessage(message)) {
+    handleExternalLogout(message);
     return;
   }
 }
@@ -47,4 +64,24 @@ function handleError(message: WebsocketResponse<'ERROR'>): void {
   const { error } = message.payload;
   errorPopup.show(error || SERVER_ERRORS.serverError);
   console.error(error || SERVER_ERRORS.serverError);
+}
+
+function handleExternalLogin(message: WebsocketResponse<'USER_EXTERNAL_LOGIN'>): void {
+  const { login, isLogined } = message.payload.user;
+
+  if (!isLogined) {
+    return;
+  }
+
+  notificationPopup.show(`User ${login} logged in`);
+}
+
+function handleExternalLogout(message: WebsocketResponse<'USER_EXTERNAL_LOGOUT'>): void {
+  const { login, isLogined } = message.payload.user;
+
+  if (isLogined) {
+    return;
+  }
+
+  notificationPopup.show(`User ${login} logged out`);
 }

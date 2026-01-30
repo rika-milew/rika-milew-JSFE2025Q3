@@ -4,7 +4,7 @@ export const errorPopup = createPopup({
   overlayClass: 'popup-overlay',
   containerClass: 'popup',
   headingContent: 'Error',
-  imageSrc: '',
-  imageAlt: '',
+  imageSrc: 'icons/closecircle.svg',
+  imageAlt: 'Error',
   animationDuration: 2000,
 });
