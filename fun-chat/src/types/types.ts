@@ -43,7 +43,7 @@ export type ButtonConfig = {
 
 export type WebsocketRequestMap = {
   USER_LOGIN: UserLoginPayload;
-  USER_LOGOUT: Record<string, never>;
+  USER_LOGOUT: UserLogoutPayload;
 };
 
 export type WebsocketRequest<T extends keyof WebsocketRequestMap = keyof WebsocketRequestMap> = {
@@ -56,6 +56,7 @@ export type WebsocketResponseMap = {
   USER_LOGIN: UserLoginResponse;
   ERROR: ErrorResponse;
   USER_EXTERNAL_LOGIN: UserLoginResponse;
+  USER_LOGOUT: UserLogoutResponse;
 };
 
 export type WebsocketResponse<T extends keyof WebsocketResponseMap = keyof WebsocketResponseMap> = {
@@ -82,6 +83,20 @@ export type UserLoginResponse = {
 
 export type ErrorResponse = {
   error: string;
+};
+
+export type UserLogoutPayload = {
+  user: {
+    login: string;
+    password: string;
+  };
+};
+
+export type UserLogoutResponse = {
+  user: {
+    login: string;
+    isLogined: boolean;
+  };
 };
 
 // app
@@ -122,6 +137,7 @@ export type UserState = {
   login: string;
   password: string;
   isLoggedIn: boolean;
+  isLoggedInOnServer: boolean;
   errors: {
     login?: string;
     password?: string;

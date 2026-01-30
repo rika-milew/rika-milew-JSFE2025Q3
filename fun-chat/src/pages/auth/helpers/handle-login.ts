@@ -16,6 +16,5 @@ export function handleLogin(): void {
   userStore.saveCredentials(login, password);
 
   const request = createRequest('USER_LOGIN', { user: { login, password } });
-
   sendWebsocket(request);
 }

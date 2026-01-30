@@ -1,3 +1,5 @@
+import { createButton } from '@/components/button/button';
+import { handleLogout } from '@/pages/main/helpers/handle-logout';
 import { createElement } from '@/utils/create-element';
 
 export function renderMainPage(container: HTMLElement): void {
@@ -12,7 +14,17 @@ export function renderMainPage(container: HTMLElement): void {
     className: ['page-title'],
   });
 
+  const button = createButton({
+    text: 'Login',
+    className: 'login-button',
+    disabled: false,
+  });
+
+  button.addEventListener('click', () => {
+    handleLogout();
+  });
+
   container.replaceChildren();
-  pageContainer.append(title);
+  pageContainer.append(title, button);
   container.append(pageContainer);
 }

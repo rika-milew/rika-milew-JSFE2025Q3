@@ -27,13 +27,14 @@ export function startApp(root: HTMLElement): void {
 
   eventState.on('ws:connected', () => {
     connectionStore.setConnected(true);
-    if (userStore.state.login && userStore.state.password) {
+    if (!userStore.state.isLoggedInOnServer && userStore.state.login && userStore.state.password) {
       sendAuth(userStore.state.login, userStore.state.password);
     }
   });
 
   eventState.on('ws:disconnected', () => {
     connectionStore.setConnected(false);
+    history.replaceState(undefined, '', '#login');
   });
 
   eventState.on('ws:reconnecting', () => {

@@ -12,11 +12,13 @@ export const userStore: {
   loginUser: () => void;
   logoutUser: () => void;
   isAuthenticated: () => boolean;
+  setServerLogin: (value: boolean) => void;
 } = {
   state: {
     login: '',
     password: '',
     isLoggedIn: false,
+    isLoggedInOnServer: false,
     errors: {},
   },
 
@@ -50,12 +52,14 @@ export const userStore: {
 
   loginUser() {
     this.state.isLoggedIn = true;
+    this.state.isLoggedInOnServer = true;
     this.state.errors = {};
     eventState.emit('user-store:changed', this.state);
   },
 
   logoutUser() {
     this.state.isLoggedIn = false;
+    this.state.isLoggedInOnServer = false;
     this.state.login = '';
     this.state.password = '';
     this.state.errors = {};
@@ -64,5 +68,10 @@ export const userStore: {
 
   isAuthenticated() {
     return this.state.isLoggedIn;
+  },
+
+  setServerLogin(value: boolean) {
+    this.state.isLoggedInOnServer = value;
+    eventState.emit('user-store:changed', this.state);
   },
 };

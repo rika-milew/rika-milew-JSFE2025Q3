@@ -4,6 +4,7 @@ type EventState<T extends Record<string, unknown>> = {
   on<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
   off<K extends keyof T>(event: K, handler?: EventHandler<T[K]>): void;
   emit<K extends keyof T>(event: K, payload?: T[K]): void;
+  once<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
 };
 
 type EventHandler<T> = (payload?: T) => void;
@@ -43,6 +44,14 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
       if (index !== -1) {
         handlers.splice(index, 1);
       }
+    },
+
+    once<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void {
+      const wrapper: EventHandler<T[K]> = (payload) => {
+        handler(payload);
+        this.off(event, wrapper);
+      };
+      this.on(event, wrapper);
     },
   };
 }

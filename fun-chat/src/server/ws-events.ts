@@ -1,6 +1,8 @@
 import { navigate } from '@/app/router';
+import { errorPopup } from '@/components/popup/error-popup';
 import { SERVER_ERRORS } from '@/data/errors';
 import { userStore } from '@/store/user-store';
+import { isUserLoginMessage, isUserLogoutMessage, isErrorMessage } from '@/types/type-guards';
 
 import type { WebsocketResponse, WebsocketResponseMap } from '@/types/types';
 
@@ -8,34 +10,41 @@ export function handleServerMessage<T extends keyof WebsocketResponseMap>(
   message: WebsocketResponse<T>,
 ): void {
   if (isUserLoginMessage(message)) {
-    const { user } = message.payload;
-    if (user.isLogined) {
-      userStore.loginUser();
-      navigate('main', document.body);
-    } else {
-      userStore.showError('password', SERVER_ERRORS.loginFailed);
-    }
+    handleUserLogin(message);
+    return;
+  }
+
+  if (isUserLogoutMessage(message)) {
+    handleUserLogout();
     return;
   }
 
   if (isErrorMessage(message)) {
-    const { error } = message.payload;
-    userStore.showError('password', error || SERVER_ERRORS.serverError);
-    return;
-  }
-
-  if (message.type === 'USER_EXTERNAL_LOGIN') {
-    userStore.logoutUser();
+    handleError(message);
     return;
   }
 }
 
-function isUserLoginMessage(
-  message: WebsocketResponse,
-): message is WebsocketResponse<'USER_LOGIN'> {
-  return message.type === 'USER_LOGIN';
+function handleUserLogin(message: WebsocketResponse<'USER_LOGIN'>): void {
+  const { user } = message.payload;
+
+  if (user.isLogined) {
+    userStore.loginUser();
+    userStore.setServerLogin(true);
+    navigate('main', document.body);
+  } else {
+    errorPopup.show(SERVER_ERRORS.loginFailed);
+  }
 }
 
-function isErrorMessage(message: WebsocketResponse): message is WebsocketResponse<'ERROR'> {
-  return message.type === 'ERROR';
+function handleUserLogout(): void {
+  userStore.logoutUser();
+  userStore.setServerLogin(false);
+  navigate('login', document.body);
+}
+
+function handleError(message: WebsocketResponse<'ERROR'>): void {
+  const { error } = message.payload;
+  errorPopup.show(error || SERVER_ERRORS.serverError);
+  console.error(error || SERVER_ERRORS.serverError);
 }

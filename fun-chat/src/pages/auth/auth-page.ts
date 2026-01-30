@@ -9,11 +9,7 @@ import './auth-page.css';
 export function renderAuthPage(container: HTMLElement): void {
   const view = createAuthElements(container);
 
-  const { form, loginInput, passwordInput, loginError, passwordError, button } = view;
-
-  button.addEventListener('click', () => {
-    handleLogin();
-  });
+  const { form, loginInput, passwordInput, loginError, passwordError } = view;
 
   loginInput.addEventListener('input', () => {
     userStore.setLogin(loginInput.value);
