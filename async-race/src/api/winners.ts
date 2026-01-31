@@ -1,4 +1,3 @@
-import { fetchData } from '@/api/fetch-data';
 import { API_URL } from '@/data/constants';
 
 import type { Winner, WinnersResponse } from '@/types/types';
@@ -10,27 +9,46 @@ export async function createWinner(
 ): Promise<Winner | undefined> {
   const url = `${API_URL}/winners`;
 
-  const winner = await fetchData<Winner>(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, wins, time }),
-  });
+  try {
+    const response: Response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, wins, time }),
+    });
 
-  return winner;
+    if (!response.ok) {
+      console.error(`Failed to create the winner: ${response.status}`);
+      return undefined;
+    }
+
+    const winner: Winner = await response.json();
+    return winner;
+  } catch (error) {
+    console.error('Failed to create the winner', error);
+    return undefined;
+  }
 }
 
 export async function getWinners(): Promise<WinnersResponse | undefined> {
   const url = `${API_URL}/winners`;
 
-  const winners: Winner[] | undefined = await fetchData<Winner[]>(url);
+  try {
+    const response: Response = await fetch(url);
+    if (!response.ok) {
+      console.error(`Failed to get the winners: ${response.status}`);
+      return undefined;
+    }
 
-  if (!winners) {
+    const winnersData = await response.json();
+    const winners: Winner[] = Array.isArray(winnersData) ? winnersData : [];
+
+    const totalWinners = winners.length;
+
+    return { winners, totalWinners };
+  } catch (error) {
+    console.error('Failed to get the the winners', error);
     return undefined;
   }
-
-  const totalWinners = winners.length;
-
-  return { winners, totalWinners };
 }
 
 export async function updateWinner(
@@ -40,17 +58,34 @@ export async function updateWinner(
 ): Promise<Winner | undefined> {
   const url = `${API_URL}/winners/${id}`;
 
-  const winner = await fetchData<Winner>(url, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ wins, time }),
-  });
+  try {
+    const response: Response = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wins, time }),
+    });
 
-  return winner;
+    if (!response.ok) {
+      console.error(`Failed to update winner: ${response.status}`);
+      return undefined;
+    }
+
+    const winner: Winner = await response.json();
+    return winner;
+  } catch (error) {
+    console.error('Failed to update the winner', error);
+    return undefined;
+  }
 }
 
 export async function deleteWinner(id: number): Promise<boolean> {
-  const result = await fetchData(`${API_URL}/winners/${id}`, { method: 'DELETE' });
+  const url = `${API_URL}/winners/${id}`;
 
-  return !!result;
+  try {
+    const response: Response = await fetch(url, { method: 'DELETE' });
+    return response.ok;
+  } catch (error) {
+    console.warn('Failed to delete the winner', error);
+    return false;
+  }
 }

@@ -1,5 +1,5 @@
-import { createButton } from '@/components/button/button';
-import { createMuteButton } from '@/components/button/mute-button';
+import { createButton } from '@/components/buttons/button';
+import { createMuteButton } from '@/components/buttons/mute-button';
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';

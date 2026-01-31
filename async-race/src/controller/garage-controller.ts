@@ -1,4 +1,5 @@
 import { createCar, deleteCar, updateCar } from '@/api/garage';
+import { deleteWinner } from '@/api/winners';
 import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
 import { errorPopup } from '@/components/popup/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';
@@ -65,6 +66,10 @@ export function startGarageController(): void {
       errorPopup.show(POPUP_MESSAGES.carDeleteFailed(payload.id, car?.name));
       return;
     }
+
+    deleteWinner(payload.id).catch((error: unknown) => {
+      console.error('Failed to delete the winner', error);
+    });
 
     stopCarAnimation(payload.id);
     carState.remove(payload.id);

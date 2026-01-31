@@ -1,4 +1,3 @@
-import { fetchData } from '@/api/fetch-data';
 import { API_URL } from '@/data/constants';
 
 import type { Car, Cars } from '@/types/types';
@@ -6,48 +5,88 @@ import type { Car, Cars } from '@/types/types';
 export async function createCar(name: string, color: string): Promise<Car | undefined> {
   const url = `${API_URL}/garage`;
 
-  return fetchData<Car>(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, color }),
-  });
+  try {
+    const response: Response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, color }),
+    });
+
+    if (!response.ok) {
+      console.error(`Failed to create car: ${response.status}`);
+      return undefined;
+    }
+
+    const car: Car = await response.json();
+    return car;
+  } catch (error) {
+    console.error('Failed to create car', error);
+    return undefined;
+  }
 }
 
 export async function deleteCar(id: number): Promise<boolean> {
-  const garageResponse = await fetchData(`${API_URL}/garage/${id}`, { method: 'DELETE' });
+  try {
+    const response: Response = await fetch(`${API_URL}/garage/${id}`, {
+      method: 'DELETE',
+    });
 
-  if (!garageResponse) {
+    if (!response.ok) {
+      console.error(`Failed to delete the car: ${response.status}`);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Failed to delete the car', error);
     return false;
   }
-
-  await fetchData(`${API_URL}/winners/${id}`, { method: 'DELETE' });
-
-  return true;
 }
 
 export async function getCars(): Promise<Cars | undefined> {
   const url = `${API_URL}/garage`;
 
-  const cars: Car[] | undefined = await fetchData<Car[]>(url);
+  try {
+    const response: Response = await fetch(url);
+    if (!response.ok) {
+      console.error(`Failed to get cars: ${response.status}`);
+      return undefined;
+    }
 
-  if (!cars) {
+    const cars: Car[] = await response.json();
+
+    const headResponse = await fetch(url, { method: 'HEAD' });
+    const totalCountHeader = headResponse.ok
+      ? Number(headResponse.headers.get('X-Total-Count'))
+      : 0;
+    const totalCount = totalCountHeader > 0 ? totalCountHeader : cars.length;
+
+    return { cars, totalCount };
+  } catch (error) {
+    console.error('Failed to get cars', error);
     return undefined;
   }
-
-  const totalCountHeader = Number(await fetchData<number>(url, { method: 'HEAD' }));
-  const totalCount = totalCountHeader > 0 ? totalCountHeader : cars.length;
-
-  return { cars, totalCount };
 }
 
 export async function updateCar(id: number, name: string, color: string): Promise<Car | undefined> {
   const url = `${API_URL}/garage/${id}`;
 
-  const updatedCar = await fetchData<Car>(url, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, color }),
-  });
+  try {
+    const response: Response = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, color }),
+    });
 
-  return updatedCar;
+    if (!response.ok) {
+      console.error(`Failed to update the car: ${response.status}`);
+      return undefined;
+    }
+
+    const car: Car = await response.json();
+    return car;
+  } catch (error) {
+    console.error('Failed to update the car', error);
+    return undefined;
+  }
 }

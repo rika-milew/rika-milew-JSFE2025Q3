@@ -1,4 +1,4 @@
-import { changeEngineStatus } from '@/api/change-engine-status';
+import { getEngineStatus } from '@/api/get-engine-status';
 import { resetCarPosition } from '@/components/car/car-animation/reset-car-position';
 import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
 import { errorPopup } from '@/components/popup/error/error';
@@ -34,7 +34,7 @@ export function startEngineController(): void {
     const car = carState.getById(carId);
     stopCarAnimation(carId);
 
-    const result = await changeEngineStatus<EngineResponse>(carId, 'stopped');
+    const result = await getEngineStatus<EngineResponse>(carId, 'stopped');
 
     if (!result) {
       errorPopup.show(POPUP_MESSAGES.carResetFailed(carId, car?.name));

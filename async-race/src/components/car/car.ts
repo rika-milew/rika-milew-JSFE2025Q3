@@ -1,4 +1,4 @@
-import { createButton } from '@/components/button/button';
+import { createButton } from '@/components/buttons/button';
 import { createEngineButtons } from '@/components/car/create-engine-buttons';
 import { createCarImage } from '@/components/svg-paint/create-car-image';
 import { createFlagImage } from '@/components/svg-paint/create-flag-image';

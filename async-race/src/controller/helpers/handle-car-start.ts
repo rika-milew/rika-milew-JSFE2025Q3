@@ -1,4 +1,4 @@
-import { changeEngineStatus } from '@/api/change-engine-status';
+import { getEngineStatus } from '@/api/get-engine-status';
 import { animateCar } from '@/components/car/car-animation/animate-car';
 import { errorPopup } from '@/components/popup/error/error';
 import { winnerPopup } from '@/components/popup/winner/winner';
@@ -26,7 +26,7 @@ export async function handleCarStart(carId: number): Promise<void> {
   setRaceButton();
   updateRaceSound();
 
-  const engineData = await changeEngineStatus<EngineResponse>(carId, 'started');
+  const engineData = await getEngineStatus<EngineResponse>(carId, 'started');
 
   if (!engineData) {
     resetCarState(car.id);
@@ -58,7 +58,7 @@ export async function handleCarStart(carId: number): Promise<void> {
 
   const sessionId = carState.garageSessionId;
 
-  const engineParams = await changeEngineStatus<DriveResponse>(carId, 'drive');
+  const engineParams = await getEngineStatus<DriveResponse>(carId, 'drive');
 
   if (carState.garageSessionId !== sessionId) {
     return;
