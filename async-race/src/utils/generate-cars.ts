@@ -1,7 +1,7 @@
 import { createCar } from '@/api/garage';
 import { errorPopup } from '@/components/popup/error/error';
-import { carBrands } from '@/data/car-models';
-import { POPUP_MESSAGES } from '@/data/error-messages';
+import { carBrands } from '@/constants/car-models';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 
 import type { Car } from '@/types/types';
 

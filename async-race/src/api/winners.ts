@@ -1,4 +1,4 @@
-import { API_URL } from '@/data/constants';
+import { API_URL } from '@/constants/constants';
 
 import type { Winner, WinnersResponse } from '@/types/types';
 

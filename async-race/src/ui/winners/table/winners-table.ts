@@ -1,5 +1,5 @@
 import { createCarImage } from '@/components/svg-paint/create-car-image';
-import { SORTING_ICONS } from '@/data/constants';
+import { SORTING_ICONS } from '@/constants/constants';
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';

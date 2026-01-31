@@ -1,5 +1,10 @@
 import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
-import { FINISH_OFFSET, SPEED_MULTIPLIER, WIDTH_DIVIDER, MILLISECONDS } from '@/data/constants';
+import {
+  FINISH_OFFSET,
+  SPEED_MULTIPLIER,
+  WIDTH_DIVIDER,
+  MILLISECONDS,
+} from '@/constants/constants';
 import { carState } from '@/state/car-state';
 import { getCarStore, setCarAnimationId } from '@/state/car-store';
 import { updateRaceSound } from '@/utils/play-race-sound';

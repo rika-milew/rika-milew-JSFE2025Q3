@@ -2,7 +2,7 @@ import { createCar, deleteCar, updateCar } from '@/api/garage';
 import { deleteWinner } from '@/api/winners';
 import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
 import { errorPopup } from '@/components/popup/error/error';
-import { POPUP_MESSAGES } from '@/data/error-messages';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { appState } from '@/state/app-state';
 import { carState } from '@/state/car-state';
 import { removeCarStore } from '@/state/car-store';

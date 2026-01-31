@@ -1,4 +1,5 @@
 import { createCarForm } from '@/components/car-form/car-form';
+import { createPageNumber } from '@/components/page-number/page-number';
 import { startEngineController } from '@/controller/engine-controller';
 import { startGarageController } from '@/controller/garage-controller';
 import { startRaceController } from '@/controller/race-controller';
@@ -10,7 +11,6 @@ import { createGarageButtons } from '@/ui/garage/garage-buttons/garage-buttons';
 import { garageContainer, garageList } from '@/ui/garage/helpers/garage-list';
 import { implementPagination } from '@/ui/garage/helpers/garage-pagination';
 import { loadDefaultCars } from '@/ui/garage/helpers/init-garage';
-import { infoElements } from '@/ui/garage/info-elements';
 import { loadWinners } from '@/ui/winners/helpers/load-winners';
 import { createElement } from '@/utils/create-element';
 
@@ -73,3 +73,24 @@ export async function createGarage(): Promise<void> {
 
   eventState.emit('garage:refresh');
 }
+
+export const infoElements = createPageNumber({
+  title: 'Garage',
+  page: appState.garagePage,
+  total: carState.cars.length,
+  totalText: 'Total Cars',
+});
+
+eventState.on('garage:refresh', () => {
+  infoElements.totalInfo.textContent = `Total Cars: ${carState.totalCount}`;
+});
+
+eventState.on('garage:pagination:update', (data) => {
+  if (!data) {
+    return;
+  }
+
+  const { currentPage, totalCount } = data;
+  infoElements.totalInfo.textContent = `Total Cars: ${totalCount}`;
+  infoElements.pageInfo.textContent = `Page: ${currentPage} / ${Math.ceil(totalCount / appState.perPage) || 1}`;
+});

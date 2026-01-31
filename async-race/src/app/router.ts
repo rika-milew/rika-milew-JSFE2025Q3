@@ -1,7 +1,7 @@
+import { createApp } from '@/app/app';
 import { errorPopup } from '@/components/popup/error/error';
-import { POPUP_MESSAGES } from '@/data/error-messages';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { appState } from '@/state/app-state';
-import { createApp } from '@/ui/ui';
 
 import type { View, AppRouter } from '@/types/types';
 

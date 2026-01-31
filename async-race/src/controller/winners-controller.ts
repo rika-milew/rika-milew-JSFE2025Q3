@@ -1,7 +1,7 @@
 import { createWinner, updateWinner } from '@/api/winners';
 import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { handleWinnerUpdate } from '@/controller/helpers/handle-winner-update';
-import { POPUP_MESSAGES } from '@/data/error-messages';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
 

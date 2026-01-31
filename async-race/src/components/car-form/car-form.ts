@@ -2,7 +2,7 @@ import { createFormComponents } from '@/components/car-form/form-components/form
 import { initFormEvents } from '@/components/car-form/helpers/init-form-events';
 import { updateFormEvents } from '@/components/car-form/helpers/update-form-events';
 import { errorPopup } from '@/components/popup/error/error';
-import { POPUP_MESSAGES } from '@/data/error-messages';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { garageList } from '@/ui/garage/helpers/garage-list';

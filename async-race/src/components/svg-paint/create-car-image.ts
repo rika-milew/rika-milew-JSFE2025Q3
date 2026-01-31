@@ -1,5 +1,5 @@
 import { carLeftWheel, carMain, carRightWheel } from '@/components/svg-paint/car-svg.config';
-import { GARAGE_CAR_WIDTH, GARAGE_CAR_HEIGHT } from '@/data/constants';
+import { GARAGE_CAR_WIDTH, GARAGE_CAR_HEIGHT } from '@/constants/constants';
 
 import type { CarSvg } from '@/types/types';
 

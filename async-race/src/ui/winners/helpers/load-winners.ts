@@ -1,6 +1,6 @@
 import { getWinners } from '@/api/winners';
 import { errorPopup } from '@/components/popup/error/error';
-import { POPUP_MESSAGES } from '@/data/error-messages';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { carState } from '@/state/car-state';
 import { winnersState } from '@/state/winners-state';
 

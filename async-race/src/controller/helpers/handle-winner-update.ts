@@ -6,13 +6,13 @@ export function handleWinnerUpdate(payload?: { id: number; name: string; color: 
     return;
   }
 
-  const existing = winnersState.getById(payload.id);
-  if (!existing) {
+  const existingWinner = winnersState.getById(payload.id);
+  if (!existingWinner) {
     return;
   }
 
   winnersState.update({
-    ...existing,
+    ...existingWinner,
     name: payload.name,
     color: payload.color,
   });

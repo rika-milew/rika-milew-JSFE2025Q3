@@ -1,10 +1,10 @@
 import { resetAllCarsPositions } from '@/components/car/car-animation/reset-car-position';
+import { createFooter } from '@/components/footer/footer';
+import { createHeader } from '@/components/header/header';
 import { errorPopup } from '@/components/popup/error/error';
-import { POPUP_MESSAGES } from '@/data/error-messages';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { appState } from '@/state/app-state';
-import { createFooter } from '@/ui/footer/footer';
 import { createGarage } from '@/ui/garage/garage';
-import { createHeader } from '@/ui/header/header';
 import { createWinners } from '@/ui/winners/winners';
 
 export async function createApp(): Promise<void> {
