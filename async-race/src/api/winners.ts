@@ -19,16 +19,6 @@ export async function createWinner(
   return winner;
 }
 
-export async function getWinner(id: number): Promise<Winner | undefined> {
-  if (!id) {
-    return undefined;
-  }
-
-  const winner = await fetchData<Winner>(`${API_URL}/winners/${id}`);
-
-  return winner;
-}
-
 export async function getWinners(): Promise<WinnersResponse | undefined> {
   const url = `${API_URL}/winners`;
 
