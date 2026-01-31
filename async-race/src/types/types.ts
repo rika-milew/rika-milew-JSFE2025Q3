@@ -240,6 +240,11 @@ export type CarState = {
   garageSessionId: number;
 };
 
+export type Cars = {
+  cars: Car[];
+  totalCount: number;
+};
+
 // api
 
 export type DriveResponse = {

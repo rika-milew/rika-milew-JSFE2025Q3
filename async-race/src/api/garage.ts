@@ -1,7 +1,7 @@
 import { fetchData } from '@/api/fetch-data';
 import { API_URL } from '@/data/constants';
 
-import type { Car } from '@/types/types';
+import type { Car, Cars } from '@/types/types';
 
 export async function createCar(name: string, color: string): Promise<Car | undefined> {
   const url = `${API_URL}/garage`;
@@ -25,7 +25,7 @@ export async function deleteCar(id: number): Promise<boolean> {
   return true;
 }
 
-export async function getCars(): Promise<{ cars: Car[]; totalCount: number } | undefined> {
+export async function getCars(): Promise<Cars | undefined> {
   const url = `${API_URL}/garage`;
 
   const cars: Car[] | undefined = await fetchData<Car[]>(url);
