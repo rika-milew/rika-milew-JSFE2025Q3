@@ -1,6 +1,5 @@
-import { createButton } from '@/components/button/button';
 import { createFooter } from '@/components/footer/footer';
-import { handleLogout } from '@/pages/main/helpers/handle-logout';
+import { createHeader } from '@/components/header/header';
 import { createElement } from '@/utils/create-element';
 
 export function renderMainPage(container: HTMLElement): void {
@@ -10,6 +9,8 @@ export function renderMainPage(container: HTMLElement): void {
     tag: 'div',
     className: ['wrapper'],
   });
+
+  const header = createHeader('main');
 
   const pageContainer = createElement({
     tag: 'main',
@@ -22,19 +23,9 @@ export function renderMainPage(container: HTMLElement): void {
     className: ['page-title'],
   });
 
-  const button = createButton({
-    text: 'Logout',
-    className: 'logout-button',
-    disabled: false,
-  });
-
-  button.addEventListener('click', () => {
-    handleLogout();
-  });
-
   const footer = createFooter();
 
-  pageContainer.append(title, button);
-  wrapper.append(pageContainer, footer);
+  pageContainer.append(title);
+  wrapper.append(header, pageContainer, footer);
   container.append(wrapper);
 }

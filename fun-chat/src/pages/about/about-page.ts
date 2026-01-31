@@ -1,4 +1,5 @@
 import { createFooter } from '@/components/footer/footer';
+import { createHeader } from '@/components/header/header';
 import { AboutPageText } from '@/configs/about-page-text';
 import { createElement } from '@/utils/create-element';
 
@@ -11,6 +12,8 @@ export function renderAboutPage(container: HTMLElement): void {
     tag: 'div',
     className: ['wrapper'],
   });
+
+  const header = createHeader('about');
 
   const pageContainer = createElement({
     tag: 'main',
@@ -68,7 +71,7 @@ export function renderAboutPage(container: HTMLElement): void {
   about.append(title, introduction, image, description, featuresTitle, featuresList, conclusion);
 
   pageContainer.append(about);
-  wrapper.append(pageContainer, footer);
+  wrapper.append(header, pageContainer, footer);
   container.append(wrapper);
 }
 
