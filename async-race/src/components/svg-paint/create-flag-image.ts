@@ -6,7 +6,6 @@ export function createFlagImage(): HTMLImageElement {
     className: ['race__finish'],
     attributes: {
       src: 'icons/finish.svg',
-      alt: 'Finish',
     },
   });
 }

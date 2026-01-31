@@ -7,7 +7,6 @@ export const winnerPopup = createPopup({
   containerClass: 'winner',
   headingContent: '🏁 Race Finished!',
   imageSrc: 'icons/winner-cup.svg',
-  imageAlt: 'Winner Icon',
   animationDuration: 3500,
   messageContent: (name) => `The winner is ${name}!`,
 });

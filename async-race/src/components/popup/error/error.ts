@@ -7,6 +7,5 @@ export const errorPopup = createPopup({
   containerClass: 'error',
   headingContent: 'Error',
   imageSrc: 'icons/error-icon.svg',
-  imageAlt: 'Error Icon',
   animationDuration: 2000,
 });

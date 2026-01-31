@@ -8,7 +8,6 @@ export function createPopup(options: PopupOptions): { show: (message: string) =>
     containerClass,
     headingContent,
     imageSrc,
-    imageAlt,
     animationDuration,
     messageContent,
   } = options;
@@ -20,7 +19,7 @@ export function createPopup(options: PopupOptions): { show: (message: string) =>
 
   const image = createElement({
     tag: 'img',
-    attributes: { src: imageSrc, alt: imageAlt, width: '100', height: '100' },
+    attributes: { src: imageSrc, width: '100', height: '100' },
   });
 
   container.append(heading, content, image);
