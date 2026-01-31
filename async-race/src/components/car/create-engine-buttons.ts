@@ -1,4 +1,4 @@
-import { createButton } from '@/components/buttons/button';
+import { createButton } from '@/components/shared/button/button';
 import { engineButtons } from '@/state/engine-buttons-state';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';

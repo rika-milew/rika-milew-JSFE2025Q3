@@ -1,4 +1,4 @@
-import { createButton } from '@/components/buttons/button';
+import { createButton } from '@/components/shared/button/button';
 import { CARS_QUANTITY } from '@/data/constants';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';
