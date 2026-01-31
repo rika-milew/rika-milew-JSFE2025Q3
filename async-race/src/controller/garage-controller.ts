@@ -1,6 +1,4 @@
-import { createCar } from '@/api/garage/create-car';
-import { deleteCar } from '@/api/garage/delete-car';
-import { updateCar } from '@/api/garage/update-car';
+import { createCar, deleteCar, updateCar } from '@/api/garage';
 import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
 import { errorPopup } from '@/components/popup/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';

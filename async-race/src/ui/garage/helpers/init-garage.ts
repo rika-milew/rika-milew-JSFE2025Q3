@@ -1,4 +1,4 @@
-import { getCars } from '@/api/garage/get-cars';
+import { getCars } from '@/api/garage';
 import { errorPopup } from '@/components/popup/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { carState } from '@/state/car-state';

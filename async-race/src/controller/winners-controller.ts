@@ -1,5 +1,4 @@
-import { createWinner } from '@/api/winners/create-winner';
-import { updateWinner } from '@/api/winners/update-winner';
+import { createWinner, updateWinner } from '@/api/winners';
 import { errorPopup } from '@/components/popup/error/error';
 import { handleWinnerUpdate } from '@/controller/helpers/handle-winner-update';
 import { POPUP_MESSAGES } from '@/data/error-messages';

@@ -4,7 +4,7 @@ import { appState } from '@/state/app-state';
 import { carState } from '@/state/car-state';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';
-import { createRandomCars } from '@/utils/generate-cars/generate-cars';
+import { createRandomCars } from '@/utils/generate-cars';
 
 import type { GarageList, Car } from '@/types/types';
 

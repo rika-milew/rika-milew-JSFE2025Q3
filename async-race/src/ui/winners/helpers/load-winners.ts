@@ -1,4 +1,4 @@
-import { getWinners } from '@/api/winners/get-winners';
+import { getWinners } from '@/api/winners';
 import { errorPopup } from '@/components/popup/error/error';
 import { POPUP_MESSAGES } from '@/data/error-messages';
 import { carState } from '@/state/car-state';
