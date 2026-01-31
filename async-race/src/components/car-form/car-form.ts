@@ -1,4 +1,4 @@
-import { createCarFormElements } from '@/components/car-form/helpers/car-form-elements';
+import { createFormComponents } from '@/components/car-form/form-components/form-components';
 import { initFormEvents } from '@/components/car-form/helpers/init-form-events';
 import { updateFormEvents } from '@/components/car-form/helpers/update-form-events';
 import { errorPopup } from '@/components/popup/error/error';
@@ -12,7 +12,7 @@ import type { CarForm } from '@/types/types';
 import './car-form.css';
 
 export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
-  const { carForm, nameInput, colorInput, button } = createCarFormElements(isUpdate);
+  const { carForm, nameInput, colorInput, button } = createFormComponents(isUpdate);
 
   const { syncDisabledState } = initFormEvents(isUpdate, nameInput, colorInput, button);
 
