@@ -1,7 +1,7 @@
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
-import { createWinnersTable } from '@/ui/winners/table/winners-table';
+import { createWinnersTable, createEmptyWinners } from '@/ui/winners/table/winners-table';
 import { createElement } from '@/utils/create-element';
 import { sortTable } from '@/utils/sort-table';
 
@@ -36,13 +36,7 @@ export const winnersList: WinnersList = ((): WinnersList => {
   function renderEmpty(): void {
     winnersContainer.replaceChildren();
 
-    winnersContainer.append(
-      createElement({
-        tag: 'p',
-        className: ['no-winners-message'],
-        textContent: 'No winners yet. Time to start a race!',
-      }),
-    );
+    winnersContainer.append(createEmptyWinners());
 
     eventState.emit('winners:pagination:update', {
       currentPage: 1,

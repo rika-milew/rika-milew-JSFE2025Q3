@@ -93,3 +93,11 @@ function createWinnerRow(winner: WinnersStateItem, index: number): HTMLDivElemen
 
   return row;
 }
+
+export function createEmptyWinners(): HTMLElement {
+  return createElement({
+    tag: 'p',
+    className: ['no-winners-message'],
+    textContent: 'No winners yet. Time to start a race!',
+  });
+}
