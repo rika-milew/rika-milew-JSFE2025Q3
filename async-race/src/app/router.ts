@@ -7,14 +7,16 @@ import type { View, AppRouter } from '@/types/types';
 
 export function createAppRouter(): AppRouter {
   return {
-    navigate: async (view: View): Promise<void> => {
-      appState.view = view;
-
-      try {
-        await createApp();
-      } catch {
-        errorPopup.show(POPUP_MESSAGES.navigationFailed());
-      }
-    },
+    navigate: handleNavigate,
   };
+}
+
+async function handleNavigate(view: View): Promise<void> {
+  appState.view = view;
+
+  try {
+    await createApp();
+  } catch {
+    errorPopup.show(POPUP_MESSAGES.navigationFailed());
+  }
 }
