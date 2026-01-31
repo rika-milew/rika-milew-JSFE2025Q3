@@ -1,9 +1,9 @@
-import { createPageInfo } from '@/components/page-info/page-info';
+import { createPageNumber } from '@/components/page-number/page-number';
 import { appState } from '@/state/app-state';
 import { carState } from '@/state/car-state';
 import { eventState } from '@/state/events/event-state';
 
-export const infoElements = createPageInfo({
+export const infoElements = createPageNumber({
   title: 'Garage',
   page: appState.garagePage,
   total: carState.cars.length,

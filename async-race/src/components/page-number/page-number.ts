@@ -2,7 +2,7 @@ import { createElement } from '@/utils/create-element';
 
 import type { PageInfoElements, PageInfoResults } from '@/types/types';
 
-export function createPageInfo({
+export function createPageNumber({
   title,
   page,
   total,

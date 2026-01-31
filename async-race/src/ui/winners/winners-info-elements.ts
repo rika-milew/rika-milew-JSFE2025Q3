@@ -1,9 +1,9 @@
-import { createPageInfo } from '@/components/page-info/page-info';
+import { createPageNumber } from '@/components/page-number/page-number';
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
 
-export const winnerInfoElements = createPageInfo({
+export const winnerInfoElements = createPageNumber({
   title: 'Winners',
   page: appState.winnersPage,
   total: appState.winners.length,
