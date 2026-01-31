@@ -8,4 +8,7 @@ export type EventMap = {
   'ws:disconnected': { reason?: string };
   'ws:reconnecting': { attempt: number };
   'connection:changed': ConnectionState;
+  'route:changed': string;
+  'app:logout': undefined;
+  'app:navigate': string;
 };

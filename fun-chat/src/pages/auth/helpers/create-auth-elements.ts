@@ -1,3 +1,4 @@
+import { navigate } from '@/app/router';
 import { createButton } from '@/components/button/button';
 import { createElement } from '@/utils/create-element';
 
@@ -39,10 +40,24 @@ export function createAuthElements(container: HTMLElement): AuthView {
 
   button.type = 'submit';
 
+  const aboutLink = createElement({
+    tag: 'a',
+    className: ['login__about-link'],
+    textContent: 'About Fun Chat',
+    attributes: {
+      href: '/about',
+    },
+  });
+
+  aboutLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    navigate('about', document.body);
+  });
+
   loginWrapper.append(loginInput, loginError);
   passwordWrapper.append(passwordInput, passwordError);
   form.append(loginWrapper, passwordWrapper, button);
-  pageContainer.append(title, form);
+  pageContainer.append(title, form, aboutLink);
 
   container.replaceChildren(pageContainer);
 

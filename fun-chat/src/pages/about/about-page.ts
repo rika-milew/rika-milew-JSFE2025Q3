@@ -1,12 +1,20 @@
+import { createFooter } from '@/components/footer/footer';
 import { AboutPageText } from '@/configs/about-page-text';
 import { createElement } from '@/utils/create-element';
 
 import './about-page.css';
 
 export function renderAboutPage(container: HTMLElement): void {
-  const pageContainer = createElement({
+  container.replaceChildren();
+
+  const wrapper = createElement({
     tag: 'div',
-    className: ['container'],
+    className: ['wrapper'],
+  });
+
+  const pageContainer = createElement({
+    tag: 'main',
+    className: ['container', 'main'],
   });
 
   const about = createElement({
@@ -47,20 +55,7 @@ export function renderAboutPage(container: HTMLElement): void {
     textContent: AboutPageText.featuresTitle,
   });
 
-  const featuresList = createElement({
-    tag: 'ul',
-    className: ['about__list'],
-  });
-
-  AboutPageText.features.forEach((feature) => {
-    const item = createElement({
-      tag: 'li',
-      className: ['about__list-item'],
-      textContent: feature,
-    });
-
-    featuresList.append(item);
-  });
+  const featuresList = createList(AboutPageText.features, 'about__list');
 
   const conclusion = createElement({
     tag: 'p',
@@ -68,10 +63,19 @@ export function renderAboutPage(container: HTMLElement): void {
     textContent: AboutPageText.conclusion,
   });
 
-  container.replaceChildren();
+  const footer = createFooter();
 
   about.append(title, introduction, image, description, featuresTitle, featuresList, conclusion);
 
   pageContainer.append(about);
-  container.append(pageContainer);
+  wrapper.append(pageContainer, footer);
+  container.append(wrapper);
+}
+
+function createList(items: string[], className: string): HTMLUListElement {
+  const ul = createElement({ tag: 'ul', className: [className] });
+  items.forEach((text) => {
+    ul.append(createElement({ tag: 'li', className: [`${className}-item`], textContent: text }));
+  });
+  return ul;
 }

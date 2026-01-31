@@ -1,11 +1,19 @@
 import { createButton } from '@/components/button/button';
+import { createFooter } from '@/components/footer/footer';
 import { handleLogout } from '@/pages/main/helpers/handle-logout';
 import { createElement } from '@/utils/create-element';
 
 export function renderMainPage(container: HTMLElement): void {
-  const pageContainer = createElement({
+  container.replaceChildren();
+
+  const wrapper = createElement({
     tag: 'div',
-    className: ['container'],
+    className: ['wrapper'],
+  });
+
+  const pageContainer = createElement({
+    tag: 'main',
+    className: ['container main'],
   });
 
   const title = createElement({
@@ -24,7 +32,9 @@ export function renderMainPage(container: HTMLElement): void {
     handleLogout();
   });
 
-  container.replaceChildren();
+  const footer = createFooter();
+
   pageContainer.append(title, button);
-  container.append(pageContainer);
+  wrapper.append(pageContainer, footer);
+  container.append(wrapper);
 }
