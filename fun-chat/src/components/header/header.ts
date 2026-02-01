@@ -6,14 +6,18 @@ import { createElement } from '@/utils/create-element';
 import './header.css';
 
 export function createHeader(page: string): HTMLElement {
-  const header = createElement({ tag: 'header', className: ['header'] });
+  const header: HTMLElement = createElement({ tag: 'header', className: ['header'] });
 
-  const title = createElement({ tag: 'h2', className: ['header__title'], textContent: 'Fun Chat' });
+  const title: HTMLHeadingElement = createElement({
+    tag: 'h2',
+    className: ['header__title'],
+    textContent: 'Fun Chat',
+  });
+
+  const buttons: HTMLDivElement = createElement({ tag: 'div', className: ['header__buttons'] });
 
   if (page === 'main') {
-    const buttons = createElement({ tag: 'div', className: ['header__buttons'] });
-
-    const logoutButton = createButton({
+    const logoutButton: HTMLButtonElement = createButton({
       text: 'Logout',
     });
 
@@ -21,7 +25,7 @@ export function createHeader(page: string): HTMLElement {
       handleLogout();
     });
 
-    const aboutButton = createButton({
+    const aboutButton: HTMLButtonElement = createButton({
       text: 'About',
     });
 
@@ -30,16 +34,18 @@ export function createHeader(page: string): HTMLElement {
     });
 
     buttons.append(logoutButton, aboutButton);
-    header.append(title, buttons);
   } else if (page === 'about') {
-    const backButton = createButton({
+    const backButton: HTMLButtonElement = createButton({
       text: 'Back',
     });
 
     backButton.addEventListener('click', () => {
       history.back();
     });
+
+    buttons.append(backButton);
   }
 
+  header.append(title, buttons);
   return header;
 }

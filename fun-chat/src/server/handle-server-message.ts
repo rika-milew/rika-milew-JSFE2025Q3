@@ -1,6 +1,5 @@
 import { navigate } from '@/app/router';
-import { errorPopup } from '@/components/popup/error-popup';
-import { notificationPopup } from '@/components/popup/notification-popup';
+import { errorPopup, notificationPopup } from '@/components/popups/popups';
 import { SERVER_ERRORS } from '@/constants/errors';
 import { userStore } from '@/store/user-store';
 import {

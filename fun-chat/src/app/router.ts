@@ -1,5 +1,5 @@
 import { renderAboutPage } from '@/pages/about/about-page';
-import { renderLoginPage } from '@/pages/auth/login-page';
+import { renderLoginPage } from '@/pages/login/login-page';
 import { renderMainPage } from '@/pages/main/main-page';
 import { userStore } from '@/store/user-store';
 

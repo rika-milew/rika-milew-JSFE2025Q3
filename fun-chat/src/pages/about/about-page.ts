@@ -8,36 +8,36 @@ import './about-page.css';
 export function renderAboutPage(container: HTMLElement): void {
   container.replaceChildren();
 
-  const wrapper = createElement({
+  const wrapper: HTMLDivElement = createElement({
     tag: 'div',
     className: ['wrapper'],
   });
 
   const header = createHeader('about');
 
-  const pageContainer = createElement({
+  const pageContainer: HTMLElement = createElement({
     tag: 'main',
     className: ['container', 'main'],
   });
 
-  const about = createElement({
+  const about: HTMLDivElement = createElement({
     tag: 'div',
     className: ['container about'],
   });
 
-  const title = createElement({
+  const title: HTMLHeadingElement = createElement({
     tag: 'h1',
     textContent: 'About Fun Chat',
     className: ['page-title'],
   });
 
-  const introduction = createElement({
+  const introduction: HTMLParagraphElement = createElement({
     tag: 'p',
     className: ['about__text'],
     textContent: AboutPageText.introduction,
   });
 
-  const image = createElement({
+  const image: HTMLImageElement = createElement({
     tag: 'img',
     className: ['about__image'],
     attributes: {
@@ -46,27 +46,27 @@ export function renderAboutPage(container: HTMLElement): void {
     },
   });
 
-  const description = createElement({
+  const description: HTMLParagraphElement = createElement({
     tag: 'p',
     className: ['about__text'],
     textContent: AboutPageText.description,
   });
 
-  const featuresTitle = createElement({
+  const featuresTitle: HTMLHeadingElement = createElement({
     tag: 'h2',
     className: ['about__subtitle'],
     textContent: AboutPageText.featuresTitle,
   });
 
-  const featuresList = createList(AboutPageText.features, 'about__list');
+  const featuresList: HTMLUListElement = createList(AboutPageText.features, 'about__list');
 
-  const conclusion = createElement({
+  const conclusion: HTMLParagraphElement = createElement({
     tag: 'p',
     className: ['about__text'],
     textContent: AboutPageText.conclusion,
   });
 
-  const footer = createFooter();
+  const footer: HTMLElement = createFooter();
 
   about.append(title, introduction, image, description, featuresTitle, featuresList, conclusion);
 
@@ -76,7 +76,7 @@ export function renderAboutPage(container: HTMLElement): void {
 }
 
 function createList(items: string[], className: string): HTMLUListElement {
-  const ul = createElement({ tag: 'ul', className: [className] });
+  const ul: HTMLUListElement = createElement({ tag: 'ul', className: [className] });
   items.forEach((text) => {
     ul.append(createElement({ tag: 'li', className: [`${className}-item`], textContent: text }));
   });

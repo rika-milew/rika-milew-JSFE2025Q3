@@ -1,10 +1,10 @@
-import { createAuthElements } from '@/pages/auth/helpers/create-auth-elements';
-import { handleLogin } from '@/pages/auth/helpers/handle-login';
+import { createAuthElements } from '@/pages/login/helpers/create-auth-elements';
+import { handleLogin } from '@/pages/login/helpers/handle-login';
 import { eventState } from '@/store/events/event-state';
 import { userStore } from '@/store/user-store';
 import { validateField } from '@/utils/validate-field';
 
-import './auth-page.css';
+import './login-page.css';
 
 export function renderLoginPage(container: HTMLElement): void {
   const view = createAuthElements(container);

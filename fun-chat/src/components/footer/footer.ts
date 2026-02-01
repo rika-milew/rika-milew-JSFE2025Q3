@@ -3,11 +3,11 @@ import { createElement } from '@/utils/create-element';
 import './footer.css';
 
 export function createFooter(): HTMLElement {
-  const footer = createElement({ tag: 'footer', className: ['footer'] });
+  const footer: HTMLElement = createElement({ tag: 'footer', className: ['footer'] });
 
-  const school = createElement({ tag: 'div', className: ['footer__school'] });
+  const school: HTMLDivElement = createElement({ tag: 'div', className: ['footer__school'] });
 
-  const logo = createElement({
+  const logo: HTMLImageElement = createElement({
     tag: 'img',
     className: ['footer__logo'],
     attributes: {
@@ -16,25 +16,25 @@ export function createFooter(): HTMLElement {
     },
   });
 
-  const schoolName = createElement({
+  const schoolName: HTMLParagraphElement = createElement({
     tag: 'p',
     textContent: 'RS School',
   });
 
-  const github = createElement({ tag: 'div', className: ['footer__github'] });
+  const github: HTMLDivElement = createElement({ tag: 'div', className: ['footer__github'] });
 
-  const year = createElement({
+  const year: HTMLSpanElement = createElement({
     tag: 'span',
     className: ['footer__year'],
     textContent: `© ${new Date().getFullYear()}`,
   });
 
-  const image = createElement({
+  const image: HTMLDivElement = createElement({
     tag: 'div',
     className: ['footer__image'],
   });
 
-  const githubLink = createElement({
+  const githubLink: HTMLAnchorElement = createElement({
     tag: 'a',
     className: ['footer__link'],
     textContent: 'rika-milew',

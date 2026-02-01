@@ -1,5 +1,5 @@
 import { initRouter } from '@/app/router';
-import { createConnectionPopup } from '@/components/popup/connection-popup';
+import { createConnectionPopup } from '@/components/popups/popups';
 import { startWebsocket } from '@/server/ws-connection';
 import { sendAuth } from '@/server/ws-requests';
 import { connectionStore } from '@/store/connection-store';

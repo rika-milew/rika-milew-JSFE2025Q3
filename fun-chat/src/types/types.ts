@@ -116,7 +116,6 @@ export type PopupOptions = {
   containerClass: string;
   headingContent: string;
   imageSrc: string;
-  imageAlt: string;
   animationDuration: number;
   messageContent?: (message: string) => string;
 };

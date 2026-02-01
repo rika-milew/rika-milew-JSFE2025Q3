@@ -1,5 +1,5 @@
-import { createElement } from '@/utils/create-element';
 import { audioPLayer } from '@/utils/audio-players';
+import { createElement } from '@/utils/create-element';
 
 import type { ButtonConfig } from '@/types/types';
 
