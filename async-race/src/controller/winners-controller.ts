@@ -20,7 +20,7 @@ export function startWinnersController(): void {
       return;
     }
 
-    const { id, name, color, time } = payload;
+    const { id, name, color, time }: WinnerAddPayload = payload;
 
     const existingWinner: Winner | undefined = winnersState.getById(id);
 

@@ -7,19 +7,19 @@ import { garageButtons } from '@/utils/set-garage-buttons';
 import './garage-buttons.css';
 
 export function createGarageButtons(): HTMLDivElement {
-  const container = createElement({ tag: 'div', className: ['garage__buttons'] });
+  const container: HTMLDivElement = createElement({ tag: 'div', className: ['garage__buttons'] });
 
-  const raceButton = createButton({
+  const raceButton: HTMLButtonElement = createButton({
     text: 'Race',
     className: 'race-button',
   });
 
-  const resetButton = createButton({
+  const resetButton: HTMLButtonElement = createButton({
     text: 'Reset',
     className: 'race-button',
   });
 
-  const generateButton = createButton({
+  const generateButton: HTMLButtonElement = createButton({
     text: 'Generate Cars',
     className: 'race-button',
   });

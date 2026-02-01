@@ -10,7 +10,7 @@ export function createPopup(options: PopupOptions): { show: (message: string) =>
     imageSrc,
     animationDuration,
     messageContent,
-  } = options;
+  }: PopupOptions = options;
 
   const overlay: HTMLDivElement = createElement({ tag: 'div', className: [overlayClass] });
   const container: HTMLDivElement = createElement({ tag: 'div', className: [containerClass] });

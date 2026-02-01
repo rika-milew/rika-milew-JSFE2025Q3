@@ -4,6 +4,8 @@ import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { carState } from '@/state/car-state';
 import { winnersState } from '@/state/winners-state';
 
+import type { WinnerView, WinnersResponse, CarStateItem } from '@/types/types';
+
 let areWinnersLoaded = false;
 
 export async function loadWinners(): Promise<void> {
@@ -12,16 +14,16 @@ export async function loadWinners(): Promise<void> {
   }
   areWinnersLoaded = true;
 
-  const result = await getWinners();
+  const result: WinnersResponse | undefined = await getWinners();
 
   if (!result) {
     errorPopup.show(POPUP_MESSAGES.winnersLoadFailed());
     return;
   }
-  const { winners } = result;
+  const { winners }: WinnersResponse = result;
 
-  const winnersData = winners.map((winner) => {
-    const car = carState.getById(winner.id);
+  const winnersData: WinnerView[] = winners.map((winner) => {
+    const car: CarStateItem | undefined = carState.getById(winner.id);
 
     return {
       id: winner.id,

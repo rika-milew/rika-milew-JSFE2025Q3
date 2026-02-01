@@ -29,7 +29,7 @@ export function setRaceButton(): void {
     return;
   }
 
-  const hasDrivingCars = carState.cars.some((car) => car.isDriving);
+  const hasDrivingCars: boolean = carState.cars.some((car) => car.isDriving);
 
   garageButtons.race.disabled = hasDrivingCars;
 }

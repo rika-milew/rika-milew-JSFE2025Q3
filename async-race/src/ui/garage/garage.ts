@@ -98,7 +98,7 @@ eventState.on(
       return;
     }
 
-    const { currentPage, totalCount } = data;
+    const { currentPage, totalCount }: { currentPage: number; totalCount: number } = data;
     infoElements.totalInfo.textContent = `Total Cars: ${totalCount}`;
     infoElements.pageInfo.textContent = `Page: ${currentPage} / ${Math.ceil(totalCount / appState.perPage) || 1}`;
   },

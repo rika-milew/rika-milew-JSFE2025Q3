@@ -200,6 +200,14 @@ export type WinnersSort = {
   order: 'ascending' | 'descending';
 };
 
+export type WinnerView = {
+  id: number;
+  wins: number;
+  time: number;
+  name: string;
+  color: string;
+};
+
 export type CarStore = {
   container: HTMLDivElement;
   svg: SVGElement;

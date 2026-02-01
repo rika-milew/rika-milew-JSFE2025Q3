@@ -1,7 +1,7 @@
 import { SCREEN_WIDTH_499, SCREEN_WIDTH_595, SCREEN_WIDTH_768 } from '@/constants/constants';
 
 export function getWinnerCarSize(): { width: number; height: number } {
-  const screenWidth = window.innerWidth;
+  const screenWidth: number = window.innerWidth;
 
   if (screenWidth > SCREEN_WIDTH_768) {
     return { width: 70, height: 26 };

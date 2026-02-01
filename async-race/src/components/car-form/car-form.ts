@@ -7,14 +7,20 @@ import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { garageList } from '@/ui/garage/helpers/garage-list';
 
-import type { CarForm } from '@/types/types';
+import type { CarForm, CarFormElements } from '@/types/types';
 
 import './car-form.css';
 
 export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
-  const { carForm, nameInput, colorInput, button } = createFormComponents(isUpdate);
+  const { carForm, nameInput, colorInput, button }: CarFormElements =
+    createFormComponents(isUpdate);
 
-  const { syncDisabledState } = initFormEvents(isUpdate, nameInput, colorInput, button);
+  const { syncDisabledState }: { syncDisabledState: () => void } = initFormEvents(
+    isUpdate,
+    nameInput,
+    colorInput,
+    button,
+  );
 
   if (isUpdate) {
     updateFormEvents(nameInput, colorInput, syncDisabledState);

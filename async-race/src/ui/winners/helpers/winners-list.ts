@@ -5,18 +5,21 @@ import { createWinnersTable, createEmptyWinners } from '@/ui/winners/table/winne
 import { createElement } from '@/utils/create-element';
 import { sortTable } from '@/utils/sort-table';
 
-import type { WinnersList, WinnersStateItem } from '@/types/types';
+import type { WinnersList, WinnersStateItem, Winner } from '@/types/types';
 
-export const winnersContainer = createElement({ tag: 'div', className: ['garage-container'] });
+export const winnersContainer: HTMLDivElement = createElement({
+  tag: 'div',
+  className: ['garage-container'],
+});
 
 export const winnersList: WinnersList = ((): WinnersList => {
   function renderWinners(): void {
-    const start = (appState.winnersPage - 1) * appState.winnersPerPage;
-    const end = start + appState.winnersPerPage;
+    const start: number = (appState.winnersPage - 1) * appState.winnersPerPage;
+    const end: number = start + appState.winnersPerPage;
 
     let winners: WinnersStateItem[] = Object.values(winnersState.winners);
     winners = sortTable(winners);
-    const pageWinners = winners.slice(start, end);
+    const pageWinners: Winner[] = winners.slice(start, end);
 
     winnersContainer.replaceChildren();
 
@@ -45,7 +48,10 @@ export const winnersList: WinnersList = ((): WinnersList => {
   }
 
   function setWinnersPage(page: number): void {
-    const maxPage = Math.max(1, Math.ceil(winnersState.totalWinners / appState.winnersPerPage));
+    const maxPage: number = Math.max(
+      1,
+      Math.ceil(winnersState.totalWinners / appState.winnersPerPage),
+    );
 
     if (page < 1 || page > maxPage) {
       return;
