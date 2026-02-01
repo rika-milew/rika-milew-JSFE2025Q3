@@ -1,6 +1,6 @@
 import './style.css';
-import { startApp } from '@/app/start-app';
+import { app } from '@/app/app';
 
 document.addEventListener('DOMContentLoaded', () => {
-  startApp(document.body);
+  app();
 });

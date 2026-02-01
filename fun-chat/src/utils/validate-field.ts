@@ -1,4 +1,4 @@
-import { VALIDATION_RULES } from '@/data/validation-rules';
+import { VALIDATION_RULES } from '@/constants/validation-rules';
 import { userStore } from '@/store/user-store';
 
 export function validateField(

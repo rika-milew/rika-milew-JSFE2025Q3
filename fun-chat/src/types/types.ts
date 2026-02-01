@@ -130,6 +130,8 @@ export type AuthView = {
   button: HTMLButtonElement;
 };
 
+export type Route = 'login' | 'main' | 'about';
+
 // state
 
 export type ConnectionState = {

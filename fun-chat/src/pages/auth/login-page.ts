@@ -6,7 +6,7 @@ import { validateField } from '@/utils/validate-field';
 
 import './auth-page.css';
 
-export function renderAuthPage(container: HTMLElement): void {
+export function renderLoginPage(container: HTMLElement): void {
   const view = createAuthElements(container);
 
   const { form, loginInput, passwordInput, loginError, passwordError } = view;

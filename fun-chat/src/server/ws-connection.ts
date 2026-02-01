@@ -7,7 +7,7 @@ let socket: WebSocket | undefined;
 let reconnectAttempt = 0;
 let manuallyClosed = false;
 
-export function startWebSocket(): void {
+export function startWebsocket(): void {
   manuallyClosed = false;
   connect();
 }

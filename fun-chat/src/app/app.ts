@@ -1,29 +1,17 @@
-import { router } from '@/app/router';
+import { initRouter } from '@/app/router';
 import { createConnectionPopup } from '@/components/popup/connection-popup';
-import { startWebSocket } from '@/server/ws-connection';
+import { startWebsocket } from '@/server/ws-connection';
 import { sendAuth } from '@/server/ws-requests';
 import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/events/event-state';
 import { userStore } from '@/store/user-store';
 
-export function startApp(root: HTMLElement): void {
+export function app(): void {
   createConnectionPopup();
 
-  startWebSocket();
+  startWebsocket();
 
-  let route = location.hash.replace('#', '');
-
-  if (!route) {
-    route = 'login';
-    history.replaceState(undefined, '', '#login');
-  }
-
-  router(route, root);
-
-  globalThis.addEventListener('hashchange', () => {
-    const route = location.hash.replace('#', '') || 'login';
-    router(route, root);
-  });
+  initRouter(document.body);
 
   eventState.on('ws:connected', () => {
     connectionStore.setConnected(true);
