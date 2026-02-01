@@ -1,4 +1,5 @@
 import { createElement } from '@/utils/create-element';
+import { audioPLayer } from '@/utils/audio-players';
 
 import type { ButtonConfig } from '@/types/types';
 
@@ -26,9 +27,9 @@ export function createButton(config: ButtonConfig): HTMLButtonElement {
     },
   });
 
-  //   button.addEventListener('click', () => {
-  //     audioPLayer.playOnce('button');
-  //   });
+  button.addEventListener('click', () => {
+    audioPLayer.playOnce('button');
+  });
 
   return button;
 }

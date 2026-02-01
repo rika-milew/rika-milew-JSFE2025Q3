@@ -132,6 +132,16 @@ export type AuthView = {
 
 export type Route = 'login' | 'main' | 'about';
 
+export type SoundTypes = 'notification' | 'button';
+
+export type AudioPlayer = {
+  stopSound: (id: SoundTypes) => void;
+  stopAllSounds: () => void;
+  toggleMute: () => void;
+  isMuted: boolean;
+  playOnce: (id: SoundTypes) => void;
+};
+
 // state
 
 export type ConnectionState = {
