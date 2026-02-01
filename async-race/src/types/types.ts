@@ -74,7 +74,6 @@ export type PopupOptions = {
   containerClass: string;
   headingContent: string;
   imageSrc: string;
-  imageAlt: string;
   animationDuration: number;
   messageContent?: (message: string) => string;
 };
@@ -157,6 +156,8 @@ export type AudioPlayer = {
   stopRaceLoop: () => void;
 };
 
+export type SortingOrder = 'ascending' | 'descending' | 'none';
+
 // state
 
 export type AppState = {
@@ -199,6 +200,14 @@ export type WinnersSort = {
   order: 'ascending' | 'descending';
 };
 
+export type WinnerView = {
+  id: number;
+  wins: number;
+  time: number;
+  name: string;
+  color: string;
+};
+
 export type CarStore = {
   container: HTMLDivElement;
   svg: SVGElement;
@@ -238,6 +247,30 @@ export type CarState = {
   winner: CarStateItem | undefined;
   isRacing: boolean;
   garageSessionId: number;
+};
+
+export type Cars = {
+  cars: Car[];
+  totalCount: number;
+};
+
+export type PopupMessages = {
+  carCreateFailed: (id?: number, name?: string) => string;
+  carUpdateFailed: () => string;
+  carDeleteFailed: (id?: number, name?: string) => string;
+  carFormFailed: () => string;
+  appLoadFailed: () => string;
+  viewChangeFailed: () => string;
+  navigationFailed: () => string;
+  garageLoadFailed: () => string;
+  winnersLoadFailed: () => string;
+  winnerCreateFailed: (name?: string) => string;
+  winnerUpdateFailed: (name?: string) => string;
+  randomCarsFailed: () => string;
+  carResetFailed: (id?: number, name?: string) => string;
+  carStartFailed: (id?: number, name?: string) => string;
+  carDriveFailed: (id?: number, name?: string) => string;
+  generalError: string;
 };
 
 // api

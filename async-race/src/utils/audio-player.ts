@@ -12,12 +12,12 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
   sounds.brake.volume = 0.3;
   sounds.button.volume = 0.5;
 
-  const activeSounds = new Set<SoundTypes>();
+  const activeSounds: Set<SoundTypes> = new Set<SoundTypes>();
 
   const STORAGE_KEY = 'audio';
 
-  const saved = localStorage.getItem(STORAGE_KEY);
-  let isMuted = saved ? saved === 'true' : false;
+  const saved: string | null = localStorage.getItem(STORAGE_KEY);
+  let isMuted: boolean = saved ? saved === 'true' : false;
 
   function updateMute(): void {
     Object.values(sounds).forEach((sound) => {
@@ -50,13 +50,13 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
       return;
     }
 
-    const sound = sounds[id];
+    const sound: HTMLAudioElement = sounds[id];
     safePlay(sound);
     activeSounds.add(id);
   }
 
   function stopSound(id: SoundTypes): void {
-    const sound = sounds[id];
+    const sound: HTMLAudioElement = sounds[id];
     sound.pause();
     sound.currentTime = 0;
     activeSounds.delete(id);
@@ -73,7 +73,7 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
       return;
     }
 
-    const sound = sounds[id];
+    const sound: HTMLAudioElement = sounds[id];
     safePlay(sound);
   }
 
@@ -82,7 +82,7 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
       return;
     }
 
-    const raceSound = sounds.race;
+    const raceSound: HTMLAudioElement = sounds.race;
     if (!raceSound.paused) {
       return;
     }

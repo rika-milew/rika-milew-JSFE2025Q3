@@ -1,5 +1,5 @@
 import { carLeftWheel, carMain, carRightWheel } from '@/components/svg-paint/car-svg.config';
-import { GARAGE_CAR_WIDTH, GARAGE_CAR_HEIGHT } from '@/data/constants';
+import { GARAGE_CAR_WIDTH, GARAGE_CAR_HEIGHT } from '@/constants/constants';
 
 import type { CarSvg } from '@/types/types';
 
@@ -8,23 +8,21 @@ export function createCarImage(
   width = GARAGE_CAR_WIDTH,
   height = GARAGE_CAR_HEIGHT,
 ): CarSvg {
-  const svgType = 'http://www.w3.org/2000/svg';
-
-  const svg = document.createElementNS(svgType, 'svg');
+  const svg: SVGSVGElement = createSvgElement('svg');
   svg.setAttribute('width', String(width));
   svg.setAttribute('height', String(height));
   svg.setAttribute('viewBox', '0 0 90 33');
   svg.setAttribute('fill', initialColor);
 
-  const rightWheel = document.createElementNS(svgType, 'path');
+  const rightWheel: SVGPathElement = createSvgElement('path');
   rightWheel.setAttribute('d', carRightWheel);
   rightWheel.setAttribute('fill', initialColor);
 
-  const leftWheel = document.createElementNS(svgType, 'path');
+  const leftWheel: SVGPathElement = createSvgElement('path');
   leftWheel.setAttribute('d', carMain);
   leftWheel.setAttribute('fill', initialColor);
 
-  const carBody = document.createElementNS(svgType, 'path');
+  const carBody: SVGPathElement = createSvgElement('path');
   carBody.setAttribute('d', carLeftWheel);
   carBody.setAttribute('fill', initialColor);
 
@@ -36,4 +34,10 @@ export function createCarImage(
       carBody.setAttribute('fill', color);
     },
   };
+}
+
+function createSvgElement<K extends keyof SVGElementTagNameMap>(
+  tagName: K,
+): SVGElementTagNameMap[K] {
+  return document.createElementNS('http://www.w3.org/2000/svg', tagName);
 }

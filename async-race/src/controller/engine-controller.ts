@@ -1,14 +1,14 @@
-import { changeEngineStatus } from '@/api/engine/change-engine-status';
+import { getEngineStatus } from '@/api/get-engine-status';
 import { resetCarPosition } from '@/components/car/car-animation/reset-car-position';
 import { stopCarAnimation } from '@/components/car/car-animation/stop-car-animation';
 import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { handleCarStart } from '@/controller/helpers/handle-car-start';
-import { POPUP_MESSAGES } from '@/data/error-messages';
 import { carState } from '@/state/car-state';
 import { eventState } from '@/state/events/event-state';
 import { setEngineButtons } from '@/utils/set-car-buttons';
 
-import type { EngineResponse } from '@/types/types';
+import type { EngineResponse, CarStateItem } from '@/types/types';
 
 let isEngineControllerStarted = false;
 
@@ -18,23 +18,26 @@ export function startEngineController(): void {
   }
   isEngineControllerStarted = true;
 
-  eventState.on('car:start', async (payload) => {
+  eventState.on('car:start', async (payload: { id: number } | undefined) => {
     if (!payload) {
       return;
     }
     await handleCarStart(payload.id);
   });
 
-  eventState.on('car:reset', async (payload) => {
+  eventState.on('car:reset', async (payload: { id: number } | undefined) => {
     if (!payload) {
       return;
     }
 
-    const carId = payload.id;
-    const car = carState.getById(carId);
+    const carId: number = payload.id;
+    const car: CarStateItem | undefined = carState.getById(carId);
     stopCarAnimation(carId);
 
-    const result = await changeEngineStatus<EngineResponse>(carId, 'stopped');
+    const result: EngineResponse | undefined = await getEngineStatus<EngineResponse>(
+      carId,
+      'stopped',
+    );
 
     if (!result) {
       errorPopup.show(POPUP_MESSAGES.carResetFailed(carId, car?.name));

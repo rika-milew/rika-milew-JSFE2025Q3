@@ -1,17 +1,17 @@
 import { createCarImage } from '@/components/svg-paint/create-car-image';
-import { SORTING_ICONS } from '@/data/constants';
+import { SORTING_ICONS } from '@/constants/constants';
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';
 import { getWinnerCarSize } from '@/utils/get-winner-car-size';
 
-import type { Winner, WinnersStateItem } from '@/types/types';
+import type { Winner, WinnersStateItem, CarSvg } from '@/types/types';
 
 import './winners-table.css';
 
 export function createWinnersTable(winners: Winner[]): HTMLDivElement {
-  const table = createElement({ tag: 'div', className: ['winners-table'] });
-  const headers = ['Position', 'Car', 'Name', 'Wins', 'Best Time (sec)'];
+  const table: HTMLDivElement = createElement({ tag: 'div', className: ['winners-table'] });
+  const headers: string[] = ['Position', 'Car', 'Name', 'Wins', 'Best Time (sec)'];
 
   table.append(createHeader(headers));
 
@@ -23,19 +23,19 @@ export function createWinnersTable(winners: Winner[]): HTMLDivElement {
 }
 
 function createHeader(headers: string[]): HTMLDivElement {
-  const header = createElement({ tag: 'div', className: ['winners-header'] });
+  const header: HTMLDivElement = createElement({ tag: 'div', className: ['winners-header'] });
 
   headers.forEach((text) => {
-    const cell = createElement({
+    const cell: HTMLDivElement = createElement({
       tag: 'div',
       className: ['winners-cell', 'header-cell'],
       textContent: text,
     });
 
     if (text === 'Wins' || text === 'Best Time (sec)') {
-      const sorting = text === 'Wins' ? 'wins' : 'time';
+      const sorting: 'wins' | 'time' = text === 'Wins' ? 'wins' : 'time';
 
-      const icon = createElement({
+      const icon: HTMLSpanElement = createElement({
         tag: 'span',
         className: ['sort-icon'],
         textContent:
@@ -64,11 +64,14 @@ function createHeader(headers: string[]): HTMLDivElement {
 }
 
 function createCarCell(color: string): HTMLDivElement {
-  const carCell = createElement({ tag: 'div', className: ['winners-cell', 'car-cell'] });
-  const carIcon = createElement({ tag: 'div', className: ['car-icon'] });
+  const carCell: HTMLDivElement = createElement({
+    tag: 'div',
+    className: ['winners-cell', 'car-cell'],
+  });
+  const carIcon: HTMLDivElement = createElement({ tag: 'div', className: ['car-icon'] });
 
-  const { width, height } = getWinnerCarSize();
-  const carSvg = createCarImage(color, width, height);
+  const { width, height }: { width: number; height: number } = getWinnerCarSize();
+  const carSvg: CarSvg = createCarImage(color, width, height);
 
   carIcon.append(carSvg.element);
   carCell.append(carIcon);
@@ -77,13 +80,17 @@ function createCarCell(color: string): HTMLDivElement {
 }
 
 function createTextCell(text: string, label: string): HTMLDivElement {
-  const cell = createElement({ tag: 'div', className: ['winners-cell'], textContent: text });
+  const cell: HTMLDivElement = createElement({
+    tag: 'div',
+    className: ['winners-cell'],
+    textContent: text,
+  });
   cell.dataset.label = label;
   return cell;
 }
 
 function createWinnerRow(winner: WinnersStateItem, index: number): HTMLDivElement {
-  const row = createElement({ tag: 'div', className: ['winners-row'] });
+  const row: HTMLDivElement = createElement({ tag: 'div', className: ['winners-row'] });
 
   row.append(createTextCell(String(index + 1), 'Position:'));
   row.append(createCarCell(winner.color));
@@ -92,4 +99,12 @@ function createWinnerRow(winner: WinnersStateItem, index: number): HTMLDivElemen
   row.append(createTextCell(winner.time.toFixed(2), 'Best Time (sec):'));
 
   return row;
+}
+
+export function createEmptyWinners(): HTMLElement {
+  return createElement({
+    tag: 'p',
+    className: ['no-winners-message'],
+    textContent: 'No winners yet. Time to start a race!',
+  });
 }

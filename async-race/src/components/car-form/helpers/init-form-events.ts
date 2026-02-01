@@ -23,7 +23,13 @@ export function initFormEvents(
     }
   });
 
-  const { syncDisabledState } = createFormState(isUpdate, nameInput, colorInput, button);
+  const { syncDisabledState }: { syncDisabledState: () => void } = createFormState(
+    isUpdate,
+    nameInput,
+    colorInput,
+    button,
+  );
+
   syncDisabledState();
 
   return { syncDisabledState };

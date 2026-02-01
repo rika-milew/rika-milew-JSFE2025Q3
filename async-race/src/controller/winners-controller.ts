@@ -1,12 +1,11 @@
-import { createWinner } from '@/api/winners/create-winner';
-import { updateWinner } from '@/api/winners/update-winner';
+import { createWinner, updateWinner } from '@/api/winners';
 import { errorPopup } from '@/components/popup/error/error';
+import { POPUP_MESSAGES } from '@/constants/error-messages';
 import { handleWinnerUpdate } from '@/controller/helpers/handle-winner-update';
-import { POPUP_MESSAGES } from '@/data/error-messages';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
 
-import type { WinnerAddPayload } from '@/types/types';
+import type { WinnerAddPayload, Winner } from '@/types/types';
 
 let isWinnersControllerStarted = false;
 
@@ -21,15 +20,15 @@ export function startWinnersController(): void {
       return;
     }
 
-    const { id, name, color, time } = payload;
+    const { id, name, color, time }: WinnerAddPayload = payload;
 
-    const existing = winnersState.getById(id);
+    const existingWinner: Winner | undefined = winnersState.getById(id);
 
-    if (existing) {
-      const currentWins = existing.wins + 1;
-      const bestTime = Math.min(existing.time, time);
+    if (existingWinner) {
+      const currentWins: number = existingWinner.wins + 1;
+      const bestTime: number = Math.min(existingWinner.time, time);
 
-      const updated = await updateWinner(id, currentWins, bestTime);
+      const updated: Winner | undefined = await updateWinner(id, currentWins, bestTime);
 
       if (!updated) {
         errorPopup.show(POPUP_MESSAGES.winnerUpdateFailed(name));
@@ -43,7 +42,7 @@ export function startWinnersController(): void {
         wins: updated.wins,
       });
     } else {
-      const created = await createWinner(id, 1, time);
+      const created: Winner | undefined = await createWinner(id, 1, time);
 
       if (!created) {
         errorPopup.show(POPUP_MESSAGES.winnerCreateFailed(name));
@@ -60,12 +59,12 @@ export function startWinnersController(): void {
     eventState.emit('winner:updated');
   });
 
-  eventState.on('car:delete', (payload) => {
+  eventState.on('car:delete', (payload: { id: number } | undefined) => {
     if (!payload) {
       return;
     }
 
-    const carId = payload.id;
+    const carId: number = payload.id;
 
     if (winnersState.getById(carId)) {
       winnersState.remove(carId);

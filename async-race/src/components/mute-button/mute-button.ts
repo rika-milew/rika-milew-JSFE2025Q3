@@ -2,7 +2,7 @@ import { audioPLayer } from '@/utils/audio-player';
 import { createElement } from '@/utils/create-element';
 
 export function createMuteButton(): HTMLDivElement {
-  const button = createElement({
+  const button: HTMLDivElement = createElement({
     tag: 'div',
     className: ['mute-button'],
   });

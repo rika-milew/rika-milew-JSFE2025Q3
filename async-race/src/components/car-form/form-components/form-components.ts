@@ -2,15 +2,15 @@ import { createElement } from '@/utils/create-element';
 
 import type { CarFormElements } from '@/types/types';
 
-export function createCarFormElements(isUpdate: boolean): CarFormElements {
-  const carForm = createElement({ tag: 'form', className: ['car-form'] });
+export function createFormComponents(isUpdate: boolean): CarFormElements {
+  const carForm: HTMLFormElement = createElement({ tag: 'form', className: ['car-form'] });
 
-  const nameInput = createElement({
+  const nameInput: HTMLInputElement = createElement({
     tag: 'input',
     attributes: { placeholder: 'Car Name', type: 'text' },
   });
 
-  const colorInput = createElement({
+  const colorInput: HTMLInputElement = createElement({
     tag: 'input',
     attributes: { type: 'color', value: '#000000' },
   });
@@ -18,7 +18,7 @@ export function createCarFormElements(isUpdate: boolean): CarFormElements {
   nameInput.id = 'car-name';
   colorInput.id = 'car-color';
 
-  const button = createElement({
+  const button: HTMLButtonElement = createElement({
     tag: 'button',
     textContent: isUpdate ? 'Update' : 'Create',
     attributes: { type: 'submit' },

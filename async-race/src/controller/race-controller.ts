@@ -7,6 +7,8 @@ import { eventState } from '@/state/events/event-state';
 import { setEngineButtons } from '@/utils/set-car-buttons';
 import { setGarageButtons } from '@/utils/set-garage-buttons';
 
+import type { Car } from '@/types/types';
+
 let isRaceControllerStarted = false;
 
 export function startRaceController(): void {
@@ -23,7 +25,7 @@ export function startRaceController(): void {
 
     setGarageButtons(false, true, false);
 
-    const carsOnPage = carState.getAllOnCurrentPage();
+    const carsOnPage: Car[] = carState.getAllOnCurrentPage();
 
     carsOnPage.forEach((car) => {
       setEngineButtons(car.id, false, false);
@@ -38,7 +40,7 @@ export function startRaceController(): void {
     carState.garageSessionId += 1;
     carState.winner = undefined;
 
-    const carsOnPage = carState.getAllOnCurrentPage();
+    const carsOnPage: Car[] = carState.getAllOnCurrentPage();
     carsOnPage.forEach((car) => {
       resetCarPosition(car.id);
     });

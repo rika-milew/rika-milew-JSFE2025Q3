@@ -1,3 +1,5 @@
+import type { SortingOrder } from '@/types/types';
+
 export const API_URL = 'http://127.0.0.1:3000';
 
 export const ERROR_RESPONSE = 404;
@@ -19,7 +21,7 @@ export const SCREEN_WIDTH_768 = 768;
 export const SCREEN_WIDTH_595 = 595;
 export const SCREEN_WIDTH_499 = 499;
 
-export const SORTING_ICONS = {
+export const SORTING_ICONS: Record<SortingOrder, string> = {
   ascending: '↑',
   descending: '↓',
   none: '',

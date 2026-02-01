@@ -1,9 +1,11 @@
-import { createPageInfo } from '@/components/page-info/page-info';
+import { createPageNumber } from '@/components/page-number/page-number';
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
 
-export const winnerInfoElements = createPageInfo({
+import type { PageInfoResults } from '@/types/types';
+
+export const winnerInfoElements: PageInfoResults = createPageNumber({
   title: 'Winners',
   page: appState.winnersPage,
   total: appState.winners.length,
@@ -19,10 +21,10 @@ eventState.on('winners:pagination:update', (data) => {
     return;
   }
 
-  const { currentPage, totalCount } = data;
+  const { currentPage, totalCount }: { currentPage: number; totalCount: number } = data;
   winnerInfoElements.totalInfo.textContent = `Total Winners: ${totalCount}`;
 
-  const totalPages = Math.ceil(totalCount / appState.winnersPerPage) || 1;
+  const totalPages: number = Math.ceil(totalCount / appState.winnersPerPage) || 1;
   const pageText = `Page: ${currentPage} / ${totalPages}`;
   winnerInfoElements.pageInfo.textContent = pageText;
 });

@@ -1,22 +1,25 @@
 import { appState } from '@/state/app-state';
 import { eventState } from '@/state/events/event-state';
 import { winnersState } from '@/state/winners-state';
-import { createWinnersTable } from '@/ui/winners/table/winners-table';
+import { createWinnersTable, createEmptyWinners } from '@/ui/winners/table/winners-table';
 import { createElement } from '@/utils/create-element';
 import { sortTable } from '@/utils/sort-table';
 
-import type { WinnersList } from '@/types/types';
+import type { WinnersList, WinnersStateItem, Winner } from '@/types/types';
 
-export const winnersContainer = createElement({ tag: 'div', className: ['garage-container'] });
+export const winnersContainer: HTMLDivElement = createElement({
+  tag: 'div',
+  className: ['garage-container'],
+});
 
 export const winnersList: WinnersList = ((): WinnersList => {
   function renderWinners(): void {
-    const start = (appState.winnersPage - 1) * appState.winnersPerPage;
-    const end = start + appState.winnersPerPage;
+    const start: number = (appState.winnersPage - 1) * appState.winnersPerPage;
+    const end: number = start + appState.winnersPerPage;
 
-    let winners = Object.values(winnersState.winners);
+    let winners: WinnersStateItem[] = Object.values(winnersState.winners);
     winners = sortTable(winners);
-    const pageWinners = winners.slice(start, end);
+    const pageWinners: Winner[] = winners.slice(start, end);
 
     winnersContainer.replaceChildren();
 
@@ -36,13 +39,7 @@ export const winnersList: WinnersList = ((): WinnersList => {
   function renderEmpty(): void {
     winnersContainer.replaceChildren();
 
-    winnersContainer.append(
-      createElement({
-        tag: 'p',
-        className: ['no-winners-message'],
-        textContent: 'No winners yet. Time to start a race!',
-      }),
-    );
+    winnersContainer.append(createEmptyWinners());
 
     eventState.emit('winners:pagination:update', {
       currentPage: 1,
@@ -51,7 +48,10 @@ export const winnersList: WinnersList = ((): WinnersList => {
   }
 
   function setWinnersPage(page: number): void {
-    const maxPage = Math.max(1, Math.ceil(winnersState.totalWinners / appState.winnersPerPage));
+    const maxPage: number = Math.max(
+      1,
+      Math.ceil(winnersState.totalWinners / appState.winnersPerPage),
+    );
 
     if (page < 1 || page > maxPage) {
       return;

@@ -1,4 +1,4 @@
-import { createButton } from '@/components/button/button';
+import { createButton } from '@/components/shared/button/button';
 import { engineButtons } from '@/state/engine-buttons-state';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';
@@ -7,7 +7,7 @@ import { setEngineButtons } from '@/utils/set-car-buttons';
 import type { Car } from '../../types/types';
 
 export function createEngineButtons(car: Car): HTMLDivElement {
-  const startButton = createButton({
+  const startButton: HTMLButtonElement = createButton({
     text: 'Start',
     className: 'animation-button start-button',
   });
@@ -16,7 +16,7 @@ export function createEngineButtons(car: Car): HTMLDivElement {
     eventState.emit('car:start', { id: car.id });
   });
 
-  const resetButton = createButton({
+  const resetButton: HTMLButtonElement = createButton({
     text: 'Reset',
     className: 'animation-button stop-button',
   });
@@ -28,7 +28,7 @@ export function createEngineButtons(car: Car): HTMLDivElement {
   engineButtons[car.id] = { startButton, resetButton };
   setEngineButtons(car.id, true, false);
 
-  const container = createElement({ tag: 'div', className: ['animation-buttons'] });
+  const container: HTMLDivElement = createElement({ tag: 'div', className: ['animation-buttons'] });
   container.append(startButton, resetButton);
 
   return container;

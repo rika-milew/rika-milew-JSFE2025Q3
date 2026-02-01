@@ -1,12 +1,12 @@
 import { appState } from '@/state/app-state';
 
-import type { Winner } from '@/types/types';
+import type { Winner, WinnersSort } from '@/types/types';
 
 export function sortTable(winners: Winner[]): Winner[] {
-  const { sorting, order } = appState.winnersSort;
+  const { sorting, order }: WinnersSort = appState.winnersSort;
 
   return [...winners].toSorted((a, b) => {
-    const difference = a[sorting] - b[sorting];
+    const difference: number = a[sorting] - b[sorting];
     return order === 'ascending' ? difference : -difference;
   });
 }

@@ -4,18 +4,21 @@ import { appState } from '@/state/app-state';
 import { carState } from '@/state/car-state';
 import { eventState } from '@/state/events/event-state';
 import { createElement } from '@/utils/create-element';
-import { createRandomCars } from '@/utils/generate-cars/generate-cars';
+import { createRandomCars } from '@/utils/generate-cars';
 
 import type { GarageList, Car } from '@/types/types';
 
-export const garageContainer = createElement({ tag: 'div', className: ['garage-container'] });
+export const garageContainer: HTMLDivElement = createElement({
+  tag: 'div',
+  className: ['garage-container'],
+});
 
 export const garageList: GarageList = ((): GarageList => {
   function render(): void {
-    const start = (appState.garagePage - 1) * appState.perPage;
-    const end = start + appState.perPage;
+    const start: number = (appState.garagePage - 1) * appState.perPage;
+    const end: number = start + appState.perPage;
 
-    const cars = carState.cars.slice(start, end);
+    const cars: Car[] = carState.cars.slice(start, end);
 
     resetAllCarsPositions();
 
@@ -39,7 +42,7 @@ export const garageList: GarageList = ((): GarageList => {
   function renderEmpty(): void {
     garageContainer.replaceChildren();
 
-    const emptyGarage = createElement({
+    const emptyGarage: HTMLParagraphElement = createElement({
       tag: 'p',
       className: ['garage-empty'],
       textContent: 'Your garage is empty. Add a car to get started!',
@@ -54,7 +57,7 @@ export const garageList: GarageList = ((): GarageList => {
   }
 
   function setPage(page: number): void {
-    const maxPage = Math.ceil(carState.totalCount / appState.perPage);
+    const maxPage: number = Math.ceil(carState.totalCount / appState.perPage);
 
     if (page < 1 || page > maxPage) {
       return;

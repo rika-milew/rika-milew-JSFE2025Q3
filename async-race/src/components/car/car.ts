@@ -1,5 +1,5 @@
-import { createButton } from '@/components/button/button';
 import { createEngineButtons } from '@/components/car/create-engine-buttons';
+import { createButton } from '@/components/shared/button/button';
 import { createCarImage } from '@/components/svg-paint/create-car-image';
 import { createFlagImage } from '@/components/svg-paint/create-flag-image';
 import { addCarStore } from '@/state/car-store';
@@ -11,36 +11,35 @@ import type { Car } from '../../types/types';
 import './car.css';
 
 export function createCarElement(car: Car): HTMLDivElement {
-  const carItem = createElement({ tag: 'div', className: ['car'] });
+  const carItem: HTMLDivElement = createElement({ tag: 'div', className: ['car'] });
 
-  const carButtons = createCarButtons(car);
-  const engineButtons = createEngineButtons(car);
+  const carButtons: HTMLDivElement = createCarButtons(car);
+  const engineButtons: HTMLDivElement = createEngineButtons(car);
 
-  const { element: carSvg, setColor } = createCarImage(car.color);
+  const { element: carSvg, setColor }: { element: SVGElement; setColor: (color: string) => void } =
+    createCarImage(car.color);
 
-  eventState.on('updateform:color', (payload) => {
+  eventState.on('updateform:color', (payload: { id: number; color: string } | undefined) => {
     if (!payload) {
       return;
     }
 
-    const { id, color } = payload;
-
-    if (id === car.id) {
-      setColor(color);
+    if (payload.id === car.id) {
+      setColor(payload.color);
     }
   });
 
-  const carTrack = createElement({
+  const carTrack: HTMLDivElement = createElement({
     tag: 'div',
     className: ['car__track'],
   });
 
-  const trackLine = createElement({
+  const trackLine: HTMLDivElement = createElement({
     tag: 'div',
     className: ['car__track-line'],
   });
 
-  const finishFlag = createFlagImage();
+  const finishFlag: HTMLImageElement = createFlagImage();
 
   addCarStore(car.id, {
     container: carItem,
@@ -57,17 +56,17 @@ export function createCarElement(car: Car): HTMLDivElement {
 }
 
 function createCarButtons(car: Car): HTMLDivElement {
-  const selectButton = createButton({
+  const selectButton: HTMLButtonElement = createButton({
     text: 'Select',
     className: 'car-button',
   });
 
-  const removeButton = createButton({
+  const removeButton: HTMLButtonElement = createButton({
     text: 'Remove',
     className: 'car-button',
   });
 
-  const carName = createElement({
+  const carName: HTMLParagraphElement = createElement({
     tag: 'p',
     className: ['car__name'],
     textContent: car.name,
@@ -81,7 +80,7 @@ function createCarButtons(car: Car): HTMLDivElement {
     eventState.emit('car:delete', { id: car.id });
   });
 
-  const container = createElement({ tag: 'div', className: ['car-buttons'] });
+  const container: HTMLDivElement = createElement({ tag: 'div', className: ['car-buttons'] });
   container.append(selectButton, removeButton, carName);
 
   return container;

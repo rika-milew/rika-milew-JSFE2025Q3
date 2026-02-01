@@ -1,6 +1,6 @@
 import type { CarStore } from '@/types/types';
 
-const carStore = new Map<number, CarStore>();
+const carStore: Map<number, CarStore> = new Map<number, CarStore>();
 
 export function addCarStore(carId: number, ui: CarStore): void {
   carStore.set(carId, ui);
@@ -15,7 +15,7 @@ export function removeCarStore(carId: number): void {
 }
 
 export function setCarAnimationId(carId: number, animationId?: number): void {
-  const car = carStore.get(carId);
+  const car: CarStore | undefined = carStore.get(carId);
 
   if (!car) {
     return;
