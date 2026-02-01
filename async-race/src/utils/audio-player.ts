@@ -17,7 +17,7 @@ export const audioPLayer: AudioPlayer = ((): AudioPlayer => {
   const STORAGE_KEY = 'audio';
 
   const saved = localStorage.getItem(STORAGE_KEY);
-  let isMuted = saved ? saved === 'true' : false;
+  let isMuted: boolean = saved ? saved === 'true' : false;
 
   function updateMute(): void {
     Object.values(sounds).forEach((sound) => {

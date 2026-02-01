@@ -39,10 +39,10 @@ export async function getWinners(): Promise<WinnersResponse | undefined> {
       return undefined;
     }
 
-    const winnersData = await response.json();
+    const winnersData: unknown = await response.json();
     const winners: Winner[] = Array.isArray(winnersData) ? winnersData : [];
 
-    const totalWinners = winners.length;
+    const totalWinners: number = winners.length;
 
     return { winners, totalWinners };
   } catch (error) {

@@ -20,7 +20,7 @@ export function createCarForm({ isUpdate = false }: CarForm): HTMLFormElement {
     updateFormEvents(nameInput, colorInput, syncDisabledState);
   }
 
-  carForm.addEventListener('submit', (event) => {
+  carForm.addEventListener('submit', (event: SubmitEvent) => {
     event.preventDefault();
 
     if (!nameInput.value.trim()) {
@@ -43,7 +43,7 @@ function handleUpdateForm(
   colorInput: HTMLInputElement,
   syncDisabledState: () => void,
 ): void {
-  const id = appState.updateForm.id;
+  const id: number | undefined = appState.updateForm.id;
 
   if (!id) {
     return;

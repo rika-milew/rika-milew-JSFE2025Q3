@@ -32,9 +32,9 @@ export const carState: CarState = {
   },
 
   update(updatedCar: Car): void {
-    const index = this.cars.findIndex((car) => car.id === updatedCar.id);
+    const index: number = this.cars.findIndex((car) => car.id === updatedCar.id);
     if (index !== -1) {
-      const saved = this.cars[index];
+      const saved: CarStateItem = this.cars[index];
       this.cars[index] = {
         ...updatedCar,
         currentPosition: saved.currentPosition,
@@ -54,8 +54,8 @@ export const carState: CarState = {
   },
 
   getAllOnCurrentPage(): CarStateItem[] {
-    const start = (appState.garagePage - 1) * appState.perPage;
-    const end = start + appState.perPage;
+    const start: number = (appState.garagePage - 1) * appState.perPage;
+    const end: number = start + appState.perPage;
     return this.cars.slice(start, end);
   },
 };

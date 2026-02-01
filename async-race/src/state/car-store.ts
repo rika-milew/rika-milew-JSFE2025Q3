@@ -15,7 +15,7 @@ export function removeCarStore(carId: number): void {
 }
 
 export function setCarAnimationId(carId: number, animationId?: number): void {
-  const car = carStore.get(carId);
+  const car: CarStore | undefined = carStore.get(carId);
 
   if (!car) {
     return;

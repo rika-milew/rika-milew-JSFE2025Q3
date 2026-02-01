@@ -156,6 +156,8 @@ export type AudioPlayer = {
   stopRaceLoop: () => void;
 };
 
+export type SortingOrder = 'ascending' | 'descending' | 'none';
+
 // state
 
 export type AppState = {
@@ -242,6 +244,25 @@ export type CarState = {
 export type Cars = {
   cars: Car[];
   totalCount: number;
+};
+
+export type PopupMessages = {
+  carCreateFailed: (id?: number, name?: string) => string;
+  carUpdateFailed: () => string;
+  carDeleteFailed: (id?: number, name?: string) => string;
+  carFormFailed: () => string;
+  appLoadFailed: () => string;
+  viewChangeFailed: () => string;
+  navigationFailed: () => string;
+  garageLoadFailed: () => string;
+  winnersLoadFailed: () => string;
+  winnerCreateFailed: (name?: string) => string;
+  winnerUpdateFailed: (name?: string) => string;
+  randomCarsFailed: () => string;
+  carResetFailed: (id?: number, name?: string) => string;
+  carStartFailed: (id?: number, name?: string) => string;
+  carDriveFailed: (id?: number, name?: string) => string;
+  generalError: string;
 };
 
 // api

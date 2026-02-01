@@ -1,4 +1,6 @@
-export const POPUP_MESSAGES = {
+import type { PopupMessages } from '@/types/types';
+
+export const POPUP_MESSAGES: PopupMessages = {
   carCreateFailed: (id?: number, name?: string): string =>
     id ? `Failed to create a new ${name ? ` ${name}` : ''} car.` : 'Failed to create a new car',
 

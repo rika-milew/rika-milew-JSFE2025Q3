@@ -3,22 +3,22 @@ import { createElement } from '@/utils/create-element';
 import './footer.css';
 
 export function createFooter(): void {
-  const footer = createElement({ tag: 'footer', className: ['footer'] });
+  const footer: HTMLElement = createElement({ tag: 'footer', className: ['footer'] });
 
-  const github = createElement({ tag: 'div', className: ['footer__github'] });
+  const github: HTMLDivElement = createElement({ tag: 'div', className: ['footer__github'] });
 
-  const year = createElement({
+  const year: HTMLSpanElement = createElement({
     tag: 'span',
     className: ['footer__year'],
     textContent: `© ${new Date().getFullYear()}`,
   });
 
-  const image = createElement({
+  const image: HTMLDivElement = createElement({
     tag: 'div',
     className: ['footer__image'],
   });
 
-  const githubLink = createElement({
+  const githubLink: HTMLAnchorElement = createElement({
     tag: 'a',
     className: ['footer__link'],
     textContent: 'rika-milew',

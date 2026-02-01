@@ -4,8 +4,10 @@ import { updateRaceSound } from '@/utils/play-race-sound';
 import { setEngineButtons } from '@/utils/set-car-buttons';
 import { setRaceButton } from '@/utils/set-garage-buttons';
 
+import type { CarStateItem } from '@/types/types';
+
 export function resetCarState(carId: number): void {
-  const car = carState.getById(carId);
+  const car: CarStateItem | undefined = carState.getById(carId);
   if (!car) {
     return;
   }

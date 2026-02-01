@@ -5,9 +5,11 @@ import { updateRaceSound } from '@/utils/play-race-sound';
 import { setEngineButtons } from '@/utils/set-car-buttons';
 import { setGarageButtons, setRaceButton } from '@/utils/set-garage-buttons';
 
+import type { CarStateItem, CarStore } from '@/types/types';
+
 export function resetCarPosition(carId: number): void {
-  const carElement = getCarStore(carId);
-  const car = carState.getById(carId);
+  const carElement: CarStore | undefined = getCarStore(carId);
+  const car: CarStateItem | undefined = carState.getById(carId);
 
   if (!carElement || !car) {
     return;
@@ -43,7 +45,7 @@ export function resetAllCarsPositions(): void {
     car.isDriving = false;
     updateRaceSound();
 
-    const carElement = getCarStore(car.id);
+    const carElement: CarStore | undefined = getCarStore(car.id);
 
     if (carElement) {
       carElement.svg.style.transform = 'translateX(0)';

@@ -2,7 +2,7 @@ import { createPopup } from '@/components/popup/popup';
 
 import './winner.css';
 
-export const winnerPopup = createPopup({
+export const winnerPopup: { show: (message: string) => void } = createPopup({
   overlayClass: 'winner-overlay',
   containerClass: 'winner',
   headingContent: '🏁 Race Finished!',

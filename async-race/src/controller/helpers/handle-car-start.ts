@@ -13,10 +13,10 @@ import { updateRaceSound } from '@/utils/play-race-sound';
 import { setEngineButtons } from '@/utils/set-car-buttons';
 import { setRaceButton } from '@/utils/set-garage-buttons';
 
-import type { EngineResponse, DriveResponse } from '@/types/types';
+import type { EngineResponse, DriveResponse, CarStateItem } from '@/types/types';
 
 export async function handleCarStart(carId: number): Promise<void> {
-  const car = carState.getById(carId);
+  const car: CarStateItem | undefined = carState.getById(carId);
 
   if (!car || car.isDriving) {
     return;
@@ -26,7 +26,10 @@ export async function handleCarStart(carId: number): Promise<void> {
   setRaceButton();
   updateRaceSound();
 
-  const engineData = await getEngineStatus<EngineResponse>(carId, 'started');
+  const engineData: EngineResponse | undefined = await getEngineStatus<EngineResponse>(
+    carId,
+    'started',
+  );
 
   if (!engineData) {
     resetCarState(car.id);
@@ -43,7 +46,7 @@ export async function handleCarStart(carId: number): Promise<void> {
       if (succeeded && !carState.winner) {
         carState.winner = car;
         winnerPopup.show(car.name);
-        const finishTime = time ?? engineData.distance / engineData.velocity / MILLISECONDS;
+        const finishTime: number = time ?? engineData.distance / engineData.velocity / MILLISECONDS;
         handleWinner(car, finishTime);
       }
 
@@ -56,9 +59,12 @@ export async function handleCarStart(carId: number): Promise<void> {
     setEngineButtons(carId, false, true);
   }
 
-  const sessionId = carState.garageSessionId;
+  const sessionId: number = carState.garageSessionId;
 
-  const engineParams = await getEngineStatus<DriveResponse>(carId, 'drive');
+  const engineParams: DriveResponse | undefined = await getEngineStatus<DriveResponse>(
+    carId,
+    'drive',
+  );
 
   if (carState.garageSessionId !== sessionId) {
     return;

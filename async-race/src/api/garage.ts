@@ -55,11 +55,11 @@ export async function getCars(): Promise<Cars | undefined> {
 
     const cars: Car[] = await response.json();
 
-    const headResponse = await fetch(url, { method: 'HEAD' });
+    const headResponse: Response = await fetch(url, { method: 'HEAD' });
     const totalCountHeader = headResponse.ok
-      ? Number(headResponse.headers.get('X-Total-Count'))
+      ? Number(headResponse.headers.get('X-Total-Count') ?? 0)
       : 0;
-    const totalCount = totalCountHeader > 0 ? totalCountHeader : cars.length;
+    const totalCount: number = totalCountHeader > 0 ? totalCountHeader : cars.length;
 
     return { cars, totalCount };
   } catch (error) {

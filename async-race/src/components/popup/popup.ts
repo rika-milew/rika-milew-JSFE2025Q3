@@ -12,12 +12,12 @@ export function createPopup(options: PopupOptions): { show: (message: string) =>
     messageContent,
   } = options;
 
-  const overlay = createElement({ tag: 'div', className: [overlayClass] });
-  const container = createElement({ tag: 'div', className: [containerClass] });
-  const heading = createElement({ tag: 'h2', textContent: headingContent });
-  const content = createElement({ tag: 'p' });
+  const overlay: HTMLDivElement = createElement({ tag: 'div', className: [overlayClass] });
+  const container: HTMLDivElement = createElement({ tag: 'div', className: [containerClass] });
+  const heading: HTMLHeadingElement = createElement({ tag: 'h2', textContent: headingContent });
+  const content: HTMLParagraphElement = createElement({ tag: 'p' });
 
-  const image = createElement({
+  const image: HTMLImageElement = createElement({
     tag: 'img',
     attributes: { src: imageSrc, width: '100', height: '100' },
   });
@@ -39,8 +39,8 @@ export function createPopup(options: PopupOptions): { show: (message: string) =>
 
     content.textContent = messageContent ? messageContent(message) : message;
 
-    const scrollTop = window.scrollY || window.pageYOffset;
-    const viewportHeight = window.innerHeight;
+    const scrollTop: number = window.scrollY || window.pageYOffset;
+    const viewportHeight: number = window.innerHeight;
     container.style.top = `${scrollTop + viewportHeight / 2}px`;
 
     requestAnimationFrame(() => {

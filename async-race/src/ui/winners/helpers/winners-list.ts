@@ -5,7 +5,7 @@ import { createWinnersTable, createEmptyWinners } from '@/ui/winners/table/winne
 import { createElement } from '@/utils/create-element';
 import { sortTable } from '@/utils/sort-table';
 
-import type { WinnersList } from '@/types/types';
+import type { WinnersList, WinnersStateItem } from '@/types/types';
 
 export const winnersContainer = createElement({ tag: 'div', className: ['garage-container'] });
 
@@ -14,7 +14,7 @@ export const winnersList: WinnersList = ((): WinnersList => {
     const start = (appState.winnersPage - 1) * appState.winnersPerPage;
     const end = start + appState.winnersPerPage;
 
-    let winners = Object.values(winnersState.winners);
+    let winners: WinnersStateItem[] = Object.values(winnersState.winners);
     winners = sortTable(winners);
     const pageWinners = winners.slice(start, end);
 
