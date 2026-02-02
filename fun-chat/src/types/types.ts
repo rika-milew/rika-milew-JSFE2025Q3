@@ -43,18 +43,18 @@ export type ButtonConfig = {
 
 // server
 
-export type WebsocketRequestMap = {
+export type RequestMap = {
   LOGIN: LoginPayload;
   LOGOUT: LogoutPayload;
 };
 
-export type WebsocketRequest<T extends keyof WebsocketRequestMap = keyof WebsocketRequestMap> = {
+export type Request<T extends keyof RequestMap = keyof RequestMap> = {
   id: string;
   type: T;
-  payload: WebsocketRequestMap[T];
+  payload: RequestMap[T];
 };
 
-export type WebsocketResponseMap = {
+export type ResponseMap = {
   LOGIN: LoginResponse;
   ERROR: ErrorResponse;
   LOGOUT: LogoutResponse;
@@ -62,10 +62,10 @@ export type WebsocketResponseMap = {
   EXTERNAL_LOGOUT: ExternalAuthResponse;
 };
 
-export type WebsocketResponse<T extends keyof WebsocketResponseMap = keyof WebsocketResponseMap> = {
+export type Response<T extends keyof ResponseMap = keyof ResponseMap> = {
   id: string | null;
   type: T;
-  payload: WebsocketResponseMap[T];
+  payload: ResponseMap[T];
 };
 
 // server requests and responses

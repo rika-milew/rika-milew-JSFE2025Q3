@@ -11,17 +11,15 @@ import {
 } from '@/types/type-guards';
 
 import type {
-  WebsocketResponse,
-  WebsocketResponseMap,
+  Response,
+  ResponseMap,
   LoginResponse,
   LogoutResponse,
   ErrorResponse,
   ExternalAuthResponse,
 } from '@/types/types';
 
-export function handleResponse<T extends keyof WebsocketResponseMap>(
-  message: WebsocketResponse<T>,
-): void {
+export function handleResponse<T extends keyof ResponseMap>(message: Response<T>): void {
   if (isLoginResponse(message)) {
     login(message);
     return;
@@ -48,7 +46,7 @@ export function handleResponse<T extends keyof WebsocketResponseMap>(
   }
 }
 
-function login(message: WebsocketResponse<'LOGIN'>): void {
+function login(message: Response<'LOGIN'>): void {
   const { user }: LoginResponse = message.payload;
 
   if (user.isLogined) {
@@ -60,7 +58,7 @@ function login(message: WebsocketResponse<'LOGIN'>): void {
   }
 }
 
-function logout(message: WebsocketResponse<'LOGOUT'>): void {
+function logout(message: Response<'LOGOUT'>): void {
   const { user }: LogoutResponse = message.payload;
 
   if (user.isLogined) {
@@ -72,13 +70,13 @@ function logout(message: WebsocketResponse<'LOGOUT'>): void {
   }
 }
 
-function handleError(message: WebsocketResponse<'ERROR'>): void {
+function handleError(message: Response<'ERROR'>): void {
   const { error }: ErrorResponse = message.payload;
   errorPopup.show(error || SERVER_ERRORS.serverError);
   console.error(error || SERVER_ERRORS.serverError);
 }
 
-function externalLogin(message: WebsocketResponse<'EXTERNAL_LOGIN'>): void {
+function externalLogin(message: Response<'EXTERNAL_LOGIN'>): void {
   const { user }: ExternalAuthResponse = message.payload;
 
   if (!user.isLogined) {
@@ -88,7 +86,7 @@ function externalLogin(message: WebsocketResponse<'EXTERNAL_LOGIN'>): void {
   notificationPopup.show(`User ${login} logged in`);
 }
 
-function externalLogout(message: WebsocketResponse<'EXTERNAL_LOGOUT'>): void {
+function externalLogout(message: Response<'EXTERNAL_LOGOUT'>): void {
   const { user }: ExternalAuthResponse = message.payload;
 
   if (user.isLogined) {

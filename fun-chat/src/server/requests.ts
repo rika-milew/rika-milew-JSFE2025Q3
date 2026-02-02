@@ -1,10 +1,10 @@
 import { getSocket } from '@/server/connection';
 import { userStore } from '@/store/user-store';
 
-import type { WebsocketRequest } from '@/types/types';
+import type { Request } from '@/types/types';
 
 export function sendRequest(data: unknown): void {
-  const socket = getSocket();
+  const socket: WebSocket | undefined = getSocket();
 
   if (socket?.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(data));
@@ -18,7 +18,7 @@ export function sendLogin(login: string, password: string): void {
 
   userStore.saveCredentials(login, password);
 
-  const request: WebsocketRequest<'LOGIN'> = {
+  const request: Request<'LOGIN'> = {
     id: crypto.randomUUID(),
     type: 'LOGIN',
     payload: {
@@ -36,7 +36,7 @@ export function sendLogout(): void {
     return;
   }
 
-  const request: WebsocketRequest<'LOGOUT'> = {
+  const request: Request<'LOGOUT'> = {
     id: crypto.randomUUID(),
     type: 'LOGOUT',
     payload: {

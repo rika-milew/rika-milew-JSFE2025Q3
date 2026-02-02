@@ -6,7 +6,7 @@ export const createElement = <K extends ElementTag>({
   textContent,
   attributes,
 }: ElementOptions<K>): HTMLElements[K] => {
-  const element = document.createElement(tag);
+  const element: HTMLElements[K] = document.createElement(tag);
 
   if (className) {
     element.className = className.join(' ');

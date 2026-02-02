@@ -2,7 +2,7 @@ import { sendRequest } from '@/server/requests';
 import { userStore } from '@/store/user-store';
 import { validate } from '@/utils/validate';
 
-import type { WebsocketRequest } from '@/types/types';
+import type { Request } from '@/types/types';
 
 export function login(): void {
   const { login, password }: { login: string; password: string } = userStore.state;
@@ -20,7 +20,7 @@ export function login(): void {
 
   userStore.saveCredentials(login, password);
 
-  const request: WebsocketRequest<'LOGIN'> = {
+  const request: Request<'LOGIN'> = {
     id: crypto.randomUUID(),
     type: 'LOGIN',
     payload: {
@@ -39,7 +39,7 @@ export function logout(): void {
     return;
   }
 
-  const request: WebsocketRequest<'LOGOUT'> = {
+  const request: Request<'LOGOUT'> = {
     id: crypto.randomUUID(),
     type: 'LOGOUT',
     payload: {
