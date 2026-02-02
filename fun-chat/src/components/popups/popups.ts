@@ -88,7 +88,7 @@ export const notificationPopup: { show: (message: string) => void } = createPopu
   containerClass: 'popup notification-popup',
   headingContent: 'Notification',
   imageSrc: 'icons/todo.svg',
-  animationDuration: 2000,
+  animationDuration: 3000,
 });
 
 export const errorPopup: { show: (message: string) => void } = createPopup({
@@ -96,5 +96,5 @@ export const errorPopup: { show: (message: string) => void } = createPopup({
   containerClass: 'popup',
   headingContent: 'Error',
   imageSrc: 'icons/closecircle.svg',
-  animationDuration: 2000,
+  animationDuration: 3000,
 });

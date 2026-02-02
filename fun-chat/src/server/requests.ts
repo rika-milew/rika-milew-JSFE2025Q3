@@ -11,34 +11,30 @@ export function sendRequest(data: unknown): void {
   }
 }
 
-export function sendLogin(login: string, password: string): void {
-  if (!login || !password || userStore.state.isLoggedInOnServer) {
-    return;
-  }
-
-  userStore.saveCredentials(login, password);
-
-  const request: Request<'LOGIN'> = {
+export function requestLogin(login: string, password: string): void {
+  const request: Request<'USER_LOGIN'> = {
     id: crypto.randomUUID(),
-    type: 'LOGIN',
+    type: 'USER_LOGIN',
     payload: {
       user: { login, password },
     },
   };
 
+  // console.log('requestLogin');
+
   sendRequest(request);
 }
 
-export function sendLogout(): void {
+export function requestLogout(): void {
   const { login, password }: { login: string; password: string } = userStore.state;
 
   if (!login || !password) {
     return;
   }
 
-  const request: Request<'LOGOUT'> = {
+  const request: Request<'USER_LOGOUT'> = {
     id: crypto.randomUUID(),
-    type: 'LOGOUT',
+    type: 'USER_LOGOUT',
     payload: {
       user: {
         login,
@@ -50,4 +46,14 @@ export function sendLogout(): void {
   sendRequest(request);
 
   userStore.logoutUser();
+}
+
+export function requestActiveUsers(): void {
+  const request: Request<'USER_ACTIVE'> = {
+    id: crypto.randomUUID(),
+    type: 'USER_ACTIVE',
+    payload: null,
+  };
+
+  sendRequest(request);
 }

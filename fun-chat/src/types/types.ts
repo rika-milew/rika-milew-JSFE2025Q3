@@ -44,8 +44,9 @@ export type ButtonConfig = {
 // server
 
 export type RequestMap = {
-  LOGIN: LoginPayload;
-  LOGOUT: LogoutPayload;
+  USER_LOGIN: LoginPayload;
+  USER_LOGOUT: LogoutPayload;
+  USER_ACTIVE: null;
 };
 
 export type Request<T extends keyof RequestMap = keyof RequestMap> = {
@@ -55,11 +56,12 @@ export type Request<T extends keyof RequestMap = keyof RequestMap> = {
 };
 
 export type ResponseMap = {
-  LOGIN: LoginResponse;
+  USER_LOGIN: LoginResponse;
   ERROR: ErrorResponse;
-  LOGOUT: LogoutResponse;
-  EXTERNAL_LOGIN: ExternalAuthResponse;
-  EXTERNAL_LOGOUT: ExternalAuthResponse;
+  USER_LOGOUT: LogoutResponse;
+  USER_EXTERNAL_LOGIN: ExternalAuthResponse;
+  USER_EXTERNAL_LOGOUT: ExternalAuthResponse;
+  USER_ACTIVE: UserActiveResponse;
 };
 
 export type Response<T extends keyof ResponseMap = keyof ResponseMap> = {
@@ -109,7 +111,23 @@ export type ExternalAuthResponse = {
   };
 };
 
+export type UserActiveResponse = {
+  users: AuthenticatedUser[];
+};
+
 // app
+
+export type User = {
+  login: string;
+  isOnline: boolean;
+  unreadCount: number;
+};
+
+export type AuthenticatedUser = {
+  login: string;
+};
+
+// elements
 
 export type PopupOptions = {
   overlayClass: string;
@@ -139,6 +157,10 @@ export type AudioPlayer = {
   toggleMute: () => void;
   isMuted: boolean;
   playOnce: (id: SoundTypes) => void;
+};
+
+export type UserList = {
+  render: (users: User[]) => void;
 };
 
 // state

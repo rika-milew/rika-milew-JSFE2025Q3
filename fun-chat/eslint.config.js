@@ -103,7 +103,7 @@ export default defineConfig([
           },
         },
       ],
-      'unicorn/no-null': 'error',
+      'unicorn/no-null': 'warn',
       'unicorn/prefer-node-protocol': 'error',
       'unicorn/prefer-top-level-await': 'error',
       'unicorn/number-literal-case': 'off',

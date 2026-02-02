@@ -20,9 +20,9 @@ export function login(): void {
 
   userStore.saveCredentials(login, password);
 
-  const request: Request<'LOGIN'> = {
+  const request: Request<'USER_LOGIN'> = {
     id: crypto.randomUUID(),
-    type: 'LOGIN',
+    type: 'USER_LOGIN',
     payload: {
       user: { login, password },
     },
@@ -39,9 +39,9 @@ export function logout(): void {
     return;
   }
 
-  const request: Request<'LOGOUT'> = {
+  const request: Request<'USER_LOGOUT'> = {
     id: crypto.randomUUID(),
-    type: 'LOGOUT',
+    type: 'USER_LOGOUT',
     payload: {
       user: { login, password },
     },

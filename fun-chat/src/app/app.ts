@@ -1,7 +1,7 @@
 import { initRouter } from '@/app/router';
 import { createConnectionPopup } from '@/components/popups/popups';
 import { startWebsocket } from '@/server/connection';
-import { sendLogin } from '@/server/requests';
+import { requestLogin } from '@/server/requests';
 import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/events/event-state';
 import { userStore } from '@/store/user-store';
@@ -15,13 +15,27 @@ export function app(): void {
 
   eventState.on('ws:connected', () => {
     connectionStore.setConnected(true);
-    if (!userStore.state.isLoggedInOnServer && userStore.state.login && userStore.state.password) {
-      sendLogin(userStore.state.login, userStore.state.password);
+
+    const { login, password, isLoggedIn, isLoggedInOnServer } = userStore.state;
+    // console.log(
+    //   'Checking login condition:',
+    //   'isLoggedIn:',
+    //   isLoggedIn,
+    //   'isLoggedInOnServer:',
+    //   isLoggedInOnServer,
+    //   'login:',
+    //   login,
+    //   'password:',
+    //   password,
+    // );
+    if (isLoggedIn && !isLoggedInOnServer && login && password) {
+      requestLogin(userStore.state.login, userStore.state.password);
     }
   });
 
   eventState.on('ws:disconnected', () => {
     connectionStore.setConnected(false);
+    userStore.setServerLogin(false);
     history.replaceState(undefined, '', '#login');
   });
 

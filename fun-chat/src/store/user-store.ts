@@ -1,6 +1,6 @@
 import { eventState } from './events/event-state';
 
-import type { UserState } from '@/types/types';
+import type { UserState, User } from '@/types/types';
 
 export const userStore: {
   state: UserState;
@@ -73,5 +73,32 @@ export const userStore: {
   setServerLogin(value: boolean) {
     this.state.isLoggedInOnServer = value;
     eventState.emit('user-store:changed', this.state);
+  },
+};
+
+let users: User[] = [];
+
+export const usersStore = {
+  get(): User[] {
+    return users;
+  },
+
+  set(newUsers: User[]): void {
+    users = newUsers;
+    eventState.emit('users:changed', users);
+  },
+
+  addUnread(login: string): void {
+    users = users.map((user) =>
+      user.login === login ? { ...user, unreadCount: user.unreadCount + 1 } : user,
+    );
+
+    eventState.emit('users:changed', users);
+  },
+
+  resetUnread(login: string): void {
+    users = users.map((user) => (user.login === login ? { ...user, unreadCount: 0 } : user));
+
+    eventState.emit('users:changed', users);
   },
 };
