@@ -18,9 +18,9 @@ export function sendLogin(login: string, password: string): void {
 
   userStore.saveCredentials(login, password);
 
-  const request: WebsocketRequest<'USER_LOGIN'> = {
+  const request: WebsocketRequest<'LOGIN'> = {
     id: crypto.randomUUID(),
-    type: 'USER_LOGIN',
+    type: 'LOGIN',
     payload: {
       user: { login, password },
     },
@@ -36,9 +36,9 @@ export function sendLogout(): void {
     return;
   }
 
-  const request: WebsocketRequest<'USER_LOGOUT'> = {
+  const request: WebsocketRequest<'LOGOUT'> = {
     id: crypto.randomUUID(),
-    type: 'USER_LOGOUT',
+    type: 'LOGOUT',
     payload: {
       user: {
         login,

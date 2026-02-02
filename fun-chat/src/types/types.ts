@@ -44,8 +44,8 @@ export type ButtonConfig = {
 // server
 
 export type WebsocketRequestMap = {
-  USER_LOGIN: UserLoginPayload;
-  USER_LOGOUT: UserLogoutPayload;
+  LOGIN: LoginPayload;
+  LOGOUT: LogoutPayload;
 };
 
 export type WebsocketRequest<T extends keyof WebsocketRequestMap = keyof WebsocketRequestMap> = {
@@ -55,11 +55,11 @@ export type WebsocketRequest<T extends keyof WebsocketRequestMap = keyof Websock
 };
 
 export type WebsocketResponseMap = {
-  USER_LOGIN: UserLoginResponse;
+  LOGIN: LoginResponse;
   ERROR: ErrorResponse;
-  USER_LOGOUT: UserLogoutResponse;
-  USER_EXTERNAL_LOGIN: UserExternalAuthResponse;
-  USER_EXTERNAL_LOGOUT: UserExternalAuthResponse;
+  LOGOUT: LogoutResponse;
+  EXTERNAL_LOGIN: ExternalAuthResponse;
+  EXTERNAL_LOGOUT: ExternalAuthResponse;
 };
 
 export type WebsocketResponse<T extends keyof WebsocketResponseMap = keyof WebsocketResponseMap> = {
@@ -70,14 +70,14 @@ export type WebsocketResponse<T extends keyof WebsocketResponseMap = keyof Webso
 
 // server requests and responses
 
-export type UserLoginPayload = {
+export type LoginPayload = {
   user: {
     login: string;
     password: string;
   };
 };
 
-export type UserLoginResponse = {
+export type LoginResponse = {
   user: {
     login: string;
     isLogined: boolean;
@@ -88,21 +88,21 @@ export type ErrorResponse = {
   error: string;
 };
 
-export type UserLogoutPayload = {
+export type LogoutPayload = {
   user: {
     login: string;
     password: string;
   };
 };
 
-export type UserLogoutResponse = {
+export type LogoutResponse = {
   user: {
     login: string;
     isLogined: boolean;
   };
 };
 
-export type UserExternalAuthResponse = {
+export type ExternalAuthResponse = {
   user: {
     login: string;
     isLogined: boolean;

@@ -1,9 +1,7 @@
 import type { WebsocketResponse } from './types';
 
-export function isLoginResponse(
-  message: WebsocketResponse,
-): message is WebsocketResponse<'USER_LOGIN'> {
-  return message.type === 'USER_LOGIN';
+export function isLoginResponse(message: WebsocketResponse): message is WebsocketResponse<'LOGIN'> {
+  return message.type === 'LOGIN';
 }
 
 export function isErrorResponse(message: WebsocketResponse): message is WebsocketResponse<'ERROR'> {
@@ -12,20 +10,20 @@ export function isErrorResponse(message: WebsocketResponse): message is Websocke
 
 export function isLogoutResponse(
   message: WebsocketResponse,
-): message is WebsocketResponse<'USER_LOGOUT'> {
-  return message.type === 'USER_LOGOUT';
+): message is WebsocketResponse<'LOGOUT'> {
+  return message.type === 'LOGOUT';
 }
 
 export function isExternalLoginResponse(
   message: WebsocketResponse,
-): message is WebsocketResponse<'USER_EXTERNAL_LOGIN'> {
-  return message.type === 'USER_EXTERNAL_LOGIN';
+): message is WebsocketResponse<'EXTERNAL_LOGIN'> {
+  return message.type === 'EXTERNAL_LOGIN';
 }
 
 export function isExternalLogoutResponse(
   message: WebsocketResponse,
-): message is WebsocketResponse<'USER_EXTERNAL_LOGOUT'> {
-  return message.type === 'USER_EXTERNAL_LOGOUT';
+): message is WebsocketResponse<'EXTERNAL_LOGOUT'> {
+  return message.type === 'EXTERNAL_LOGOUT';
 }
 
 export function isResponse(value: unknown): value is WebsocketResponse {

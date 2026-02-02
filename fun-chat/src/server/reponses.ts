@@ -10,7 +10,14 @@ import {
   isExternalLogoutResponse,
 } from '@/types/type-guards';
 
-import type { WebsocketResponse, WebsocketResponseMap } from '@/types/types';
+import type {
+  WebsocketResponse,
+  WebsocketResponseMap,
+  LoginResponse,
+  LogoutResponse,
+  ErrorResponse,
+  ExternalAuthResponse,
+} from '@/types/types';
 
 export function handleResponse<T extends keyof WebsocketResponseMap>(
   message: WebsocketResponse<T>,
@@ -41,8 +48,8 @@ export function handleResponse<T extends keyof WebsocketResponseMap>(
   }
 }
 
-function login(message: WebsocketResponse<'USER_LOGIN'>): void {
-  const { user } = message.payload;
+function login(message: WebsocketResponse<'LOGIN'>): void {
+  const { user }: LoginResponse = message.payload;
 
   if (user.isLogined) {
     userStore.loginUser();
@@ -53,8 +60,8 @@ function login(message: WebsocketResponse<'USER_LOGIN'>): void {
   }
 }
 
-function logout(message: WebsocketResponse<'USER_LOGOUT'>): void {
-  const { user } = message.payload;
+function logout(message: WebsocketResponse<'LOGOUT'>): void {
+  const { user }: LogoutResponse = message.payload;
 
   if (user.isLogined) {
     errorPopup.show(SERVER_ERRORS.logoutFailed);
@@ -66,25 +73,25 @@ function logout(message: WebsocketResponse<'USER_LOGOUT'>): void {
 }
 
 function handleError(message: WebsocketResponse<'ERROR'>): void {
-  const { error } = message.payload;
+  const { error }: ErrorResponse = message.payload;
   errorPopup.show(error || SERVER_ERRORS.serverError);
   console.error(error || SERVER_ERRORS.serverError);
 }
 
-function externalLogin(message: WebsocketResponse<'USER_EXTERNAL_LOGIN'>): void {
-  const { login, isLogined } = message.payload.user;
+function externalLogin(message: WebsocketResponse<'EXTERNAL_LOGIN'>): void {
+  const { user }: ExternalAuthResponse = message.payload;
 
-  if (!isLogined) {
+  if (!user.isLogined) {
     return;
   }
 
   notificationPopup.show(`User ${login} logged in`);
 }
 
-function externalLogout(message: WebsocketResponse<'USER_EXTERNAL_LOGOUT'>): void {
-  const { login, isLogined } = message.payload.user;
+function externalLogout(message: WebsocketResponse<'EXTERNAL_LOGOUT'>): void {
+  const { user }: ExternalAuthResponse = message.payload;
 
-  if (isLogined) {
+  if (user.isLogined) {
     return;
   }
 
