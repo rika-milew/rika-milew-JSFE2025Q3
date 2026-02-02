@@ -5,25 +5,25 @@ import { createElement } from '@/utils/create-element';
 export function renderMainPage(container: HTMLElement): void {
   container.replaceChildren();
 
-  const wrapper = createElement({
+  const wrapper: HTMLDivElement = createElement({
     tag: 'div',
     className: ['wrapper'],
   });
 
-  const header = createHeader('main');
+  const header: HTMLElement = createHeader('main');
 
-  const pageContainer = createElement({
+  const pageContainer: HTMLElement = createElement({
     tag: 'main',
     className: ['container main'],
   });
 
-  const title = createElement({
+  const title: HTMLHeadingElement = createElement({
     tag: 'h1',
     textContent: 'Main Page',
     className: ['page-title'],
   });
 
-  const footer = createFooter();
+  const footer: HTMLElement = createFooter();
 
   pageContainer.append(title);
   wrapper.append(header, pageContainer, footer);

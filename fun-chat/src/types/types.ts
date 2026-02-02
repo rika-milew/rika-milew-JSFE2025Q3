@@ -120,7 +120,7 @@ export type PopupOptions = {
   messageContent?: (message: string) => string;
 };
 
-export type AuthView = {
+export type LoginView = {
   form: HTMLFormElement;
   loginInput: HTMLInputElement;
   passwordInput: HTMLInputElement;

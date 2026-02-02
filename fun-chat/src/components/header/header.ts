@@ -1,6 +1,6 @@
 import { navigate } from '@/app/router';
 import { createButton } from '@/components/button/button';
-import { handleLogout } from '@/pages/main/helpers/handle-logout';
+import { logout } from '@/pages/login/helpers/auth-requests';
 import { createElement } from '@/utils/create-element';
 
 import './header.css';
@@ -22,7 +22,7 @@ export function createHeader(page: string): HTMLElement {
     });
 
     logoutButton.addEventListener('click', () => {
-      handleLogout();
+      logout();
     });
 
     const aboutButton: HTMLButtonElement = createButton({

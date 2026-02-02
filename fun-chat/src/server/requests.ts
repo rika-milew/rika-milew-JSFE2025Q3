@@ -1,10 +1,18 @@
-import { sendWebsocket } from '@/server/ws-connection';
+import { getSocket } from '@/server/connection';
 import { userStore } from '@/store/user-store';
 import { generateId } from '@/utils/generate-id';
 
 import type { WebsocketRequest } from '@/types/types';
 
-export function sendAuth(login: string, password: string): void {
+export function sendRequest(data: unknown): void {
+  const socket = getSocket();
+
+  if (socket?.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(data));
+  }
+}
+
+export function sendLogin(login: string, password: string): void {
   if (!login || !password || userStore.state.isLoggedInOnServer) {
     return;
   }
@@ -19,11 +27,11 @@ export function sendAuth(login: string, password: string): void {
     },
   };
 
-  sendWebsocket(request);
+  sendRequest(request);
 }
 
 export function sendLogout(): void {
-  const { login, password } = userStore.state;
+  const { login, password }: { login: string; password: string } = userStore.state;
 
   if (!login || !password) {
     return;
@@ -40,7 +48,7 @@ export function sendLogout(): void {
     },
   };
 
-  sendWebsocket(request);
+  sendRequest(request);
 
   userStore.logoutUser();
 }

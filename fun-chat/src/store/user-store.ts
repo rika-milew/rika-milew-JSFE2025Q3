@@ -11,7 +11,7 @@ export const userStore: {
   removeError: (field: 'login' | 'password') => void;
   loginUser: () => void;
   logoutUser: () => void;
-  isAuthenticated: () => boolean;
+  isLoggedIn: () => boolean;
   setServerLogin: (value: boolean) => void;
 } = {
   state: {
@@ -66,7 +66,7 @@ export const userStore: {
     eventState.emit('user-store:changed', this.state);
   },
 
-  isAuthenticated() {
+  isLoggedIn() {
     return this.state.isLoggedIn;
   },
 

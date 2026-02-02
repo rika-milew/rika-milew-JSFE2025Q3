@@ -1,7 +1,7 @@
 import { initRouter } from '@/app/router';
 import { createConnectionPopup } from '@/components/popups/popups';
-import { startWebsocket } from '@/server/ws-connection';
-import { sendAuth } from '@/server/ws-requests';
+import { startWebsocket } from '@/server/connection';
+import { sendLogin } from '@/server/requests';
 import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/events/event-state';
 import { userStore } from '@/store/user-store';
@@ -16,7 +16,7 @@ export function app(): void {
   eventState.on('ws:connected', () => {
     connectionStore.setConnected(true);
     if (!userStore.state.isLoggedInOnServer && userStore.state.login && userStore.state.password) {
-      sendAuth(userStore.state.login, userStore.state.password);
+      sendLogin(userStore.state.login, userStore.state.password);
     }
   });
 

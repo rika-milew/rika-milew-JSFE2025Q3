@@ -1,32 +1,36 @@
-import { createAuthElements } from '@/pages/login/helpers/create-auth-elements';
-import { handleLogin } from '@/pages/login/helpers/handle-login';
+import { navigate } from '@/app/router';
+import { createButton } from '@/components/button/button';
+import { login } from '@/pages/login/helpers/auth-requests';
 import { eventState } from '@/store/events/event-state';
 import { userStore } from '@/store/user-store';
-import { validateField } from '@/utils/validate-field';
+import { createElement } from '@/utils/create-element';
+import { validate } from '@/utils/validate';
+
+import type { LoginView, UserState } from '@/types/types';
 
 import './login-page.css';
 
 export function renderLoginPage(container: HTMLElement): void {
-  const view = createAuthElements(container);
+  const view: LoginView = createLoginElements(container);
 
-  const { form, loginInput, passwordInput, loginError, passwordError } = view;
+  const { form, loginInput, passwordInput, loginError, passwordError }: LoginView = view;
 
   loginInput.addEventListener('input', () => {
     userStore.setLogin(loginInput.value);
-    validateField('login', userStore.state.login, userStore.state.password);
+    validate('login', userStore.state.login, userStore.state.password);
   });
 
   passwordInput.addEventListener('input', () => {
     userStore.setPassword(passwordInput.value);
-    validateField('password', userStore.state.password, userStore.state.login);
+    validate('password', userStore.state.password, userStore.state.login);
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', (event: SubmitEvent) => {
     event.preventDefault();
-    handleLogin();
+    login();
   });
 
-  eventState.on('user-store:changed', (state) => {
+  eventState.on('user-store:changed', (state: UserState | undefined) => {
     if (!state) {
       return;
     }
@@ -34,4 +38,71 @@ export function renderLoginPage(container: HTMLElement): void {
     loginError.textContent = state.errors.login ?? '';
     passwordError.textContent = state.errors.password ?? '';
   });
+}
+
+export function createLoginElements(container: HTMLElement): LoginView {
+  const pageContainer: HTMLDivElement = createElement({
+    tag: 'div',
+    className: ['container auth-container'],
+  });
+
+  const title: HTMLHeadingElement = createElement({
+    tag: 'h1',
+    textContent: 'Login Page',
+    className: ['page-title'],
+  });
+
+  const form: HTMLFormElement = createElement({ tag: 'form', className: ['form-container'] });
+
+  const loginWrapper: HTMLDivElement = createElement({ tag: 'div', className: ['input-wrapper'] });
+
+  const loginInput: HTMLInputElement = createElement({
+    tag: 'input',
+    className: ['input'],
+    attributes: { type: 'text', name: 'login', placeholder: 'Login' },
+  });
+  const loginError: HTMLDivElement = createElement({ tag: 'div', className: ['input-error'] });
+
+  const passwordWrapper: HTMLDivElement = createElement({
+    tag: 'div',
+    className: ['input-wrapper'],
+  });
+
+  const passwordInput: HTMLInputElement = createElement({
+    tag: 'input',
+    className: ['input'],
+    attributes: { type: 'password', name: 'password', placeholder: 'Password' },
+  });
+  const passwordError: HTMLDivElement = createElement({ tag: 'div', className: ['input-error'] });
+
+  const button: HTMLButtonElement = createButton({
+    text: 'Login',
+    className: 'login-button',
+    disabled: false,
+  });
+
+  button.type = 'submit';
+
+  const aboutLink: HTMLAnchorElement = createElement({
+    tag: 'a',
+    className: ['login__about-link'],
+    textContent: 'About Fun Chat',
+    attributes: {
+      href: '/about',
+    },
+  });
+
+  aboutLink.addEventListener('click', (event: MouseEvent) => {
+    event.preventDefault();
+    navigate('about', document.body);
+  });
+
+  loginWrapper.append(loginInput, loginError);
+  passwordWrapper.append(passwordInput, passwordError);
+  form.append(loginWrapper, passwordWrapper, button);
+  pageContainer.append(title, form, aboutLink);
+
+  container.replaceChildren(pageContainer);
+
+  return { form, loginInput, passwordInput, loginError, passwordError, button };
 }

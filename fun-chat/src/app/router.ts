@@ -57,11 +57,11 @@ export function router(route: Route, container: HTMLElement): void {
 }
 
 export function resolveRoute(route: Route): Route {
-  if (route === 'main' && !userStore.isAuthenticated()) {
+  if (route === 'main' && !userStore.isLoggedIn()) {
     return 'login';
   }
 
-  if (route === 'login' && userStore.isAuthenticated()) {
+  if (route === 'login' && userStore.isLoggedIn()) {
     return 'main';
   }
 

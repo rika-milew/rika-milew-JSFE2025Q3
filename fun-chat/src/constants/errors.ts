@@ -18,5 +18,6 @@ export const PASSWORD_ERRORS = {
 
 export const SERVER_ERRORS = {
   loginFailed: 'Invalid login or password',
+  logoutFailed: 'Failed to log out. Please try again',
   serverError: 'Server error. Please try again',
 };
