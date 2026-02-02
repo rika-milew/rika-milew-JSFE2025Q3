@@ -24,6 +24,10 @@ export function isExternalLogoutResponse(
   return message.type === 'USER_EXTERNAL_LOGOUT';
 }
 
+export function isUserInactiveResponse(message: Response): message is Response<'USER_INACTIVE'> {
+  return message.type === 'USER_INACTIVE';
+}
+
 export function isResponse(value: unknown): value is Response {
   if (typeof value !== 'object' || value === null) {
     return false;

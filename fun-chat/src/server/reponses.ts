@@ -1,7 +1,7 @@
 import { navigate } from '@/app/router';
 import { errorPopup, notificationPopup } from '@/components/popups/popups';
 import { SERVER_ERRORS } from '@/constants/errors';
-import { requestActiveUsers } from '@/server/requests';
+import { requestActiveUsers, requestInactiveUsers } from '@/server/requests';
 import { userStore, usersStore } from '@/store/user-store';
 import {
   isLoginResponse,
@@ -10,6 +10,7 @@ import {
   isExternalLoginResponse,
   isExternalLogoutResponse,
   isUserActiveResponse,
+  isUserInactiveResponse,
 } from '@/types/type-guards';
 
 import type {
@@ -53,6 +54,11 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
     getActiveUsers(message);
     return;
   }
+
+  if (isUserInactiveResponse(message)) {
+    getInactiveUsers(message);
+    return;
+  }
 }
 
 function login(message: Response<'USER_LOGIN'>): void {
@@ -62,6 +68,7 @@ function login(message: Response<'USER_LOGIN'>): void {
     userStore.loginUser();
     userStore.setServerLogin(true);
     requestActiveUsers();
+    requestInactiveUsers();
     navigate('main', document.body);
   } else {
     errorPopup.show(SERVER_ERRORS.loginFailed);
@@ -95,6 +102,7 @@ function externalLogin(message: Response<'USER_EXTERNAL_LOGIN'>): void {
   }
 
   requestActiveUsers();
+  requestInactiveUsers();
   notificationPopup.show(`User ${user.login} logged in`);
 }
 
@@ -106,6 +114,7 @@ function externalLogout(message: Response<'USER_EXTERNAL_LOGOUT'>): void {
   }
 
   requestActiveUsers();
+  requestInactiveUsers();
   notificationPopup.show(`User ${user.login} logged out`);
 }
 
@@ -122,4 +131,21 @@ export function getActiveUsers(message: Response<'USER_ACTIVE'>): void {
     }));
 
   usersStore.set(activeUsers);
+}
+
+export function getInactiveUsers(message: Response<'USER_INACTIVE'>): void {
+  const { users }: UserActiveResponse = message.payload;
+  const currentLogin = userStore.state.login;
+
+  const inactiveUsers: User[] = users
+    .filter((user) => user.login !== currentLogin)
+    .map((user) => ({
+      login: user.login,
+      isOnline: false,
+      unreadCount: 0,
+    }));
+
+  const currentUsers = usersStore.get();
+
+  usersStore.set([...currentUsers.filter((u) => u.isOnline), ...inactiveUsers]);
 }

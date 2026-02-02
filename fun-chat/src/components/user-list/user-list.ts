@@ -1,3 +1,4 @@
+import { usersStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 
 import type { User, UserList } from '@/types/types';
@@ -11,6 +12,29 @@ export function createUserList({
   container: HTMLElement;
   users: User[];
 }): UserList {
+  const { list, searchInput } = createUserListContainer(container);
+
+  let search = '';
+  const caseSensitive = false;
+
+  searchInput.addEventListener('input', () => {
+    search = searchInput.value;
+    createList(list, usersStore.get(), search, caseSensitive);
+  });
+
+  createList(list, users, search, caseSensitive);
+
+  return {
+    render: (users: User[]): void => {
+      createList(list, users, search, caseSensitive);
+    },
+  };
+}
+
+function createUserListContainer(container: HTMLElement): {
+  list: HTMLUListElement;
+  searchInput: HTMLInputElement;
+} {
   const list: HTMLUListElement = createElement({ tag: 'ul', className: ['user-list'] });
 
   const title: HTMLHeadingElement = createElement({
@@ -19,45 +43,70 @@ export function createUserList({
     className: ['list-title'],
   });
 
-  container.append(title, list);
+  const searchInput = createElement({
+    tag: 'input',
+    className: ['user-search'],
+    attributes: { placeholder: 'Search users...' },
+  });
 
-  function render(users: User[]): void {
-    list.replaceChildren();
+  container.append(title, searchInput, list);
 
-    users.forEach((user) => {
-      const item: HTMLLIElement = createElement({ tag: 'li', className: ['item'] });
+  return { list, searchInput };
+}
 
-      const userInfo: HTMLDivElement = createElement({ tag: 'div', className: ['user__info'] });
+function createList(
+  list: HTMLUListElement,
+  users: User[],
+  search = '',
+  caseSensitive = false,
+): void {
+  list.replaceChildren();
+  const filteredUsers = filterUsers(users, search, caseSensitive);
 
-      const login: HTMLSpanElement = createElement({
-        tag: 'span',
-        className: ['user__login'],
-        textContent: user.login,
-      });
+  filteredUsers.forEach((user) => {
+    list.append(createItem(user));
+  });
+}
 
-      const status: HTMLSpanElement = createElement({
-        tag: 'span',
-        className: ['user__status', user.isOnline ? 'online' : ''],
-      });
+function createItem(user: User): HTMLLIElement {
+  const item: HTMLLIElement = createElement({ tag: 'li', className: ['item'] });
 
-      userInfo.append(login, status);
+  const userInfo: HTMLDivElement = createElement({ tag: 'div', className: ['user__info'] });
 
-      item.append(userInfo);
+  const login: HTMLSpanElement = createElement({
+    tag: 'span',
+    className: ['user__login'],
+    textContent: user.login,
+  });
 
-      if (user.unreadCount > 0) {
-        const unread: HTMLSpanElement = createElement({
-          tag: 'span',
-          className: ['user__unread'],
-          textContent: user.unreadCount.toString(),
-        });
-        item.append(unread);
-      }
+  const status: HTMLSpanElement = createElement({
+    tag: 'span',
+    className: ['user__status', user.isOnline ? 'online' : 'offline'],
+  });
 
-      list.append(item);
+  userInfo.append(login, status);
+  item.append(userInfo);
+
+  if (user.unreadCount > 0) {
+    const unread: HTMLSpanElement = createElement({
+      tag: 'span',
+      className: ['user__unread'],
+      textContent: user.unreadCount.toString(),
     });
+    item.append(unread);
   }
 
-  render(users);
+  return item;
+}
 
-  return { render };
+function filterUsers(users: User[], search: string, caseSensitive: boolean): User[] {
+  if (!search) {
+    return users;
+  }
+
+  return users.filter((user) =>
+    caseSensitive
+      ? user.login.includes(search)
+      : user.login.toLowerCase().includes(search.toLowerCase()),
+  );
 }

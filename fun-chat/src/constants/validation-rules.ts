@@ -1,18 +1,23 @@
 import { LOGIN_ERRORS, PASSWORD_ERRORS } from './errors';
 
-const LOGIN_LENGTH = 3;
+const MIN_LOGIN_LENGTH = 3;
+const MAX_LOGIN_LENGTH = 15;
 const PASSWORD_LENGTH = 8;
 
 export const VALIDATION_RULES = {
   login: [
     { test: (value: string): boolean => value.length > 0, error: LOGIN_ERRORS.empty },
     {
-      test: (value: string): boolean => value.length >= LOGIN_LENGTH,
+      test: (value: string): boolean => value.length >= MIN_LOGIN_LENGTH,
       error: LOGIN_ERRORS.tooShort,
     },
     {
       test: (value: string): boolean => /^[a-zA-Z0-9-]+$/.test(value),
       error: LOGIN_ERRORS.invalidChars,
+    },
+    {
+      test: (value: string): boolean => value.length <= MAX_LOGIN_LENGTH,
+      error: LOGIN_ERRORS.tooLong,
     },
   ],
   password: [

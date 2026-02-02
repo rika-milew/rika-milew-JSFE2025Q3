@@ -57,3 +57,13 @@ export function requestActiveUsers(): void {
 
   sendRequest(request);
 }
+
+export function requestInactiveUsers(): void {
+  const request: Request<'USER_INACTIVE'> = {
+    id: crypto.randomUUID(),
+    type: 'USER_INACTIVE',
+    payload: null,
+  };
+
+  sendRequest(request);
+}

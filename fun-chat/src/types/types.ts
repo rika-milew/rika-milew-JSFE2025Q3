@@ -47,6 +47,7 @@ export type RequestMap = {
   USER_LOGIN: LoginPayload;
   USER_LOGOUT: LogoutPayload;
   USER_ACTIVE: null;
+  USER_INACTIVE: null;
 };
 
 export type Request<T extends keyof RequestMap = keyof RequestMap> = {
@@ -62,6 +63,7 @@ export type ResponseMap = {
   USER_EXTERNAL_LOGIN: ExternalAuthResponse;
   USER_EXTERNAL_LOGOUT: ExternalAuthResponse;
   USER_ACTIVE: UserActiveResponse;
+  USER_INACTIVE: UserActiveResponse;
 };
 
 export type Response<T extends keyof ResponseMap = keyof ResponseMap> = {

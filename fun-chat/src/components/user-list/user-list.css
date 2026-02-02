@@ -45,8 +45,10 @@
 
 .user__info {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
+  width: 100%;
 }
 
 .user__login {
@@ -65,6 +67,10 @@
   background-color: #388776;
 }
 
+.user__status.offline {
+  background-color: #992b2b;
+}
+
 .user__unread {
   min-width: 20px;
   padding: 2px 6px;
@@ -74,4 +80,28 @@
   color: #fff;
   text-align: center;
   background-color: #ff5252;
+}
+
+.user-search {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border: 2px solid #6fd9ad;
+  border-radius: 8px;
+  background-color: #e8fdf7;
+  color: #2b6e4d;
+  font-size: 16px;
+  outline: none;
+  transition:
+    border 0.2s,
+    box-shadow 0.2s;
+}
+
+.user-search:focus {
+  border-color: #41906f;
+  box-shadow: 0 0 5px rgba(76, 175, 113, 0.5);
+}
+
+.user-search::placeholder {
+  color: #76c8a6;
 }
