@@ -1,25 +1,45 @@
 import { renderAboutPage } from '@/pages/about/about-page';
-import { renderAuthPage } from '@/pages/auth/auth-page';
+import { renderLoginPage } from '@/pages/login/login-page';
 import { renderMainPage } from '@/pages/main/main-page';
 import { userStore } from '@/store/user-store';
 
-export function router(route: string, container: HTMLElement): void {
-  container.replaceChildren();
+import type { Route } from '@/types/types';
 
-  if (route === 'main' && !userStore.isAuthenticated()) {
-    history.replaceState(undefined, '', '#login');
-    router('login', container);
-    return;
+const ROUTES = new Set<Route>(['login', 'main', 'about']);
+
+function getRoute(): Route {
+  const hash = location.hash.replace('#', '');
+  if (isRoute(hash)) {
+    return hash;
   }
-  if (route === 'login' && userStore.isAuthenticated()) {
-    history.replaceState(undefined, '', '#main');
-    router('main', container);
-    return;
-  }
+
+  return 'login';
+}
+
+export function initRouter(container: HTMLElement): void {
+  const initialRoute: Route = getRoute();
+  const resolvedRoute: Route = resolveRoute(initialRoute);
+
+  history.replaceState({ route: resolvedRoute }, '', `#${resolvedRoute}`);
+
+  router(resolvedRoute, container);
+
+  globalThis.addEventListener('popstate', () => {
+    const route: Route = getRoute();
+    const finalRoute: Route = resolveRoute(route);
+
+    history.replaceState({ route: finalRoute }, '', `#${finalRoute}`);
+
+    router(finalRoute, container);
+  });
+}
+
+export function router(route: Route, container: HTMLElement): void {
+  container.replaceChildren();
 
   switch (route) {
     case 'login': {
-      renderAuthPage(container);
+      renderLoginPage(container);
       break;
     }
     case 'main': {
@@ -36,7 +56,29 @@ export function router(route: string, container: HTMLElement): void {
   }
 }
 
-export function navigate(route: string, container: HTMLElement): void {
-  router(route, container);
-  history.pushState(undefined, '', `#${route}`);
+export function resolveRoute(route: Route): Route {
+  if (route === 'main' && !userStore.isLoggedIn()) {
+    return 'login';
+  }
+
+  if (route === 'login' && userStore.isLoggedIn()) {
+    return 'main';
+  }
+
+  return route;
+}
+
+export function navigate(route: Route, container: HTMLElement): void {
+  const resolvedRoute: Route = resolveRoute(route);
+  history.pushState({ route: resolvedRoute }, '', `#${resolvedRoute}`);
+  router(resolvedRoute, container);
+}
+
+export function isRoute(value: string): value is Route {
+  for (const route of ROUTES) {
+    if (route === value) {
+      return true;
+    }
+  }
+  return false;
 }

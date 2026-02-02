@@ -1,20 +1,23 @@
-import { handleServerMessage } from '@/server/handle-server-message';
+import { handleResponse } from '@/server/reponses';
 import { eventState } from '@/store/events/event-state';
-
-import type { WebsocketResponse } from '@/types/types';
+import { isResponse } from '@/types/type-guards';
 
 let socket: WebSocket | undefined;
 let reconnectAttempt = 0;
 let manuallyClosed = false;
 
-export function startWebSocket(): void {
+export function startWebsocket(): void {
   manuallyClosed = false;
   connect();
 }
 
-export function closeWebSocket(): void {
+export function closeWebsocket(): void {
   manuallyClosed = true;
   socket?.close();
+}
+
+export function getSocket(): WebSocket | undefined {
+  return socket;
 }
 
 function connect(): void {
@@ -33,12 +36,12 @@ function connect(): void {
 
       const parsed: unknown = JSON.parse(event.data);
 
-      if (!isWebsocketResponse(parsed)) {
+      if (!isResponse(parsed)) {
         console.error('Invalid websocket message shape', parsed);
         return;
       }
 
-      handleServerMessage(parsed);
+      handleResponse(parsed);
     } catch {
       console.error('Invalid websocket message', event.data);
     }
@@ -48,7 +51,7 @@ function connect(): void {
     eventState.emit('ws:disconnected');
 
     if (!manuallyClosed) {
-      reconnectWebsocket();
+      reconnect();
     }
   });
 
@@ -57,7 +60,7 @@ function connect(): void {
   });
 }
 
-function reconnectWebsocket(): void {
+function reconnect(): void {
   const DELAY = 1000;
   const MAX_DELAY = 5000;
 
@@ -65,22 +68,4 @@ function reconnectWebsocket(): void {
   eventState.emit('ws:reconnecting', { attempt: reconnectAttempt });
 
   setTimeout(connect, Math.min(DELAY * reconnectAttempt, MAX_DELAY));
-}
-
-export function sendWebsocket(data: unknown): void {
-  if (socket?.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(data));
-  }
-}
-
-function isWebsocketResponse(value: unknown): value is WebsocketResponse {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-
-  if (!('type' in value) || !('payload' in value)) {
-    return false;
-  }
-
-  return typeof value.type === 'string';
 }

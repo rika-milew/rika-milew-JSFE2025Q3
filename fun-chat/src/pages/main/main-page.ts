@@ -1,30 +1,50 @@
-import { createButton } from '@/components/button/button';
-import { handleLogout } from '@/pages/main/helpers/handle-logout';
+import { createFooter } from '@/components/footer/footer';
+import { createHeader } from '@/components/header/header';
+import { createUserList } from '@/components/user-list/user-list';
+import { eventState } from '@/store/events/event-state';
+import { usersStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 
+import type { UserList } from '@/types/types';
+
 export function renderMainPage(container: HTMLElement): void {
-  const pageContainer = createElement({
+  container.replaceChildren();
+
+  const wrapper: HTMLDivElement = createElement({
     tag: 'div',
-    className: ['container'],
+    className: ['wrapper'],
   });
 
-  const title = createElement({
+  const header: HTMLElement = createHeader('main');
+
+  const pageContainer: HTMLElement = createElement({
+    tag: 'main',
+    className: ['container main'],
+  });
+
+  const title: HTMLHeadingElement = createElement({
     tag: 'h1',
     textContent: 'Main Page',
     className: ['page-title'],
   });
 
-  const button = createButton({
-    text: 'Logout',
-    className: 'logout-button',
-    disabled: false,
+  const footer: HTMLElement = createFooter();
+
+  const usersSection: HTMLElement = createElement({
+    tag: 'section',
+    className: ['user-section'],
   });
 
-  button.addEventListener('click', () => {
-    handleLogout();
+  const userList: UserList = createUserList({ container: usersSection, users: usersStore.get() });
+
+  eventState.on('users:changed', (users) => {
+    if (!users) {
+      return;
+    }
+    userList.render(users);
   });
 
-  container.replaceChildren();
-  pageContainer.append(title, button);
-  container.append(pageContainer);
+  pageContainer.append(title, usersSection);
+  wrapper.append(header, pageContainer, footer);
+  container.append(wrapper);
 }

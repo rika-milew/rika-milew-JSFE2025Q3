@@ -16,7 +16,7 @@
   padding: 30px 25px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: var(--color-bg-3);
 }
 
@@ -53,6 +53,13 @@
 .login-button {
   padding: 12px;
   font-weight: 600;
+}
+
+.login__about-link {
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--color-text-accent);
 }
 
 @media (max-width: 500px) {

@@ -13,6 +13,8 @@ export type HTMLElements = Pick<
   | 'p'
   | 'a'
   | 'img'
+  | 'ul'
+  | 'li'
   | 'select'
   | 'option'
   | 'label'
@@ -41,41 +43,45 @@ export type ButtonConfig = {
 
 // server
 
-export type WebsocketRequestMap = {
-  USER_LOGIN: UserLoginPayload;
-  USER_LOGOUT: UserLogoutPayload;
+export type RequestMap = {
+  USER_LOGIN: LoginPayload;
+  USER_LOGOUT: LogoutPayload;
+  USER_ACTIVE: null;
+  USER_INACTIVE: null;
 };
 
-export type WebsocketRequest<T extends keyof WebsocketRequestMap = keyof WebsocketRequestMap> = {
+export type Request<T extends keyof RequestMap = keyof RequestMap> = {
   id: string;
   type: T;
-  payload: WebsocketRequestMap[T];
+  payload: RequestMap[T];
 };
 
-export type WebsocketResponseMap = {
-  USER_LOGIN: UserLoginResponse;
+export type ResponseMap = {
+  USER_LOGIN: LoginResponse;
   ERROR: ErrorResponse;
-  USER_LOGOUT: UserLogoutResponse;
-  USER_EXTERNAL_LOGIN: UserExternalAuthResponse;
-  USER_EXTERNAL_LOGOUT: UserExternalAuthResponse;
+  USER_LOGOUT: LogoutResponse;
+  USER_EXTERNAL_LOGIN: ExternalAuthResponse;
+  USER_EXTERNAL_LOGOUT: ExternalAuthResponse;
+  USER_ACTIVE: UserActiveResponse;
+  USER_INACTIVE: UserActiveResponse;
 };
 
-export type WebsocketResponse<T extends keyof WebsocketResponseMap = keyof WebsocketResponseMap> = {
+export type Response<T extends keyof ResponseMap = keyof ResponseMap> = {
   id: string | null;
   type: T;
-  payload: WebsocketResponseMap[T];
+  payload: ResponseMap[T];
 };
 
 // server requests and responses
 
-export type UserLoginPayload = {
+export type LoginPayload = {
   user: {
     login: string;
     password: string;
   };
 };
 
-export type UserLoginResponse = {
+export type LoginResponse = {
   user: {
     login: string;
     isLogined: boolean;
@@ -86,46 +92,77 @@ export type ErrorResponse = {
   error: string;
 };
 
-export type UserLogoutPayload = {
+export type LogoutPayload = {
   user: {
     login: string;
     password: string;
   };
 };
 
-export type UserLogoutResponse = {
+export type LogoutResponse = {
   user: {
     login: string;
     isLogined: boolean;
   };
 };
 
-export type UserExternalAuthResponse = {
+export type ExternalAuthResponse = {
   user: {
     login: string;
     isLogined: boolean;
   };
+};
+
+export type UserActiveResponse = {
+  users: AuthenticatedUser[];
 };
 
 // app
+
+export type User = {
+  login: string;
+  isOnline: boolean;
+  unreadCount: number;
+};
+
+export type AuthenticatedUser = {
+  login: string;
+};
+
+// elements
 
 export type PopupOptions = {
   overlayClass: string;
   containerClass: string;
   headingContent: string;
   imageSrc: string;
-  imageAlt: string;
   animationDuration: number;
   messageContent?: (message: string) => string;
 };
 
-export type AuthView = {
+export type LoginView = {
   form: HTMLFormElement;
   loginInput: HTMLInputElement;
   passwordInput: HTMLInputElement;
   loginError: HTMLDivElement;
   passwordError: HTMLDivElement;
   button: HTMLButtonElement;
+};
+
+export type Route = 'login' | 'main' | 'about';
+
+export type SoundTypes = 'notification' | 'button';
+
+export type AudioPlayer = {
+  stopSound: (id: SoundTypes) => void;
+  stopAllSounds: () => void;
+  toggleMute: () => void;
+  isMuted: boolean;
+  playOnce: (id: SoundTypes) => void;
+};
+
+export type UserList = {
+  render: (users: User[]) => void;
 };
 
 // state

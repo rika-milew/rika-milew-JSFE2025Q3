@@ -1,0 +1,51 @@
+import { sendRequest } from '@/server/requests';
+import { userStore } from '@/store/user-store';
+import { validate } from '@/utils/validate';
+
+import type { Request } from '@/types/types';
+
+export function login(): void {
+  const { login, password }: { login: string; password: string } = userStore.state;
+
+  const loginValid: boolean = validate('login', userStore.state.login, userStore.state.password);
+  const passwordValid: boolean = validate(
+    'password',
+    userStore.state.password,
+    userStore.state.login,
+  );
+
+  if (!loginValid || !passwordValid) {
+    return;
+  }
+
+  userStore.saveCredentials(login, password);
+
+  const request: Request<'USER_LOGIN'> = {
+    id: crypto.randomUUID(),
+    type: 'USER_LOGIN',
+    payload: {
+      user: { login, password },
+    },
+  };
+
+  sendRequest(request);
+}
+
+export function logout(): void {
+  const { login, password }: { login: string; password: string } = userStore.state;
+
+  if (!login || !password) {
+    userStore.logoutUser();
+    return;
+  }
+
+  const request: Request<'USER_LOGOUT'> = {
+    id: crypto.randomUUID(),
+    type: 'USER_LOGOUT',
+    payload: {
+      user: { login, password },
+    },
+  };
+
+  sendRequest(request);
+}

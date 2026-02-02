@@ -3,6 +3,7 @@ export const LOGIN_ERRORS = {
   invalidChars: 'Login can contain only English letters, digits or "-"',
   tooShort: 'Login must be at least 3 characters',
   sameAsPassword: 'Login and password must be different',
+  tooLong: 'Login cannot be longer than 15 characters',
 };
 
 export const PASSWORD_ERRORS = {
@@ -18,5 +19,6 @@ export const PASSWORD_ERRORS = {
 
 export const SERVER_ERRORS = {
   loginFailed: 'Invalid login or password',
+  logoutFailed: 'Failed to log out. Please try again',
   serverError: 'Server error. Please try again',
 };
