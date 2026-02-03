@@ -27,7 +27,7 @@ export function createDialogue(): MessageContainer {
 
   let currentRecipient: User | undefined;
 
-  const { header, messagesWrapper }: DialogueElements = createDialogueElements();
+  const { header, recipientName, messagesWrapper }: DialogueElements = createDialogueElements();
 
   const messageInput: MessageInput = createMessageInput((text: string) => {
     if (!currentRecipient) {
@@ -43,7 +43,7 @@ export function createDialogue(): MessageContainer {
 
   function handleRecipientChange(user?: User): void {
     currentRecipient = user;
-    header.textContent = user ? user.login : 'Select a user';
+    recipientName.textContent = user ? user.login : 'Select a user';
     setMessageInput(!!user, messageInput);
 
     if (!user) {
@@ -95,17 +95,30 @@ function createDialogueElements(): DialogueElements {
   const header: HTMLDivElement = createElement({
     tag: 'div',
     className: ['dialogue__title'],
+  });
+
+  const recipientLabel = createElement({
+    tag: 'span',
+    className: ['recipient-label'],
+    textContent: 'Recipient: ',
+  });
+
+  const recipientName = createElement({
+    tag: 'span',
+    className: ['recipient-name'],
     textContent: 'Select a user',
   });
 
+  header.append(recipientLabel, recipientName);
+
   const messagesWrapper: HTMLDivElement = createElement({
     tag: 'div',
-    className: ['dialogue__messages'],
+    className: ['messages'],
   });
 
   messagesWrapper.replaceChildren(createEmptyNotice('Select a user to start chatting...'));
 
-  return { header, messagesWrapper };
+  return { header, recipientName, messagesWrapper };
 }
 
 export function createMessageInput(onSend: (text: string) => void): MessageInput {
@@ -117,6 +130,7 @@ export function createMessageInput(onSend: (text: string) => void): MessageInput
   });
 
   const button: HTMLButtonElement = createButton({
+    className: 'send-button',
     text: 'Send',
   });
 
@@ -158,15 +172,16 @@ function renderMessagesList(
     .forEach((message) => {
       const messageContainer = createElement({
         tag: 'div',
-        className: ['message', message.senderId === currentUser.login ? 'own' : 'other'],
+        className: ['message', message.senderId === currentUser.login ? 'sender' : 'recipient'],
       });
 
       const header: HTMLDivElement = createElement({ tag: 'div', className: ['message__header'] });
+      const footer: HTMLDivElement = createElement({ tag: 'div', className: ['message__footer'] });
 
       const sender: HTMLSpanElement = createElement({
         tag: 'span',
         className: ['sender'],
-        textContent: message.senderName,
+        textContent: 'You',
       });
 
       const time: HTMLSpanElement = createElement({
@@ -185,13 +200,14 @@ function renderMessagesList(
         if (message.read) {
           status.textContent = 'Read';
         } else if (message.delivered) {
-          status.textContent = 'Delivered';
+          status.textContent = 'Delivered ✓✓';
         } else {
-          status.textContent = 'Sent';
+          status.textContent = 'Sent ✓';
         }
       }
 
-      header.append(sender, time, status);
+      header.append(sender, time);
+      footer.append(status);
 
       const body: HTMLDivElement = createElement({ tag: 'div', className: ['message-body'] });
       const textSpan: HTMLSpanElement = createElement({ tag: 'span', textContent: message.text });
@@ -206,7 +222,7 @@ function renderMessagesList(
         body.append(edited);
       }
 
-      messageContainer.append(header, body);
+      messageContainer.append(header, body, footer);
       messagesWrapper.append(messageContainer);
     });
 

@@ -175,6 +175,7 @@ export type MessageInput = {
 
 export type DialogueElements = {
   header: HTMLDivElement;
+  recipientName: HTMLSpanElement;
   messagesWrapper: HTMLDivElement;
 };
 
