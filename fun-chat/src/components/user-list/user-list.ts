@@ -1,3 +1,4 @@
+import { eventState } from '@/store/events/event-state';
 import { usersStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 
@@ -95,6 +96,10 @@ function createItem(user: User): HTMLLIElement {
     });
     item.append(unread);
   }
+
+  item.addEventListener('click', () => {
+    eventState.emit('users:selected', { login: user.login });
+  });
 
   return item;
 }

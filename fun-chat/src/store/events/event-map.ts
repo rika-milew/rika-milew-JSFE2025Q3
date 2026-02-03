@@ -1,5 +1,5 @@
 import type { userStore } from '../user-store';
-import type { ConnectionState, User } from '@/types/types';
+import type { ConnectionState, User, Message } from '@/types/types';
 
 export type EventMap = {
   'app:login': undefined;
@@ -13,4 +13,6 @@ export type EventMap = {
   'app:navigate': string;
   'users:changed': User[];
   'users:selected': { login: string };
+  'messages:changed': Message[];
+  'dialogue:recipient-changed': User | undefined;
 };

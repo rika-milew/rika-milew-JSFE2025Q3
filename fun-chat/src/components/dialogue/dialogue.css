@@ -1,0 +1,25 @@
+.dialogue-container {
+  display: grid;
+
+  gap: 0;
+  grid-template-columns: minmax(400px, 450px) 1fr;
+  margin: 20px auto;
+}
+
+.dialogue {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  overflow-y: auto;
+  background-color: #dcdcdc;
+}
+
+.dialogue_empty {
+  margin-top: 2rem;
+  font-style: italic;
+  color: #333333;
+  text-align: center;
+}

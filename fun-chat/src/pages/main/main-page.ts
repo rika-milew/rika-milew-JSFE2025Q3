@@ -1,3 +1,4 @@
+import { createDialogue } from '@/components/dialogue/dialogue';
 import { createFooter } from '@/components/footer/footer';
 import { createHeader } from '@/components/header/header';
 import { createUserList } from '@/components/user-list/user-list';
@@ -30,6 +31,11 @@ export function renderMainPage(container: HTMLElement): void {
 
   const footer: HTMLElement = createFooter();
 
+  const dialogueContainer: HTMLDivElement = createElement({
+    tag: 'div',
+    className: ['dialogue-container'],
+  });
+
   const usersSection: HTMLElement = createElement({
     tag: 'section',
     className: ['user-section'],
@@ -44,7 +50,15 @@ export function renderMainPage(container: HTMLElement): void {
     userList.render(users);
   });
 
-  pageContainer.append(title, usersSection);
+  const dialogue = createDialogue();
+
+  eventState.on('users:selected', (payload?: { login: string }) => {
+    const user = usersStore.get().find((user) => user.login === payload?.login);
+    eventState.emit('dialogue:recipient-changed', user);
+  });
+
+  dialogueContainer.append(usersSection, dialogue.container);
+  pageContainer.append(title, dialogueContainer);
   wrapper.append(header, pageContainer, footer);
   container.append(wrapper);
 }

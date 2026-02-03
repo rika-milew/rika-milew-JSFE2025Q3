@@ -129,6 +129,24 @@ export type AuthenticatedUser = {
   login: string;
 };
 
+export type Message = {
+  id: string;
+  senderId: string;
+  senderName: string;
+  recipientId: string;
+  text: string;
+  created: string;
+  edited?: boolean;
+  delivered: boolean;
+  read: boolean;
+};
+
+export type MessageContainer = {
+  container: HTMLDivElement;
+  render: (recipient: User) => void;
+  setRecipient: (recipient: User) => void;
+};
+
 // elements
 
 export type PopupOptions = {
@@ -149,6 +167,17 @@ export type LoginView = {
   button: HTMLButtonElement;
 };
 
+export type MessageInput = {
+  container: HTMLDivElement;
+  input: HTMLInputElement;
+  button: HTMLButtonElement;
+};
+
+export type DialogueElements = {
+  header: HTMLDivElement;
+  messagesWrapper: HTMLDivElement;
+};
+
 export type Route = 'login' | 'main' | 'about';
 
 export type SoundTypes = 'notification' | 'button';
@@ -163,6 +192,10 @@ export type AudioPlayer = {
 
 export type UserList = {
   render: (users: User[]) => void;
+};
+
+export type UserLogin = {
+  login: string;
 };
 
 // state

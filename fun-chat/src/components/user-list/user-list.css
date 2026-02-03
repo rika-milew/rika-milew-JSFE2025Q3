@@ -1,6 +1,7 @@
 .user-section {
+  width: 100%;
   max-width: 420px;
-  margin: 20px auto;
+  margin: 0 auto;
   padding: 16px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -84,13 +85,13 @@
 
 .user-search {
   width: 100%;
-  padding: 8px 12px;
   margin-bottom: 12px;
+  padding: 8px 12px;
   border: 2px solid #6fd9ad;
   border-radius: 8px;
-  background-color: #e8fdf7;
-  color: #2b6e4d;
   font-size: 16px;
+  color: #2b6e4d;
+  background-color: #e8fdf7;
   outline: none;
   transition:
     border 0.2s,

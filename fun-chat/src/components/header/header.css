@@ -25,3 +25,24 @@
     font-size: 24px;
   }
 }
+
+.header__user {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.header__user-label {
+  margin-right: 8px;
+  font-weight: 500;
+  color: #dcdcdc;
+}
+
+.header__username {
+  padding: 4px 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #338a86;
+  border-radius: 6px;
+  background-color: #d5f5e3;
+}
