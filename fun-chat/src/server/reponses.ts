@@ -1,6 +1,7 @@
 import { navigate } from '@/app/router';
 import { errorPopup, notificationPopup } from '@/components/popups/popups';
 import { SERVER_ERRORS } from '@/constants/errors';
+import { messageController } from '@/controller/message-controller';
 import { requestActiveUsers, requestInactiveUsers } from '@/server/requests';
 import { userStore, usersStore } from '@/store/user-store';
 import {
@@ -11,6 +12,8 @@ import {
   isExternalLogoutResponse,
   isUserActiveResponse,
   isUserInactiveResponse,
+  isSendMessageResponse,
+  isFromUserResponse,
 } from '@/types/type-guards';
 
 import type {
@@ -57,6 +60,16 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
 
   if (isUserInactiveResponse(message)) {
     getInactiveUsers(message);
+    return;
+  }
+
+  if (isSendMessageResponse(message)) {
+    messageController.handleSendMessage(message);
+    return;
+  }
+
+  if (isFromUserResponse(message)) {
+    messageController.handleMessagesFromUser(message);
     return;
   }
 }

@@ -20,8 +20,6 @@ export function requestLogin(login: string, password: string): void {
     },
   };
 
-  // console.log('requestLogin');
-
   sendRequest(request);
 }
 

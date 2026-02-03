@@ -28,6 +28,14 @@ export function isUserInactiveResponse(message: Response): message is Response<'
   return message.type === 'USER_INACTIVE';
 }
 
+export function isSendMessageResponse(message: Response): message is Response<'MSG_SEND'> {
+  return message.type === 'MSG_SEND';
+}
+
+export function isFromUserResponse(message: Response): message is Response<'MSG_FROM_USER'> {
+  return message.type === 'MSG_FROM_USER';
+}
+
 export function isResponse(value: unknown): value is Response {
   if (typeof value !== 'object' || value === null) {
     return false;

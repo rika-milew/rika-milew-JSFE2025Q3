@@ -1,8 +1,4 @@
-import { messageStore } from '@/store/message-store';
-import { userStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
-
-import type { User } from '@/types/types';
 
 export function createEmptyNotice(
   text = 'Start the conversation by sending a message…',
@@ -11,20 +7,6 @@ export function createEmptyNotice(
     tag: 'div',
     className: ['dialogue_empty'],
     textContent: text,
-  });
-}
-
-export function sendMessage(text: string, recipient: User): void {
-  messageStore.add({
-    id: crypto.randomUUID(),
-    text,
-    senderId: userStore.state.login,
-    senderName: userStore.state.login,
-    recipientId: recipient.login,
-    created: new Date().toISOString(),
-    delivered: false,
-    read: false,
-    edited: false,
   });
 }
 

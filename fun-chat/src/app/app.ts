@@ -14,17 +14,7 @@ export function app(): void {
     connectionStore.setConnected(true);
 
     const { login, password, isLoggedIn, isLoggedInOnServer } = userStore.state;
-    // console.log(
-    //   'Checking login condition:',
-    //   'isLoggedIn:',
-    //   isLoggedIn,
-    //   'isLoggedInOnServer:',
-    //   isLoggedInOnServer,
-    //   'login:',
-    //   login,
-    //   'password:',
-    //   password,
-    // );
+
     if (isLoggedIn && !isLoggedInOnServer && login && password) {
       requestLogin(userStore.state.login, userStore.state.password);
     }

@@ -1,9 +1,6 @@
 import { createButton } from '@/components/button/button';
-import {
-  createEmptyNotice,
-  sendMessage,
-  setMessageInput,
-} from '@/components/dialogue/helpers/helpers';
+import { createEmptyNotice, setMessageInput } from '@/components/dialogue/helpers/helpers';
+import { messageController } from '@/controller/message-controller';
 import { eventState } from '@/store/events/event-state';
 import { messageStore } from '@/store/message-store';
 import { userStore } from '@/store/user-store';
@@ -33,7 +30,7 @@ export function createDialogue(): MessageContainer {
     if (!currentRecipient) {
       return;
     }
-    sendMessage(text, currentRecipient);
+    messageController.sendMessage(currentRecipient.login, text);
     renderMessages({ login: userStore.state.login }, currentRecipient);
   });
 
@@ -54,14 +51,7 @@ export function createDialogue(): MessageContainer {
 
     setMessageInput(true, messageInput);
 
-    const currentUser = { login: userStore.state.login };
-    const messages = messageStore.getDialog(currentUser, user);
-
-    if (messages.length === 0) {
-      messagesWrapper.replaceChildren(createEmptyNotice());
-    } else {
-      renderMessages(currentUser, user);
-    }
+    messageController.getMessagesFromUser(user.login);
   }
 
   eventState.on('dialogue:recipient-changed', handleRecipientChange);
@@ -181,7 +171,7 @@ function renderMessagesList(
       const sender: HTMLSpanElement = createElement({
         tag: 'span',
         className: ['sender'],
-        textContent: 'You',
+        textContent: message.senderName,
       });
 
       const time: HTMLSpanElement = createElement({

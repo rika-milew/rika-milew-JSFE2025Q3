@@ -1,6 +1,6 @@
 import { eventState } from './events/event-state';
 
-import type { Message, User, UserLogin } from '@/types/types';
+import type { Message, UserLogin } from '@/types/types';
 
 let messages: Message[] = [];
 
@@ -49,11 +49,20 @@ export const messageStore = {
     eventState.emit('messages:changed', messages);
   },
 
-  getDialog(currentUser: UserLogin, otherUser: User): Message[] {
+  getDialog(currentUser: UserLogin, otherUser: UserLogin): Message[] {
     return messages.filter(
       (message) =>
         (message.senderId === currentUser.login && message.recipientId === otherUser.login) ||
         (message.senderId === otherUser.login && message.recipientId === currentUser.login),
     );
+  },
+
+  setDialogWithUser(login: string, messagesFromServer: Message[]): void {
+    messages = [
+      ...messages.filter((m) => m.senderId !== login && m.recipientId !== login),
+      ...messagesFromServer,
+    ];
+
+    eventState.emit('messages:changed');
   },
 };
