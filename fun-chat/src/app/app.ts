@@ -1,4 +1,5 @@
 import { initRouter } from '@/app/router';
+import { syncUnreadCounts } from '@/controller/message-controller';
 import { startWebsocket } from '@/server/connection';
 import { requestLogin } from '@/server/requests';
 import { connectionStore } from '@/store/connection-store';
@@ -18,6 +19,7 @@ export function app(): void {
     if (isLoggedIn && !isLoggedInOnServer && login && password) {
       requestLogin(userStore.state.login, userStore.state.password);
     }
+    syncUnreadCounts();
   });
 
   eventState.on('ws:disconnected', () => {

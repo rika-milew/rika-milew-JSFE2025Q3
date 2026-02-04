@@ -160,61 +160,72 @@ function renderMessagesList(
   messages
     .toSorted((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
     .forEach((message) => {
-      const messageContainer = createElement({
-        tag: 'div',
-        className: ['message', message.senderId === currentUser.login ? 'sender' : 'recipient'],
-      });
-
-      const header: HTMLDivElement = createElement({ tag: 'div', className: ['message__header'] });
-      const footer: HTMLDivElement = createElement({ tag: 'div', className: ['message__footer'] });
-
-      const sender: HTMLSpanElement = createElement({
-        tag: 'span',
-        className: ['sender'],
-        textContent: message.senderName,
-      });
-
-      const time: HTMLSpanElement = createElement({
-        tag: 'span',
-        className: ['time'],
-        textContent: new Date(message.created).toLocaleTimeString(),
-      });
-
-      const status: HTMLSpanElement = createElement({
-        tag: 'span',
-        className: ['status'],
-        textContent: '',
-      });
-
-      if (message.senderId === currentUser.login) {
-        if (message.read) {
-          status.textContent = 'Read';
-        } else if (message.delivered) {
-          status.textContent = 'Delivered ✓✓';
-        } else {
-          status.textContent = 'Sent ✓';
-        }
-      }
-
-      header.append(sender, time);
-      footer.append(status);
-
-      const body: HTMLDivElement = createElement({ tag: 'div', className: ['message-body'] });
-      const textSpan: HTMLSpanElement = createElement({ tag: 'span', textContent: message.text });
-      body.append(textSpan);
-
-      if (message.edited) {
-        const edited: HTMLSpanElement = createElement({
-          tag: 'span',
-          className: ['edited'],
-          textContent: ' (edited)',
-        });
-        body.append(edited);
-      }
-
-      messageContainer.append(header, body, footer);
-      messagesWrapper.append(messageContainer);
+      const messageElement = createMessageElement(message, currentUser);
+      messagesWrapper.append(messageElement);
     });
 
-  messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
+  messagesWrapper.scrollTop = messagesWrapper.scrollHeight; 
+}
+
+
+function createMessageElement(
+  message: Message,
+  currentUser: { login: string },
+): HTMLDivElement {
+  const messageContainer: HTMLDivElement = createElement({
+    tag: 'div',
+    className: ['message', message.senderId === currentUser.login ? 'sender' : 'recipient'],
+  });
+
+  const header: HTMLDivElement = createElement({ tag: 'div', className: ['message__header'] });
+  const footer: HTMLDivElement = createElement({ tag: 'div', className: ['message__footer'] });
+
+  const sender: HTMLSpanElement = createElement({
+    tag: 'span',
+    className: ['sender'],
+    textContent: message.senderName,
+  });
+
+  const time: HTMLSpanElement = createElement({
+    tag: 'span',
+    className: ['time'],
+    textContent: new Date(message.created).toLocaleTimeString(),
+  });
+
+  const status: HTMLSpanElement = createElement({
+    tag: 'span',
+    className: ['status'],
+    textContent: '',
+  });
+
+
+
+  if (message.senderId === currentUser.login) {
+    if (message.read) {
+      status.textContent = 'Read ✓✓';
+    } else if (message.delivered) {
+      status.textContent = 'Delivered ✓';
+    } else {
+      status.textContent = 'Sent';
+    }
+  }
+
+  header.append(sender, time);
+  footer.append(status);
+
+  const body: HTMLDivElement = createElement({ tag: 'div', className: ['message-body'] });
+  const textSpan: HTMLSpanElement = createElement({ tag: 'span', textContent: message.text });
+  body.append(textSpan);
+
+  if (message.edited) {
+    const edited: HTMLSpanElement = createElement({
+      tag: 'span',
+      className: ['edited'],
+      textContent: ' (edited)',
+    });
+    body.append(edited);
+  }
+
+  messageContainer.append(header, body, footer);
+  return messageContainer;
 }

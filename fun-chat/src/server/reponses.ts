@@ -1,7 +1,7 @@
 import { navigate } from '@/app/router';
 import { errorPopup, notificationPopup } from '@/components/popups/popups';
 import { SERVER_ERRORS } from '@/constants/errors';
-import { messageController } from '@/controller/message-controller';
+import { messageController, syncUnreadCounts } from '@/controller/message-controller';
 import { requestActiveUsers, requestInactiveUsers } from '@/server/requests';
 import { userStore, usersStore } from '@/store/user-store';
 import {
@@ -14,6 +14,11 @@ import {
   isUserInactiveResponse,
   isSendMessageResponse,
   isFromUserResponse,
+  isMessageDeliverResponse,
+  isMessageNotReadResponse,
+  isMessageReadResponse,
+  isMessageDeleteResponse,
+  isMessageEditResponse,
 } from '@/types/type-guards';
 
 import type {
@@ -72,6 +77,31 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
     messageController.handleMessagesFromUser(message);
     return;
   }
+
+  if (isMessageNotReadResponse(message)) {
+    messageController.handleUnreadCount(message);
+    return;
+  }
+
+  if (isMessageDeliverResponse(message)) {
+    messageController.markDelivered(message.payload.message.id);
+    return;
+  }
+
+  if (isMessageReadResponse(message)) {
+    messageController.markRead(message.payload.message.id);
+    return;
+  }
+
+  if (isMessageDeleteResponse(message)) {
+    messageController.deleteMessage(message.payload.message.id);
+    return;
+  }
+
+  if (isMessageEditResponse(message)) {
+    messageController.editMessage(message.payload.message.id, message.payload.message.text);
+    return;
+  }
 }
 
 function login(message: Response<'USER_LOGIN'>): void {
@@ -82,6 +112,9 @@ function login(message: Response<'USER_LOGIN'>): void {
     userStore.setServerLogin(true);
     requestActiveUsers();
     requestInactiveUsers();
+
+    syncUnreadCounts();
+
     navigate('main', document.body);
   } else {
     errorPopup.show(SERVER_ERRORS.loginFailed);
@@ -144,6 +177,7 @@ export function getActiveUsers(message: Response<'USER_ACTIVE'>): void {
     }));
 
   usersStore.set(activeUsers);
+  syncUnreadCounts();
 }
 
 export function getInactiveUsers(message: Response<'USER_INACTIVE'>): void {
@@ -161,4 +195,5 @@ export function getInactiveUsers(message: Response<'USER_INACTIVE'>): void {
   const currentUsers = usersStore.get();
 
   usersStore.set([...currentUsers.filter((u) => u.isOnline), ...inactiveUsers]);
+  syncUnreadCounts();
 }

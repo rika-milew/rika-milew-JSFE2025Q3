@@ -1,8 +1,10 @@
 import { sendRequest } from '@/server/requests';
 import { messageStore } from '@/store/message-store';
-import { userStore } from '@/store/user-store';
+import { userStore, usersStore } from '@/store/user-store';
 
 import type { Request, Response, Message } from '@/types/types';
+
+const unreadRequests = new Map<string, string>();
 
 export const messageController = {
   sendMessage(to: string, text: string): void {
@@ -24,6 +26,11 @@ export const messageController = {
     const serverMessage = message.payload.message;
     const sendMessage: Message = mapServerMessage(serverMessage);
     messageStore.add(sendMessage);
+
+    const from = message.payload.message.from;
+    if (from !== userStore.state.login) {
+      messageController.getUnreadCountFromUser(from);
+    }
   },
 
   handleMessagesFromUser(message: Response<'MSG_FROM_USER'>): void {
@@ -78,6 +85,33 @@ export const messageController = {
       payload: { message: { id: messageId, text: newText } },
     });
   },
+
+  getUnreadCountFromUser(login: string): void {
+    const id = crypto.randomUUID();
+
+    unreadRequests.set(id, login);
+
+    sendRequest({
+      id,
+      type: 'MSG_COUNT_NOT_READED_FROM_USER',
+      payload: {
+        user: { login },
+      },
+    });
+  },
+
+  handleUnreadCount(message: Response<'MSG_COUNT_NOT_READED_FROM_USER'>): void {
+    if (message.id === null) {
+      return;
+    }
+    const login = unreadRequests.get(message.id);
+    if (!login) {
+      return;
+    }
+
+    usersStore.updateUnreadCount(login, message.payload.count);
+    unreadRequests.delete(message.id);
+  },
 };
 
 function mapServerMessage(serverMessage: {
@@ -103,4 +137,10 @@ function mapServerMessage(serverMessage: {
     read: serverMessage.status.isReaded,
     edited: serverMessage.status.isEdited,
   };
+}
+
+export function syncUnreadCounts(): void {
+  usersStore.get().forEach((user) => {
+    messageController.getUnreadCountFromUser(user.login);
+  });
 }

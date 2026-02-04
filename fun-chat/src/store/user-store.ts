@@ -101,4 +101,9 @@ export const usersStore = {
 
     eventState.emit('users:changed', users);
   },
+
+  updateUnreadCount(login: string, count: number): void {
+    users = users.map((user) => (user.login === login ? { ...user, unreadCount: count } : user));
+    eventState.emit('users:changed', users);
+  },
 };

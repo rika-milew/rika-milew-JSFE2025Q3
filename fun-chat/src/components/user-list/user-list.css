@@ -46,7 +46,6 @@
 
 .user__info {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
   width: 100%;
@@ -73,14 +72,18 @@
 }
 
 .user__unread {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   min-width: 20px;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 50%;
+  font-size: 12px;
   font-weight: bold;
   color: #fff;
   text-align: center;
-  background-color: #ff5252;
+  background-color: #d03333;
 }
 
 .user-search {
