@@ -47,6 +47,7 @@ export function renderMainPage(container: HTMLElement): void {
     if (!users) {
       return;
     }
+
     userList.render(users);
   });
 

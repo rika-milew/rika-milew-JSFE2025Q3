@@ -1,5 +1,10 @@
 import { createButton } from '@/components/button/button';
-import { createEmptyNotice, setMessageInput } from '@/components/dialogue/helpers/helpers';
+import {
+  createEmptyNotice,
+  setMessageInput,
+  updateDialogue,
+  updateRecipientStatus,
+} from '@/components/dialogue/helpers/helpers';
 import { messageController } from '@/controller/message-controller';
 import { eventState } from '@/store/events/event-state';
 import { messageStore } from '@/store/message-store';
@@ -24,7 +29,8 @@ export function createDialogue(): MessageContainer {
 
   let currentRecipient: User | undefined;
 
-  const { header, recipientName, messagesWrapper }: DialogueElements = createDialogueElements();
+  const { header, recipientName, messagesWrapper, recipientStatus }: DialogueElements =
+    createDialogueElements();
 
   const messageInput: MessageInput = createMessageInput((text: string) => {
     if (!currentRecipient) {
@@ -40,18 +46,7 @@ export function createDialogue(): MessageContainer {
 
   function handleRecipientChange(user?: User): void {
     currentRecipient = user;
-    recipientName.textContent = user ? user.login : 'Select a user';
-    setMessageInput(!!user, messageInput);
-
-    if (!user) {
-      messagesWrapper.replaceChildren(createEmptyNotice('Select a user to start chatting...'));
-      setMessageInput(false, messageInput);
-      return;
-    }
-
-    setMessageInput(true, messageInput);
-
-    messageController.getMessagesFromUser(user.login);
+    updateDialogue(user, recipientName, recipientStatus, messagesWrapper, messageInput);
   }
 
   eventState.on('dialogue:recipient-changed', handleRecipientChange);
@@ -61,6 +56,19 @@ export function createDialogue(): MessageContainer {
       return;
     }
     renderMessages({ login: userStore.state.login }, currentRecipient);
+  });
+
+  eventState.on('users:changed', (users) => {
+    if (!currentRecipient || !users) {
+      return;
+    }
+
+    const recipientLogin = currentRecipient.login;
+    const updatedUser = users.find((user) => user.login === recipientLogin);
+    if (updatedUser) {
+      currentRecipient = updatedUser;
+      updateRecipientStatus(recipientStatus, updatedUser);
+    }
   });
 
   function renderMessages(currentUser: { login: string }, recipient: User): void {
@@ -81,7 +89,7 @@ export function createDialogue(): MessageContainer {
   };
 }
 
-function createDialogueElements(): DialogueElements {
+function createDialogueElements(recipient?: User): DialogueElements {
   const header: HTMLDivElement = createElement({
     tag: 'div',
     className: ['dialogue__title'],
@@ -99,7 +107,15 @@ function createDialogueElements(): DialogueElements {
     textContent: 'Select a user',
   });
 
-  header.append(recipientLabel, recipientName);
+  const recipientStatus = createElement({
+    tag: 'span',
+    className: [
+      'recipient-status',
+      recipient ? (recipient.isOnline ? 'online' : 'offline') : 'unknown',
+    ],
+  });
+
+  header.append(recipientLabel, recipientName, recipientStatus);
 
   const messagesWrapper: HTMLDivElement = createElement({
     tag: 'div',
@@ -108,7 +124,7 @@ function createDialogueElements(): DialogueElements {
 
   messagesWrapper.replaceChildren(createEmptyNotice('Select a user to start chatting...'));
 
-  return { header, recipientName, messagesWrapper };
+  return { header, recipientName, messagesWrapper, recipientStatus };
 }
 
 export function createMessageInput(onSend: (text: string) => void): MessageInput {
@@ -164,14 +180,10 @@ function renderMessagesList(
       messagesWrapper.append(messageElement);
     });
 
-  messagesWrapper.scrollTop = messagesWrapper.scrollHeight; 
+  messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
 }
 
-
-function createMessageElement(
-  message: Message,
-  currentUser: { login: string },
-): HTMLDivElement {
+function createMessageElement(message: Message, currentUser: { login: string }): HTMLDivElement {
   const messageContainer: HTMLDivElement = createElement({
     tag: 'div',
     className: ['message', message.senderId === currentUser.login ? 'sender' : 'recipient'],
@@ -197,8 +209,6 @@ function createMessageElement(
     className: ['status'],
     textContent: '',
   });
-
-
 
   if (message.senderId === currentUser.login) {
     if (message.read) {

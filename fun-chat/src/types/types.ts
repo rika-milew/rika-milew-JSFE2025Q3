@@ -301,6 +301,7 @@ export type DialogueElements = {
   header: HTMLDivElement;
   recipientName: HTMLSpanElement;
   messagesWrapper: HTMLDivElement;
+  recipientStatus: HTMLSpanElement;
 };
 
 export type Route = 'login' | 'main' | 'about';

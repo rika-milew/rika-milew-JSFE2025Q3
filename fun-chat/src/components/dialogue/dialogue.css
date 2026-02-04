@@ -191,3 +191,20 @@
 .message.recipient:active {
   background-color: #e8e8e8;
 }
+
+.recipient-status {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 6px;
+  background-color: none;
+}
+
+.recipient-status.online {
+  background-color: #388776;
+}
+
+.recipient-status.offline {
+  background-color: #992b2b;
+}
