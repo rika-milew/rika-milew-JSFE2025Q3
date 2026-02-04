@@ -4,6 +4,7 @@ import {
   setMessageInput,
   updateDialogue,
   updateRecipientStatus,
+  createUnreadDivider,
 } from '@/components/dialogue/helpers/helpers';
 import { messageController } from '@/controller/message-controller';
 import { eventState } from '@/store/events/event-state';
@@ -17,6 +18,7 @@ import type {
   Message,
   MessageInput,
   DialogueElements,
+  DialogueState,
 } from '@/types/types';
 
 import './dialogue.css';
@@ -37,6 +39,7 @@ export function createDialogue(): MessageContainer {
       return;
     }
     messageController.sendMessage(currentRecipient.login, text);
+    eventState.emit('dialogue:divider-remove');
     renderMessages({ login: userStore.state.login }, currentRecipient);
   });
 
@@ -58,6 +61,24 @@ export function createDialogue(): MessageContainer {
     renderMessages({ login: userStore.state.login }, currentRecipient);
   });
 
+  eventState.on('dialogue:divider-remove', () => {
+    if (!currentRecipient) {
+      return;
+    }
+
+    const state = messageStore.getDialogueState(currentRecipient.login);
+
+    if (state.unreadDividerRemoved) {
+      return;
+    }
+
+    state.unreadDividerRemoved = true;
+
+    messageController.markAllAsReadForUser(currentRecipient.login);
+
+    renderMessages({ login: userStore.state.login }, currentRecipient);
+  });
+
   eventState.on('users:changed', (users) => {
     if (!currentRecipient || !users) {
       return;
@@ -73,7 +94,8 @@ export function createDialogue(): MessageContainer {
 
   function renderMessages(currentUser: { login: string }, recipient: User): void {
     const messages = messageStore.getDialog(currentUser, recipient);
-    renderMessagesList(messagesWrapper, currentUser, messages);
+    const dialogueState = messageStore.getDialogueState(recipient.login);
+    renderMessagesList(messagesWrapper, currentUser, messages, dialogueState);
   }
 
   return {
@@ -122,6 +144,14 @@ function createDialogueElements(recipient?: User): DialogueElements {
     className: ['messages'],
   });
 
+  messagesWrapper.addEventListener('scroll', () => {
+    eventState.emit('dialogue:divider-remove');
+  });
+
+  messagesWrapper.addEventListener('click', () => {
+    eventState.emit('dialogue:divider-remove');
+  });
+
   messagesWrapper.replaceChildren(createEmptyNotice('Select a user to start chatting...'));
 
   return { header, recipientName, messagesWrapper, recipientStatus };
@@ -164,8 +194,10 @@ function renderMessagesList(
   messagesWrapper: HTMLDivElement,
   currentUser: { login: string },
   messages: Message[],
+  dialogueState: DialogueState,
 ): void {
   messagesWrapper.replaceChildren();
+  let dividerInserted = false;
 
   if (messages.length === 0) {
     const emptyDialogue = createEmptyNotice();
@@ -176,6 +208,15 @@ function renderMessagesList(
   messages
     .toSorted((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
     .forEach((message) => {
+      if (
+        !dividerInserted &&
+        !message.read &&
+        message.senderId !== currentUser.login &&
+        !dialogueState.unreadDividerRemoved
+      ) {
+        messagesWrapper.append(createUnreadDivider());
+        dividerInserted = true;
+      }
       const messageElement = createMessageElement(message, currentUser);
       messagesWrapper.append(messageElement);
     });

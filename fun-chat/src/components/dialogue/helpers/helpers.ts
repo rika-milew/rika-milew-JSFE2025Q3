@@ -1,4 +1,5 @@
 import { messageController } from '@/controller/message-controller';
+import { messageStore } from '@/store/message-store';
 import { createElement } from '@/utils/create-element';
 
 import type { User, MessageInput } from '@/types/types';
@@ -51,5 +52,16 @@ export function updateDialogue(
 
   setMessageInput(true, messageInput);
 
+  const dialogueState = messageStore.getDialogueState(user.login);
+  dialogueState.unreadDividerRemoved = false;
+
   messageController.getMessagesFromUser(user.login);
+}
+
+export function createUnreadDivider(): HTMLDivElement {
+  return createElement({
+    tag: 'div',
+    className: ['unread-divider'],
+    textContent: 'Unread messages',
+  });
 }

@@ -1,8 +1,9 @@
 import { eventState } from './events/event-state';
 
-import type { Message, UserLogin } from '@/types/types';
+import type { Message, UserLogin, DialogueState } from '@/types/types';
 
 let messages: Message[] = [];
+const dialogueStates = new Map<string, DialogueState>();
 
 export const messageStore = {
   get state(): Message[] {
@@ -64,5 +65,16 @@ export const messageStore = {
     ];
 
     eventState.emit('messages:changed');
+  },
+
+  getDialogueState(login: string): DialogueState {
+    let state = dialogueStates.get(login);
+
+    if (!state) {
+      state = { unreadDividerRemoved: false };
+      dialogueStates.set(login, state);
+    }
+
+    return state;
   },
 };

@@ -64,8 +64,33 @@ export const messageController = {
     messageStore.markDelivered(messageId);
   },
 
+  sendReadStatus(messageId: string): void {
+    const request: Request<'MSG_READ'> = {
+      id: crypto.randomUUID(),
+      type: 'MSG_READ',
+      payload: {
+        message: { id: messageId },
+      },
+    };
+    sendRequest(request);
+    messageStore.markRead(messageId);
+  },
+
   markRead(messageId: string): void {
     messageStore.markRead(messageId);
+  },
+
+  markAllAsReadForUser(login: string): void {
+    const currentLogin: string = userStore.state.login;
+    const messages = messageStore.getDialog({ login: currentLogin }, { login });
+
+    messages
+      .filter((message) => !message.read && message.senderId === login)
+      .forEach((message) => {
+        this.sendReadStatus(message.id);
+      });
+
+    usersStore.updateUnreadCount(login, 0);
   },
 
   deleteMessage(messageId: string): void {

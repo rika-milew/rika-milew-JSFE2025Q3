@@ -324,6 +324,10 @@ export type UserLogin = {
   login: string;
 };
 
+export type DialogueState = {
+  unreadDividerRemoved: boolean;
+};
+
 // state
 
 export type ConnectionState = {

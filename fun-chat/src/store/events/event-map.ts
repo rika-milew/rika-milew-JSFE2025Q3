@@ -15,4 +15,5 @@ export type EventMap = {
   'users:selected': { login: string };
   'messages:changed': Message[];
   'dialogue:recipient-changed': User | undefined;
+  'dialogue:divider-remove': undefined;
 };
