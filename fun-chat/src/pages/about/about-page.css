@@ -39,3 +39,13 @@
   height: auto;
   margin: 0 auto;
 }
+
+@media (max-width: 650px) {
+  .about {
+    padding: 35px 10px;
+  }
+  .about__text {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}

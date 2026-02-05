@@ -1,6 +1,6 @@
 .dialogue-container {
   display: grid;
-  gap: 0;
+  gap: 10px;
   grid-template-columns: minmax(400px, 450px) 1fr;
   margin: 20px auto;
 }
@@ -224,4 +224,42 @@
 }
 .delete-btn:hover {
   color: #f44336;
+}
+
+@media (max-width: 1250px) {
+  .dialogue-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(360px, 380px) 1fr;
+    margin: 20px auto;
+  }
+}
+
+@media (max-width: 1050px) {
+  .dialogue-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(320px, 350px) 1fr;
+    margin: 20px auto;
+  }
+}
+
+@media (max-width: 950px) {
+  .dialogue-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    margin: 20px auto;
+  }
+
+  .dialogue {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .message-body {
+    font-size: 12px;
+  }
 }

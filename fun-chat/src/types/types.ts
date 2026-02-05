@@ -266,7 +266,7 @@ export type Message = {
 };
 
 export type MessageContainer = {
-  container: HTMLDivElement;
+  container: HTMLElement;
   render: (recipient: User) => void;
   setRecipient: (recipient: User) => void;
 };

@@ -24,8 +24,8 @@ import type {
 import './dialogue.css';
 
 export function createDialogue(): MessageContainer {
-  const container: HTMLDivElement = createElement({
-    tag: 'div',
+  const container: HTMLElement = createElement({
+    tag: 'section',
     className: ['dialogue'],
   });
 
@@ -130,7 +130,7 @@ export function createDialogue(): MessageContainer {
     setRecipient: (recipient: User): void => {
       eventState.emit('dialogue:recipient-changed', recipient);
     },
-    get container(): HTMLDivElement {
+    get container(): HTMLElement {
       return container;
     },
   };

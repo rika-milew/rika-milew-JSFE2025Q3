@@ -25,7 +25,7 @@ export function renderMainPage(container: HTMLElement): void {
 
   const title: HTMLHeadingElement = createElement({
     tag: 'h1',
-    textContent: 'Main Page',
+    textContent: 'Chats',
     className: ['page-title'],
   });
 

@@ -109,3 +109,28 @@
 .user-search::placeholder {
   color: #76c8a6;
 }
+
+@media (max-width: 1250px) {
+  .user-section {
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .user-section {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 950px) {
+  .user-section {
+    width: 90%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-list {
+    font-size: 14px;
+  }
+}
