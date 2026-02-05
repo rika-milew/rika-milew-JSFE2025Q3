@@ -94,7 +94,21 @@ export const messageController = {
   },
 
   deleteMessage(messageId: string): void {
+    const message = messageStore.state.find((m) => m.id === messageId);
+
+    if (message?.senderId !== userStore.state.login) {
+      return;
+    }
+
     messageStore.delete(messageId);
+
+    if (!message.read) {
+      const recipientLogin = message.recipientId;
+      const recipientState = usersStore.getUserState(recipientLogin);
+      if (recipientState?.unreadCount) {
+        usersStore.updateUnreadCount(recipientLogin, recipientState.unreadCount - 1);
+      }
+    }
     sendRequest({
       id: crypto.randomUUID(),
       type: 'MSG_DELETE',
@@ -102,13 +116,21 @@ export const messageController = {
     });
   },
 
-  editMessage(messageId: string, newText: string): void {
-    messageStore.edit(messageId, newText);
-    sendRequest({
-      id: crypto.randomUUID(),
-      type: 'MSG_EDIT',
-      payload: { message: { id: messageId, text: newText } },
-    });
+  handleServerDelete(message: Response<'MSG_DELETE'>): void {
+    const serverMessageId = message.payload.message.id;
+
+    const deleteMessage = messageStore.state.find((m) => m.id === serverMessageId);
+
+    if (deleteMessage) {
+      if (!deleteMessage.read && deleteMessage.senderId !== userStore.state.login) {
+        const senderState = usersStore.getUserState(deleteMessage.senderId);
+        if (senderState?.unreadCount) {
+          usersStore.updateUnreadCount(deleteMessage.senderId, senderState.unreadCount - 1);
+        }
+      }
+
+      messageStore.delete(serverMessageId);
+    }
   },
 
   getUnreadCountFromUser(login: string): void {
@@ -123,6 +145,24 @@ export const messageController = {
         user: { login },
       },
     });
+  },
+
+  editMessage(messageId: string, newText: string): void {
+    const message = messageStore.state.find((m) => m.id === messageId);
+
+    if (message?.senderId !== userStore.state.login) {
+      return;
+    }
+    sendRequest({
+      id: crypto.randomUUID(),
+      type: 'MSG_EDIT',
+      payload: { message: { id: messageId, text: newText } },
+    });
+  },
+
+  handleServerEdit(message: Response<'MSG_EDIT'>): void {
+    const serverMessage = message.payload.message;
+    messageStore.edit(serverMessage.id, serverMessage.text);
   },
 
   handleUnreadCount(message: Response<'MSG_COUNT_NOT_READED_FROM_USER'>): void {

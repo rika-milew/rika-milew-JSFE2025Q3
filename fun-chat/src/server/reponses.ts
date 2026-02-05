@@ -94,12 +94,12 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
   }
 
   if (isMessageDeleteResponse(message)) {
-    messageController.deleteMessage(message.payload.message.id);
+    messageController.handleServerDelete(message);
     return;
   }
 
   if (isMessageEditResponse(message)) {
-    messageController.editMessage(message.payload.message.id, message.payload.message.text);
+    messageController.handleServerEdit(message);
     return;
   }
 }

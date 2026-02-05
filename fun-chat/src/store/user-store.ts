@@ -88,6 +88,10 @@ export const usersStore = {
     eventState.emit('users:changed', users);
   },
 
+  getUserState(login: string): User | undefined {
+    return users.find((user) => user.login === login);
+  },
+
   addUnread(login: string): void {
     users = users.map((user) =>
       user.login === login ? { ...user, unreadCount: user.unreadCount + 1 } : user,

@@ -30,17 +30,32 @@ export function createDialogue(): MessageContainer {
   });
 
   let currentRecipient: User | undefined;
+  let editingMessageId: string | null = null;
 
   const { header, recipientName, messagesWrapper, recipientStatus }: DialogueElements =
     createDialogueElements();
+
+  let isEditing = false;
 
   const messageInput: MessageInput = createMessageInput((text: string) => {
     if (!currentRecipient) {
       return;
     }
-    messageController.sendMessage(currentRecipient.login, text);
-    eventState.emit('dialogue:divider-remove');
-    renderMessages({ login: userStore.state.login }, currentRecipient);
+    if (!messageInput.input.value.trim()) {
+      return;
+    }
+    if (editingMessageId) {
+      isEditing = true;
+      messageController.editMessage(editingMessageId, text);
+      editingMessageId = null;
+    } else {
+      messageController.sendMessage(currentRecipient.login, text);
+    }
+
+    if (!isEditing) {
+      eventState.emit('dialogue:divider-remove');
+    }
+    messageInput.input.value = '';
   });
 
   setMessageInput(false, messageInput);
@@ -51,6 +66,16 @@ export function createDialogue(): MessageContainer {
     currentRecipient = user;
     updateDialogue(user, recipientName, recipientStatus, messagesWrapper, messageInput);
   }
+
+  eventState.on('dialogue:edit-message', (payload) => {
+    if (!payload) {
+      return;
+    }
+    const { messageId, text } = payload;
+    editingMessageId = messageId;
+    messageInput.input.value = text;
+    messageInput.input.focus();
+  });
 
   eventState.on('dialogue:recipient-changed', handleRecipientChange);
 
@@ -263,6 +288,31 @@ function createMessageElement(message: Message, currentUser: { login: string }):
 
   header.append(sender, time);
   footer.append(status);
+
+  if (message.senderId === currentUser.login && !messageContainer.dataset.handlersAttached) {
+    const editButton = createElement({
+      tag: 'button',
+      className: ['edit-btn'],
+      textContent: 'Edit',
+    });
+    const deleteButton = createElement({
+      tag: 'button',
+      className: ['delete-btn'],
+      textContent: 'Delete',
+    });
+
+    editButton.addEventListener('click', () => {
+      eventState.emit('dialogue:edit-message', { messageId: message.id, text: message.text });
+    });
+
+    deleteButton.addEventListener('click', () => {
+      messageController.deleteMessage(message.id);
+    });
+
+    footer.prepend(editButton, deleteButton);
+
+    messageContainer.dataset.handlersAttached = 'true';
+  }
 
   const body: HTMLDivElement = createElement({ tag: 'div', className: ['message-body'] });
   const textSpan: HTMLSpanElement = createElement({ tag: 'span', textContent: message.text });

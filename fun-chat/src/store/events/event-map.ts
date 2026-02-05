@@ -16,4 +16,5 @@ export type EventMap = {
   'messages:changed': Message[];
   'dialogue:recipient-changed': User | undefined;
   'dialogue:divider-remove': undefined;
+  'dialogue:edit-message': { messageId: string; text: string };
 };
