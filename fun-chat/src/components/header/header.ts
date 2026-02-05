@@ -18,19 +18,22 @@ export function createHeader(page: string): HTMLElement {
   const buttons: HTMLDivElement = createElement({ tag: 'div', className: ['header__buttons'] });
 
   if (page === 'main') {
-    const userLabel = createElement({
+    const userLabel: HTMLSpanElement = createElement({
       tag: 'span',
       className: ['header__user-label'],
       textContent: 'You: ',
     });
 
-    const userName = createElement({
+    const userName: HTMLSpanElement = createElement({
       tag: 'span',
       className: ['header__username'],
       textContent: userStore.state.login || '',
     });
 
-    const userContainer = createElement({ tag: 'div', className: ['header__user'] });
+    const userContainer: HTMLDivElement = createElement({
+      tag: 'div',
+      className: ['header__user'],
+    });
 
     const logoutButton: HTMLButtonElement = createButton({
       text: 'Logout',

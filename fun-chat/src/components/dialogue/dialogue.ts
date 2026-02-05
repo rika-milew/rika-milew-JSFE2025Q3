@@ -1,25 +1,17 @@
 import { createButton } from '@/components/button/button';
 import {
+  bindDialogueEvents,
   createEmptyNotice,
   setMessageInput,
   updateDialogue,
-  updateRecipientStatus,
-  createUnreadDivider,
+  createMessages,
 } from '@/components/dialogue/helpers/helpers';
 import { messageController } from '@/controller/message-controller';
 import { eventState } from '@/store/events/event-state';
-import { messageStore } from '@/store/message-store';
 import { userStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 
-import type {
-  User,
-  MessageContainer,
-  Message,
-  MessageInput,
-  DialogueElements,
-  DialogueState,
-} from '@/types/types';
+import type { User, MessageContainer, MessageInput, DialogueElements } from '@/types/types';
 
 import './dialogue.css';
 
@@ -30,98 +22,54 @@ export function createDialogue(): MessageContainer {
   });
 
   let currentRecipient: User | undefined;
-  let editingMessageId: string | null = null;
+  let editingMessageId: string | undefined;
 
-  const { header, recipientName, messagesWrapper, recipientStatus }: DialogueElements =
+  const { header, recipientName, messagesContainer, recipientStatus }: DialogueElements =
     createDialogueElements();
 
-  let isEditing = false;
-
   const messageInput: MessageInput = createMessageInput((text: string) => {
-    if (!currentRecipient) {
+    if (!currentRecipient || !messageInput.input.value.trim()) {
       return;
     }
-    if (!messageInput.input.value.trim()) {
-      return;
-    }
+
     if (editingMessageId) {
-      isEditing = true;
       messageController.editMessage(editingMessageId, text);
-      editingMessageId = null;
+      editingMessageId = undefined;
     } else {
       messageController.sendMessage(currentRecipient.login, text);
-    }
-
-    if (!isEditing) {
       eventState.emit('dialogue:divider-remove');
     }
+
     messageInput.input.value = '';
   });
 
   setMessageInput(false, messageInput);
+  container.append(header, messagesContainer, messageInput.container);
 
-  container.append(header, messagesWrapper, messageInput.container);
-
-  function handleRecipientChange(user?: User): void {
+  function changeRecipient(user?: User): void {
     currentRecipient = user;
-    updateDialogue(user, recipientName, recipientStatus, messagesWrapper, messageInput);
+    updateDialogue(user, recipientName, recipientStatus, messagesContainer, messageInput);
   }
 
-  eventState.on('dialogue:edit-message', (payload) => {
-    if (!payload) {
-      return;
-    }
-    const { messageId, text } = payload;
-    editingMessageId = messageId;
-    messageInput.input.value = text;
-    messageInput.input.focus();
+  bindDialogueEvents({
+    getRecipient: () => currentRecipient,
+    setRecipient: changeRecipient,
+    getEditingMessageId: () => {
+      return editingMessageId;
+    },
+    setEditingMessageId: (id) => {
+      editingMessageId = id;
+    },
+    messageInput,
+    recipientStatus,
+    renderMessages: (recipient) => {
+      createMessages({
+        wrapper: messagesContainer,
+        currentUser: { login: userStore.state.login },
+        recipient,
+      });
+    },
   });
-
-  eventState.on('dialogue:recipient-changed', handleRecipientChange);
-
-  eventState.on('messages:changed', () => {
-    if (!currentRecipient) {
-      return;
-    }
-    renderMessages({ login: userStore.state.login }, currentRecipient);
-  });
-
-  eventState.on('dialogue:divider-remove', () => {
-    if (!currentRecipient) {
-      return;
-    }
-
-    const state = messageStore.getDialogueState(currentRecipient.login);
-
-    if (state.unreadDividerRemoved) {
-      return;
-    }
-
-    state.unreadDividerRemoved = true;
-
-    messageController.markAllAsReadForUser(currentRecipient.login);
-
-    renderMessages({ login: userStore.state.login }, currentRecipient);
-  });
-
-  eventState.on('users:changed', (users) => {
-    if (!currentRecipient || !users) {
-      return;
-    }
-
-    const recipientLogin = currentRecipient.login;
-    const updatedUser = users.find((user) => user.login === recipientLogin);
-    if (updatedUser) {
-      currentRecipient = updatedUser;
-      updateRecipientStatus(recipientStatus, updatedUser);
-    }
-  });
-
-  function renderMessages(currentUser: { login: string }, recipient: User): void {
-    const messages = messageStore.getDialog(currentUser, recipient);
-    const dialogueState = messageStore.getDialogueState(recipient.login);
-    renderMessagesList(messagesWrapper, currentUser, messages, dialogueState);
-  }
 
   return {
     render: (recipient: User): void => {
@@ -142,19 +90,19 @@ function createDialogueElements(recipient?: User): DialogueElements {
     className: ['dialogue__title'],
   });
 
-  const recipientLabel = createElement({
+  const recipientLabel: HTMLSpanElement = createElement({
     tag: 'span',
     className: ['recipient-label'],
     textContent: 'Recipient: ',
   });
 
-  const recipientName = createElement({
+  const recipientName: HTMLSpanElement = createElement({
     tag: 'span',
     className: ['recipient-name'],
     textContent: 'Select a user',
   });
 
-  const recipientStatus = createElement({
+  const recipientStatus: HTMLSpanElement = createElement({
     tag: 'span',
     className: [
       'recipient-status',
@@ -164,22 +112,22 @@ function createDialogueElements(recipient?: User): DialogueElements {
 
   header.append(recipientLabel, recipientName, recipientStatus);
 
-  const messagesWrapper: HTMLDivElement = createElement({
+  const messagesContainer: HTMLDivElement = createElement({
     tag: 'div',
     className: ['messages'],
   });
 
-  messagesWrapper.addEventListener('scroll', () => {
+  messagesContainer.addEventListener('scroll', () => {
     eventState.emit('dialogue:divider-remove');
   });
 
-  messagesWrapper.addEventListener('click', () => {
+  messagesContainer.addEventListener('click', () => {
     eventState.emit('dialogue:divider-remove');
   });
 
-  messagesWrapper.replaceChildren(createEmptyNotice('Select a user to start chatting...'));
+  messagesContainer.replaceChildren(createEmptyNotice('Select a user to start chatting...'));
 
-  return { header, recipientName, messagesWrapper, recipientStatus };
+  return { header, recipientName, messagesContainer, recipientStatus };
 }
 
 export function createMessageInput(onSend: (text: string) => void): MessageInput {
@@ -213,120 +161,4 @@ export function createMessageInput(onSend: (text: string) => void): MessageInput
 
   container.append(input, button);
   return { container, input, button };
-}
-
-function renderMessagesList(
-  messagesWrapper: HTMLDivElement,
-  currentUser: { login: string },
-  messages: Message[],
-  dialogueState: DialogueState,
-): void {
-  messagesWrapper.replaceChildren();
-  let dividerInserted = false;
-
-  if (messages.length === 0) {
-    const emptyDialogue = createEmptyNotice();
-    messagesWrapper.append(emptyDialogue);
-    return;
-  }
-
-  messages
-    .toSorted((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
-    .forEach((message) => {
-      if (
-        !dividerInserted &&
-        !message.read &&
-        message.senderId !== currentUser.login &&
-        !dialogueState.unreadDividerRemoved
-      ) {
-        messagesWrapper.append(createUnreadDivider());
-        dividerInserted = true;
-      }
-      const messageElement = createMessageElement(message, currentUser);
-      messagesWrapper.append(messageElement);
-    });
-
-  messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
-}
-
-function createMessageElement(message: Message, currentUser: { login: string }): HTMLDivElement {
-  const messageContainer: HTMLDivElement = createElement({
-    tag: 'div',
-    className: ['message', message.senderId === currentUser.login ? 'sender' : 'recipient'],
-  });
-
-  const header: HTMLDivElement = createElement({ tag: 'div', className: ['message__header'] });
-  const footer: HTMLDivElement = createElement({ tag: 'div', className: ['message__footer'] });
-
-  const sender: HTMLSpanElement = createElement({
-    tag: 'span',
-    className: ['sender'],
-    textContent: message.senderName,
-  });
-
-  const time: HTMLSpanElement = createElement({
-    tag: 'span',
-    className: ['time'],
-    textContent: new Date(message.created).toLocaleTimeString(),
-  });
-
-  const status: HTMLSpanElement = createElement({
-    tag: 'span',
-    className: ['status'],
-    textContent: '',
-  });
-
-  if (message.senderId === currentUser.login) {
-    if (message.read) {
-      status.textContent = 'Read ✓✓';
-    } else if (message.delivered) {
-      status.textContent = 'Delivered ✓';
-    } else {
-      status.textContent = 'Sent';
-    }
-  }
-
-  header.append(sender, time);
-  footer.append(status);
-
-  if (message.senderId === currentUser.login && !messageContainer.dataset.handlersAttached) {
-    const editButton = createElement({
-      tag: 'button',
-      className: ['edit-btn'],
-      textContent: 'Edit',
-    });
-    const deleteButton = createElement({
-      tag: 'button',
-      className: ['delete-btn'],
-      textContent: 'Delete',
-    });
-
-    editButton.addEventListener('click', () => {
-      eventState.emit('dialogue:edit-message', { messageId: message.id, text: message.text });
-    });
-
-    deleteButton.addEventListener('click', () => {
-      messageController.deleteMessage(message.id);
-    });
-
-    footer.prepend(editButton, deleteButton);
-
-    messageContainer.dataset.handlersAttached = 'true';
-  }
-
-  const body: HTMLDivElement = createElement({ tag: 'div', className: ['message-body'] });
-  const textSpan: HTMLSpanElement = createElement({ tag: 'span', textContent: message.text });
-  body.append(textSpan);
-
-  if (message.edited) {
-    const edited: HTMLSpanElement = createElement({
-      tag: 'span',
-      className: ['edited'],
-      textContent: ' (edited)',
-    });
-    body.append(edited);
-  }
-
-  messageContainer.append(header, body, footer);
-  return messageContainer;
 }

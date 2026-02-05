@@ -19,6 +19,7 @@ export function app(): void {
     if (isLoggedIn && !isLoggedInOnServer && login && password) {
       requestLogin(userStore.state.login, userStore.state.password);
     }
+
     syncUnreadCounts();
   });
 

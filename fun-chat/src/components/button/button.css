@@ -23,7 +23,7 @@
   }
 }
 
-.button .active {
+.button:active {
   background-color: var(--color-button-active);
   transform: translateY(-2px);
 }

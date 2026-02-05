@@ -209,8 +209,8 @@
   background-color: #992b2b;
 }
 
-.edit-btn,
-.delete-btn {
+.edit-button,
+.delete-button {
   margin-left: 6px;
   border: none;
   font-size: 12px;
@@ -219,10 +219,23 @@
   cursor: pointer;
 }
 
-.edit-btn:hover {
+@media (hover: hover) and (pointer: fine) {
+  .edit-button:hover {
+    color: #4caf50;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .delete-button:hover {
+    color: #f44336;
+  }
+}
+
+.edit-button:active {
   color: #4caf50;
 }
-.delete-btn:hover {
+
+.delete-button:active {
   color: #f44336;
 }
 

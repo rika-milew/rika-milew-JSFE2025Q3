@@ -9,6 +9,7 @@ const ROUTES = new Set<Route>(['login', 'main', 'about']);
 
 function getRoute(): Route {
   const hash = location.hash.replace('#', '');
+
   if (isRoute(hash)) {
     return hash;
   }
