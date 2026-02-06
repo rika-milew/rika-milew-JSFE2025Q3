@@ -48,7 +48,7 @@ export function createMessageElement(
     className: ['message', message.senderId === currentUser.login ? 'sender' : 'recipient'],
   });
 
-  const header = createMessageHeader(message);
+  const header = createMessageHeader(message, currentUser);
 
   const footer = createMessageFooter(message, currentUser);
 
@@ -69,14 +69,15 @@ export function createMessageElement(
   return messageContainer;
 }
 
-function createMessageHeader(message: Message): HTMLDivElement {
+function createMessageHeader(message: Message, currentUser: { login: string }): HTMLDivElement {
   const header = createElement({ tag: 'div', className: ['message__header'] });
 
   const sender = createElement({
     tag: 'span',
     className: ['sender'],
-    textContent: message.senderName,
+    textContent: message.senderId === currentUser.login ? 'You' : message.senderName,
   });
+
   const time = createElement({
     tag: 'span',
     className: ['time'],
