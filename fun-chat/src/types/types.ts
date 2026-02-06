@@ -276,10 +276,22 @@ export type MessageContainer = {
 export type PopupOptions = {
   overlayClass: string;
   containerClass: string;
-  headingContent: string;
-  imageSrc: string;
-  animationDuration: number;
+  headingContent?: string;
+  imageSrc?: string;
+  clickToClose?: boolean;
+  closeButton?: boolean;
   messageContent?: (message: string) => string;
+};
+
+export type PopupElements = {
+  overlay: HTMLDivElement;
+  container: HTMLDivElement;
+  content: HTMLParagraphElement;
+  button?: HTMLButtonElement;
+};
+
+export type PopupController = {
+  show: (message: string, autoClose?: boolean, autoCloseDuration?: number) => void;
 };
 
 export type LoginView = {
