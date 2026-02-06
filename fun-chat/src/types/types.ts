@@ -338,6 +338,7 @@ export type UserLogin = {
 
 export type DialogueState = {
   dividerRemoved: boolean;
+  dividerElement?: HTMLDivElement | undefined;
 };
 
 export type BindDialogueEventsParams = {

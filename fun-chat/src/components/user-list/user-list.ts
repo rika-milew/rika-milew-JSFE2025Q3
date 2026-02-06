@@ -47,7 +47,7 @@ function createUserListContainer(container: HTMLElement): {
   const searchInput = createElement({
     tag: 'input',
     className: ['user-search'],
-    attributes: { placeholder: 'Search users...' },
+    attributes: { placeholder: 'Search users...', name: 'search', type: 'text' },
   });
 
   container.append(title, searchInput, list);

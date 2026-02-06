@@ -117,9 +117,9 @@ function createDialogueElements(recipient?: User): DialogueElements {
     className: ['messages'],
   });
 
-  messagesContainer.addEventListener('scroll', () => {
-    eventState.emit('dialogue:divider-remove');
-  });
+  // messagesContainer.addEventListener('scroll', () => {
+  //   eventState.emit('dialogue:divider-remove');
+  // });
 
   messagesContainer.addEventListener('click', () => {
     eventState.emit('dialogue:divider-remove');
@@ -135,7 +135,7 @@ export function createMessageInput(onSend: (text: string) => void): MessageInput
 
   const input: HTMLInputElement = createElement({
     tag: 'input',
-    attributes: { placeholder: 'Type a message...' },
+    attributes: { placeholder: 'Type a message...', name: 'message', type: 'text' },
   });
 
   const button: HTMLButtonElement = createButton({

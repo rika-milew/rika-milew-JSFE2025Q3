@@ -36,7 +36,10 @@ export function createMessagesList(
       messagesContainer.append(messageElement);
     });
 
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  messagesContainer.scrollTo({
+    top: messagesContainer.scrollHeight,
+    behavior: 'smooth',
+  });
 }
 
 export function createMessageElement(
