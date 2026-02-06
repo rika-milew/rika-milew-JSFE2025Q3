@@ -1,7 +1,5 @@
 import { initRouter } from '@/app/router';
-import { syncUnreadCounts } from '@/controller/message-controller';
-import { startWebsocket } from '@/server/connection';
-import { requestLogin } from '@/server/requests';
+import { startWebsocket, handleServerReconnect } from '@/server/connection';
 import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/events/event-state';
 import { userStore } from '@/store/user-store';
@@ -12,25 +10,7 @@ export function app(): void {
   initRouter(document.body);
 
   eventState.on('ws:connected', () => {
-    connectionStore.setConnected(true);
-
-    const {
-      login,
-      password,
-      isLoggedIn,
-      isLoggedInOnServer,
-    }: {
-      login: string;
-      password: string;
-      isLoggedIn: boolean;
-      isLoggedInOnServer: boolean;
-    } = userStore.state;
-
-    if (isLoggedIn && !isLoggedInOnServer && login && password) {
-      requestLogin(userStore.state.login, userStore.state.password);
-    }
-
-    syncUnreadCounts();
+    handleServerReconnect();
   });
 
   eventState.on('ws:disconnected', () => {

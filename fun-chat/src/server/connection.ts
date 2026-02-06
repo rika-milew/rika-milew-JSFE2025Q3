@@ -1,5 +1,11 @@
+import { errorPopup } from '@/components/popups/popups';
+import { syncUnreadCounts } from '@/controller/message-controller';
 import { handleResponse } from '@/server/reponses';
+import { requestLogin } from '@/server/requests';
+import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/events/event-state';
+import { messageStore } from '@/store/message-store';
+import { userStore, usersStore } from '@/store/user-store';
 import { isResponse } from '@/types/type-guards';
 
 let socket: WebSocket | undefined;
@@ -38,12 +44,14 @@ function connect(): void {
 
       if (!isResponse(parsed)) {
         console.error('Invalid websocket message shape', parsed);
+        errorPopup.show('Received invalid data format from the server');
         return;
       }
 
       handleResponse(parsed);
     } catch {
       console.error('Invalid websocket message', event.data);
+      errorPopup.show('Failed to process the message from the server');
     }
   });
 
@@ -68,4 +76,28 @@ function reconnect(): void {
   eventState.emit('ws:reconnecting', { attempt: reconnectAttempt });
 
   setTimeout(connect, Math.min(DELAY * reconnectAttempt, MAX_DELAY));
+}
+
+export function handleServerReconnect(): void {
+  connectionStore.setConnected(true);
+
+  const {
+    login,
+    password,
+    isLoggedIn,
+    isLoggedInOnServer,
+  }: {
+    login: string;
+    password: string;
+    isLoggedIn: boolean;
+    isLoggedInOnServer: boolean;
+  } = userStore.state;
+
+  if (isLoggedIn && !isLoggedInOnServer && login && password) {
+    requestLogin(login, password);
+  }
+
+  usersStore.reset();
+  messageStore.reset();
+  syncUnreadCounts();
 }

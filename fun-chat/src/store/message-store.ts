@@ -77,4 +77,10 @@ export const messageStore = {
 
     return state;
   },
+
+  reset(): void {
+    messages = [];
+    dialogueStates.clear();
+    eventState.emit('messages:changed');
+  },
 };

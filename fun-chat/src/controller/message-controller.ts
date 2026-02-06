@@ -99,7 +99,7 @@ export const messageController = {
     unreadRequests.set(id, login);
 
     const request: Request<'MSG_COUNT_NOT_READED_FROM_USER'> = {
-      id: crypto.randomUUID(),
+      id,
       type: 'MSG_COUNT_NOT_READED_FROM_USER',
       payload: {
         user: { login },

@@ -136,7 +136,10 @@ function logout(message: Response<'USER_LOGOUT'>): void {
 
 function handleError(message: Response<'ERROR'>): void {
   const { error }: ErrorResponse = message.payload;
-  errorPopup.show(error || SERVER_ERRORS.serverError);
+  errorPopup.show(
+    error ? error.charAt(0).toUpperCase() + error.slice(1) : SERVER_ERRORS.serverError,
+  );
+
   console.error(error || SERVER_ERRORS.serverError);
 }
 

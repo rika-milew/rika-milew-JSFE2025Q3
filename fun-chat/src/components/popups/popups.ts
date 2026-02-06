@@ -47,7 +47,6 @@ function createPopupElements(options: PopupOptions): PopupElements {
   }
 
   overlay.append(container);
-  document.body.append(overlay);
 
   return { overlay, container, content, button };
 }
