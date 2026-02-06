@@ -69,7 +69,7 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
   }
 
   if (isSendMessageResponse(message)) {
-    messageController.handleSendMessage(message);
+    messageController.handleMessage(message);
     return;
   }
 
@@ -94,12 +94,12 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
   }
 
   if (isMessageDeleteResponse(message)) {
-    messageController.handleServerDelete(message);
+    messageController.handleDelete(message);
     return;
   }
 
   if (isMessageEditResponse(message)) {
-    messageController.handleServerEdit(message);
+    messageController.handleEdit(message);
     return;
   }
 }

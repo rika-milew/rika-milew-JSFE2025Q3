@@ -4,17 +4,14 @@ import { eventState } from '@/store/events/event-state';
 import { messageStore } from '@/store/message-store';
 import { createElement } from '@/utils/create-element';
 
-import type { User, MessageInput } from '@/types/types';
+import type {
+  User,
+  MessageInput,
+  BindDialogueEventsParams,
+  BindRecipientEventsParams,
+} from '@/types/types';
 
-export function bindDialogueEvents(params: {
-  getRecipient: () => User | undefined;
-  setRecipient: (user: User) => void;
-  getEditingMessageId: () => string | undefined;
-  setEditingMessageId: (id: string | undefined) => void;
-  messageInput: MessageInput;
-  recipientStatus: HTMLElement;
-  renderMessages: (recipient: User) => void;
-}): void {
+export function bindDialogueEvents(params: BindDialogueEventsParams): void {
   const {
     getRecipient,
     setRecipient,
@@ -50,12 +47,7 @@ export function bindDialogueEvents(params: {
   });
 }
 
-function bindRecipientEvents(params: {
-  getRecipient: () => User | undefined;
-  setRecipient: (user: User) => void;
-  recipientStatus: HTMLElement;
-  renderMessages: (recipient: User) => void;
-}): void {
+function bindRecipientEvents(params: BindRecipientEventsParams): void {
   const { getRecipient, setRecipient, recipientStatus, renderMessages } = params;
 
   const withRecipient = (function_: (recipient: User) => void): void => {
@@ -72,29 +64,18 @@ function bindRecipientEvents(params: {
 
   eventState.on('dialogue:divider-remove', () => {
     withRecipient((recipient) => {
-      const state = messageStore.getDialogueState(recipient.login);
-
-      if (state.unreadDividerRemoved) {
-        return;
-      }
-
-      state.unreadDividerRemoved = true;
-      messageController.markAllAsReadForUser(recipient.login);
-      renderMessages(recipient);
+      handleDividerRemove(recipient, renderMessages);
     });
   });
 
   eventState.on('users:changed', (users) => {
     withRecipient((recipient) => {
-      if (!users) {
-        return;
-      }
-
-      const updatedUser = users.find((user) => user.login === recipient.login);
-      if (updatedUser) {
-        setRecipient(updatedUser);
-        updateRecipientStatus(recipientStatus, updatedUser);
-      }
+      handleUsersChanged({
+        users,
+        recipient,
+        setRecipient,
+        recipientStatus,
+      });
     });
   });
 }
@@ -149,9 +130,30 @@ export function updateDialogue(
   setMessageInput(true, messageInput);
 
   const dialogueState = messageStore.getDialogueState(user.login);
-  dialogueState.unreadDividerRemoved = false;
+  dialogueState.dividerRemoved = false;
 
   messageController.getMessagesFromUser(user.login);
+}
+
+function handleUsersChanged(params: {
+  users: User[] | undefined;
+  recipient: User;
+  setRecipient: (user: User) => void;
+  recipientStatus: HTMLElement;
+}): void {
+  const { users, recipient, setRecipient, recipientStatus } = params;
+
+  if (!users) {
+    return;
+  }
+
+  const updatedUser = users.find((user) => user.login === recipient.login);
+  if (!updatedUser) {
+    return;
+  }
+
+  setRecipient(updatedUser);
+  updateRecipientStatus(recipientStatus, updatedUser);
 }
 
 export function createDivider(): HTMLDivElement {
@@ -160,6 +162,18 @@ export function createDivider(): HTMLDivElement {
     className: ['divider'],
     textContent: 'Unread messages',
   });
+}
+
+function handleDividerRemove(recipient: User, renderMessages: (recipient: User) => void): void {
+  const state = messageStore.getDialogueState(recipient.login);
+
+  if (state.dividerRemoved) {
+    return;
+  }
+
+  state.dividerRemoved = true;
+  messageController.markAllRead(recipient.login);
+  renderMessages(recipient);
 }
 
 export function createMessages(params: {

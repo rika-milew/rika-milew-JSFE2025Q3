@@ -58,7 +58,7 @@ export const messageStore = {
     );
   },
 
-  setDialogWithUser(login: string, messagesFromServer: Message[]): void {
+  setDialog(login: string, messagesFromServer: Message[]): void {
     messages = [
       ...messages.filter((m) => m.senderId !== login && m.recipientId !== login),
       ...messagesFromServer,
@@ -71,7 +71,7 @@ export const messageStore = {
     let state = dialogueStates.get(login);
 
     if (!state) {
-      state = { unreadDividerRemoved: false };
+      state = { dividerRemoved: false };
       dialogueStates.set(login, state);
     }
 

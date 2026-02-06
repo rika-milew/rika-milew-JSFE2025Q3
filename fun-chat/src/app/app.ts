@@ -14,7 +14,17 @@ export function app(): void {
   eventState.on('ws:connected', () => {
     connectionStore.setConnected(true);
 
-    const { login, password, isLoggedIn, isLoggedInOnServer } = userStore.state;
+    const {
+      login,
+      password,
+      isLoggedIn,
+      isLoggedInOnServer,
+    }: {
+      login: string;
+      password: string;
+      isLoggedIn: boolean;
+      isLoggedInOnServer: boolean;
+    } = userStore.state;
 
     if (isLoggedIn && !isLoggedInOnServer && login && password) {
       requestLogin(userStore.state.login, userStore.state.password);

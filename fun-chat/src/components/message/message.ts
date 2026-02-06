@@ -27,7 +27,7 @@ export function createMessagesList(
         !divider &&
         !message.read &&
         message.senderId !== currentUser.login &&
-        !dialogueState.unreadDividerRemoved
+        !dialogueState.dividerRemoved
       ) {
         messagesContainer.append(createDivider());
         divider = true;
@@ -53,8 +53,8 @@ export function createMessageElement(
   const footer = createMessageFooter(message, currentUser);
 
   const body: HTMLDivElement = createElement({ tag: 'div', className: ['message-body'] });
-  const textSpan: HTMLSpanElement = createElement({ tag: 'span', textContent: message.text });
-  body.append(textSpan);
+  const text: HTMLSpanElement = createElement({ tag: 'span', textContent: message.text });
+  body.append(text);
 
   if (message.edited) {
     const edited: HTMLSpanElement = createElement({
@@ -113,6 +113,7 @@ function createMessageFooter(message: Message, currentUser: { login: string }): 
       className: ['edit-button'],
       textContent: 'Edit',
     });
+
     const deleteButton = createElement({
       tag: 'button',
       className: ['delete-button'],

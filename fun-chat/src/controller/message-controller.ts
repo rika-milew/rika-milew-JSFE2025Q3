@@ -22,29 +22,15 @@ export const messageController = {
     sendRequest(request);
   },
 
-  handleSendMessage(message: Response<'MSG_SEND'>): void {
+  handleMessage(message: Response<'MSG_SEND'>): void {
     const serverMessage = message.payload.message;
     const sendMessage: Message = mapServerMessage(serverMessage);
     messageStore.add(sendMessage);
 
     const from = message.payload.message.from;
     if (from !== userStore.state.login) {
-      messageController.getUnreadCountFromUser(from);
+      messageController.getUnreadCount(from);
     }
-  },
-
-  handleMessagesFromUser(message: Response<'MSG_FROM_USER'>): void {
-    const serverMessages = message.payload.messages;
-    const mapped: Message[] = serverMessages.map((message) => mapServerMessage(message));
-
-    if (mapped.length === 0) {
-      return;
-    }
-
-    const otherUserLogin =
-      mapped[0].senderId === userStore.state.login ? mapped[0].recipientId : mapped[0].senderId;
-
-    messageStore.setDialogWithUser(otherUserLogin, mapped);
   },
 
   getMessagesFromUser(login: string): void {
@@ -60,8 +46,39 @@ export const messageController = {
     sendRequest(request);
   },
 
+  handleMessagesFromUser(message: Response<'MSG_FROM_USER'>): void {
+    const serverMessages = message.payload.messages;
+    const mapped: Message[] = serverMessages.map((message) => mapServerMessage(message));
+
+    if (mapped.length === 0) {
+      return;
+    }
+
+    const otherUserLogin =
+      mapped[0].senderId === userStore.state.login ? mapped[0].recipientId : mapped[0].senderId;
+
+    messageStore.setDialog(otherUserLogin, mapped);
+  },
+
   markDelivered(messageId: string): void {
     messageStore.markDelivered(messageId);
+  },
+
+  markRead(messageId: string): void {
+    messageStore.markRead(messageId);
+  },
+
+  markAllRead(login: string): void {
+    const currentLogin: string = userStore.state.login;
+    const messages = messageStore.getDialog({ login: currentLogin }, { login });
+
+    messages
+      .filter((message) => !message.read && message.senderId === login)
+      .forEach((message) => {
+        this.sendReadStatus(message.id);
+      });
+
+    usersStore.updateUnreadCount(login, 0);
   },
 
   sendReadStatus(messageId: string): void {
@@ -76,21 +93,32 @@ export const messageController = {
     messageStore.markRead(messageId);
   },
 
-  markRead(messageId: string): void {
-    messageStore.markRead(messageId);
+  getUnreadCount(login: string): void {
+    const id = crypto.randomUUID();
+
+    unreadRequests.set(id, login);
+
+    const request: Request<'MSG_COUNT_NOT_READED_FROM_USER'> = {
+      id: crypto.randomUUID(),
+      type: 'MSG_COUNT_NOT_READED_FROM_USER',
+      payload: {
+        user: { login },
+      },
+    };
+    sendRequest(request);
   },
 
-  markAllAsReadForUser(login: string): void {
-    const currentLogin: string = userStore.state.login;
-    const messages = messageStore.getDialog({ login: currentLogin }, { login });
+  handleUnreadCount(message: Response<'MSG_COUNT_NOT_READED_FROM_USER'>): void {
+    if (message.id === null) {
+      return;
+    }
+    const login = unreadRequests.get(message.id);
+    if (!login) {
+      return;
+    }
 
-    messages
-      .filter((message) => !message.read && message.senderId === login)
-      .forEach((message) => {
-        this.sendReadStatus(message.id);
-      });
-
-    usersStore.updateUnreadCount(login, 0);
+    usersStore.updateUnreadCount(login, message.payload.count);
+    unreadRequests.delete(message.id);
   },
 
   deleteMessage(messageId: string): void {
@@ -109,14 +137,16 @@ export const messageController = {
         usersStore.updateUnreadCount(recipientLogin, recipientState.unreadCount - 1);
       }
     }
-    sendRequest({
+
+    const request: Request<'MSG_DELETE'> = {
       id: crypto.randomUUID(),
       type: 'MSG_DELETE',
       payload: { message: { id: messageId } },
-    });
+    };
+    sendRequest(request);
   },
 
-  handleServerDelete(message: Response<'MSG_DELETE'>): void {
+  handleDelete(message: Response<'MSG_DELETE'>): void {
     const serverMessageId = message.payload.message.id;
 
     const deleteMessage = messageStore.state.find((m) => m.id === serverMessageId);
@@ -133,49 +163,24 @@ export const messageController = {
     }
   },
 
-  getUnreadCountFromUser(login: string): void {
-    const id = crypto.randomUUID();
-
-    unreadRequests.set(id, login);
-
-    sendRequest({
-      id,
-      type: 'MSG_COUNT_NOT_READED_FROM_USER',
-      payload: {
-        user: { login },
-      },
-    });
-  },
-
   editMessage(messageId: string, newText: string): void {
     const message = messageStore.state.find((m) => m.id === messageId);
 
     if (message?.senderId !== userStore.state.login) {
       return;
     }
-    sendRequest({
+
+    const request: Request<'MSG_EDIT'> = {
       id: crypto.randomUUID(),
       type: 'MSG_EDIT',
       payload: { message: { id: messageId, text: newText } },
-    });
+    };
+    sendRequest(request);
   },
 
-  handleServerEdit(message: Response<'MSG_EDIT'>): void {
+  handleEdit(message: Response<'MSG_EDIT'>): void {
     const serverMessage = message.payload.message;
     messageStore.edit(serverMessage.id, serverMessage.text);
-  },
-
-  handleUnreadCount(message: Response<'MSG_COUNT_NOT_READED_FROM_USER'>): void {
-    if (message.id === null) {
-      return;
-    }
-    const login = unreadRequests.get(message.id);
-    if (!login) {
-      return;
-    }
-
-    usersStore.updateUnreadCount(login, message.payload.count);
-    unreadRequests.delete(message.id);
   },
 };
 
@@ -206,6 +211,6 @@ function mapServerMessage(serverMessage: {
 
 export function syncUnreadCounts(): void {
   usersStore.get().forEach((user) => {
-    messageController.getUnreadCountFromUser(user.login);
+    messageController.getUnreadCount(user.login);
   });
 }

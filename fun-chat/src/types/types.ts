@@ -337,7 +337,24 @@ export type UserLogin = {
 };
 
 export type DialogueState = {
-  unreadDividerRemoved: boolean;
+  dividerRemoved: boolean;
+};
+
+export type BindDialogueEventsParams = {
+  getRecipient: () => User | undefined;
+  setRecipient: (user: User) => void;
+  getEditingMessageId: () => string | undefined;
+  setEditingMessageId: (id: string | undefined) => void;
+  messageInput: MessageInput;
+  recipientStatus: HTMLElement;
+  renderMessages: (recipient: User) => void;
+};
+
+export type BindRecipientEventsParams = {
+  getRecipient: () => User | undefined;
+  setRecipient: (user: User) => void;
+  recipientStatus: HTMLElement;
+  renderMessages: (recipient: User) => void;
 };
 
 // state
