@@ -1,4 +1,4 @@
-import { eventState } from './events/event-state';
+import { eventState } from './event-state';
 
 import type { UserState, User } from '@/types/types';
 

@@ -1,6 +1,6 @@
 import { createMessagesList } from '@/components/message/message';
 import { messageController } from '@/controller/message-controller';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { messageStore } from '@/store/message-store';
 import { createElement } from '@/utils/create-element';
 

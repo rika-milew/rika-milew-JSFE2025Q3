@@ -7,7 +7,7 @@ import {
   createMessages,
 } from '@/components/dialogue/helpers/helpers';
 import { messageController } from '@/controller/message-controller';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { userStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 

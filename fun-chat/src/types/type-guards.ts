@@ -32,7 +32,7 @@ export function isSendMessageResponse(message: Response): message is Response<'M
   return message.type === 'MSG_SEND';
 }
 
-export function isFromUserResponse(message: Response): message is Response<'MSG_FROM_USER'> {
+export function isMessageFromUserResponse(message: Response): message is Response<'MSG_FROM_USER'> {
   return message.type === 'MSG_FROM_USER';
 }
 

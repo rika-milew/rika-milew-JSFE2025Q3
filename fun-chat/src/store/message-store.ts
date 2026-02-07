@@ -1,8 +1,9 @@
-import { eventState } from './events/event-state';
+import { eventState } from './event-state';
 
 import type { Message, UserLogin, DialogueState } from '@/types/types';
 
 let messages: Message[] = [];
+
 const dialogueStates = new Map<string, DialogueState>();
 
 export const messageStore = {

@@ -43,6 +43,12 @@ export type ButtonConfig = {
 
 // server
 
+export type Request<T extends keyof RequestMap = keyof RequestMap> = {
+  id: string;
+  type: T;
+  payload: RequestMap[T];
+};
+
 export type RequestMap = {
   USER_LOGIN: LoginPayload;
   USER_LOGOUT: LogoutPayload;
@@ -56,10 +62,10 @@ export type RequestMap = {
   MSG_EDIT: MessageEditingRequest;
 };
 
-export type Request<T extends keyof RequestMap = keyof RequestMap> = {
-  id: string;
+export type Response<T extends keyof ResponseMap = keyof ResponseMap> = {
+  id: string | null;
   type: T;
-  payload: RequestMap[T];
+  payload: ResponseMap[T];
 };
 
 export type ResponseMap = {
@@ -79,18 +85,23 @@ export type ResponseMap = {
   MSG_EDIT: MessageEditingResponse;
 };
 
-export type Response<T extends keyof ResponseMap = keyof ResponseMap> = {
-  id: string | null;
-  type: T;
-  payload: ResponseMap[T];
-};
-
 // server requests and responses
+
+export type ErrorResponse = {
+  error: string;
+};
 
 export type LoginPayload = {
   user: {
     login: string;
     password: string;
+  };
+};
+
+export type LoginResponse = {
+  user: {
+    login: string;
+    isLogined: boolean;
   };
 };
 
@@ -101,11 +112,54 @@ export type LogoutPayload = {
   };
 };
 
+export type LogoutResponse = {
+  user: {
+    login: string;
+    isLogined: boolean;
+  };
+};
+
+export type ExternalAuthResponse = {
+  user: {
+    login: string;
+    isLogined: boolean;
+  };
+};
+
+export type UserActiveResponse = {
+  users: AuthenticatedUser[];
+};
+
 export type SendMessageRequest = {
   message: {
     to: string;
     text: string;
   };
+};
+
+export type SendMessageResponse = {
+  message: {
+    id: string;
+    from: string;
+    to: string;
+    text: string;
+    datetime: number;
+    status: {
+      isDelivered: boolean;
+      isReaded: boolean;
+      isEdited: boolean;
+    };
+  };
+};
+
+export type MessageHistoryRequest = {
+  user: {
+    login: string;
+  };
+};
+
+export type MessageHistoryResponse = {
+  messages: [];
 };
 
 export type UnreadMessagesRequest = {
@@ -114,9 +168,31 @@ export type UnreadMessagesRequest = {
   };
 };
 
+export type UnreadMessagesResponse = {
+  count: number;
+};
+
+export type MessageDeliveryResponse = {
+  message: {
+    id: string;
+    status: {
+      isDelivered: boolean;
+    };
+  };
+};
+
 export type ReadStatusRequest = {
   message: {
     id: string;
+  };
+};
+
+export type ReadStatusResponse = {
+  message: {
+    id: string;
+    status: {
+      isReaded: boolean;
+    };
   };
 };
 
@@ -152,82 +228,6 @@ export type MessageEditingResponse = {
   };
 };
 
-export type ReadStatusResponse = {
-  message: {
-    id: string;
-    status: {
-      isReaded: boolean;
-    };
-  };
-};
-
-export type UnreadMessagesResponse = {
-  count: number;
-};
-
-export type SendMessageResponse = {
-  message: {
-    id: string;
-    from: string;
-    to: string;
-    text: string;
-    datetime: number;
-    status: {
-      isDelivered: boolean;
-      isReaded: boolean;
-      isEdited: boolean;
-    };
-  };
-};
-
-export type MessageDeliveryResponse = {
-  message: {
-    id: string;
-    status: {
-      isDelivered: boolean;
-    };
-  };
-};
-
-export type MessageHistoryRequest = {
-  user: {
-    login: string;
-  };
-};
-
-export type MessageHistoryResponse = {
-  messages: [];
-};
-
-export type LoginResponse = {
-  user: {
-    login: string;
-    isLogined: boolean;
-  };
-};
-
-export type ErrorResponse = {
-  error: string;
-};
-
-export type LogoutResponse = {
-  user: {
-    login: string;
-    isLogined: boolean;
-  };
-};
-
-export type ExternalAuthResponse = {
-  user: {
-    login: string;
-    isLogined: boolean;
-  };
-};
-
-export type UserActiveResponse = {
-  users: AuthenticatedUser[];
-};
-
 export type ServerMessage = {
   id: string;
   from: string;
@@ -242,6 +242,8 @@ export type ServerMessage = {
 };
 
 // app
+
+export type Route = 'login' | 'main' | 'about';
 
 export type User = {
   login: string;
@@ -265,13 +267,17 @@ export type Message = {
   read: boolean;
 };
 
+export type UserLogin = {
+  login: string;
+};
+
+// ui
+
 export type MessageContainer = {
   container: HTMLElement;
   render: (recipient: User) => void;
   setRecipient: (recipient: User) => void;
 };
-
-// elements
 
 export type PopupOptions = {
   overlayClass: string;
@@ -316,30 +322,11 @@ export type DialogueElements = {
   recipientStatus: HTMLSpanElement;
 };
 
-export type Route = 'login' | 'main' | 'about';
-
-export type SoundTypes = 'notification' | 'button';
-
-export type AudioPlayer = {
-  stopSound: (id: SoundTypes) => void;
-  stopAllSounds: () => void;
-  toggleMute: () => void;
-  isMuted: boolean;
-  playOnce: (id: SoundTypes) => void;
-};
-
 export type UserList = {
   render: (users: User[]) => void;
 };
 
-export type UserLogin = {
-  login: string;
-};
-
-export type DialogueState = {
-  dividerRemoved: boolean;
-  dividerElement?: HTMLDivElement | undefined;
-};
+// params
 
 export type BindDialogueEventsParams = {
   getRecipient: () => User | undefined;
@@ -380,4 +367,9 @@ export type UserState = {
     login?: string;
     password?: string;
   };
+};
+
+export type DialogueState = {
+  dividerRemoved: boolean;
+  dividerElement?: HTMLDivElement | undefined;
 };

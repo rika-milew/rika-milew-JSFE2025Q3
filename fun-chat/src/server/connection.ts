@@ -3,12 +3,13 @@ import { syncUnreadCounts } from '@/controller/message-controller';
 import { handleResponse } from '@/server/reponses';
 import { requestLogin } from '@/server/requests';
 import { connectionStore } from '@/store/connection-store';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { messageStore } from '@/store/message-store';
 import { userStore, usersStore } from '@/store/user-store';
 import { isResponse } from '@/types/type-guards';
 
 let socket: WebSocket | undefined;
+let reconnectTimeout: ReturnType<typeof setTimeout> | undefined;
 let reconnectAttempt = 0;
 let manuallyClosed = false;
 
@@ -75,10 +76,14 @@ function reconnect(): void {
   reconnectAttempt += 1;
   eventState.emit('ws:reconnecting', { attempt: reconnectAttempt });
 
-  setTimeout(connect, Math.min(DELAY * reconnectAttempt, MAX_DELAY));
+  if (reconnectTimeout) {
+    clearTimeout(reconnectTimeout);
+  }
+
+  reconnectTimeout = setTimeout(connect, Math.min(DELAY * reconnectAttempt, MAX_DELAY));
 }
 
-export function handleServerReconnect(): void {
+export function handleReconnect(): void {
   connectionStore.setConnected(true);
 
   const {

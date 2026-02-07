@@ -1,4 +1,4 @@
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 
 import type { ConnectionStore } from '@/types/types';
 

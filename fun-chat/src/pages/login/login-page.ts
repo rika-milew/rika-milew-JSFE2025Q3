@@ -1,7 +1,7 @@
 import { navigate } from '@/app/router';
 import { createButton } from '@/components/button/button';
 import { login } from '@/pages/login/helpers/auth-requests';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { userStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 import { validate } from '@/utils/validate';

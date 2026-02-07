@@ -65,3 +65,8 @@ export function requestInactiveUsers(): void {
 
   sendRequest(request);
 }
+
+export function requestAllUsers(): void {
+  requestActiveUsers();
+  requestInactiveUsers();
+}

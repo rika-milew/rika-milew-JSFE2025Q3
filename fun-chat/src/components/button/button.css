@@ -5,9 +5,9 @@
   font-size: 16px;
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-  color: var(--color-text-button-1);
+  color: var(--color-text-button);
   text-align: center;
-  background-color: var(--color-button-1);
+  background-color: var(--color-button);
   cursor: pointer;
   transition:
     background-color 0.2s,

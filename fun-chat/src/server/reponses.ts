@@ -2,7 +2,7 @@ import { navigate } from '@/app/router';
 import { errorPopup, notificationPopup } from '@/components/popups/popups';
 import { SERVER_ERRORS } from '@/constants/errors';
 import { messageController, syncUnreadCounts } from '@/controller/message-controller';
-import { requestActiveUsers, requestInactiveUsers } from '@/server/requests';
+import { requestAllUsers } from '@/server/requests';
 import { userStore, usersStore } from '@/store/user-store';
 import {
   isLoginResponse,
@@ -13,7 +13,7 @@ import {
   isUserActiveResponse,
   isUserInactiveResponse,
   isSendMessageResponse,
-  isFromUserResponse,
+  isMessageFromUserResponse,
   isMessageDeliverResponse,
   isMessageNotReadResponse,
   isMessageReadResponse,
@@ -73,7 +73,7 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
     return;
   }
 
-  if (isFromUserResponse(message)) {
+  if (isMessageFromUserResponse(message)) {
     messageController.handleMessagesFromUser(message);
     return;
   }
@@ -110,9 +110,8 @@ function login(message: Response<'USER_LOGIN'>): void {
   if (user.isLogined) {
     userStore.loginUser();
     userStore.setServerLogin(true);
-    requestActiveUsers();
-    requestInactiveUsers();
 
+    requestAllUsers();
     syncUnreadCounts();
 
     navigate('main', document.body);
@@ -130,6 +129,7 @@ function logout(message: Response<'USER_LOGOUT'>): void {
     userStore.logoutUser();
     userStore.setServerLogin(false);
     usersStore.set([]);
+
     navigate('login', document.body);
   }
 }
@@ -150,8 +150,7 @@ function externalLogin(message: Response<'USER_EXTERNAL_LOGIN'>): void {
     return;
   }
 
-  requestActiveUsers();
-  requestInactiveUsers();
+  requestAllUsers();
   notificationPopup.show(`User ${user.login} logged in`);
 }
 
@@ -162,8 +161,7 @@ function externalLogout(message: Response<'USER_EXTERNAL_LOGOUT'>): void {
     return;
   }
 
-  requestActiveUsers();
-  requestInactiveUsers();
+  requestAllUsers();
   notificationPopup.show(`User ${user.login} logged out`);
 }
 

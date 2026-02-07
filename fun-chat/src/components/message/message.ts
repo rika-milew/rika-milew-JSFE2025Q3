@@ -1,6 +1,6 @@
 import { createEmptyNotice, createDivider } from '@/components/dialogue/helpers/helpers';
 import { messageController } from '@/controller/message-controller';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { createElement } from '@/utils/create-element';
 
 import type { Message, DialogueState } from '@/types/types';

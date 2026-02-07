@@ -1,5 +1,5 @@
 import { createButton } from '@/components/button/button';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { createElement } from '@/utils/create-element';
 
 import type { PopupOptions, PopupElements, PopupController } from '@/types/types';
