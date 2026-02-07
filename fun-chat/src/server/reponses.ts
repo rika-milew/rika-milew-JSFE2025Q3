@@ -114,6 +114,13 @@ function login(message: Response<'USER_LOGIN'>): void {
     requestAllUsers();
     syncUnreadCounts();
 
+    const allUsers = usersStore.get();
+    allUsers.forEach((user) => {
+      if (user.login !== userStore.state.login) {
+        messageController.getMessagesFromUser(user.login);
+      }
+    });
+
     navigate('main', document.body);
   } else {
     errorPopup.show(SERVER_ERRORS.loginFailed);

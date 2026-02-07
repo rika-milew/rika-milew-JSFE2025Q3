@@ -6,7 +6,7 @@ import type { PopupOptions, PopupElements, PopupController } from '@/types/types
 
 import './popups.css';
 
-const AUTO_CLOSE_DURATION = 2000;
+const AUTO_CLOSE_DURATION = 1500;
 
 export function createPopup(options: PopupOptions): {
   show: (message: string, autoClose?: boolean, autoCloseDuration?: number) => void;

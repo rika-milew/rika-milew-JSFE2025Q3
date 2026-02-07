@@ -57,6 +57,23 @@ export const messageController = {
     const otherUserLogin =
       mapped[0].senderId === userStore.state.login ? mapped[0].recipientId : mapped[0].senderId;
 
+    const existingMessages = messageStore.getDialog(
+      { login: userStore.state.login },
+      { login: otherUserLogin },
+    );
+
+    const allMessages = [...existingMessages, ...mapped];
+
+    allMessages.forEach((message) => {
+      if (!message.delivered && !message.read) {
+        const recipient = usersStore.getUserState(message.recipientId);
+        if (recipient?.isOnline || message.recipientId === userStore.state.login) {
+          message.delivered = true;
+          messageController.markDelivered(message.id);
+        }
+      }
+    });
+
     messageStore.setDialog(otherUserLogin, mapped);
   },
 
