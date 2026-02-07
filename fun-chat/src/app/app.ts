@@ -1,4 +1,5 @@
 import { initRouter } from '@/app/router';
+import { createConnectionPopup } from '@/components/popups/popups';
 import { startWebsocket, handleServerReconnect } from '@/server/connection';
 import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/events/event-state';
@@ -6,6 +7,7 @@ import { userStore } from '@/store/user-store';
 
 export function app(): void {
   startWebsocket();
+  createConnectionPopup();
 
   initRouter(document.body);
 

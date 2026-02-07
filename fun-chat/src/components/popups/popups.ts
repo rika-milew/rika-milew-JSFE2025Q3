@@ -83,6 +83,10 @@ function usePopup(elements: PopupElements, options: PopupOptions): PopupControll
     autoClose?: boolean,
     autoCloseDuration = AUTO_CLOSE_DURATION,
   ): void {
+    if (!message) {
+      return;
+    }
+
     if (!document.body.contains(overlay)) {
       document.body.append(overlay);
     }
@@ -105,10 +109,14 @@ function usePopup(elements: PopupElements, options: PopupOptions): PopupControll
   return { show };
 }
 
-export const connectionPopup: PopupController = ((): PopupController => {
-  const popup: {
-    show: (message: string, autoClose?: boolean, autoCloseDuration?: number) => void;
-  } = createPopup({
+let connectionPopup: PopupController | undefined;
+
+export function createConnectionPopup(): PopupController {
+  if (connectionPopup) {
+    return connectionPopup;
+  }
+
+  const popup: PopupController = createPopup({
     overlayClass: 'popup-overlay',
     containerClass: 'popup connection-popup',
     imageSrc: 'icons/turbo.svg',
@@ -129,8 +137,9 @@ export const connectionPopup: PopupController = ((): PopupController => {
     }
   });
 
+  connectionPopup = popup;
   return popup;
-})();
+}
 
 export const notificationPopup: PopupController = createPopup({
   overlayClass: 'popup-overlay',
