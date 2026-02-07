@@ -8,9 +8,7 @@ import './popups.css';
 
 const AUTO_CLOSE_DURATION = 1500;
 
-export function createPopup(options: PopupOptions): {
-  show: (message: string, autoClose?: boolean, autoCloseDuration?: number) => void;
-} {
+export function createPopup(options: PopupOptions): PopupController {
   const elements = createPopupElements(options);
   return usePopup(elements, options);
 }
@@ -64,6 +62,10 @@ function usePopup(elements: PopupElements, options: PopupOptions): PopupControll
       clearTimeout(timeout);
       timeout = undefined;
     }
+
+    if (overlay.parentElement) {
+      overlay.remove();
+    }
   }
 
   if (clickToClose) {
@@ -87,9 +89,7 @@ function usePopup(elements: PopupElements, options: PopupOptions): PopupControll
       return;
     }
 
-    if (!document.body.contains(overlay)) {
-      document.body.append(overlay);
-    }
+    document.body.append(overlay);
 
     content.textContent = messageContent ? messageContent(message) : message;
 
@@ -106,20 +106,14 @@ function usePopup(elements: PopupElements, options: PopupOptions): PopupControll
     }
   }
 
-  return { show };
+  return { show, hide };
 }
 
-let connectionPopup: PopupController | undefined;
-
-export function createConnectionPopup(): PopupController {
-  if (connectionPopup) {
-    return connectionPopup;
-  }
-
-  const popup: PopupController = createPopup({
+export function createReconnectionPopup(): PopupController & { hide: () => void } {
+  const popup = createPopup({
     overlayClass: 'popup-overlay',
     containerClass: 'popup connection-popup',
-    imageSrc: 'icons/turbo.svg',
+    imageSrc: 'icons/reconnect.svg',
     clickToClose: false,
     closeButton: false,
     messageContent: (message) => message,
@@ -129,17 +123,23 @@ export function createConnectionPopup(): PopupController {
     if (!state) {
       return;
     }
-
-    if (state.connected) {
-      popup.show('Connection restored', true, AUTO_CLOSE_DURATION);
-    } else {
+    if (!state.connected) {
       popup.show('Connection lost. Reconnecting...', false);
+    } else {
+      popup.hide();
     }
   });
 
-  connectionPopup = popup;
   return popup;
 }
+
+export const connectionPopup: PopupController = createPopup({
+  overlayClass: 'popup-overlay',
+  containerClass: 'popup connection-popup',
+  imageSrc: 'icons/turbo.svg',
+  clickToClose: true,
+  closeButton: true,
+});
 
 export const notificationPopup: PopupController = createPopup({
   overlayClass: 'popup-overlay',

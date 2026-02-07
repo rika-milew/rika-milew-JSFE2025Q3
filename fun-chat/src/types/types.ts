@@ -298,6 +298,7 @@ export type PopupElements = {
 
 export type PopupController = {
   show: (message: string, autoClose?: boolean, autoCloseDuration?: number) => void;
+  hide: () => void;
 };
 
 export type LoginView = {

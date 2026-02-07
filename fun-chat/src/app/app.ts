@@ -1,5 +1,5 @@
 import { initRouter } from '@/app/router';
-import { createConnectionPopup } from '@/components/popups/popups';
+import { connectionPopup, createReconnectionPopup } from '@/components/popups/popups';
 import { startWebsocket, handleReconnect } from '@/server/connection';
 import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/event-state';
@@ -7,7 +7,7 @@ import { userStore } from '@/store/user-store';
 
 export function app(): void {
   startWebsocket();
-  createConnectionPopup();
+  createReconnectionPopup();
 
   initRouter(document.body);
 
@@ -23,5 +23,14 @@ export function app(): void {
 
   eventState.on('ws:reconnecting', () => {
     connectionStore.setReconnecting();
+  });
+
+  eventState.on('connection:changed', (state) => {
+    if (!state) {
+      return;
+    }
+    if (state.connected) {
+      connectionPopup.show('Connection restored');
+    }
   });
 }
