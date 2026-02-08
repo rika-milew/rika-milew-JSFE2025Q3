@@ -1,5 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-cd fun-chat
-npx lint-staged
+npx --prefix fun-chat lint-staged
