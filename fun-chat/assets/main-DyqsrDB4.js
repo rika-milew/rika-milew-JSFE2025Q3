@@ -1747,6 +1747,9 @@ function getRoute() {
   return "login";
 }
 function initRouter(container) {
+  if (!location.hash) {
+    history.replaceState({}, "", "#login");
+  }
   const initialRoute = getRoute();
   const resolvedRoute = resolveRoute(initialRoute);
   history.replaceState({ route: resolvedRoute }, "", `#${resolvedRoute}`);
@@ -1829,4 +1832,4 @@ function app() {
 document.addEventListener("DOMContentLoaded", () => {
   app();
 });
-//# sourceMappingURL=main-Cmr2jkXQ.js.map
+//# sourceMappingURL=main-DyqsrDB4.js.map
