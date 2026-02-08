@@ -1,10 +1,12 @@
 import { LOGIN_ERRORS, PASSWORD_ERRORS } from './errors';
 
+import type { ValidationRules } from '@/types/types';
+
 const MIN_LOGIN_LENGTH = 3;
 const MAX_LOGIN_LENGTH = 15;
 const PASSWORD_LENGTH = 8;
 
-export const VALIDATION_RULES = {
+export const VALIDATION_RULES: ValidationRules = {
   login: [
     { test: (value: string): boolean => value.length > 0, error: LOGIN_ERRORS.empty },
     {

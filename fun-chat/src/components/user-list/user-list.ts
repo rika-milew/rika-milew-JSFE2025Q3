@@ -13,12 +13,13 @@ export function createUserList({
   container: HTMLElement;
   users: User[];
 }): UserList {
-  const { list, searchInput } = createUserListContainer(container);
+  const { list, searchInput }: { list: HTMLUListElement; searchInput: HTMLInputElement } =
+    createUserListContainer(container);
 
   let search = '';
   const caseSensitive = false;
 
-  searchInput.addEventListener('input', () => {
+  searchInput.addEventListener('input', (_event: Event) => {
     search = searchInput.value;
     createList(list, usersStore.get(), search, caseSensitive);
   });
@@ -44,7 +45,7 @@ function createUserListContainer(container: HTMLElement): {
     className: ['list-title'],
   });
 
-  const searchInput = createElement({
+  const searchInput: HTMLInputElement = createElement({
     tag: 'input',
     className: ['user-search'],
     attributes: { placeholder: 'Search users...', name: 'search', type: 'text' },
@@ -62,7 +63,7 @@ function createList(
   caseSensitive = false,
 ): void {
   list.replaceChildren();
-  const filteredUsers = filterUsers(users, search, caseSensitive);
+  const filteredUsers: User[] = filterUsers(users, search, caseSensitive);
 
   filteredUsers.forEach((user) => {
     list.append(createItem(user));
@@ -97,7 +98,7 @@ function createItem(user: User): HTMLLIElement {
     item.append(unread);
   }
 
-  item.addEventListener('click', () => {
+  item.addEventListener('click', (_event: Event) => {
     eventState.emit('users:selected', { login: user.login });
   });
 

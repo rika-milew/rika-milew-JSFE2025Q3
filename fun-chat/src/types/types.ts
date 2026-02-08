@@ -327,6 +327,15 @@ export type UserList = {
   render: (users: User[]) => void;
 };
 
+export type AboutPageTextType = {
+  title: string;
+  introduction: string;
+  description: string;
+  featuresTitle: string;
+  features: string[];
+  conclusion: string;
+};
+
 // params
 
 export type BindDialogueEventsParams = {
@@ -373,4 +382,36 @@ export type UserState = {
 export type DialogueState = {
   dividerRemoved: boolean;
   dividerElement?: HTMLDivElement | undefined;
+};
+
+// constants
+
+export type LoginErrorKey = 'empty' | 'invalidChars' | 'tooShort' | 'sameAsPassword' | 'tooLong';
+
+export type LoginErrors = Record<LoginErrorKey, string>;
+
+export type PasswordErrorKey =
+  | 'empty'
+  | 'tooShort'
+  | 'noUpper'
+  | 'noLower'
+  | 'noDigit'
+  | 'noSpecial'
+  | 'invalidChars'
+  | 'sameAsLogin';
+
+export type PasswordErrors = Record<PasswordErrorKey, string>;
+
+export type ServerErrorKey = 'loginFailed' | 'logoutFailed' | 'serverError';
+
+export type ServerErrors = Record<ServerErrorKey, string>;
+
+export type ValidationRule = {
+  test: (value: string, login?: string) => boolean;
+  error: string;
+};
+
+export type ValidationRules = {
+  login: ValidationRule[];
+  password: ValidationRule[];
 };

@@ -47,7 +47,7 @@ export function createHeader(page: string): HTMLElement {
       text: 'About',
     });
 
-    aboutButton.addEventListener('click', () => {
+    aboutButton.addEventListener('click', (_event: MouseEvent) => {
       navigate('about', document.body);
     });
 

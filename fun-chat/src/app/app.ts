@@ -5,6 +5,8 @@ import { connectionStore } from '@/store/connection-store';
 import { eventState } from '@/store/event-state';
 import { userStore } from '@/store/user-store';
 
+import type { ConnectionState } from '@/types/types';
+
 export function app(): void {
   startWebsocket();
   createReconnectionPopup();
@@ -25,7 +27,7 @@ export function app(): void {
     connectionStore.setReconnecting();
   });
 
-  eventState.on('connection:changed', (state) => {
+  eventState.on('connection:changed', (state?: ConnectionState) => {
     if (!state) {
       return;
     }

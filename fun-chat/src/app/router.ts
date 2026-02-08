@@ -5,7 +5,7 @@ import { userStore } from '@/store/user-store';
 
 import type { Route } from '@/types/types';
 
-const ROUTES = new Set<Route>(['login', 'main', 'about']);
+const ROUTES: ReadonlySet<Route> = new Set<Route>(['login', 'main', 'about']);
 
 function getRoute(): Route {
   const hash: string = location.hash.replace('#', '');

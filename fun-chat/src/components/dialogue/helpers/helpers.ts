@@ -9,6 +9,8 @@ import type {
   MessageInput,
   BindDialogueEventsParams,
   BindRecipientEventsParams,
+  DialogueState,
+  Message,
 } from '@/types/types';
 
 export function bindDialogueEvents(params: BindDialogueEventsParams): void {
@@ -19,6 +21,13 @@ export function bindDialogueEvents(params: BindDialogueEventsParams): void {
     messageInput,
     recipientStatus,
     renderMessages,
+  }: {
+    getRecipient: () => User | undefined;
+    setRecipient: (user: User) => void;
+    setEditingMessageId: (id?: string) => void;
+    messageInput: MessageInput;
+    recipientStatus: HTMLElement;
+    renderMessages: (recipient: User) => void;
   } = params;
 
   bindRecipientEvents({
@@ -28,7 +37,7 @@ export function bindDialogueEvents(params: BindDialogueEventsParams): void {
     renderMessages,
   });
 
-  eventState.on('dialogue:edit-message', (payload) => {
+  eventState.on('dialogue:edit-message', (payload?: { messageId: string; text: string }) => {
     if (!payload) {
       return;
     }
@@ -48,10 +57,20 @@ export function bindDialogueEvents(params: BindDialogueEventsParams): void {
 }
 
 function bindRecipientEvents(params: BindRecipientEventsParams): void {
-  const { getRecipient, setRecipient, recipientStatus, renderMessages } = params;
+  const {
+    getRecipient,
+    setRecipient,
+    recipientStatus,
+    renderMessages,
+  }: {
+    getRecipient: () => User | undefined;
+    setRecipient: (user: User) => void;
+    recipientStatus: HTMLElement;
+    renderMessages: (recipient: User) => void;
+  } = params;
 
-  const withRecipient = (function_: (recipient: User) => void): void => {
-    const recipient = getRecipient();
+  const withRecipient: (function_: (recipient: User) => void) => void = (function_) => {
+    const recipient: User | undefined = getRecipient();
     if (!recipient) {
       return;
     }
@@ -141,13 +160,23 @@ function handleUsersChanged(params: {
   setRecipient: (user: User) => void;
   recipientStatus: HTMLElement;
 }): void {
-  const { users, recipient, setRecipient, recipientStatus } = params;
+  const {
+    users,
+    recipient,
+    setRecipient,
+    recipientStatus,
+  }: {
+    users: User[] | undefined;
+    recipient: User;
+    setRecipient: (user: User) => void;
+    recipientStatus: HTMLElement;
+  } = params;
 
   if (!users) {
     return;
   }
 
-  const updatedUser = users.find((user) => user.login === recipient.login);
+  const updatedUser: User | undefined = users.find((user) => user.login === recipient.login);
   if (!updatedUser) {
     return;
   }
@@ -165,7 +194,7 @@ export function createDivider(): HTMLDivElement {
 }
 
 function handleDividerRemove(recipient: User, renderMessages: (recipient: User) => void): void {
-  const state = messageStore.getDialogueState(recipient.login);
+  const state: DialogueState = messageStore.getDialogueState(recipient.login);
 
   if (state.dividerRemoved) {
     return;
@@ -173,6 +202,7 @@ function handleDividerRemove(recipient: User, renderMessages: (recipient: User) 
 
   state.dividerRemoved = true;
   messageController.markAllRead(recipient.login);
+
   renderMessages(recipient);
 }
 
@@ -181,10 +211,18 @@ export function createMessages(params: {
   currentUser: { login: string };
   recipient: User;
 }): void {
-  const { wrapper, currentUser, recipient } = params;
+  const {
+    wrapper,
+    currentUser,
+    recipient,
+  }: {
+    wrapper: HTMLDivElement;
+    currentUser: { login: string };
+    recipient: User;
+  } = params;
 
-  const messages = messageStore.getDialog(currentUser, recipient);
-  const dialogueState = messageStore.getDialogueState(recipient.login);
+  const messages: Message[] | undefined = messageStore.getDialog(currentUser, recipient);
+  const dialogueState: DialogueState = messageStore.getDialogueState(recipient.login);
 
   createMessagesList(wrapper, currentUser, messages, dialogueState);
 }

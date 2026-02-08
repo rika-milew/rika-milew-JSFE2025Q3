@@ -117,11 +117,11 @@ function createDialogueElements(recipient?: User): DialogueElements {
     className: ['messages'],
   });
 
-  // messagesContainer.addEventListener('scroll', () => {
+  // messagesContainer.addEventListener('scroll', (_event: MouseEvent) => {
   //   eventState.emit('dialogue:divider-remove');
   // });
 
-  messagesContainer.addEventListener('click', () => {
+  messagesContainer.addEventListener('click', (_event: MouseEvent) => {
     eventState.emit('dialogue:divider-remove');
   });
 
@@ -153,7 +153,7 @@ export function createMessageInput(onSend: (text: string) => void): MessageInput
 
   button.addEventListener('click', send);
 
-  input.addEventListener('keydown', (event) => {
+  input.addEventListener('keydown', (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
       send();
     }

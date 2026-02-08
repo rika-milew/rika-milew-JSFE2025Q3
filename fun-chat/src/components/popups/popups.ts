@@ -2,19 +2,25 @@ import { createButton } from '@/components/button/button';
 import { eventState } from '@/store/event-state';
 import { createElement } from '@/utils/create-element';
 
-import type { PopupOptions, PopupElements, PopupController } from '@/types/types';
+import type { PopupOptions, PopupElements, PopupController, ConnectionState } from '@/types/types';
 
 import './popups.css';
 
 const AUTO_CLOSE_DURATION = 1500;
 
 export function createPopup(options: PopupOptions): PopupController {
-  const elements = createPopupElements(options);
+  const elements: PopupElements = createPopupElements(options);
   return usePopup(elements, options);
 }
 
 function createPopupElements(options: PopupOptions): PopupElements {
-  const { overlayClass, containerClass, headingContent, imageSrc, closeButton = true } = options;
+  const {
+    overlayClass,
+    containerClass,
+    headingContent,
+    imageSrc,
+    closeButton = true,
+  }: PopupOptions = options;
 
   const overlay: HTMLDivElement = createElement({ tag: 'div', className: [overlayClass] });
   const container: HTMLDivElement = createElement({ tag: 'div', className: [containerClass] });
@@ -50,8 +56,8 @@ function createPopupElements(options: PopupOptions): PopupElements {
 }
 
 function usePopup(elements: PopupElements, options: PopupOptions): PopupController {
-  const { overlay, content, button } = elements;
-  const { clickToClose = true, messageContent } = options;
+  const { overlay, content, button }: PopupElements = elements;
+  const { clickToClose = true, messageContent }: PopupOptions = options;
 
   let timeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -110,7 +116,7 @@ function usePopup(elements: PopupElements, options: PopupOptions): PopupControll
 }
 
 export function createReconnectionPopup(): PopupController & { hide: () => void } {
-  const popup = createPopup({
+  const popup: PopupController = createPopup({
     overlayClass: 'popup-overlay',
     containerClass: 'popup connection-popup',
     imageSrc: 'icons/reconnect.svg',
@@ -119,14 +125,14 @@ export function createReconnectionPopup(): PopupController & { hide: () => void 
     messageContent: (message) => message,
   });
 
-  eventState.on('connection:changed', (state) => {
+  eventState.on('connection:changed', (state?: ConnectionState) => {
     if (!state) {
       return;
     }
-    if (!state.connected) {
-      popup.show('Connection lost. Reconnecting...', false);
-    } else {
+    if (state.connected) {
       popup.hide();
+    } else {
+      popup.show('Connection lost. Reconnecting...', false);
     }
   });
 
