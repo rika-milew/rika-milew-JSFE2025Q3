@@ -26,7 +26,7 @@ export function createFooter(): HTMLElement {
   const authorName: HTMLSpanElement = createElement({
     tag: 'span',
     className: ['footer__name'],
-    textContent: `Eryka Mileuskaya`,
+    textContent: 'Eryka Mileuskaya',
   });
 
   const year: HTMLSpanElement = createElement({
