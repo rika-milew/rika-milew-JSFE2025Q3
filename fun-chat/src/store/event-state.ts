@@ -19,14 +19,14 @@ export type EventMap = {
   'dialogue:edit-message': { messageId: string; text: string };
 };
 
-export type EventState<T extends Record<string, unknown>> = {
+type EventState<T extends Record<string, unknown>> = {
   on<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
   off<K extends keyof T>(event: K, handler?: EventHandler<T[K]>): void;
   emit<K extends keyof T>(event: K, payload?: T[K]): void;
   once<K extends keyof T>(event: K, handler: EventHandler<T[K]>): void;
 };
 
-export type EventHandler<T> = (payload?: T) => void;
+type EventHandler<T> = (payload?: T) => void;
 
 export function createEventState<T extends Record<string, unknown>>(): EventState<T> {
   const subscribers: { [K in keyof T]?: EventHandler<T[K]>[] } = {};
@@ -38,7 +38,7 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
     },
 
     emit<K extends keyof T>(event: K, payload: T[K]): void {
-      const handlers = subscribers[event];
+      const handlers: EventHandler<T[K]>[] | undefined = subscribers[event];
 
       if (handlers) {
         handlers.forEach((handler) => {
@@ -48,7 +48,7 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
     },
 
     off<K extends keyof T>(event: K, handler?: EventHandler<T[K]>): void {
-      const handlers = subscribers[event];
+      const handlers: EventHandler<T[K]>[] | undefined = subscribers[event];
 
       if (!handlers) {
         return;
@@ -59,7 +59,7 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
         return;
       }
 
-      const index = handlers.indexOf(handler);
+      const index: number = handlers.indexOf(handler);
       if (index !== -1) {
         handlers.splice(index, 1);
       }
@@ -75,4 +75,4 @@ export function createEventState<T extends Record<string, unknown>>(): EventStat
   };
 }
 
-export const eventState = createEventState<EventMap>();
+export const eventState: EventState<EventMap> = createEventState<EventMap>();

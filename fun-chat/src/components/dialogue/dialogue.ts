@@ -117,10 +117,6 @@ function createDialogueElements(recipient?: User): DialogueElements {
     className: ['messages'],
   });
 
-  // messagesContainer.addEventListener('scroll', (_event: MouseEvent) => {
-  //   eventState.emit('dialogue:divider-remove');
-  // });
-
   messagesContainer.addEventListener('click', (_event: MouseEvent) => {
     eventState.emit('dialogue:divider-remove');
   });

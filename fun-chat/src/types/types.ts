@@ -384,6 +384,50 @@ export type DialogueState = {
   dividerElement?: HTMLDivElement | undefined;
 };
 
+export type MessageStore = {
+  readonly state: Message[];
+
+  get(): Message[];
+  set(messages: Message[]): void;
+
+  add(message: Message): void;
+  edit(messageId: string, newText: string): void;
+  delete(messageId: string): void;
+
+  markDelivered(messageId: string): void;
+  markRead(messageId: string): void;
+
+  getDialog(currentUser: UserLogin, otherUser: UserLogin): Message[];
+  setDialog(login: UserLogin['login'], messagesFromServer: Message[]): void;
+
+  getDialogueState(login: UserLogin['login']): DialogueState;
+
+  reset(): void;
+};
+
+export type UserStore = {
+  state: UserState;
+  saveCredentials(login: string, password: string): void;
+  setLogin(login: string): void;
+  setPassword(password: string): void;
+  showError(field: 'login' | 'password', message: string): void;
+  removeError(field: 'login' | 'password'): void;
+  loginUser(): void;
+  logoutUser(): void;
+  isLoggedIn(): boolean;
+  setServerLogin(value: boolean): void;
+};
+
+export type UsersStore = {
+  get(): readonly User[];
+  set(newUsers: User[]): void;
+  getUserState(login: string): User | undefined;
+  addUnread(login: User['login']): void;
+  resetUnread(login: User['login']): void;
+  updateUnreadCount(login: User['login'], count: number): void;
+  reset(): void;
+};
+
 // constants
 
 export type LoginErrorKey = 'empty' | 'invalidChars' | 'tooShort' | 'sameAsPassword' | 'tooLong';

@@ -114,7 +114,7 @@ function login(message: Response<'USER_LOGIN'>): void {
     requestAllUsers();
     syncUnreadCounts();
 
-    const allUsers = usersStore.get();
+    const allUsers: User[] = usersStore.get();
     allUsers.forEach((user) => {
       if (user.login !== userStore.state.login) {
         messageController.getMessagesFromUser(user.login);
@@ -174,7 +174,7 @@ function externalLogout(message: Response<'USER_EXTERNAL_LOGOUT'>): void {
 
 export function getActiveUsers(message: Response<'USER_ACTIVE'>): void {
   const { users }: UserActiveResponse = message.payload;
-  const currentLogin = userStore.state.login;
+  const currentLogin: string = userStore.state.login;
 
   const activeUsers: User[] = users
     .filter((user) => user.login !== currentLogin)
@@ -190,7 +190,7 @@ export function getActiveUsers(message: Response<'USER_ACTIVE'>): void {
 
 export function getInactiveUsers(message: Response<'USER_INACTIVE'>): void {
   const { users }: UserActiveResponse = message.payload;
-  const currentLogin = userStore.state.login;
+  const currentLogin: string = userStore.state.login;
 
   const inactiveUsers: User[] = users
     .filter((user) => user.login !== currentLogin)
@@ -200,7 +200,7 @@ export function getInactiveUsers(message: Response<'USER_INACTIVE'>): void {
       unreadCount: 0,
     }));
 
-  const currentUsers = usersStore.get();
+  const currentUsers: User[] = usersStore.get();
 
   usersStore.set([...currentUsers.filter((u) => u.isOnline), ...inactiveUsers]);
   syncUnreadCounts();

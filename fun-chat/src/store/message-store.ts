@@ -1,12 +1,12 @@
 import { eventState } from './event-state';
 
-import type { Message, UserLogin, DialogueState } from '@/types/types';
+import type { Message, UserLogin, DialogueState, MessageStore } from '@/types/types';
 
 let messages: Message[] = [];
 
 const dialogueStates = new Map<string, DialogueState>();
 
-export const messageStore = {
+export const messageStore: MessageStore = {
   get state(): Message[] {
     return messages;
   },
@@ -69,7 +69,7 @@ export const messageStore = {
   },
 
   getDialogueState(login: string): DialogueState {
-    let state = dialogueStates.get(login);
+    let state: DialogueState | undefined = dialogueStates.get(login);
 
     if (!state) {
       state = { dividerRemoved: false };
