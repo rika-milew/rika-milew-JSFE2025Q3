@@ -112,8 +112,12 @@ export function createLoginElements(container: HTMLElement): LoginView {
 }
 
 function updateLoginButtonState(button: HTMLButtonElement): void {
-  const loginValid = validate('login', userStore.state.login, userStore.state.password);
-  const passwordValid = validate('password', userStore.state.password, userStore.state.login);
+  const loginValid: boolean = validate('login', userStore.state.login, userStore.state.password);
+  const passwordValid: boolean = validate(
+    'password',
+    userStore.state.password,
+    userStore.state.login,
+  );
 
   button.disabled = !(loginValid && passwordValid);
 }

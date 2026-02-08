@@ -6,7 +6,7 @@ import { eventState } from '@/store/event-state';
 import { usersStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 
-import type { UserList } from '@/types/types';
+import type { MessageContainer, UserList, User } from '@/types/types';
 
 export function renderMainPage(container: HTMLElement): void {
   container.replaceChildren();
@@ -51,10 +51,10 @@ export function renderMainPage(container: HTMLElement): void {
     userList.render(users);
   });
 
-  const dialogue = createDialogue();
+  const dialogue: MessageContainer = createDialogue();
 
   eventState.on('users:selected', (payload?: { login: string }) => {
-    const user = usersStore.get().find((user) => user.login === payload?.login);
+    const user: User | undefined = usersStore.get().find((user) => user.login === payload?.login);
     eventState.emit('dialogue:recipient-changed', user);
   });
 

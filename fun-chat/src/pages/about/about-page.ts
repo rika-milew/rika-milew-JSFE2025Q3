@@ -13,7 +13,7 @@ export function renderAboutPage(container: HTMLElement): void {
     className: ['wrapper'],
   });
 
-  const header = createHeader('about');
+  const header: HTMLElement = createHeader('about');
 
   const pageContainer: HTMLElement = createElement({
     tag: 'main',

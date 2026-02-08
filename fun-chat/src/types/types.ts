@@ -415,3 +415,33 @@ export type ValidationRules = {
   login: ValidationRule[];
   password: ValidationRule[];
 };
+
+// controller
+
+export type UnreadRequestsMap = Map<RequestId, UserLoginRequest>;
+
+type RequestId = string;
+
+type UserLoginRequest = string;
+
+export type MessageController = {
+  sendMessage: (to: string, text: string) => void;
+  handleMessage: (message: Response<'MSG_SEND'>) => void;
+
+  getMessagesFromUser: (login: string) => void;
+  handleMessagesFromUser: (message: Response<'MSG_FROM_USER'>) => void;
+
+  markDelivered: (messageId: string) => void;
+  markRead: (messageId: string) => void;
+  markAllRead: (login: string) => void;
+  sendReadStatus: (messageId: string) => void;
+
+  getUnreadCount: (login: string) => void;
+  handleUnreadCount: (message: Response<'MSG_COUNT_NOT_READED_FROM_USER'>) => void;
+
+  deleteMessage: (messageId: string) => void;
+  handleDelete: (message: Response<'MSG_DELETE'>) => void;
+
+  editMessage: (messageId: string, newText: string) => void;
+  handleEdit: (message: Response<'MSG_EDIT'>) => void;
+};

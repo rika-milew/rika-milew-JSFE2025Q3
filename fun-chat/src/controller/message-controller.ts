@@ -2,11 +2,19 @@ import { sendRequest } from '@/server/requests';
 import { messageStore } from '@/store/message-store';
 import { userStore, usersStore } from '@/store/user-store';
 
-import type { Request, Response, Message } from '@/types/types';
+import type {
+  Request,
+  Response,
+  Message,
+  UnreadRequestsMap,
+  MessageController,
+  ServerMessage,
+  User,
+} from '@/types/types';
 
-const unreadRequests = new Map<string, string>();
+const unreadRequests: UnreadRequestsMap = new Map();
 
-export const messageController = {
+export const messageController: MessageController = {
   sendMessage(to: string, text: string): void {
     const request: Request<'MSG_SEND'> = {
       id: crypto.randomUUID(),
@@ -23,11 +31,11 @@ export const messageController = {
   },
 
   handleMessage(message: Response<'MSG_SEND'>): void {
-    const serverMessage = message.payload.message;
+    const serverMessage: ServerMessage = message.payload.message;
     const sendMessage: Message = mapServerMessage(serverMessage);
     messageStore.add(sendMessage);
 
-    const from = message.payload.message.from;
+    const from: string = message.payload.message.from;
     if (from !== userStore.state.login) {
       messageController.getUnreadCount(from);
     }
@@ -47,26 +55,26 @@ export const messageController = {
   },
 
   handleMessagesFromUser(message: Response<'MSG_FROM_USER'>): void {
-    const serverMessages = message.payload.messages;
+    const serverMessages: ServerMessage[] = message.payload.messages;
     const mapped: Message[] = serverMessages.map((message) => mapServerMessage(message));
 
     if (mapped.length === 0) {
       return;
     }
 
-    const otherUserLogin =
+    const otherUserLogin: string =
       mapped[0].senderId === userStore.state.login ? mapped[0].recipientId : mapped[0].senderId;
 
-    const existingMessages = messageStore.getDialog(
+    const existingMessages: Message[] = messageStore.getDialog(
       { login: userStore.state.login },
       { login: otherUserLogin },
     );
 
-    const allMessages = [...existingMessages, ...mapped];
+    const allMessages: Message[] = [...existingMessages, ...mapped];
 
     allMessages.forEach((message) => {
       if (!message.delivered && !message.read) {
-        const recipient = usersStore.getUserState(message.recipientId);
+        const recipient: User | undefined = usersStore.getUserState(message.recipientId);
         if (recipient?.isOnline || message.recipientId === userStore.state.login) {
           message.delivered = true;
           messageController.markDelivered(message.id);
@@ -87,7 +95,7 @@ export const messageController = {
 
   markAllRead(login: string): void {
     const currentLogin: string = userStore.state.login;
-    const messages = messageStore.getDialog({ login: currentLogin }, { login });
+    const messages: Message[] = messageStore.getDialog({ login: currentLogin }, { login });
 
     messages
       .filter((message) => !message.read && message.senderId === login)
@@ -111,7 +119,7 @@ export const messageController = {
   },
 
   getUnreadCount(login: string): void {
-    const id = crypto.randomUUID();
+    const id: string = crypto.randomUUID();
 
     unreadRequests.set(id, login);
 
@@ -129,7 +137,7 @@ export const messageController = {
     if (message.id === null) {
       return;
     }
-    const login = unreadRequests.get(message.id);
+    const login: string | undefined = unreadRequests.get(message.id);
     if (!login) {
       return;
     }
@@ -139,7 +147,7 @@ export const messageController = {
   },
 
   deleteMessage(messageId: string): void {
-    const message = messageStore.state.find((m) => m.id === messageId);
+    const message: Message | undefined = messageStore.state.find((m) => m.id === messageId);
 
     if (message?.senderId !== userStore.state.login) {
       return;
@@ -148,8 +156,8 @@ export const messageController = {
     messageStore.delete(messageId);
 
     if (!message.read) {
-      const recipientLogin = message.recipientId;
-      const recipientState = usersStore.getUserState(recipientLogin);
+      const recipientLogin: string = message.recipientId;
+      const recipientState: User | undefined = usersStore.getUserState(recipientLogin);
       if (recipientState?.unreadCount) {
         usersStore.updateUnreadCount(recipientLogin, recipientState.unreadCount - 1);
       }
@@ -164,13 +172,15 @@ export const messageController = {
   },
 
   handleDelete(message: Response<'MSG_DELETE'>): void {
-    const serverMessageId = message.payload.message.id;
+    const serverMessageId: string = message.payload.message.id;
 
-    const deleteMessage = messageStore.state.find((m) => m.id === serverMessageId);
+    const deleteMessage: Message | undefined = messageStore.state.find(
+      (m) => m.id === serverMessageId,
+    );
 
     if (deleteMessage) {
       if (!deleteMessage.read && deleteMessage.senderId !== userStore.state.login) {
-        const senderState = usersStore.getUserState(deleteMessage.senderId);
+        const senderState: User | undefined = usersStore.getUserState(deleteMessage.senderId);
         if (senderState?.unreadCount) {
           usersStore.updateUnreadCount(deleteMessage.senderId, senderState.unreadCount - 1);
         }
@@ -181,7 +191,7 @@ export const messageController = {
   },
 
   editMessage(messageId: string, newText: string): void {
-    const message = messageStore.state.find((m) => m.id === messageId);
+    const message: Message | undefined = messageStore.state.find((m) => m.id === messageId);
 
     if (message?.senderId !== userStore.state.login) {
       return;
@@ -196,7 +206,13 @@ export const messageController = {
   },
 
   handleEdit(message: Response<'MSG_EDIT'>): void {
-    const serverMessage = message.payload.message;
+    const serverMessage: {
+      id: string;
+      text: string;
+      status: {
+        isEdited: boolean;
+      };
+    } = message.payload.message;
     messageStore.edit(serverMessage.id, serverMessage.text);
   },
 };
