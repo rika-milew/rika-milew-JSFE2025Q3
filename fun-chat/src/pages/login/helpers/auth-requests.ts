@@ -8,6 +8,7 @@ export function login(): void {
   const { login, password }: { login: string; password: string } = userStore.state;
 
   const loginValid: boolean = validate('login', userStore.state.login, userStore.state.password);
+
   const passwordValid: boolean = validate(
     'password',
     userStore.state.password,

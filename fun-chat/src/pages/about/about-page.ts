@@ -77,8 +77,10 @@ export function renderAboutPage(container: HTMLElement): void {
 
 function createList(items: string[], className: string): HTMLUListElement {
   const ul: HTMLUListElement = createElement({ tag: 'ul', className: [className] });
+
   items.forEach((text) => {
     ul.append(createElement({ tag: 'li', className: [`${className}-item`], textContent: text }));
   });
+
   return ul;
 }
