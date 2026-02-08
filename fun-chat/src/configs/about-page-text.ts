@@ -19,6 +19,6 @@ export const AboutPageText: AboutPageTextType = {
     'Automatic reconnection after connection loss.',
   ],
   conclusion:
-    'This project was developed as a learning application to practice WebSocket communication, ' +
+    'This project was developed by Eryka Mileuskaya as a learning application to practice WebSocket communication, ' +
     'DOM manipulation, and asynchronous client-server interaction.',
 };
