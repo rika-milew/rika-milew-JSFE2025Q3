@@ -18,6 +18,10 @@ function getRoute(): Route {
 }
 
 export function initRouter(container: HTMLElement): void {
+  if (!location.hash) {
+    history.replaceState({}, '', '#login');
+  }
+
   const initialRoute: Route = getRoute();
   const resolvedRoute: Route = resolveRoute(initialRoute);
 
