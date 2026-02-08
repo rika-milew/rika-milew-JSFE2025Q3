@@ -1,7 +1,8 @@
 import { navigate } from '@/app/router';
 import { errorPopup, notificationPopup } from '@/components/popups/popups';
 import { SERVER_ERRORS } from '@/constants/errors';
-import { requestActiveUsers, requestInactiveUsers } from '@/server/requests';
+import { messageController, syncUnreadCounts } from '@/controller/message-controller';
+import { requestAllUsers } from '@/server/requests';
 import { userStore, usersStore } from '@/store/user-store';
 import {
   isLoginResponse,
@@ -11,6 +12,13 @@ import {
   isExternalLogoutResponse,
   isUserActiveResponse,
   isUserInactiveResponse,
+  isSendMessageResponse,
+  isMessageFromUserResponse,
+  isMessageDeliverResponse,
+  isMessageNotReadResponse,
+  isMessageReadResponse,
+  isMessageDeleteResponse,
+  isMessageEditResponse,
 } from '@/types/type-guards';
 
 import type {
@@ -59,6 +67,41 @@ export function handleResponse<T extends keyof ResponseMap>(message: Response<T>
     getInactiveUsers(message);
     return;
   }
+
+  if (isSendMessageResponse(message)) {
+    messageController.handleMessage(message);
+    return;
+  }
+
+  if (isMessageFromUserResponse(message)) {
+    messageController.handleMessagesFromUser(message);
+    return;
+  }
+
+  if (isMessageNotReadResponse(message)) {
+    messageController.handleUnreadCount(message);
+    return;
+  }
+
+  if (isMessageDeliverResponse(message)) {
+    messageController.markDelivered(message.payload.message.id);
+    return;
+  }
+
+  if (isMessageReadResponse(message)) {
+    messageController.markRead(message.payload.message.id);
+    return;
+  }
+
+  if (isMessageDeleteResponse(message)) {
+    messageController.handleDelete(message);
+    return;
+  }
+
+  if (isMessageEditResponse(message)) {
+    messageController.handleEdit(message);
+    return;
+  }
 }
 
 function login(message: Response<'USER_LOGIN'>): void {
@@ -67,8 +110,17 @@ function login(message: Response<'USER_LOGIN'>): void {
   if (user.isLogined) {
     userStore.loginUser();
     userStore.setServerLogin(true);
-    requestActiveUsers();
-    requestInactiveUsers();
+
+    requestAllUsers();
+    syncUnreadCounts();
+
+    const allUsers: User[] = usersStore.get();
+    allUsers.forEach((user) => {
+      if (user.login !== userStore.state.login) {
+        messageController.getMessagesFromUser(user.login);
+      }
+    });
+
     navigate('main', document.body);
   } else {
     errorPopup.show(SERVER_ERRORS.loginFailed);
@@ -84,13 +136,17 @@ function logout(message: Response<'USER_LOGOUT'>): void {
     userStore.logoutUser();
     userStore.setServerLogin(false);
     usersStore.set([]);
+
     navigate('login', document.body);
   }
 }
 
 function handleError(message: Response<'ERROR'>): void {
   const { error }: ErrorResponse = message.payload;
-  errorPopup.show(error || SERVER_ERRORS.serverError);
+  errorPopup.show(
+    error ? error.charAt(0).toUpperCase() + error.slice(1) : SERVER_ERRORS.serverError,
+  );
+
   console.error(error || SERVER_ERRORS.serverError);
 }
 
@@ -101,8 +157,7 @@ function externalLogin(message: Response<'USER_EXTERNAL_LOGIN'>): void {
     return;
   }
 
-  requestActiveUsers();
-  requestInactiveUsers();
+  requestAllUsers();
   notificationPopup.show(`User ${user.login} logged in`);
 }
 
@@ -113,14 +168,13 @@ function externalLogout(message: Response<'USER_EXTERNAL_LOGOUT'>): void {
     return;
   }
 
-  requestActiveUsers();
-  requestInactiveUsers();
+  requestAllUsers();
   notificationPopup.show(`User ${user.login} logged out`);
 }
 
 export function getActiveUsers(message: Response<'USER_ACTIVE'>): void {
   const { users }: UserActiveResponse = message.payload;
-  const currentLogin = userStore.state.login;
+  const currentLogin: string = userStore.state.login;
 
   const activeUsers: User[] = users
     .filter((user) => user.login !== currentLogin)
@@ -131,11 +185,12 @@ export function getActiveUsers(message: Response<'USER_ACTIVE'>): void {
     }));
 
   usersStore.set(activeUsers);
+  syncUnreadCounts();
 }
 
 export function getInactiveUsers(message: Response<'USER_INACTIVE'>): void {
   const { users }: UserActiveResponse = message.payload;
-  const currentLogin = userStore.state.login;
+  const currentLogin: string = userStore.state.login;
 
   const inactiveUsers: User[] = users
     .filter((user) => user.login !== currentLogin)
@@ -145,7 +200,8 @@ export function getInactiveUsers(message: Response<'USER_INACTIVE'>): void {
       unreadCount: 0,
     }));
 
-  const currentUsers = usersStore.get();
+  const currentUsers: User[] = usersStore.get();
 
   usersStore.set([...currentUsers.filter((u) => u.isOnline), ...inactiveUsers]);
+  syncUnreadCounts();
 }

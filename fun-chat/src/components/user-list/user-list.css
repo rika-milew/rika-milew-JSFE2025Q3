@@ -1,9 +1,11 @@
 .user-section {
+  width: 100%;
   max-width: 420px;
-  margin: 20px auto;
+  margin: 0 auto;
   padding: 16px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
   background-color: #dcdcdc;
 }
 
@@ -45,7 +47,6 @@
 
 .user__info {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
   width: 100%;
@@ -72,25 +73,29 @@
 }
 
 .user__unread {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   min-width: 20px;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 50%;
+  font-size: 12px;
   font-weight: bold;
   color: #fff;
   text-align: center;
-  background-color: #ff5252;
+  background-color: #d03333;
 }
 
 .user-search {
   width: 100%;
-  padding: 8px 12px;
   margin-bottom: 12px;
+  padding: 8px 12px;
   border: 2px solid #6fd9ad;
   border-radius: 8px;
-  background-color: #e8fdf7;
-  color: #2b6e4d;
   font-size: 16px;
+  color: #2b6e4d;
+  background-color: #e8fdf7;
   outline: none;
   transition:
     border 0.2s,
@@ -104,4 +109,29 @@
 
 .user-search::placeholder {
   color: #76c8a6;
+}
+
+@media (max-width: 1250px) {
+  .user-section {
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .user-section {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 950px) {
+  .user-section {
+    width: 90%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-list {
+    font-size: 14px;
+  }
 }

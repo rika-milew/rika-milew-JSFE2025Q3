@@ -1,100 +1,166 @@
-import { eventState } from '@/store/events/event-state';
+import { createButton } from '@/components/button/button';
+import { eventState } from '@/store/event-state';
 import { createElement } from '@/utils/create-element';
 
-import type { PopupOptions } from '@/types/types';
+import type { PopupOptions, PopupElements, PopupController, ConnectionState } from '@/types/types';
 
 import './popups.css';
 
-export function createPopup(options: PopupOptions): { show: (message: string) => void } {
+const AUTO_CLOSE_DURATION = 1500;
+
+export function createPopup(options: PopupOptions): PopupController {
+  const elements: PopupElements = createPopupElements(options);
+  return usePopup(elements, options);
+}
+
+function createPopupElements(options: PopupOptions): PopupElements {
   const {
     overlayClass,
     containerClass,
     headingContent,
     imageSrc,
-    animationDuration,
-    messageContent,
+    closeButton = true,
   }: PopupOptions = options;
 
   const overlay: HTMLDivElement = createElement({ tag: 'div', className: [overlayClass] });
   const container: HTMLDivElement = createElement({ tag: 'div', className: [containerClass] });
-  const heading: HTMLHeadingElement = createElement({ tag: 'h2', textContent: headingContent });
+
+  if (headingContent) {
+    const heading: HTMLHeadingElement = createElement({ tag: 'h2', textContent: headingContent });
+    container.append(heading);
+  }
+
   const content: HTMLParagraphElement = createElement({ tag: 'p' });
+  container.append(content);
 
-  const image: HTMLImageElement = createElement({
-    tag: 'img',
-    attributes: { src: imageSrc, width: '100', height: '100' },
-  });
+  if (imageSrc) {
+    const image: HTMLImageElement = createElement({
+      tag: 'img',
+      attributes: { src: imageSrc, width: '100', height: '100' },
+    });
+    container.append(image);
+  }
 
-  container.append(heading, content, image);
+  let button: HTMLButtonElement | undefined;
+  if (closeButton) {
+    button = createButton({
+      text: 'Close',
+      className: 'popup-button',
+    });
+    container.append(button);
+  }
+
   overlay.append(container);
-  document.body.append(overlay);
+
+  return { overlay, container, content, button };
+}
+
+function usePopup(elements: PopupElements, options: PopupOptions): PopupController {
+  const { overlay, content, button }: PopupElements = elements;
+  const { clickToClose = true, messageContent }: PopupOptions = options;
 
   let timeout: ReturnType<typeof setTimeout> | undefined;
 
-  function show(message: string): void {
-    if (!document.body.contains(overlay)) {
-      document.body.append(overlay);
-    }
-
+  function hide(): void {
+    overlay.classList.remove('visible');
+    content.textContent = '';
     if (timeout) {
       clearTimeout(timeout);
+      timeout = undefined;
     }
 
-    content.textContent = messageContent ? messageContent(message) : message;
+    if (overlay.parentElement) {
+      overlay.remove();
+    }
+  }
 
-    const scrollTop: number = window.scrollY || window.pageYOffset;
-    const viewportHeight: number = window.innerHeight;
-    container.style.top = `${scrollTop + viewportHeight / 2}px`;
+  if (clickToClose) {
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) {
+        hide();
+      }
+    });
+  }
+
+  if (button) {
+    button.addEventListener('click', hide);
+  }
+
+  function show(
+    message: string,
+    autoClose?: boolean,
+    autoCloseDuration = AUTO_CLOSE_DURATION,
+  ): void {
+    if (!message) {
+      return;
+    }
+
+    document.body.append(overlay);
+
+    content.textContent = messageContent ? messageContent(message) : message;
 
     requestAnimationFrame(() => {
       overlay.classList.add('visible');
     });
 
-    timeout = setTimeout(() => {
-      overlay.classList.remove('visible');
-      content.textContent = '';
-      timeout = undefined;
-    }, animationDuration);
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    if (autoClose) {
+      timeout = setTimeout(hide, autoCloseDuration);
+    }
   }
 
-  return { show };
+  return { show, hide };
 }
 
-export function createConnectionPopup(): void {
-  const popup: { show: (message: string) => void } = createPopup({
+export function createReconnectionPopup(): PopupController & { hide: () => void } {
+  const popup: PopupController = createPopup({
     overlayClass: 'popup-overlay',
     containerClass: 'popup connection-popup',
-    headingContent: '',
-    imageSrc: 'icons/turbo.svg',
-    animationDuration: 3000,
+    imageSrc: 'icons/reconnect.svg',
+    clickToClose: false,
+    closeButton: false,
     messageContent: (message) => message,
   });
 
-  eventState.on('connection:changed', (state) => {
+  eventState.on('connection:changed', (state?: ConnectionState) => {
     if (!state) {
       return;
     }
-
     if (state.connected) {
-      popup.show('Connection restored');
+      popup.hide();
     } else {
-      popup.show('Connection lost. Reconnecting...');
+      popup.show('Connection lost. Reconnecting...', false);
     }
   });
+
+  return popup;
 }
 
-export const notificationPopup: { show: (message: string) => void } = createPopup({
+export const connectionPopup: PopupController = createPopup({
+  overlayClass: 'popup-overlay',
+  containerClass: 'popup connection-popup',
+  imageSrc: 'icons/turbo.svg',
+  clickToClose: true,
+  closeButton: true,
+});
+
+export const notificationPopup: PopupController = createPopup({
   overlayClass: 'popup-overlay',
   containerClass: 'popup notification-popup',
   headingContent: 'Notification',
   imageSrc: 'icons/todo.svg',
-  animationDuration: 3000,
+  clickToClose: true,
+  closeButton: true,
 });
 
-export const errorPopup: { show: (message: string) => void } = createPopup({
+export const errorPopup: PopupController = createPopup({
   overlayClass: 'popup-overlay',
   containerClass: 'popup',
   headingContent: 'Error',
-  imageSrc: 'icons/closecircle.svg',
-  animationDuration: 3000,
+  imageSrc: 'icons/error-svg.svg',
+  clickToClose: true,
+  closeButton: true,
 });

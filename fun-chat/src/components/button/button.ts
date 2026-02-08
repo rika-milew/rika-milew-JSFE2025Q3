@@ -1,4 +1,3 @@
-import { audioPLayer } from '@/utils/audio-players';
 import { createElement } from '@/utils/create-element';
 
 import type { ButtonConfig } from '@/types/types';
@@ -25,10 +24,6 @@ export function createButton(config: ButtonConfig): HTMLButtonElement {
       type,
       ...(disabled && { disabled: 'true' }),
     },
-  });
-
-  button.addEventListener('click', () => {
-    audioPLayer.playOnce('button');
   });
 
   return button;

@@ -1,6 +1,7 @@
 import { navigate } from '@/app/router';
 import { createButton } from '@/components/button/button';
 import { logout } from '@/pages/login/helpers/auth-requests';
+import { userStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 
 import './header.css';
@@ -17,6 +18,23 @@ export function createHeader(page: string): HTMLElement {
   const buttons: HTMLDivElement = createElement({ tag: 'div', className: ['header__buttons'] });
 
   if (page === 'main') {
+    const userLabel: HTMLSpanElement = createElement({
+      tag: 'span',
+      className: ['header__user-label'],
+      textContent: 'You: ',
+    });
+
+    const userName: HTMLSpanElement = createElement({
+      tag: 'span',
+      className: ['header__username'],
+      textContent: userStore.state.login || '',
+    });
+
+    const userContainer: HTMLDivElement = createElement({
+      tag: 'div',
+      className: ['header__user'],
+    });
+
     const logoutButton: HTMLButtonElement = createButton({
       text: 'Logout',
     });
@@ -29,11 +47,13 @@ export function createHeader(page: string): HTMLElement {
       text: 'About',
     });
 
-    aboutButton.addEventListener('click', () => {
+    aboutButton.addEventListener('click', (_event: MouseEvent) => {
       navigate('about', document.body);
     });
 
+    userContainer.append(userLabel, userName);
     buttons.append(logoutButton, aboutButton);
+    header.append(userContainer, title, buttons);
   } else if (page === 'about') {
     const backButton: HTMLButtonElement = createButton({
       text: 'Back',
@@ -44,8 +64,9 @@ export function createHeader(page: string): HTMLElement {
     });
 
     buttons.append(backButton);
+
+    header.append(title, buttons);
   }
 
-  header.append(title, buttons);
   return header;
 }

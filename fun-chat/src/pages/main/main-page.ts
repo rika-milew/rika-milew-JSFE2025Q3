@@ -1,11 +1,12 @@
+import { createDialogue } from '@/components/dialogue/dialogue';
 import { createFooter } from '@/components/footer/footer';
 import { createHeader } from '@/components/header/header';
 import { createUserList } from '@/components/user-list/user-list';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { usersStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 
-import type { UserList } from '@/types/types';
+import type { MessageContainer, UserList, User } from '@/types/types';
 
 export function renderMainPage(container: HTMLElement): void {
   container.replaceChildren();
@@ -24,11 +25,16 @@ export function renderMainPage(container: HTMLElement): void {
 
   const title: HTMLHeadingElement = createElement({
     tag: 'h1',
-    textContent: 'Main Page',
+    textContent: 'Chats',
     className: ['page-title'],
   });
 
   const footer: HTMLElement = createFooter();
+
+  const dialogueContainer: HTMLDivElement = createElement({
+    tag: 'div',
+    className: ['dialogue-container'],
+  });
 
   const usersSection: HTMLElement = createElement({
     tag: 'section',
@@ -41,10 +47,19 @@ export function renderMainPage(container: HTMLElement): void {
     if (!users) {
       return;
     }
+
     userList.render(users);
   });
 
-  pageContainer.append(title, usersSection);
+  const dialogue: MessageContainer = createDialogue();
+
+  eventState.on('users:selected', (payload?: { login: string }) => {
+    const user: User | undefined = usersStore.get().find((user) => user.login === payload?.login);
+    eventState.emit('dialogue:recipient-changed', user);
+  });
+
+  dialogueContainer.append(usersSection, dialogue.container);
+  pageContainer.append(title, dialogueContainer);
   wrapper.append(header, pageContainer, footer);
   container.append(wrapper);
 }

@@ -11,22 +11,15 @@
   --color-bg-2: #5fa9a2;
   --color-bg-3: #4d8882;
 
-  --color-text-1: #222222;
-  --color-text-2: #444444;
+  --color-text: #222222;
   --color-text-accent: #0a3d3a;
 
-  --color-button-1: #0a3d3a;
-  --color-button-2: #81d8d0;
-
-  --color-text-button-1: #ffffff;
-  --color-text-button-2: #222222;
+  --color-button: #0a3d3a;
+  --color-text-button: #ffffff;
 
   --color-button-hover: #1e3a5f;
   --color-button-hover-text: #ffffff;
   --color-button-active: #1e3a5f;
-
-  --color-bg-nav: #4c8f88;
-  --color-text-nav: #f0f0f0;
 }
 
 html,
@@ -63,4 +56,16 @@ h1 {
   margin-bottom: 20px;
   font-size: 42px;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 450px) {
+  h1 {
+    font-size: 34px;
+  }
 }

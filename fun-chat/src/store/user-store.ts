@@ -1,19 +1,8 @@
-import { eventState } from './events/event-state';
+import { eventState } from './event-state';
 
-import type { UserState, User } from '@/types/types';
+import type { User, UserStore, UsersStore } from '@/types/types';
 
-export const userStore: {
-  state: UserState;
-  saveCredentials: (login: string, password: string) => void;
-  setLogin: (login: string) => void;
-  setPassword: (password: string) => void;
-  showError: (field: 'login' | 'password', message: string) => void;
-  removeError: (field: 'login' | 'password') => void;
-  loginUser: () => void;
-  logoutUser: () => void;
-  isLoggedIn: () => boolean;
-  setServerLogin: (value: boolean) => void;
-} = {
+export const userStore: UserStore = {
   state: {
     login: '',
     password: '',
@@ -38,12 +27,12 @@ export const userStore: {
     eventState.emit('user-store:changed', this.state);
   },
 
-  showError(field, message) {
+  showError(field: 'login' | 'password', message: string) {
     this.state.errors[field] = message;
     eventState.emit('user-store:changed', this.state);
   },
 
-  removeError(field) {
+  removeError(field: 'login' | 'password') {
     this.state.errors = Object.fromEntries(
       Object.entries(this.state.errors).filter(([key]) => key !== field),
     );
@@ -78,7 +67,7 @@ export const userStore: {
 
 let users: User[] = [];
 
-export const usersStore = {
+export const usersStore: UsersStore = {
   get(): User[] {
     return users;
   },
@@ -86,6 +75,10 @@ export const usersStore = {
   set(newUsers: User[]): void {
     users = newUsers;
     eventState.emit('users:changed', users);
+  },
+
+  getUserState(login: string): User | undefined {
+    return users.find((user) => user.login === login);
   },
 
   addUnread(login: string): void {
@@ -99,6 +92,16 @@ export const usersStore = {
   resetUnread(login: string): void {
     users = users.map((user) => (user.login === login ? { ...user, unreadCount: 0 } : user));
 
+    eventState.emit('users:changed', users);
+  },
+
+  updateUnreadCount(login: string, count: number): void {
+    users = users.map((user) => (user.login === login ? { ...user, unreadCount: count } : user));
+    eventState.emit('users:changed', users);
+  },
+
+  reset(): void {
+    users = [];
     eventState.emit('users:changed', users);
   },
 };

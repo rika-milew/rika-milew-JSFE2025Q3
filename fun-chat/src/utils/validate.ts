@@ -1,8 +1,10 @@
 import { VALIDATION_RULES } from '@/constants/validation-rules';
 import { userStore } from '@/store/user-store';
 
+import type { ValidationRule } from '@/types/types';
+
 export function validate(field: 'login' | 'password', value: string, otherValue?: string): boolean {
-  const rules = VALIDATION_RULES[field];
+  const rules: ValidationRule[] = VALIDATION_RULES[field];
 
   for (const rule of rules) {
     if (!rule.test(value, otherValue)) {

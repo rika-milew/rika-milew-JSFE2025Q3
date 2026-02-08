@@ -1,7 +1,7 @@
 import { navigate } from '@/app/router';
 import { createButton } from '@/components/button/button';
 import { login } from '@/pages/login/helpers/auth-requests';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { userStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
 import { validate } from '@/utils/validate';
@@ -13,16 +13,18 @@ import './login-page.css';
 export function renderLoginPage(container: HTMLElement): void {
   const view: LoginView = createLoginElements(container);
 
-  const { form, loginInput, passwordInput, loginError, passwordError }: LoginView = view;
+  const { form, loginInput, passwordInput, loginError, passwordError, button }: LoginView = view;
 
   loginInput.addEventListener('input', () => {
     userStore.setLogin(loginInput.value);
     validate('login', userStore.state.login, userStore.state.password);
+    updateLoginButtonState(button);
   });
 
   passwordInput.addEventListener('input', () => {
     userStore.setPassword(passwordInput.value);
     validate('password', userStore.state.password, userStore.state.login);
+    updateLoginButtonState(button);
   });
 
   form.addEventListener('submit', (event: SubmitEvent) => {
@@ -61,6 +63,7 @@ export function createLoginElements(container: HTMLElement): LoginView {
     className: ['input'],
     attributes: { type: 'text', name: 'login', placeholder: 'Login' },
   });
+
   const loginError: HTMLDivElement = createElement({ tag: 'div', className: ['input-error'] });
 
   const passwordWrapper: HTMLDivElement = createElement({
@@ -73,12 +76,13 @@ export function createLoginElements(container: HTMLElement): LoginView {
     className: ['input'],
     attributes: { type: 'password', name: 'password', placeholder: 'Password' },
   });
+
   const passwordError: HTMLDivElement = createElement({ tag: 'div', className: ['input-error'] });
 
   const button: HTMLButtonElement = createButton({
     text: 'Login',
     className: 'login-button',
-    disabled: false,
+    disabled: true,
   });
 
   button.type = 'submit';
@@ -105,4 +109,15 @@ export function createLoginElements(container: HTMLElement): LoginView {
   container.replaceChildren(pageContainer);
 
   return { form, loginInput, passwordInput, loginError, passwordError, button };
+}
+
+function updateLoginButtonState(button: HTMLButtonElement): void {
+  const loginValid: boolean = validate('login', userStore.state.login, userStore.state.password);
+  const passwordValid: boolean = validate(
+    'password',
+    userStore.state.password,
+    userStore.state.login,
+  );
+
+  button.disabled = !(loginValid && passwordValid);
 }

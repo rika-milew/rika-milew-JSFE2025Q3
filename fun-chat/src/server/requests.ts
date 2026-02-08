@@ -20,8 +20,6 @@ export function requestLogin(login: string, password: string): void {
     },
   };
 
-  // console.log('requestLogin');
-
   sendRequest(request);
 }
 
@@ -66,4 +64,9 @@ export function requestInactiveUsers(): void {
   };
 
   sendRequest(request);
+}
+
+export function requestAllUsers(): void {
+  requestActiveUsers();
+  requestInactiveUsers();
 }

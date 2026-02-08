@@ -23,11 +23,19 @@ export function createFooter(): HTMLElement {
 
   const github: HTMLDivElement = createElement({ tag: 'div', className: ['footer__github'] });
 
+  const authorName: HTMLSpanElement = createElement({
+    tag: 'span',
+    className: ['footer__name'],
+    textContent: `Eryka Mileuskaya`,
+  });
+
   const year: HTMLSpanElement = createElement({
     tag: 'span',
     className: ['footer__year'],
     textContent: `© ${new Date().getFullYear()}`,
   });
+
+  const info: HTMLDivElement = createElement({ tag: 'div', className: ['footer__info'] });
 
   const image: HTMLDivElement = createElement({
     tag: 'div',
@@ -47,7 +55,8 @@ export function createFooter(): HTMLElement {
 
   school.append(logo, schoolName);
   github.append(image, githubLink);
-  footer.append(school, github, year);
+  info.append(authorName, year);
+  footer.append(school, github, info);
 
   return footer;
 }

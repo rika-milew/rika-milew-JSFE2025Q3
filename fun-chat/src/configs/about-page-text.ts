@@ -1,4 +1,6 @@
-export const AboutPageText = {
+import type { AboutPageTextType } from '@/types/types';
+
+export const AboutPageText: AboutPageTextType = {
   title: 'About Fun Chat',
   introduction:
     'Fun Chat is a real-time web chat application built using the WebSocket protocol. ' +
@@ -17,6 +19,6 @@ export const AboutPageText = {
     'Automatic reconnection after connection loss.',
   ],
   conclusion:
-    'This project was developed as a learning application to practice WebSocket communication, ' +
+    'This project was developed by Eryka Mileuskaya as a learning application to practice WebSocket communication, ' +
     'DOM manipulation, and asynchronous client-server interaction.',
 };

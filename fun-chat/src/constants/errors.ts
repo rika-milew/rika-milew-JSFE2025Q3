@@ -1,4 +1,6 @@
-export const LOGIN_ERRORS = {
+import type { LoginErrors, PasswordErrors, ServerErrors } from '@/types/types';
+
+export const LOGIN_ERRORS: LoginErrors = {
   empty: 'Login cannot be empty',
   invalidChars: 'Login can contain only English letters, digits or "-"',
   tooShort: 'Login must be at least 3 characters',
@@ -6,7 +8,7 @@ export const LOGIN_ERRORS = {
   tooLong: 'Login cannot be longer than 15 characters',
 };
 
-export const PASSWORD_ERRORS = {
+export const PASSWORD_ERRORS: PasswordErrors = {
   empty: 'Password cannot be empty',
   tooShort: 'Password must be at least 8 characters long',
   noUpper: 'Password must contain at least one uppercase letter',
@@ -17,7 +19,7 @@ export const PASSWORD_ERRORS = {
   sameAsLogin: 'Password and login must be different',
 };
 
-export const SERVER_ERRORS = {
+export const SERVER_ERRORS: ServerErrors = {
   loginFailed: 'Invalid login or password',
   logoutFailed: 'Failed to log out. Please try again',
   serverError: 'Server error. Please try again',

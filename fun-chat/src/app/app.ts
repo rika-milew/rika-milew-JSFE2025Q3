@@ -1,36 +1,20 @@
 import { initRouter } from '@/app/router';
-import { createConnectionPopup } from '@/components/popups/popups';
-import { startWebsocket } from '@/server/connection';
-import { requestLogin } from '@/server/requests';
+import { connectionPopup, createReconnectionPopup } from '@/components/popups/popups';
+import { startWebsocket, handleReconnect } from '@/server/connection';
 import { connectionStore } from '@/store/connection-store';
-import { eventState } from '@/store/events/event-state';
+import { eventState } from '@/store/event-state';
 import { userStore } from '@/store/user-store';
 
-export function app(): void {
-  createConnectionPopup();
+import type { ConnectionState } from '@/types/types';
 
+export function app(): void {
   startWebsocket();
+  createReconnectionPopup();
 
   initRouter(document.body);
 
   eventState.on('ws:connected', () => {
-    connectionStore.setConnected(true);
-
-    const { login, password, isLoggedIn, isLoggedInOnServer } = userStore.state;
-    // console.log(
-    //   'Checking login condition:',
-    //   'isLoggedIn:',
-    //   isLoggedIn,
-    //   'isLoggedInOnServer:',
-    //   isLoggedInOnServer,
-    //   'login:',
-    //   login,
-    //   'password:',
-    //   password,
-    // );
-    if (isLoggedIn && !isLoggedInOnServer && login && password) {
-      requestLogin(userStore.state.login, userStore.state.password);
-    }
+    handleReconnect();
   });
 
   eventState.on('ws:disconnected', () => {
@@ -41,5 +25,14 @@ export function app(): void {
 
   eventState.on('ws:reconnecting', () => {
     connectionStore.setReconnecting();
+  });
+
+  eventState.on('connection:changed', (state?: ConnectionState) => {
+    if (!state) {
+      return;
+    }
+    if (state.connected) {
+      connectionPopup.show('Connection restored');
+    }
   });
 }
