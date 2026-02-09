@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <title>Redirecting...</title>
   <script>
-    const path = window.location.pathname;
-    window.location.replace('/fun-chat/#' + path.slice(1));
+    const repoBase = '/rika-milew-JSFE2025Q3/fun-chat/';
+    const path = window.location.pathname.replace(repoBase, '');
+    const route = path && path !== '/' ? path : 'login';
+    window.location.replace(repoBase + '#' + route);
   </script>
 </head>
 <body>
