@@ -291,19 +291,19 @@
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
-  text-align: center;
   color: #555555;
+  text-align: center;
   background-color: #f0f0f0;
 }
 
 .divider::before,
 .divider::after {
-  content: '';
   display: inline-block;
   width: 30%;
   height: 1px;
   margin: 0 8px;
   background-color: #3b8481;
+  content: '';
   vertical-align: middle;
 }
 
