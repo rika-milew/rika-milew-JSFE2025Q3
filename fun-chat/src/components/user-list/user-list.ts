@@ -1,3 +1,4 @@
+import { filterUsers } from '@/components/user-list/helpers/helpers';
 import { eventState } from '@/store/event-state';
 import { usersStore } from '@/store/user-store';
 import { createElement } from '@/utils/create-element';
@@ -63,6 +64,7 @@ function createList(
   caseSensitive = false,
 ): void {
   list.replaceChildren();
+
   const filteredUsers: User[] = filterUsers(users, search, caseSensitive);
 
   filteredUsers.forEach((user) => {
@@ -103,16 +105,4 @@ function createItem(user: User): HTMLLIElement {
   });
 
   return item;
-}
-
-function filterUsers(users: User[], search: string, caseSensitive: boolean): User[] {
-  if (!search) {
-    return users;
-  }
-
-  return users.filter((user) =>
-    caseSensitive
-      ? user.login.includes(search)
-      : user.login.toLowerCase().includes(search.toLowerCase()),
-  );
 }

@@ -113,6 +113,7 @@ export function createLoginElements(container: HTMLElement): LoginView {
 
 function updateLoginButtonState(button: HTMLButtonElement): void {
   const loginValid: boolean = validate('login', userStore.state.login, userStore.state.password);
+
   const passwordValid: boolean = validate(
     'password',
     userStore.state.password,

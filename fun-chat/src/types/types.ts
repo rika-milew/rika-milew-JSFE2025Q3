@@ -419,7 +419,7 @@ export type UserStore = {
 };
 
 export type UsersStore = {
-  get(): readonly User[];
+  get(): User[];
   set(newUsers: User[]): void;
   getUserState(login: string): User | undefined;
   addUnread(login: User['login']): void;
