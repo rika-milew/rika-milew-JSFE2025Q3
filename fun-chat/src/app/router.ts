@@ -18,7 +18,9 @@ function getRoute(): Route {
 }
 
 export function initRouter(container: HTMLElement): void {
-  if (!location.hash) {
+  const hash = location.hash.replace('#', '');
+
+  if (!isRoute(hash)) {
     history.replaceState({}, '', '#login');
   }
 
