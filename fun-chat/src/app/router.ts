@@ -18,12 +18,8 @@ function getRoute(): Route {
 }
 
 export function initRouter(container: HTMLElement): void {
-  const hash = location.hash.replace('#', '');
-
-  if (!isRoute(hash)) {
+  if (!location.hash) {
     history.replaceState({}, '', '#login');
-    router('login', container);
-    return;
   }
 
   const initialRoute: Route = getRoute();
@@ -34,15 +30,11 @@ export function initRouter(container: HTMLElement): void {
   router(resolvedRoute, container);
 
   globalThis.addEventListener('popstate', () => {
-    const hash = location.hash.replace('#', '');
+    const route: Route = getRoute();
+    const finalRoute: Route = resolveRoute(route);
 
-    if (!isRoute(hash)) {
-      history.replaceState({}, '', '#login');
-      router('login', container);
-      return;
-    }
+    history.replaceState({ route: finalRoute }, '', `#${finalRoute}`);
 
-    const finalRoute = resolveRoute(hash);
     router(finalRoute, container);
   });
 }
