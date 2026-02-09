@@ -5,10 +5,7 @@
   <title>Redirecting...</title>
   <script>
     const repoBase = '/rika-milew-JSFE2025Q3/fun-chat/';
-    let path = window.location.pathname;
-    if (path.startsWith(repoBase)) {
-      path = path.slice(repoBase.length);
-    }
+    let path = window.location.pathname.replace(repoBase, '');
     const validRoutes = ['login', 'main', 'about'];
     const route = validRoutes.includes(path) ? path : 'login';
     window.location.replace(repoBase + '#' + route);
