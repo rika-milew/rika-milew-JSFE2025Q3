@@ -22,7 +22,7 @@ Drag-racing SPA built with vanilla TypeScript. Manage cars, run races, and view 
 1. Clone the server mock: `git clone https://github.com/mikhama/async-race-api.git`
 2. Install and run server: `npm install && npm start`
 3. Clone this repo: `git clone https://github.com/rika-milew/async-race.git`
-4. Install and run: `npm install && npm start`
+4. Install and run: `npm install && npm run dev`
 5. Open `http://localhost:5173`
 
 ## Demo
